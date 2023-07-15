@@ -1,0 +1,45 @@
+[versions]
+jdkTarget = "8"
+jvmToolchain = "21"
+kotlinTarget = "1.9.0"
+kotlinPlugin = "1.9.10"
+kotlinx-coroutines = "1.6.4"
+kotlinx-serialization = "1.5.1"
+ktor = "2.3.2"
+log4j = "2.20.0"
+junit5 = "5.10.0"
+
+[libraries]
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlinPlugin" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+
+alllex-tbot-api = { module = "me.alllex.telegram.botkit:tbot-api" } # no version, because substituted by an included build
+
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
+ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+slf4j-api = { module = "org.slf4j:slf4j-api", version = "1.7.36" }
+
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+log4j-slf4j-impl = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j" }
+
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
+assertk-jvm = { module = "com.willowtreeapps.assertk:assertk-jvm", version = "0.26.1" }
+
+[bundles]
+log4j = ["log4j-api", "log4j-core", "log4j-slf4j-impl"]
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
+kotlinx-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
+dokka = { id = "org.jetbrains.dokka", version = "1.9.0" }
+nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }

@@ -51,6 +51,7 @@ dependencyResolutionManagement {
 
             val ktor = version("ktor", "2.3.2")
             lib("io.ktor", "ktor-client-core").versionRef(ktor)
+            lib("io.ktor", "ktor-client-logging").versionRef(ktor)
             lib("io.ktor", "ktor-client-java").versionRef(ktor)
             lib("io.ktor", "ktor-client-mock").versionRef(ktor)
             lib("io.ktor", "ktor-client-content-negotiation").versionRef(ktor)

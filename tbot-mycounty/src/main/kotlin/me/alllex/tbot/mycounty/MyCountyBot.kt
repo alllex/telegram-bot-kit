@@ -1,11 +1,9 @@
 package me.alllex.tbot.mycounty
 
 import kotlinx.coroutines.*
-import me.alllex.tbot.api.*
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.client.TelegramBotApiContext
-import me.alllex.tbot.api.client.TelegramBotApiPoller
-import me.alllex.tbot.api.client.TelegramBotUpdateListener
+import me.alllex.tbot.bot.TelegramBotUpdateListener
 import me.alllex.tbot.api.model.*
 import me.alllex.tbot.bot.util.log.loggerForClass
 import me.alllex.tbot.bot.util.newSingleThreadExecutor
@@ -18,14 +16,13 @@ import java.time.ZonedDateTime
 class MyCountyBot(
     db: Db,
     private val api: TelegramBotApiClient,
-    private val apiPoller: TelegramBotApiPoller,
 ) : TelegramBotUpdateListener, TelegramBotApiContext, CoroutineScope {
 
     private val job = SupervisorJob()
     private val coroutineExecutor = newSingleThreadExecutor("bot")
     override val coroutineContext = job +
-            coroutineExecutor.asCoroutineDispatcher() +
-            CoroutineExceptionHandler { _, t -> onCoroutineError(t) }
+        coroutineExecutor.asCoroutineDispatcher() +
+        CoroutineExceptionHandler { _, t -> onCoroutineError(t) }
 
     private val userDao = UserDao(db)
     private val counterDao = UserCounterDao(db)
@@ -37,52 +34,44 @@ class MyCountyBot(
     override val botApiClient: TelegramBotApiClient get() = api
 
     fun start() {
-        apiPoller.addListener(this)
     }
 
     fun stop() {
-        apiPoller.removeListener(this)
         coroutineExecutor.shutdownAndAwaitTermination()
         job.cancel()
     }
 
-    override fun onUpdate(update: Update) {
-        when (update) {
-            is MessageUpdate -> onChatMessage(update.message)
-            is CallbackQueryUpdate -> onCallbackQuery(update.callbackQuery)
-            else -> {}
-        }
-    }
-
-    private fun onChatMessage(msg: Message) {
-        launch {
-            val user = getOrCreateUser(msg.chat.id)
+    context(TelegramBotApiContext)
+    override suspend fun onMessage(message: Message) {
+        (this as CoroutineScope).launch {
+            val user = getOrCreateUser(message.chat.id)
             try {
-                onChatMessageImpl(user, msg)
+                onChatMessageImpl(user, message)
             } catch (e: BadRequestException) {
                 val text = e.userFriendlyMessage ?: "Something went wrong..."
-                msg.chat.sendMessage(text)
+                message.chat.sendMessage(text)
             }
         }
     }
 
-    private fun onCallbackQuery(query: CallbackQuery) {
-        launch {
+    context(TelegramBotApiContext)
+    override suspend fun onCallbackQuery(callbackQuery: CallbackQuery) {
+        (this as CoroutineScope).launch {
             // treat user id as chat id, because working with private chats
-            val chatId = ChatId(query.from.id.value)
+            val chatId = ChatId(callbackQuery.from.id.value)
             val user = getOrCreateUser(chatId)
             var answered = false
             try {
-                onQueryCallbackImpl(user, query)
-                query.answer()
+                onQueryCallbackImpl(user, callbackQuery)
+                callbackQuery.answer()
                 answered = true
             } catch (e: BadRequestException) {
                 val text = e.userFriendlyMessage ?: UserStrings["somethingWentWrong"]
-                query.answer(text)
+                callbackQuery.answer(text)
                 answered = true
             } finally {
                 if (!answered) {
-                    query.answer()
+                    callbackQuery.answer()
                 }
             }
         }
@@ -297,6 +286,7 @@ class MyCountyBot(
 
                 onCounterQueryCallback(user, query, callbackName, counter)
             }
+
             else -> error("unexpected size: ${dataParts.size}")
         }
     }

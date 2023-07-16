@@ -1,9 +1,10 @@
 package me.alllex.tbot.mycounty
 
+import io.ktor.client.plugins.logging.*
 import kotlinx.coroutines.runBlocking
 import me.alllex.tbot.Build
 import me.alllex.tbot.api.client.TelegramBotApiClient
-import me.alllex.tbot.api.client.TelegramBotApiPoller
+import me.alllex.tbot.bot.TelegramBotApiPoller
 import me.alllex.tbot.api.client.unwrap
 import me.alllex.tbot.api.model.getMe
 import me.alllex.tbot.bot.util.getSystemPropertyOrThrow
@@ -28,19 +29,22 @@ class Main(
     private val bot: MyCountyBot
 
     init {
-        api = TelegramBotApiClient(config.api.token, host = config.api.host)
+        api = TelegramBotApiClient(config.api.token, host = config.api.host) {
+            install(Logging) {
+                level = LogLevel.INFO
+            }
+        }
         apiPoller = TelegramBotApiPoller(api, pollingTimeout = 10.seconds)
-        bot = MyCountyBot(db, api, apiPoller)
+        bot = MyCountyBot(db, api)
     }
 
     fun start() {
         log.info("Starting `$NAME` v$version with config:\n${config}")
 
         db.start()
-//        api.start()
         runBlocking { checkBotToken() }
         bot.start()
-        apiPoller.start()
+        apiPoller.start(bot)
 
         log.info("Started")
     }
@@ -50,7 +54,7 @@ class Main(
 
         apiPoller.stop()
         bot.stop()
-//        api.stop()
+        api.close()
         db.stop()
 
         log.info("Stopped")

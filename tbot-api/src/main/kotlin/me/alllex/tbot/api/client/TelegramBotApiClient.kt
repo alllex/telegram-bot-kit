@@ -18,7 +18,11 @@ class TelegramBotApiClient private constructor(
     internal val apiProtocol: URLProtocol = URLProtocol.HTTPS,
     internal val apiHost: String = DEFAULT_TELEGRAM_API_HOST,
     internal val apiPort: Int = DEFAULT_PORT,
-) {
+) : AutoCloseable {
+
+    override fun close() {
+        httpClient.close()
+    }
 
     companion object {
 
@@ -40,11 +44,18 @@ class TelegramBotApiClient private constructor(
             engine: HttpClientEngine? = null,
             host: String = DEFAULT_TELEGRAM_API_HOST,
             port: Int = DEFAULT_PORT,
+            configuration: (HttpClientConfig<*>.() -> Unit)? = null,
         ): TelegramBotApiClient {
             val httpClient = if (engine == null) {
-                HttpClient { applyDefaultConfiguration() }
+                HttpClient {
+                    applyDefaultConfiguration()
+                    configuration?.invoke(this)
+                }
             } else {
-                HttpClient(engine) { applyDefaultConfiguration() }
+                HttpClient(engine) {
+                    applyDefaultConfiguration()
+                    configuration?.invoke(this)
+                }
             }
             return TelegramBotApiClient(httpClient, apiToken, protocol, host, port)
         }

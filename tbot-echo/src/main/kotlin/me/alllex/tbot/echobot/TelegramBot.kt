@@ -23,9 +23,9 @@ class TelegramBot(
         check(started.compareAndSet(false, true)) { "Already started" }
         flowOf(1)
 
-        val state = State(FlowPoller(client, pollingTimeout))
-        this.state = state
         val poller = FlowPoller(client, pollingTimeout)
+        val state = State(poller)
+        this.state = state
 
         val botApiContext = object : TelegramBotApiContext {
             override val botApiClient = client

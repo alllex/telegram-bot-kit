@@ -1,15 +1,18 @@
-package me.alllex.tbot.api.client
+package me.alllex.tbot.bot
 
 import kotlinx.coroutines.*
+import me.alllex.tbot.api.client.TelegramBotApiClient
+import me.alllex.tbot.api.client.TelegramBotApiContext
 import me.alllex.tbot.api.model.Seconds
 import me.alllex.tbot.bot.util.log.loggerForClass
 import me.alllex.tbot.bot.util.newSingleThreadExecutor
 import me.alllex.tbot.bot.util.shutdownAndAwaitTermination
 import me.alllex.tbot.api.model.Update
 import me.alllex.tbot.api.model.getUpdates
-import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 
@@ -18,86 +21,116 @@ class TelegramBotApiPoller(
     private val pollingTimeout: Duration = 10.seconds
 ) : CoroutineScope {
 
+    private val started = AtomicBoolean(false)
     private val updateOffset = AtomicLong(0)
-    private val listeners = CopyOnWriteArrayList<TelegramBotUpdateListener>()
 
     private val pollerJob = SupervisorJob()
-    private val pollerExecutor = newSingleThreadExecutor("api-poll")
+    private val pollerExecutor = newSingleThreadExecutor("tbot-polling")
     override val coroutineContext = pollerJob +
         pollerExecutor.asCoroutineDispatcher() +
         CoroutineExceptionHandler { _, t -> onCoroutineError(t) }
 
-    fun addListener(listener: TelegramBotUpdateListener) {
-        listeners.addIfAbsent(listener)
+    private val botApiContext = object : TelegramBotApiContext {
+        override val botApiClient: TelegramBotApiClient get() = client
     }
 
-    fun removeListener(listener: TelegramBotUpdateListener) {
-        listeners -= listener
-    }
-
-    fun start() {
-        launch { pollingForever() }
+    fun start(listener: TelegramBotUpdateListener) {
+        check(started.compareAndSet(false, true)) { "Already started" }
+        launch { runPollingForever(listener) }
         log.info("Started")
     }
 
     fun stop() {
-        pollerJob.cancel()
+        runBlocking {
+            withTimeout(500.milliseconds) {
+                pollerJob.cancelAndJoin()
+                log.info("Polling job stopped successfully")
+            }
+        }
         pollerExecutor.shutdownAndAwaitTermination()
         log.info("Stopped")
     }
 
-    private suspend fun pollingForever() {
-        supervisorScope {
-            while (true) {
-                launch {
-                    val rawUpdates = getUpdatesSafely()
-                    processReceivedUpdates(rawUpdates)
-                }.join()
-            }
+    private suspend fun runPollingForever(listener: TelegramBotUpdateListener) {
+        while (isActive) {
+            runPollingIteration(listener)
         }
     }
 
-    private fun processReceivedUpdates(rawUpdates: List<Update>?) {
-        if (rawUpdates.isNullOrEmpty()) {
-            return // polling timeout
-        }
+    private suspend fun runPollingIteration(listener: TelegramBotUpdateListener) {
+        val updates = fetchUpdatesSafelyRetryingForever() ?: return
+        log.debug { "Received ${updates.size} updates" }
 
-        if (listeners.isEmpty()) {
-            return
-        }
+        for (update in updates) {
+            if (!isActive) break
 
-        for (l in listeners) {
-            for (rawUpdate in rawUpdates) {
-                notifyOnUpdateSafely(l, rawUpdate)
+            try {
+                with(botApiContext) {
+                    listener.onUpdate(update)
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                log.error("Failed to process update $update", e)
             }
-        }
 
-        val lastUpdateId = rawUpdates.maxByOrNull { it.updateId }?.updateId
-        if (lastUpdateId != null) {
-            updateOffset.set(lastUpdateId + 1)
+            val updateId = update.updateId
+            updateOffset.updateAndGet { maxOf(it, updateId + 1) }
         }
     }
 
-    private suspend fun getUpdatesSafely(): List<Update>? {
-        val response = client.getUpdates(updateOffset.get(), timeout = Seconds(pollingTimeout.inWholeSeconds))
+    private suspend fun fetchUpdatesSafelyRetryingForever(): List<Update>? {
+        // happy path
+        fetchUpdatesSafely()?.let { return it }
+
+        // 1, 2, 4, 8, 10, 10, ...
+        val retryDelaySeconds = generateSequence(1) { it * 2 }.map { it.coerceAtMost(10) }
+
+        for (delaySeconds in retryDelaySeconds) {
+            if (!isActive) break
+
+            fetchUpdatesSafely()?.let { return it }
+
+            log.debug { "Retrying update fetching in $delaySeconds seconds" }
+            delay(delaySeconds * 1000L)
+        }
+
+        // Should not get here
+        return null
+    }
+
+    /**
+     * Returns fetched updates or null if an error occurred.
+     */
+    private suspend fun fetchUpdatesSafely(): List<Update>? {
+        return try {
+            fetchUpdates()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            log.error("Failed to get updates due to unexpected error:", e)
+            null
+        }
+    }
+
+    private suspend fun fetchUpdates(): List<Update>? {
+        val updateOffsetValue = updateOffset.get()
+        log.debug { "Fetching updates with offset $updateOffsetValue" }
+        val response = client.getUpdates(updateOffsetValue, timeout = Seconds(pollingTimeout.inWholeSeconds))
         if (response.ok) {
             return response.result
         }
 
-        log.error("Failed to get updates: ${response.description}")
-        return null
-    }
+        log.error("Failed to get updates: $response")
 
-    private fun notifyOnUpdateSafely(l: TelegramBotUpdateListener, rawUpdate: Update) {
-        try {
-            notifyOnUpdate(l, rawUpdate)
-        } catch (e: Exception) {
-            log.error("Unexpected exception: ", e)
+        val retryAfter = response.parameters?.retryAfter
+        if (retryAfter != null) {
+            log.warn("Too many requests, Bot API asks to retry after $retryAfter seconds. Suspending requests for this time...")
+            delay(retryAfter.value * 1000L)
+            return null
         }
-    }
 
-    private fun notifyOnUpdate(l: TelegramBotUpdateListener, rawUpdate: Update) {
-        l.onUpdate(rawUpdate)
+        return null
     }
 
     private fun onCoroutineError(t: Throwable) {
@@ -107,5 +140,4 @@ class TelegramBotApiPoller(
     companion object {
         private val log = loggerForClass<TelegramBotApiPoller>()
     }
-
 }

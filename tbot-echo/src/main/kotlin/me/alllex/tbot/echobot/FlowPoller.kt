@@ -81,7 +81,7 @@ class FlowPoller(
             return response.result
         }
 
-        log.error("Failed to get updates: ${response.description}")
+        log.error("Failed to get updates: $response")
         return null
     }
 

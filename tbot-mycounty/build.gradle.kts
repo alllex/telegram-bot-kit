@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.tbotApi)
     implementation(projects.tbotBot)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.ktor.client.logging)
     implementation(libs.bundles.log4j)
     implementation(libs.bundles.jackson.kotlin.yaml)
     implementation(libs.sqlite.jdbc)

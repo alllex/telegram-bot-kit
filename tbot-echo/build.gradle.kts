@@ -26,6 +26,7 @@ dependencies {
     implementation(platform(libs.kotlinx.coroutines.bom))
     implementation(libs.kotlinx.coroutines.core)
 
+    implementation(libs.bundles.log4j)
 }
 
 testing {
@@ -42,4 +43,8 @@ testing {
 
 application {
     mainClass = "me.alllex.tbot.echobot.EchoBotKt"
+}
+
+kotlin.compilerOptions {
+    freeCompilerArgs.add("-Xcontext-receivers")
 }

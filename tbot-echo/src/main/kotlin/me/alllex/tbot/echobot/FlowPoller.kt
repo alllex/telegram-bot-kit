@@ -1,25 +1,28 @@
-package me.alllex.tbot.api.client
+package me.alllex.tbot.echobot
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.model.Seconds
+import me.alllex.tbot.api.model.Update
+import me.alllex.tbot.api.model.getUpdates
 import me.alllex.tbot.bot.util.log.loggerForClass
 import me.alllex.tbot.bot.util.newSingleThreadExecutor
 import me.alllex.tbot.bot.util.shutdownAndAwaitTermination
-import me.alllex.tbot.api.model.Update
-import me.alllex.tbot.api.model.getUpdates
-import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-
-class TelegramBotApiPoller(
+class FlowPoller(
     private val client: TelegramBotApiClient,
     private val pollingTimeout: Duration = 10.seconds
-) : CoroutineScope {
+) : CoroutineScope, AutoCloseable {
+
+    override fun close() {
+        stop()
+    }
 
     private val updateOffset = AtomicLong(0)
-    private val listeners = CopyOnWriteArrayList<TelegramBotUpdateListener>()
 
     private val pollerJob = SupervisorJob()
     private val pollerExecutor = newSingleThreadExecutor("api-poll")
@@ -27,16 +30,15 @@ class TelegramBotApiPoller(
         pollerExecutor.asCoroutineDispatcher() +
         CoroutineExceptionHandler { _, t -> onCoroutineError(t) }
 
-    fun addListener(listener: TelegramBotUpdateListener) {
-        listeners.addIfAbsent(listener)
-    }
+    private val _updates: MutableSharedFlow<Update> = MutableSharedFlow()
 
-    fun removeListener(listener: TelegramBotUpdateListener) {
-        listeners -= listener
-    }
+    val updates: SharedFlow<Update> = _updates.asSharedFlow()
 
     fun start() {
-        launch { pollingForever() }
+        launch {
+            _updates.subscriptionCount.takeWhile { it == 0 }.collect()
+            pollingForever()
+        }
         log.info("Started")
     }
 
@@ -47,29 +49,24 @@ class TelegramBotApiPoller(
     }
 
     private suspend fun pollingForever() {
-        supervisorScope {
-            while (true) {
-                launch {
-                    val rawUpdates = getUpdatesSafely()
-                    processReceivedUpdates(rawUpdates)
-                }.join()
+        while (true) {
+            try {
+                val rawUpdates = getUpdatesSafely()
+                processReceivedUpdates(rawUpdates)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (t: Throwable) {
+                onCoroutineError(t)
             }
         }
     }
 
-    private fun processReceivedUpdates(rawUpdates: List<Update>?) {
+    private suspend fun processReceivedUpdates(rawUpdates: List<Update>?) {
         if (rawUpdates.isNullOrEmpty()) {
             return // polling timeout
         }
-
-        if (listeners.isEmpty()) {
-            return
-        }
-
-        for (l in listeners) {
-            for (rawUpdate in rawUpdates) {
-                notifyOnUpdateSafely(l, rawUpdate)
-            }
+        for (rawUpdate in rawUpdates) {
+            _updates.emit(rawUpdate)
         }
 
         val lastUpdateId = rawUpdates.maxByOrNull { it.updateId }?.updateId
@@ -88,24 +85,12 @@ class TelegramBotApiPoller(
         return null
     }
 
-    private fun notifyOnUpdateSafely(l: TelegramBotUpdateListener, rawUpdate: Update) {
-        try {
-            notifyOnUpdate(l, rawUpdate)
-        } catch (e: Exception) {
-            log.error("Unexpected exception: ", e)
-        }
-    }
-
-    private fun notifyOnUpdate(l: TelegramBotUpdateListener, rawUpdate: Update) {
-        l.onUpdate(rawUpdate)
-    }
-
     private fun onCoroutineError(t: Throwable) {
         log.error("Unexpected coroutine error: ", t)
     }
 
     companion object {
-        private val log = loggerForClass<TelegramBotApiPoller>()
+        private val log = loggerForClass<FlowPoller>()
     }
 
 }

@@ -1,66 +1,37 @@
 package me.alllex.tbot.echobot
 
-import kotlinx.coroutines.runBlocking
-import me.alllex.tbot.api.client.TelegramBotApiClient
-import me.alllex.tbot.api.client.TelegramBotApiPoller
-import me.alllex.tbot.api.client.TelegramBotUpdateListener
-import me.alllex.tbot.api.client.TelegramResponse
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import me.alllex.tbot.api.client.*
 import me.alllex.tbot.api.model.*
 import me.alllex.tbot.bot.util.log.loggerForClass
 import me.alllex.tbot.bot.util.runForever
-
-class EchoBot {
-
-}
 
 fun main(args: Array<String>) {
     check(args.size == 3) { "Expected 3 arguments" }
     val (botApiToken, botUsername, chatId) = args
 
-    val client = TelegramBotApiClient(
-        botApiToken
-    )
+    val client = TelegramBotApiClient(botApiToken)
 
-    val poller = TelegramBotApiPoller(client)
+    runBlocking { selfCheck(client, botUsername) }
 
-    try {
-        poller.start()
+    val bot = TelegramBot(client)
 
-        poller.addListener(object : TelegramBotUpdateListener {
-            override fun onUpdate(update: Update) {
-                println("Received update: $update")
-                when (update) {
-                    is MessageUpdate -> {
-                        val message = update.message
-                        runBlocking {
-                            client.sendMessage(
-                                chatId = message.chat.id,
-                                text = message.text ?: "I don't understand you"
-                            )
-                        }
-                    }
-                    else -> {}
-                }
-            }
-        })
+    bot.start {
+        println("Received update: ${it.toString().take(64)}")
+        println()
+        if (it !is MessageUpdate) return@start
 
-        runBlocking {
-            selfCheck(client, botUsername)
-
-            client.sendMessage(
-                chatId = ChatId(chatId.toLong()),
-                text = "Hello, world!"
-            )
+        val text = it.message.text
+        if (text.equals("stop", ignoreCase = true)) {
+            bot.stop()
+        } else {
+            it.message.reply("Thanks!")
         }
-
-        runForever(loggerForClass<EchoBot>())
-    } finally {
-        poller.stop()
     }
 
+    runForever(loggerForClass<TelegramBot>())
 }
-
-fun <T> TelegramResponse<T>.unwrap(): T = result ?: error("Response is not ok: $this")
 
 suspend fun selfCheck(client: TelegramBotApiClient, expectedUsername: String) {
     val me = client.getMe().unwrap()

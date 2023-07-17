@@ -198,7 +198,7 @@ class BotApiGenerator {
         }
         appendLine("    }.body()")
 
-        // convenience method
+        // generate a convenience extension method
         if (parameters.isNotEmpty()) {
             appendLine()
             appendLine("/**")
@@ -215,10 +215,30 @@ class BotApiGenerator {
                 appendFieldLine(elementName, parameter, isProperty = false)
             }
             appendLine("): TelegramResponse<${returnType.value}> =")
-            appendLine {
-                append("    ${elementName.value}(${requestTypeName}(${parameters.joinToString { it.name.snakeToCamelCase() }}))")
+            appendLine("    ${elementName.value}(${requestTypeName}(${parameters.joinToString { it.name.snakeToCamelCase() }}))")
+        }
+
+        // generate a convenience method on a context
+        appendLine()
+        appendLine("/**")
+        description.split("\n").forEach {
+            appendLine(" * $it")
+        }
+        appendLine(" *")
+        parameters.filter { it.description.isNotEmpty() }.forEach {
+            appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
+        }
+        appendLine(" */")
+        appendLine("context(TelegramBotApiContext)")
+        append("suspend fun ${elementName.value}(")
+        if (parameters.isNotEmpty()) {
+            appendLine()
+            for (parameter in parameters) {
+                appendFieldLine(elementName, parameter, isProperty = false)
             }
         }
+        appendLine("): TelegramResponse<${returnType.value}> =")
+        appendLine("    botApiClient.${elementName.value}(${parameters.joinToString { it.name.snakeToCamelCase() }})")
     }
 
     private fun generateTypesFile(

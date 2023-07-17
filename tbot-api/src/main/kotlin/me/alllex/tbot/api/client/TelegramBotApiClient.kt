@@ -18,9 +18,9 @@ class TelegramBotApiClient private constructor(
     internal val apiProtocol: URLProtocol = URLProtocol.HTTPS,
     internal val apiHost: String = DEFAULT_TELEGRAM_API_HOST,
     internal val apiPort: Int = DEFAULT_PORT,
-) : AutoCloseable {
+) {
 
-    override fun close() {
+    fun closeHttpClient() {
         httpClient.close()
     }
 

@@ -54,7 +54,7 @@ class Main(
 
         apiPoller.stop()
         bot.stop()
-        api.close()
+        api.closeHttpClient()
         db.stop()
 
         log.info("Stopped")

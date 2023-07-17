@@ -148,12 +148,10 @@ class MyCountyBot(
     }
 
     private fun createCountersSelectKeyboard(user: User, counters: List<UserCounter>) = inlineKeyboard {
-        counters.chunked(2).map { rowCounters ->
-            row {
-                rowCounters.map { counter ->
-                    val data = "${user.userId.value}/${QueryCallbackName.SELECT}/${counter.id}"
-                    button(text = counter.name, callbackData = data)
-                }
+        rowsChunked(2) {
+            for (counter in counters) {
+                val data = "${user.userId.value}/${QueryCallbackName.SELECT}/${counter.id}"
+                button(text = counter.name, callbackData = data)
             }
         }
     }
@@ -347,8 +345,8 @@ class MyCountyBot(
 
     private fun createSelectedCounterKeyboard(user: User, counter: UserCounter): InlineKeyboardMarkup {
         return inlineKeyboard {
-            row { button("Inc", "${user.userId.value}/${QueryCallbackName.INC}/${counter.id}") }
-            row { button("Drop Last", "${user.userId.value}/${QueryCallbackName.UNDO}/${counter.id}") }
+            button("Inc", "${user.userId.value}/${QueryCallbackName.INC}/${counter.id}")
+            button("Drop Last", "${user.userId.value}/${QueryCallbackName.UNDO}/${counter.id}")
             row {
                 button("Rename", "${user.userId.value}/${QueryCallbackName.RENAME}/${counter.id}")
                 button("Delete", "${user.userId.value}/${QueryCallbackName.DELETE}/${counter.id}")
@@ -368,16 +366,14 @@ class MyCountyBot(
             return
         }
 
-        val keyboard = inlineKeyboard {
-            row {
-                button("Remove", "${user.userId.value}/${QueryCallbackName.UNDO_CONFIRM}/${counter.id}")
-                button("Cancel", "${user.userId.value}/${QueryCallbackName.UNDO_CANCEL}/${counter.id}")
-            }
-        }
-
         queryMessage.editMarkdown(
             text = UserStrings["askCounterUndoConfirmation"].format(counter.name),
-            replyMarkup = keyboard
+            replyMarkup = inlineKeyboard {
+                row {
+                    button("Remove", "${user.userId.value}/${QueryCallbackName.UNDO_CONFIRM}/${counter.id}")
+                    button("Cancel", "${user.userId.value}/${QueryCallbackName.UNDO_CANCEL}/${counter.id}")
+                }
+            }
         )
     }
 
@@ -403,11 +399,10 @@ class MyCountyBot(
         val time = ZonedDateTime.ofInstant(now, user.timezone)
         val newValue = counter.register(time)
 
-        val keyboard = inlineKeyboard {
-            row { button("Select", "${user.userId.value}/${QueryCallbackName.SELECT_SINGLE}/${counter.id}") }
-        }
         val replyText = UserStrings["incrementedCounter"].format(counter.name, newValue)
-        api.sendMarkdown(user.chatId, replyText, replyMarkup = keyboard)
+        api.sendMarkdown(user.chatId, replyText, replyMarkup = inlineKeyboard {
+            button("Select", "${user.userId.value}/${QueryCallbackName.SELECT_SINGLE}/${counter.id}")
+        })
 
         transitionToIdle(user)
     }
@@ -425,16 +420,14 @@ class MyCountyBot(
             return
         }
 
-        val keyboard = inlineKeyboard {
-            row {
-                button("Delete", "${user.userId.value}/${QueryCallbackName.DELETE_CONFIRM}/${counter.id}")
-                button("Cancel", "${user.userId.value}/${QueryCallbackName.DELETE_CANCEL}/${counter.id}")
-            }
-        }
-
         queryMessage.editMarkdown(
             text = UserStrings["askDeleteConfirmation"].format(counter.name),
-            replyMarkup = keyboard
+            replyMarkup = inlineKeyboard {
+                row {
+                    button("Delete", "${user.userId.value}/${QueryCallbackName.DELETE_CONFIRM}/${counter.id}")
+                    button("Cancel", "${user.userId.value}/${QueryCallbackName.DELETE_CANCEL}/${counter.id}")
+                }
+            }
         )
     }
 

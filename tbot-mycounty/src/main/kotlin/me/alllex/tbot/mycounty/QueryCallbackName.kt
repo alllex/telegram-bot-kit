@@ -18,7 +18,7 @@ enum class QueryCallbackName(val string: String) {
 
     companion object {
         fun parse(s: String): QueryCallbackName? {
-            return values().find { it.string == s }
+            return entries.find { it.string == s }
         }
     }
 }

@@ -1,3 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
+import java.time.Instant
+
 plugins {
     kotlin("jvm")
     application
@@ -6,21 +10,15 @@ plugins {
 version = "2.2.2"
 
 val javaVersion: String by project
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(javaVersion))
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
 
 application {
-    mainClass.set("me.alllex.tbot.mycounty.Main")
+    mainClass = "me.alllex.tbot.mycounty.Main"
     applicationDefaultJvmArgs = listOf("-Dlog4j.shutdownHookEnabled=false")
 }
 
-distributions {
-    main {
-        contents {
-            into("/${project.name}")
-        }
-    }
+distributions.main {
+    contents.into("/${project.name}")
 }
 
 repositories {
@@ -41,3 +39,30 @@ kotlin.compilerOptions {
     freeCompilerArgs.add("-Xcontext-receivers")
 }
 
+val createBuildProperties by tasks.registering {
+    val projectVersion = version
+    val outputDir = layout.buildDirectory.file("build-properties")
+
+    inputs.property("version", projectVersion)
+    outputs.dir(outputDir)
+
+    doLast {
+        outputDir.get().asFile
+            .apply { mkdirs() }
+            .resolve("build.properties")
+            .writeText(
+                """
+                    version=$projectVersion
+                    time=${Instant.ofEpochMilli(System.currentTimeMillis())}
+                """.trimIndent()
+            )
+    }
+}
+
+sourceSets.main {
+    resources.srcDir(createBuildProperties)
+}
+
+tasks.processResources {
+    dependsOn(createBuildProperties)
+}

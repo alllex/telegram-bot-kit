@@ -4,14 +4,15 @@ import io.ktor.client.plugins.logging.*
 import kotlinx.coroutines.runBlocking
 import me.alllex.tbot.Build
 import me.alllex.tbot.api.client.TelegramBotApiClient
-import me.alllex.tbot.bot.TelegramBotApiPoller
 import me.alllex.tbot.api.client.unwrap
 import me.alllex.tbot.api.model.getMe
+import me.alllex.tbot.bot.TelegramBotApiPoller
 import me.alllex.tbot.bot.util.getSystemPropertyOrThrow
 import me.alllex.tbot.bot.util.log.loggerForClass
 import me.alllex.tbot.bot.util.runForever
 import me.alllex.tbot.mycounty.db.Db
 import me.alllex.tbot.util.parseYaml
+import me.alllex.tbot.util.serialiseAsYamlIntoString
 import org.apache.logging.log4j.LogManager
 import java.nio.file.Paths
 import kotlin.concurrent.thread
@@ -39,7 +40,7 @@ class Main(
     }
 
     fun start() {
-        log.info("Starting `$NAME` v$version with config:\n${config}")
+        log.info("Starting `$NAME` v$version with config:\n${config.serialiseAsYamlIntoString()}")
 
         db.start()
         runBlocking { checkBotToken() }

@@ -1,11 +1,16 @@
 package me.alllex.tbot.echobot
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import me.alllex.tbot.api.client.*
-import me.alllex.tbot.api.model.*
-import me.alllex.tbot.bot.util.log.loggerForClass
-import me.alllex.tbot.bot.util.runForever
+import kotlinx.coroutines.runBlocking
+import me.alllex.tbot.api.client.TelegramBotApiClient
+import me.alllex.tbot.api.client.TelegramBotApiContext
+import me.alllex.tbot.api.client.unwrap
+import me.alllex.tbot.api.model.Message
+import me.alllex.tbot.api.model.getMe
+import me.alllex.tbot.api.model.reply
+import me.alllex.tbot.bot.TelegramBotApiPoller
+import me.alllex.tbot.bot.TelegramBotUpdateListener
+import java.util.concurrent.CountDownLatch
+
 
 fun main(args: Array<String>) {
     check(args.size == 3) { "Expected 3 arguments" }
@@ -15,22 +20,27 @@ fun main(args: Array<String>) {
 
     runBlocking { selfCheck(client, botUsername) }
 
-    val bot = TelegramBot(client)
+    val updatePolling = TelegramBotApiPoller(client)
+    val countDownLatch = CountDownLatch(1)
 
-    bot.start {
-        println("Received update: ${it.toString().take(64)}")
-        println()
-        if (it !is MessageUpdate) return@start
-
-        val text = it.message.text
-        if (text.equals("stop", ignoreCase = true)) {
-            bot.stop()
-        } else {
-            it.message.reply("Thanks!")
+    updatePolling.start(object : TelegramBotUpdateListener {
+        context(TelegramBotApiContext)
+        override suspend fun onMessage(message: Message) {
+            println("Received message: ${message.text}")
+            val text = message.text
+            if (text.equals("stop", ignoreCase = true)) {
+                println("Received stop command, stopping...")
+                countDownLatch.countDown()
+            } else {
+                message.reply("Thanks!")
+            }
         }
-    }
+    })
 
-    runForever(loggerForClass<TelegramBot>())
+    countDownLatch.await()
+    updatePolling.stop()
+
+    println("Done")
 }
 
 suspend fun selfCheck(client: TelegramBotApiClient, expectedUsername: String) {

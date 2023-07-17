@@ -1,6 +1,8 @@
 package me.alllex.tbot.bot
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.client.TelegramBotApiContext
 import me.alllex.tbot.api.model.Seconds
@@ -9,6 +11,7 @@ import me.alllex.tbot.bot.util.newSingleThreadExecutor
 import me.alllex.tbot.bot.util.shutdownAndAwaitTermination
 import me.alllex.tbot.api.model.Update
 import me.alllex.tbot.api.model.getUpdates
+import me.alllex.tbot.bot.util.awaitCollectors
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration
@@ -30,13 +33,42 @@ class TelegramBotApiPoller(
         pollerExecutor.asCoroutineDispatcher() +
         CoroutineExceptionHandler { _, t -> onCoroutineError(t) }
 
+    /**
+     * When a batch of updates is emitted into this flow,
+     * the flow suspends emission of a next value until the previous on has been consumed (zero-buffer + suspend on overflow).
+     * This leads to a behavior that the next batch of updates is not requested from the Bot API until
+     * the last update from the previous batch is emitted.
+     * It means that as soon as the last update from a batch is emitted, the poller does not wait for the listeners to
+     * process it and starts fetching the next batch immediately (in doing so, it confirms that the previous batch can be dropped on the Bot API side).
+     */
+    private val _updates: MutableSharedFlow<Update> = MutableSharedFlow(extraBufferCapacity = 0, onBufferOverflow = BufferOverflow.SUSPEND)
+
     private val botApiContext = object : TelegramBotApiContext {
         override val botApiClient: TelegramBotApiClient get() = client
     }
 
+    /**
+     * Starts polling with the given listener.
+     *
+     * Cannot be restarted again.
+     */
     fun start(listener: TelegramBotUpdateListener) {
         check(started.compareAndSet(false, true)) { "Already started" }
-        launch { runPollingForever(listener) }
+
+        launch {
+            _updates.collect { update ->
+                listener.onUpdateSafely(update)
+            }
+        }
+
+        launch {
+            // have to await, because the collector registration happens concurrently
+            // and as soon as there is at least one collector the polling will start immediately
+            // which could lead to the remaining collectors to skip updates if they start collecting later
+            _updates.awaitCollectors(n = 1)
+
+            runPollingForever()
+        }
         log.info("Started")
     }
 
@@ -51,29 +83,30 @@ class TelegramBotApiPoller(
         log.info("Stopped")
     }
 
-    private suspend fun runPollingForever(listener: TelegramBotUpdateListener) {
-        while (isActive) {
-            runPollingIteration(listener)
+    private suspend fun TelegramBotUpdateListener.onUpdateSafely(update: Update) {
+        try {
+            with(botApiContext) {
+                onUpdate(update)
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            log.error("Failed to process update $update", e)
         }
     }
 
-    private suspend fun runPollingIteration(listener: TelegramBotUpdateListener) {
+    private suspend fun runPollingForever() {
+        while (isActive) {
+            runPollingIteration()
+        }
+    }
+
+    private suspend fun runPollingIteration() {
         val updates = fetchUpdatesSafelyRetryingForever() ?: return
         log.debug { "Received ${updates.size} updates" }
 
         for (update in updates) {
-            if (!isActive) break
-
-            try {
-                with(botApiContext) {
-                    listener.onUpdate(update)
-                }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Throwable) {
-                log.error("Failed to process update $update", e)
-            }
-
+            _updates.emit(update) // cancellable
             val updateId = update.updateId
             updateOffset.updateAndGet { maxOf(it, updateId + 1) }
         }

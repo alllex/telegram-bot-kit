@@ -17,6 +17,8 @@
 
 ### Alpha
 
+- [ ] Squash history
+- [ ] Error handling
 - [ ] Move required fields before optional
 
 ### Beta

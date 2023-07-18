@@ -7,7 +7,7 @@ plugins {
     application
 }
 
-version = "2.2.2"
+version = "3.0.0-SNAPSHOT"
 
 val javaVersion: String by project
 java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.tbotBot)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.java)
     implementation(libs.bundles.log4j)
     implementation(libs.bundles.jackson.kotlin.yaml)
     implementation(libs.sqlite.jdbc)

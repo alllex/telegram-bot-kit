@@ -1,5 +1,6 @@
 package me.alllex.tbot.mycounty
 
+import io.ktor.client.engine.java.*
 import io.ktor.client.plugins.logging.*
 import kotlinx.coroutines.runBlocking
 import me.alllex.tbot.Build
@@ -14,7 +15,9 @@ import me.alllex.tbot.mycounty.db.Db
 import me.alllex.tbot.util.parseYaml
 import me.alllex.tbot.util.serialiseAsYamlIntoString
 import org.apache.logging.log4j.LogManager
+import java.net.http.HttpClient
 import java.nio.file.Paths
+import java.time.Duration
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 import kotlin.time.Duration.Companion.seconds
@@ -30,8 +33,20 @@ class Main(
     private val bot: MyCountyBot
 
     init {
-        api = TelegramBotApiClient(config.api.token, host = config.api.host) {
+        api = TelegramBotApiClient(config.api.token, host = config.api.host, engine = Java) {
+            engine {
+                config {
+                    followRedirects(HttpClient.Redirect.NORMAL)
+                    connectTimeout(Duration.ofSeconds(30))
+                }
+            }
             install(Logging) {
+                logger = object : Logger {
+                    private val log = LogManager.getLogger("tbot-api")
+                    override fun log(message: String) {
+                        log.info(message)
+                    }
+                }
                 level = LogLevel.INFO
             }
         }

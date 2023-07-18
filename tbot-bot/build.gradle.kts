@@ -20,7 +20,6 @@ java {
 
 dependencies {
     api(projects.tbotApi)
-    implementation(libs.ktor.client.java)
 
     implementation(libs.bundles.log4j)
 

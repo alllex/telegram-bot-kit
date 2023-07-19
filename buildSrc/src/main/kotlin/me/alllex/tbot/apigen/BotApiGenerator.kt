@@ -110,7 +110,7 @@ class BotApiGenerator {
             .toMap()
 
         val typesFileText = generateTypesFile(allTypes, unionTypeParentByChild, packageName)
-        val requestTypesFileText = generateRequestTypesFile(allMethods, packageName, wrapperPackageName)
+        val requestTypesFileText = generateRequestTypesFile(allMethods, packageName)
         val methodsFileText = generateMethodsFile(allMethods, packageName, wrapperPackageName)
 
         val outputPackageDir = outputDirectory.resolve(packageName.replace(".", "/"))
@@ -133,18 +133,15 @@ class BotApiGenerator {
 
     private fun generateRequestTypesFile(
         methodElements: List<BotApiMethod>,
-        packageName: String,
-        wrapperPackageName: String
+        packageName: String
     ): String = buildString {
 
         if (packageName.isNotEmpty()) {
             appendLine("package $packageName")
+            appendLine()
         }
-        appendLine()
         appendLine("import kotlinx.serialization.Serializable")
-        if (wrapperPackageName.isNotEmpty() && wrapperPackageName != packageName) {
-            appendLine("import $wrapperPackageName.*")
-        }
+        appendLine("import kotlinx.serialization.encodeToString")
         appendLine()
         appendLine()
 
@@ -162,6 +159,8 @@ class BotApiGenerator {
     ): String = buildString {
 
         if (parameters.isNotEmpty()) {
+            val requestTypeName = elementName.asMethodNameToRequestTypeName()
+
             appendLine("/**")
             appendLine(" * Request body for [${elementName.value}].")
             appendLine(" * ")
@@ -170,11 +169,14 @@ class BotApiGenerator {
             }
             appendLine(" */")
             appendLine("@Serializable")
-            appendLine("data class ${elementName.asMethodNameToRequestTypeName()}(")
+            appendLine("data class $requestTypeName(")
             for (parameter in parameters) {
                 appendFieldLine(elementName, parameter, true)
             }
-            appendLine(")")
+            appendLine(") {")
+            appendLine("    ${generateDebugToString(requestTypeName, parameters)}")
+
+            appendLine("}")
         }
     }
 
@@ -317,13 +319,14 @@ class BotApiGenerator {
 
         if (packageName.isNotEmpty()) {
             appendLine("package $packageName")
+            appendLine()
         }
-        appendLine()
         appendLine("import kotlinx.serialization.json.*")
         appendLine("import kotlinx.serialization.DeserializationStrategy")
         appendLine("import kotlinx.serialization.ExperimentalSerializationApi")
         appendLine("import kotlinx.serialization.SerialName")
         appendLine("import kotlinx.serialization.Serializable")
+        appendLine("import kotlinx.serialization.encodeToString")
         appendLine()
 
         val specialTypes: Map<String, StringBuilder.(BotApiElement) -> Unit> = mapOf(
@@ -362,7 +365,9 @@ class BotApiGenerator {
     private fun generateValueTypeSourceCode(valueType: ValueType): String = buildString {
         appendLine("@Serializable")
         appendLine("@JvmInline")
-        appendLine("value class ${valueType.name}(val value: ${valueType.backingType})")
+        appendLine("value class ${valueType.name}(val value: ${valueType.backingType}) {")
+        appendLine("    override fun toString(): String = \"${valueType.name}(\${quoteWhenWhitespace(value)})\"")
+        appendLine("}")
     }
 
     private fun StringBuilder.generateSourceCodeForUpdate(updateTypeElement: BotApiElement) {
@@ -491,13 +496,13 @@ class BotApiGenerator {
     }
 
     private fun generateContentfulTypeSourceCode(
-        name: BotApiElementName,
+        typeName: BotApiElementName,
         description: String,
         fields: List<BotApiElement.Field>,
         unionTypeParentByChild: Map<BotApiElementName, BotApiElementName>
     ): String = buildString {
 
-        val sealedParentName = unionTypeParentByChild[name]
+        val sealedParentName = unionTypeParentByChild[typeName]
 
         // For sealed classes the "type" field will be automatically added by kotlinx.serialization
         // See: https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/polymorphism.md#custom-subclass-serial-name
@@ -524,36 +529,40 @@ class BotApiGenerator {
                 val fieldDescription = markerField.description
                 val unionMarkerValue = unionMarkerValueInDescriptionRe.find(fieldDescription)
                     ?.groupValues?.get(1)
-                    ?: error("Can't find union marker value for ${name.value} in description: '$fieldDescription'")
+                    ?: error("Can't find union marker value for ${typeName.value} in description: '$fieldDescription'")
                 appendLine("@SerialName(\"${unionMarkerValue}\")")
             }
         }
 
         if (trueFields.isEmpty()) {
-            appendLine {
-                if (sealedParentName != null) {
-                    append("data ") // https://kotlinlang.org/docs/object-declarations.html#data-objects
-                }
-                append("object ")
-                append(name.value)
-                if (sealedParentName != null) {
-                    append(" : ${sealedParentName.value}()")
-                }
+            // https://kotlinlang.org/docs/object-declarations.html#data-objects
+            append("data object ")
+            append(typeName.value)
+            if (sealedParentName != null) {
+                append(" : ${sealedParentName.value}()")
             }
+            appendLine()
         } else {
-            appendLine("data class ${name.value}(")
+            appendLine("data class ${typeName.value}(")
 
             for (field in trueFields) {
-                appendFieldLine(name, field, true)
+                appendFieldLine(typeName, field, true)
             }
 
-            appendLine {
-                append(")")
-                if (sealedParentName != null) {
-                    append(" : ${sealedParentName.value}()")
-                }
+            append(")")
+            if (sealedParentName != null) {
+                append(" : ${sealedParentName.value}()")
             }
+            appendLine(" {")
+            appendLine("    ${generateDebugToString(typeName.value, trueFields)}")
+            appendLine("}")
         }
+    }
+
+    private fun generateDebugToString(typeName: String, fields: List<BotApiElement.Field>): String = buildString {
+        append("override fun toString() = DebugStringBuilder(\"$typeName\")")
+        append(fields.map { it.name.snakeToCamelCase() }.joinToString("") { ".prop(\"$it\", $it)" })
+        append(".toString()")
     }
 
     private fun resolveFieldType(elementType: BotApiElementName, field: BotApiElement.Field): String {

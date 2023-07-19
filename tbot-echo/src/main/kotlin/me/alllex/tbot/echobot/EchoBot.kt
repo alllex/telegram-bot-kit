@@ -27,19 +27,20 @@ fun main(args: Array<String>) {
     updatePolling.start(object : TelegramBotUpdateListener {
         context(TelegramBotApiContext)
         override suspend fun onMessage(message: Message) {
-            println("Received message: ${message.text}")
+            println("Received message: $message")
+            println()
             val text = message.text
             if (text.equals("stop", ignoreCase = true)) {
                 println("Received stop command, stopping...")
                 countDownLatch.countDown()
             } else {
-                println("Waiting 10 seconds...")
+                println("Waiting...")
                 delay(3_000)
                 val botReplyMessage = message.reply("Thanks!")
-                delay(3_000)
+                delay(1_000)
                 println("Deleting bot reply message...")
                 println(botReplyMessage.delete())
-                delay(3_000)
+                delay(1_000)
                 println("Deleting bot reply message... again")
                 println(botReplyMessage.delete())
             }

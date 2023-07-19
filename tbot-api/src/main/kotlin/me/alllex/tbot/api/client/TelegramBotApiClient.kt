@@ -38,6 +38,8 @@ class TelegramBotApiClient private constructor(
                     namingStrategy = JsonNamingStrategy.SnakeCase
                     // To avoid the deserialization breaking when Telegram introduces new fields
                     ignoreUnknownKeys = true
+                    // Smaller payloads
+                    explicitNulls = false
                 })
             }
         }

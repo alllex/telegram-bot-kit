@@ -10,7 +10,7 @@ import me.alllex.tbot.bot.util.log.loggerForClass
 import me.alllex.tbot.bot.util.newSingleThreadExecutor
 import me.alllex.tbot.bot.util.shutdownAndAwaitTermination
 import me.alllex.tbot.api.model.Update
-import me.alllex.tbot.api.model.getUpdates
+import me.alllex.tbot.api.model.tryGetUpdates
 import me.alllex.tbot.bot.util.awaitCollectors
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
@@ -149,7 +149,7 @@ class TelegramBotApiPoller(
     private suspend fun fetchUpdates(): List<Update>? {
         val updateOffsetValue = updateOffset.get()
         log.debug { "Fetching updates with offset $updateOffsetValue" }
-        val response = client.getUpdates(updateOffsetValue, timeout = Seconds(pollingTimeout.inWholeSeconds))
+        val response = client.tryGetUpdates(updateOffsetValue, timeout = Seconds(pollingTimeout.inWholeSeconds))
         if (response.ok) {
             return response.result
         }

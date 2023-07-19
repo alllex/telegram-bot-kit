@@ -77,6 +77,8 @@ fun BotApiElement.getUnionDiscriminatorFieldName(): String? {
     return fields?.find { it.isUnionDiscriminator() }?.name
 }
 
+private fun BotApiElementName.asMethodNameToRequestTypeName() = "${value.toTitleCase()}Request"
+
 class BotApiGenerator {
 
     fun run(
@@ -108,12 +110,14 @@ class BotApiGenerator {
             .toMap()
 
         val typesFileText = generateTypesFile(allTypes, unionTypeParentByChild, packageName)
+        val requestTypesFileText = generateRequestTypesFile(allMethods, packageName, wrapperPackageName)
         val methodsFileText = generateMethodsFile(allMethods, packageName, wrapperPackageName)
 
         val outputPackageDir = outputDirectory.resolve(packageName.replace(".", "/"))
         outputPackageDir.mkdirs()
 
         outputPackageDir.resolve("Types.kt").writeText(typesFileText)
+        outputPackageDir.resolve("RequestTypes.kt").writeText(requestTypesFileText)
         outputPackageDir.resolve("Methods.kt").writeText(methodsFileText)
     }
 
@@ -127,6 +131,53 @@ class BotApiGenerator {
         }
     }
 
+    private fun generateRequestTypesFile(
+        methodElements: List<BotApiMethod>,
+        packageName: String,
+        wrapperPackageName: String
+    ): String = buildString {
+
+        if (packageName.isNotEmpty()) {
+            appendLine("package $packageName")
+        }
+        appendLine()
+        appendLine("import kotlinx.serialization.Serializable")
+        if (wrapperPackageName.isNotEmpty() && wrapperPackageName != packageName) {
+            appendLine("import $wrapperPackageName.*")
+        }
+        appendLine()
+        appendLine()
+
+        for (el in methodElements) {
+            val requestTypeSourceCodeText = generateRequestTypeSourceCode(el.name, el.parameters)
+            if (requestTypeSourceCodeText.isNotEmpty()) {
+                appendLine(requestTypeSourceCodeText)
+            }
+        }
+    }
+
+    private fun generateRequestTypeSourceCode(
+        elementName: BotApiElementName,
+        parameters: List<BotApiElement.Field>,
+    ): String = buildString {
+
+        if (parameters.isNotEmpty()) {
+            appendLine("/**")
+            appendLine(" * Request body for [${elementName.value}].")
+            appendLine(" * ")
+            parameters.filter { it.description.isNotEmpty() }.forEach {
+                appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
+            }
+            appendLine(" */")
+            appendLine("@Serializable")
+            appendLine("data class ${elementName.asMethodNameToRequestTypeName()}(")
+            for (parameter in parameters) {
+                appendFieldLine(elementName, parameter, true)
+            }
+            appendLine(")")
+        }
+    }
+
     private fun generateMethodsFile(
         methodElements: List<BotApiMethod>,
         packageName: String,
@@ -136,7 +187,6 @@ class BotApiGenerator {
             appendLine("package $packageName")
         }
         appendLine()
-        appendLine("import kotlinx.serialization.Serializable")
         appendLine("import io.ktor.client.call.*")
         appendLine("import io.ktor.client.request.*")
         appendLine("import io.ktor.http.*")
@@ -158,32 +208,30 @@ class BotApiGenerator {
         returnType: KotlinType,
     ): String = buildString {
 
-        val requestTypeName = "${elementName.value.toTitleCase()}Request"
-        if (parameters.isNotEmpty()) {
-            appendLine("/**")
-            appendLine(" * Request body for [${elementName.value}]")
-            parameters.filter { it.description.isNotEmpty() }.forEach {
-                appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
+        val requestTypeName = elementName.asMethodNameToRequestTypeName()
+        val mainMethodName = elementName.value
+        val tryMethodName = "try${mainMethodName.toTitleCase()}"
+
+        val requestValueArg =
+            if (parameters.isEmpty()) ""
+            else "${requestTypeName}(${parameters.joinToString { it.name.snakeToCamelCase() }})"
+
+
+        fun StringBuilder.appendDescriptionDoc() {
+            description.split("\n").forEach {
+                appendLine(" * $it")
             }
-            appendLine(" */")
-            appendLine("@Serializable")
-            appendLine("data class $requestTypeName(")
-            for (parameter in parameters) {
-                appendFieldLine(elementName, parameter, true)
-            }
-            appendLine(")")
-            appendLine()
         }
 
+        // Core try-prefixed method that does the actual request
         val httpMethod = if (parameters.isEmpty()) "get" else "post"
         appendLine("/**")
-        description.split("\n").forEach {
-            appendLine(" * $it")
-        }
+        appendDescriptionDoc()
         appendLine(" */")
-        append("suspend fun TelegramBotApiClient.${elementName.value}(")
-        if (parameters.isNotEmpty())
+        append("suspend fun TelegramBotApiClient.$tryMethodName(")
+        if (parameters.isNotEmpty()) {
             append("requestBody: $requestTypeName")
+        }
         appendLine("): TelegramResponse<${returnType.value}> =")
         appendLine("    httpClient.$httpMethod {")
         appendLine("        url {")
@@ -198,47 +246,64 @@ class BotApiGenerator {
         }
         appendLine("    }.body()")
 
-        // generate a convenience extension method
-        if (parameters.isNotEmpty()) {
-            appendLine()
+        fun StringBuilder.appendMethodDoc() {
             appendLine("/**")
-            description.split("\n").forEach {
-                appendLine(" * $it")
+            appendDescriptionDoc()
+            if (parameters.isNotEmpty()) {
+                appendLine(" *")
             }
-            appendLine(" *")
             parameters.filter { it.description.isNotEmpty() }.forEach {
                 appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
             }
             appendLine(" */")
-            appendLine("suspend fun TelegramBotApiClient.${elementName.value}(")
-            for (parameter in parameters) {
-                appendFieldLine(elementName, parameter, isProperty = false)
-            }
-            appendLine("): TelegramResponse<${returnType.value}> =")
-            appendLine("    ${elementName.value}(${requestTypeName}(${parameters.joinToString { it.name.snakeToCamelCase() }}))")
         }
 
-        // generate a convenience method on a context
-        appendLine()
-        appendLine("/**")
-        description.split("\n").forEach {
-            appendLine(" * $it")
-        }
-        appendLine(" *")
-        parameters.filter { it.description.isNotEmpty() }.forEach {
-            appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
-        }
-        appendLine(" */")
-        appendLine("context(TelegramBotApiContext)")
-        append("suspend fun ${elementName.value}(")
-        if (parameters.isNotEmpty()) {
-            appendLine()
+        fun StringBuilder.appendParameters() {
+            if (parameters.isNotEmpty()) {
+                appendLine()
+            }
             for (parameter in parameters) {
                 appendFieldLine(elementName, parameter, isProperty = false)
             }
         }
+
+        // Convenience try-prefixed method
+        if (parameters.isNotEmpty()) {
+            appendLine()
+            appendMethodDoc()
+            append("suspend fun TelegramBotApiClient.$tryMethodName(")
+            appendParameters()
+            appendLine("): TelegramResponse<${returnType.value}> =")
+            appendLine("    $tryMethodName($requestValueArg)")
+        }
+
+        // Convenience try-prefixed method with context
+        appendLine()
+        appendMethodDoc()
+        appendLine("context(TelegramBotApiContext)")
+        append("suspend fun $tryMethodName(")
+        appendParameters()
         appendLine("): TelegramResponse<${returnType.value}> =")
-        appendLine("    botApiClient.${elementName.value}(${parameters.joinToString { it.name.snakeToCamelCase() }})")
+        appendLine("    botApiClient.$tryMethodName($requestValueArg)")
+
+        // Convenience method
+        appendLine()
+        appendMethodDoc()
+        appendLine("@Throws(TelegramBotApiException::class)")
+        append("suspend fun TelegramBotApiClient.$mainMethodName(")
+        appendParameters()
+        appendLine("): ${returnType.value} =")
+        appendLine("    $tryMethodName($requestValueArg).getResultOrThrow()")
+
+        // Convenience method with context
+        appendLine()
+        appendMethodDoc()
+        appendLine("context(TelegramBotApiContext)")
+        appendLine("@Throws(TelegramBotApiException::class)")
+        append("suspend fun $mainMethodName(")
+        appendParameters()
+        appendLine("): ${returnType.value} =")
+        appendLine("    botApiClient.$tryMethodName($requestValueArg).getResultOrThrow()")
     }
 
     private fun generateTypesFile(

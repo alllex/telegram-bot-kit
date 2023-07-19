@@ -5,7 +5,6 @@ import io.ktor.client.plugins.logging.*
 import kotlinx.coroutines.runBlocking
 import me.alllex.tbot.Build
 import me.alllex.tbot.api.client.TelegramBotApiClient
-import me.alllex.tbot.api.client.unwrap
 import me.alllex.tbot.api.model.getMe
 import me.alllex.tbot.bot.TelegramBotApiPoller
 import me.alllex.tbot.bot.util.getSystemPropertyOrThrow
@@ -77,7 +76,7 @@ class Main(
     }
 
     private suspend fun checkBotToken() {
-        val me = api.getMe().unwrap()
+        val me = api.getMe()
         check(me.isBot) { "Self-check for being bot has failed" }
         check(me.username == config.api.username) {
             "Expected username to be @${config.api.username}, but it is @${me.username}"

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.*
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.model.Seconds
 import me.alllex.tbot.api.model.Update
-import me.alllex.tbot.api.model.getUpdates
+import me.alllex.tbot.api.model.tryGetUpdates
 import me.alllex.tbot.bot.util.log.loggerForClass
 import me.alllex.tbot.bot.util.newSingleThreadExecutor
 import me.alllex.tbot.bot.util.shutdownAndAwaitTermination
@@ -76,7 +76,7 @@ class FlowPoller(
     }
 
     private suspend fun getUpdatesSafely(): List<Update>? {
-        val response = client.getUpdates(updateOffset.get(), timeout = Seconds(pollingTimeout.inWholeSeconds))
+        val response = client.tryGetUpdates(updateOffset.get(), timeout = Seconds(pollingTimeout.inWholeSeconds))
         if (response.ok) {
             return response.result
         }

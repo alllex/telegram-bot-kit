@@ -20,6 +20,10 @@ class TelegramBotApiClient private constructor(
     internal val apiPort: Int = DEFAULT_PORT,
 ) {
 
+    internal inline fun <T> executeRequest(request: () -> T): T {
+        return request()
+    }
+
     fun closeHttpClient() {
         httpClient.close()
     }

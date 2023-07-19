@@ -3,6 +3,7 @@ package me.alllex.tbot.api.model
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.client.TelegramBotApiContext
 import me.alllex.tbot.api.client.TelegramResponse
+import me.alllex.tbot.api.client.getResultOrThrow
 
 suspend fun TelegramBotApiClient.sendMarkdown(
     chatId: ChatId,
@@ -16,8 +17,9 @@ suspend fun TelegramBotApiClient.sendMarkdown(
     replyToMessageId: MessageId? = null,
     allowSendingWithoutReply: Boolean? = null,
     replyMarkup: ReplyMarkup? = null,
-): TelegramResponse<Message> =
-    sendMessage(SendMessageRequest(chatId, text, messageThreadId, parseMode, entities, disableWebPagePreview, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+): Message =
+    trySendMessage(SendMessageRequest(chatId, text, messageThreadId, parseMode, entities, disableWebPagePreview, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+        .getResultOrThrow()
 
 
 context(TelegramBotApiContext)
@@ -32,8 +34,9 @@ suspend fun Chat.sendMessage(
     replyToMessageId: MessageId? = null,
     allowSendingWithoutReply: Boolean? = null,
     replyMarkup: ReplyMarkup? = null,
-): TelegramResponse<Message> =
-    botApiClient.sendMessage(SendMessageRequest(id, text, messageThreadId, parseMode, entities, disableWebPagePreview, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+): Message =
+    botApiClient.trySendMessage(SendMessageRequest(id, text, messageThreadId, parseMode, entities, disableWebPagePreview, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+        .getResultOrThrow()
 
 context(TelegramBotApiContext)
 suspend fun Chat.sendMarkdown(
@@ -46,8 +49,9 @@ suspend fun Chat.sendMarkdown(
     replyToMessageId: MessageId? = null,
     allowSendingWithoutReply: Boolean? = null,
     replyMarkup: ReplyMarkup? = null,
-): TelegramResponse<Message> =
-    botApiClient.sendMessage(SendMessageRequest(id, text, messageThreadId, "markdown", entities, disableWebPagePreview, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+): Message =
+    botApiClient.trySendMessage(SendMessageRequest(id, text, messageThreadId, "markdown", entities, disableWebPagePreview, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+        .getResultOrThrow()
 
 context(TelegramBotApiContext)
 suspend fun Message.reply(
@@ -60,8 +64,9 @@ suspend fun Message.reply(
     protectContent: Boolean? = null,
     allowSendingWithoutReply: Boolean? = null,
     replyMarkup: ReplyMarkup? = null,
-): TelegramResponse<Message> =
-    botApiClient.sendMessage(SendMessageRequest(chat.id, text, messageThreadId, parseMode, entities, disableWebPagePreview, disableNotification, protectContent, messageId, allowSendingWithoutReply, replyMarkup))
+): Message =
+    botApiClient.trySendMessage(SendMessageRequest(chat.id, text, messageThreadId, parseMode, entities, disableWebPagePreview, disableNotification, protectContent, messageId, allowSendingWithoutReply, replyMarkup))
+        .getResultOrThrow()
 
 context(TelegramBotApiContext)
 suspend fun Message.editMarkdown(
@@ -70,13 +75,14 @@ suspend fun Message.editMarkdown(
     entities: List<MessageEntity>? = null,
     disableWebPagePreview: Boolean? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
-): TelegramResponse<Message> =
-    botApiClient.editMessageText(EditMessageTextRequest(text, chat.id, messageId, null, parseMode, entities, disableWebPagePreview, replyMarkup))
+): Message =
+    botApiClient.tryEditMessageText(EditMessageTextRequest(text, chat.id, messageId, null, parseMode, entities, disableWebPagePreview, replyMarkup))
+        .getResultOrThrow()
 
 context(TelegramBotApiContext)
-suspend fun Message.delete(
-): TelegramResponse<Boolean> =
-    botApiClient.deleteMessage(DeleteMessageRequest(chat.id, messageId))
+suspend fun Message.delete(): Boolean =
+    botApiClient.tryDeleteMessage(DeleteMessageRequest(chat.id, messageId))
+        .getResultOrThrow()
 
 context(TelegramBotApiContext)
 suspend fun CallbackQuery.answer(
@@ -85,7 +91,7 @@ suspend fun CallbackQuery.answer(
     url: String? = null,
     cacheTime: Seconds? = null,
 ): TelegramResponse<Boolean> =
-    botApiClient.answerCallbackQuery(AnswerCallbackQueryRequest(id, text, showAlert, url, cacheTime))
+    botApiClient.tryAnswerCallbackQuery(AnswerCallbackQueryRequest(id, text, showAlert, url, cacheTime))
 
 val MessageEntity.isBotCommand get(): Boolean = type == "bot_command"
 

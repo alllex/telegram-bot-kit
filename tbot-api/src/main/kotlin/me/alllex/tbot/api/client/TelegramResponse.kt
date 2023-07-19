@@ -2,6 +2,7 @@ package me.alllex.tbot.api.client
 
 import kotlinx.serialization.Serializable
 import me.alllex.tbot.api.model.ResponseParameters
+import kotlin.jvm.Throws
 
 @Serializable
 data class TelegramResponse<out T>(
@@ -12,9 +13,11 @@ data class TelegramResponse<out T>(
     val parameters: ResponseParameters? = null
 )
 
-fun <T> TelegramResponse<T>.unwrap(): T {
-    check (ok && result != null) {
-        "Telegram API error: $errorCode $description $parameters"
+@Throws(TelegramBotApiException::class)
+fun <T> TelegramResponse<T>.getResultOrThrow(): T {
+    if(ok && result != null) {
+        return result
     }
-    return result
+
+    throw TelegramBotApiException(this)
 }

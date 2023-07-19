@@ -26,6 +26,8 @@ dependencies {
     implementation(platform(libs.kotlinx.coroutines.bom))
     implementation(libs.kotlinx.coroutines.core)
 
+    implementation(libs.ktor.client.java)
+
     implementation(libs.bundles.log4j)
 }
 

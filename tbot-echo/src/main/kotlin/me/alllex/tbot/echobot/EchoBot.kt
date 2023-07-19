@@ -1,10 +1,11 @@
 package me.alllex.tbot.echobot
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.client.TelegramBotApiContext
-import me.alllex.tbot.api.client.unwrap
 import me.alllex.tbot.api.model.Message
+import me.alllex.tbot.api.model.delete
 import me.alllex.tbot.api.model.getMe
 import me.alllex.tbot.api.model.reply
 import me.alllex.tbot.bot.TelegramBotApiPoller
@@ -32,7 +33,15 @@ fun main(args: Array<String>) {
                 println("Received stop command, stopping...")
                 countDownLatch.countDown()
             } else {
-                message.reply("Thanks!")
+                println("Waiting 10 seconds...")
+                delay(3_000)
+                val botReplyMessage = message.reply("Thanks!")
+                delay(3_000)
+                println("Deleting bot reply message...")
+                println(botReplyMessage.delete())
+                delay(3_000)
+                println("Deleting bot reply message... again")
+                println(botReplyMessage.delete())
             }
         }
     })
@@ -44,7 +53,7 @@ fun main(args: Array<String>) {
 }
 
 suspend fun selfCheck(client: TelegramBotApiClient, expectedUsername: String) {
-    val me = client.getMe().unwrap()
+    val me = client.getMe()
     if (!me.isBot) error("Self-check for being a bot has failed")
     if (me.username != expectedUsername) {
         error("Username must be @$expectedUsername, but it is @${me.username}")

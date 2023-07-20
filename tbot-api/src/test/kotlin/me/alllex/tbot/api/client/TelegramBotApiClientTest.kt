@@ -34,7 +34,7 @@ class TelegramBotApiClientTest {
 
         val client = TelegramBotApiClient("Token", host = "bot.test", engine = engine)
 
-        val actualResponse = client.getMe()
+        val actualResponse = client.tryGetMe()
 
         assertEquals(
             actual = actualResponse,
@@ -66,7 +66,7 @@ class TelegramBotApiClientTest {
 
         val client = TelegramBotApiClient("Token", host = "bot.test", engine = engine)
 
-        val actualResponse = client.getMe()
+        val actualResponse = client.tryGetMe()
 
         assertEquals(
             actual = actualResponse,
@@ -102,7 +102,7 @@ class TelegramBotApiClientTest {
 
         val client = TelegramBotApiClient("Token", host = "bot.test", engine = engine)
 
-        val actualResponse = client.getUpdates(
+        val actualResponse = client.tryGetUpdates(
             allowedUpdates = listOf(UpdateType.MESSAGE, UpdateType.INLINE_QUERY)
         )
 
@@ -168,7 +168,7 @@ class TelegramBotApiClientTest {
 
         val client = TelegramBotApiClient("Token", host = "bot.test", engine = engine)
 
-        val actualResponse = client.sendMessage(
+        val actualResponse = client.trySendMessage(
             chatId = ChatId(1),
             text = "Hello",
             replyMarkup = InlineKeyboardMarkup(

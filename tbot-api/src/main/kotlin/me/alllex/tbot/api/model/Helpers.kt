@@ -1,5 +1,6 @@
 package me.alllex.tbot.api.model
 
+import me.alllex.tbot.api.client.TelegramBotApiClient
 import kotlin.time.Duration
 
 
@@ -47,4 +48,14 @@ private fun Message.ensureText(reason: String): String {
     val text = text
     requireNotNull(text) { reason }
     return text
+}
+
+suspend fun TelegramBotApiClient.selfCheck(expectedUsername: String) {
+    val me = getMe()
+    check(me.isBot) {
+        "Self-check for being a bot has failed"
+    }
+    check(me.username == expectedUsername) {
+        "Username must be @$expectedUsername, but it is @${me.username}"
+    }
 }

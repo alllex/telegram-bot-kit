@@ -26,7 +26,7 @@ dependencies {
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.assertk.jvm)
-    testRuntimeOnly(libs.slf4j.simple)
+    testRuntimeOnly(libs.bundles.log4j)
 }
 
 tasks.test {

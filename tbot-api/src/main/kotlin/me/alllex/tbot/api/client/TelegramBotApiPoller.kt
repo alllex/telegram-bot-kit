@@ -75,11 +75,23 @@ class TelegramBotApiPoller(
         log.info("Started")
     }
 
+    fun runForever(listener: TelegramBotUpdateListener) {
+        start(listener)
+
+        runBlocking {
+            pollerCoroutineScope!!.coroutineContext.job.join()
+        }
+    }
+
     suspend fun stop() {
         val pollerJob = pollerCoroutineScope!!.coroutineContext.job
         try {
             pollerJob.cancelAndJoin()
             log.info("Polling job stopped successfully")
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            log.error("Failed to gracefully stop polling job", e)
         } finally {
             pollerCoroutineScope = null
             started.set(false)
@@ -179,6 +191,7 @@ class TelegramBotApiPoller(
     }
 
     companion object {
+
         private val log: Logger = LoggerFactory.getLogger(TelegramBotApiPoller::class.java)
 
         private fun onUnhandledCoroutineException(context: CoroutineContext, throwable: Throwable) {

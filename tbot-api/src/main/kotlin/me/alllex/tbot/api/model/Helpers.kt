@@ -1,5 +1,16 @@
 package me.alllex.tbot.api.model
 
+import kotlin.time.Duration
+
+
+val Int.asSeconds get() = Seconds(this.toLong())
+
+val Long.asSeconds get() = Seconds(this)
+
+val Duration.asSeconds get() = Seconds(this.inWholeSeconds)
+
+val User.usernameOrId: String get() = "@" + (username ?: id.value.toString())
+
 val MessageEntity.isBotCommand get(): Boolean = type == "bot_command"
 
 fun Message.findLeadCommand(): MessageEntity? {

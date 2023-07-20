@@ -382,8 +382,10 @@ class BotApiGenerator {
         val mainMethodName = methodName.value
         val tryMethodName = "try${mainMethodName.toTitleCase()}"
 
+        val hasParams = parameters.isNotEmpty()
+
         val requestValueArg =
-            if (parameters.isEmpty()) ""
+            if (!hasParams) ""
             else "${requestTypeName}(${parameters.joinToString { it.name.snakeToCamelCase() }})"
 
         // Core try-prefixed method that does the actual request
@@ -394,26 +396,28 @@ class BotApiGenerator {
             appendDescriptionDoc(description)
             appendLine(" */")
             append("suspend fun TelegramBotApiClient.$tryMethodName(")
-            if (parameters.isNotEmpty()) {
+            if (hasParams) {
                 append("requestBody: $requestTypeName")
             }
             appendLine("): TelegramResponse<${returnType.value}> =")
-            appendLine("    httpClient.$httpMethod {")
-            appendLine("        url {")
-            appendLine("            protocol = apiProtocol")
-            appendLine("            host = apiHost")
-            appendLine("            port = apiPort")
-            appendLine("            path(\"bot\$apiToken\", \"${methodName.value}\")")
-            appendLine("        }")
-            if (parameters.isNotEmpty()) {
-                appendLine("        contentType(ContentType.Application.Json)")
-                appendLine("        setBody(requestBody)")
+            appendLine("    executeRequest(\"$methodName\", ${if (hasParams) "requestBody" else "null"}) {")
+            appendLine("        httpClient.$httpMethod {")
+            appendLine("            url {")
+            appendLine("                protocol = apiProtocol")
+            appendLine("                host = apiHost")
+            appendLine("                port = apiPort")
+            appendLine("                path(\"bot\$apiToken\", \"$methodName\")")
+            appendLine("            }")
+            if (hasParams) {
+                appendLine("            contentType(ContentType.Application.Json)")
+                appendLine("            setBody(requestBody)")
             }
-            appendLine("    }.body()")
+            appendLine("        }.body()")
+            appendLine("    }")
         }
 
         val tryMethodSourceCode = buildString {
-            if (parameters.isNotEmpty()) {
+            if (hasParams) {
                 appendLine()
                 appendMethodDoc(description, parameters)
                 append("suspend fun TelegramBotApiClient.$tryMethodName(")
@@ -459,7 +463,6 @@ class BotApiGenerator {
 
         val fluentContextMethods = fluentMethods.filter { it.originalName == mainMethodName }.map { fluent ->
             buildString {
-//                appendMethodDoc() // TODO
                 appendLine("context(TelegramBotApiContext)")
                 appendLine("@Throws(TelegramBotApiException::class)")
                 append("suspend fun ${fluent.receiver}.${fluent.name}(")

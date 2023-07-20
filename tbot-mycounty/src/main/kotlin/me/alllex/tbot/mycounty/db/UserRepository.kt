@@ -1,7 +1,7 @@
 package me.alllex.tbot.mycounty.db
 
 import me.alllex.tbot.api.model.ChatId
-import me.alllex.tbot.mycounty.User
+import me.alllex.tbot.mycounty.BotUser
 import java.time.ZoneId
 
 /**
@@ -9,9 +9,9 @@ import java.time.ZoneId
  */
 class UserRepository(private val userDao: UserDao) {
 
-    private val usersByChatId = hashMapOf<ChatId, User>()
+    private val usersByChatId = hashMapOf<ChatId, BotUser>()
 
-    suspend fun getOrCreateUser(tgChatId: ChatId, timezone: ZoneId): User {
+    suspend fun getOrCreateUser(tgChatId: ChatId, timezone: ZoneId): BotUser {
         usersByChatId[tgChatId]?.let { return it }
 
         val foundUserId = userDao.findUserByChatId(tgChatId)

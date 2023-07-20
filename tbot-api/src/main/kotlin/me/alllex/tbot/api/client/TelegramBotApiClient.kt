@@ -18,10 +18,15 @@ class TelegramBotApiClient private constructor(
     internal val apiProtocol: URLProtocol = URLProtocol.HTTPS,
     internal val apiHost: String = DEFAULT_TELEGRAM_API_HOST,
     internal val apiPort: Int = DEFAULT_PORT,
+    private val onRequest: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?) -> Unit)? = null,
+    private val onResponse: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?, responseBody: TelegramResponse<*>) -> Unit)? = null,
 ) {
 
-    internal inline fun <T> executeRequest(request: () -> T): T {
-        return request()
+    internal inline fun <T> executeRequest(requestMethod: String, requestBody: Any?, request: () -> TelegramResponse<T>): TelegramResponse<T> {
+        onRequest?.invoke(this, requestMethod, requestBody)
+        val responseBody = request()
+        onResponse?.invoke(this, requestMethod, requestBody, responseBody)
+        return responseBody
     }
 
     fun closeHttpClient() {
@@ -50,6 +55,8 @@ class TelegramBotApiClient private constructor(
             engine: HttpClientEngine? = null,
             host: String = DEFAULT_TELEGRAM_API_HOST,
             port: Int = DEFAULT_PORT,
+            onRequest: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?) -> Unit)? = null,
+            onResponse: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?, responseBody: TelegramResponse<*>) -> Unit)? = null,
             configuration: (HttpClientConfig<*>.() -> Unit)? = null,
         ): TelegramBotApiClient {
             val httpClient = if (engine == null) {
@@ -63,7 +70,7 @@ class TelegramBotApiClient private constructor(
                     configuration?.invoke(this)
                 }
             }
-            return TelegramBotApiClient(httpClient, apiToken, protocol, host, port)
+            return TelegramBotApiClient(httpClient, apiToken, protocol, host, port, onRequest, onResponse)
         }
 
         operator fun <T : HttpClientEngineConfig> invoke(
@@ -72,13 +79,15 @@ class TelegramBotApiClient private constructor(
             protocol: URLProtocol = URLProtocol.HTTPS,
             host: String = DEFAULT_TELEGRAM_API_HOST,
             port: Int = DEFAULT_PORT,
+            onRequest: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?) -> Unit)? = null,
+            onResponse: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?, responseBody: TelegramResponse<*>) -> Unit)? = null,
             configuration: (HttpClientConfig<T>.() -> Unit)? = null,
         ): TelegramBotApiClient {
             val httpClient = HttpClient(engine) {
                 applyDefaultConfiguration()
                 configuration?.let { it() }
             }
-            return TelegramBotApiClient(httpClient, apiToken, protocol, host, port)
+            return TelegramBotApiClient(httpClient, apiToken, protocol, host, port, onRequest, onResponse)
         }
 
     }

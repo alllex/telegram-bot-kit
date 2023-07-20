@@ -2,7 +2,7 @@ package me.alllex.tbot.mycounty.db
 
 import me.alllex.tbot.api.model.ChatId
 import me.alllex.tbot.api.model.UserId
-import me.alllex.tbot.mycounty.User
+import me.alllex.tbot.mycounty.BotUser
 import java.sql.ResultSet
 import java.time.ZoneId
 
@@ -21,7 +21,7 @@ class UserDao(
         }
     }?.let(::UserId)
 
-    suspend fun getUser(userId: UserId): User = db.run {
+    suspend fun getUser(userId: UserId): BotUser = db.run {
         conn.prepareStatement("select * from users where id = ?").use { stmt ->
             stmt.setLong(1, userId.value)
             stmt.executeQuery().use { rs ->
@@ -30,7 +30,7 @@ class UserDao(
         }
     }
 
-    suspend fun createUser(tgChatId: ChatId, timezone: ZoneId): User = db.run {
+    suspend fun createUser(tgChatId: ChatId, timezone: ZoneId): BotUser = db.run {
         conn.prepareStatement("insert into users(tg_chat_id, timezone) values(?,?)").use { stmt ->
             stmt.setLong(1, tgChatId.value)
             stmt.setString(2, timezone.id)
@@ -44,12 +44,12 @@ class UserDao(
     }
 
     companion object {
-        private fun ResultSet.readUser(): User {
+        private fun ResultSet.readUser(): BotUser {
             val userId = getLong("id")
             val tgChatId = getLong("tg_chat_id")
             val timezoneStr = getString("timezone")
             val timezone = ZoneId.of(timezoneStr)
-            return User(UserId(userId), ChatId(tgChatId), timezone)
+            return BotUser(UserId(userId), ChatId(tgChatId), timezone)
         }
     }
 }

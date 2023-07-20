@@ -3,6 +3,7 @@ package me.alllex.tbot.mycounty
 import kotlinx.coroutines.*
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.client.TelegramBotApiContext
+import me.alllex.tbot.api.client.TelegramBotApiException
 import me.alllex.tbot.bot.TelegramBotUpdateListener
 import me.alllex.tbot.api.model.*
 import me.alllex.tbot.bot.util.log.loggerForClass
@@ -47,9 +48,9 @@ class MyCountyBot(
             val user = getOrCreateUser(message.chat.id)
             try {
                 onChatMessageImpl(user, message)
-            } catch (e: BadRequestException) {
-                val text = e.userFriendlyMessage ?: "Something went wrong..."
-                message.chat.sendMessage(text)
+            } catch (e: TelegramBotApiException) {
+                log.error("Failed to process message from $user", e)
+                message.chat.sendMessage(UserStrings["somethingWentWrong"])
             }
         }
     }
@@ -65,9 +66,8 @@ class MyCountyBot(
                 onQueryCallbackImpl(user, callbackQuery)
                 callbackQuery.answer()
                 answered = true
-            } catch (e: BadRequestException) {
-                val text = e.userFriendlyMessage ?: UserStrings["somethingWentWrong"]
-                callbackQuery.answer(text)
+            } catch (e: TelegramBotApiException) {
+                callbackQuery.answer(UserStrings["somethingWentWrong"])
                 answered = true
             } finally {
                 if (!answered) {
@@ -77,127 +77,127 @@ class MyCountyBot(
         }
     }
 
-    private suspend fun onChatMessageImpl(user: User, msg: Message) {
-        log.debug { "Received message from $user" }
+    private suspend fun onChatMessageImpl(botUser: BotUser, msg: Message) {
+        log.debug { "Received message from $botUser" }
 
         // cancellation comes before any state semantics
         if (msg.text.orEmpty().trim() == CommandName.CANCEL.string) {
-            onCancelCommand(user)
+            onCancelCommand(botUser)
             return
         }
 
-        when (val state = user.state) {
-            UserChatState.Idle -> onChatMessageInIdle(user, msg)
-            UserChatState.AwaitNameForNewCounter -> onChatMessageInAwaitNameForNewCounter(user, msg)
-            is UserChatState.AwaitNewNameForCounter -> onChatMessageInAwaitNewNameForCounter(user, msg, state)
+        when (val state = botUser.state) {
+            UserChatState.Idle -> onChatMessageInIdle(botUser, msg)
+            UserChatState.AwaitNameForNewCounter -> onChatMessageInAwaitNameForNewCounter(botUser, msg)
+            is UserChatState.AwaitNewNameForCounter -> onChatMessageInAwaitNewNameForCounter(botUser, msg, state)
         }
     }
 
-    private suspend fun onChatMessageInIdle(user: User, msg: Message) {
+    private suspend fun onChatMessageInIdle(botUser: BotUser, msg: Message) {
         val leadCommand = msg.findLeadCommand()
         if (leadCommand == null) {
-            onUnknownCommand(user, msg)
+            onUnknownCommand(botUser, msg)
             return
         }
 
         val commandArgText = msg.getTextAfter(leadCommand).trim()
         when (msg[leadCommand]) {
-            CommandName.START.string -> onStartCommand(user)
-            CommandName.HELP.string -> onHelpCommand(user)
-            CommandName.CREATE.string -> onCreateCommand(user, commandArgText)
-            CommandName.SELECT.string -> onSelectCommand(user, commandArgText)
-            CommandName.SUMMARY.string -> onSummaryCommand(user, commandArgText)
-            CommandName.CANCEL.string -> onCancelCommand(user)
-            else -> onUnknownCommand(user, msg)
+            CommandName.START.string -> onStartCommand(botUser)
+            CommandName.HELP.string -> onHelpCommand(botUser)
+            CommandName.CREATE.string -> onCreateCommand(botUser, commandArgText)
+            CommandName.SELECT.string -> onSelectCommand(botUser, commandArgText)
+            CommandName.SUMMARY.string -> onSummaryCommand(botUser, commandArgText)
+            CommandName.CANCEL.string -> onCancelCommand(botUser)
+            else -> onUnknownCommand(botUser, msg)
         }
     }
 
-    private suspend fun onUnknownCommand(user: User, msg: Message) {
+    private suspend fun onUnknownCommand(botUser: BotUser, msg: Message) {
         val msgText = msg.text?.trim() ?: ""
-        val counters = counterRepository.findCountersMatchingName(user.userId, msgText)
+        val counters = counterRepository.findCountersMatchingName(botUser.userId, msgText)
         if (counters.isEmpty()) {
             msg.reply(UserStrings["unknownCommand"])
             return
         }
 
-        val keyboard = createCountersSelectKeyboard(user, counters)
-        user.chatId.sendMarkdown(UserStrings["selectCountersMatching"].format(msgText), replyMarkup = keyboard)
+        val keyboard = createCountersSelectKeyboard(botUser, counters)
+        botUser.chatId.sendMarkdown(UserStrings["selectCountersMatching"].format(msgText), replyMarkup = keyboard)
     }
 
-    private suspend fun onStartCommand(user: User) {
-        user.chatId.sendMarkdown(UserStrings["startGreeting"])
+    private suspend fun onStartCommand(botUser: BotUser) {
+        botUser.chatId.sendMarkdown(UserStrings["startGreeting"])
     }
 
-    private suspend fun onHelpCommand(user: User) {
-        user.chatId.sendMarkdown(UserStrings["userHelp"])
+    private suspend fun onHelpCommand(botUser: BotUser) {
+        botUser.chatId.sendMarkdown(UserStrings["userHelp"])
     }
 
-    private suspend fun onSelectCommand(user: User, counterName: String) {
+    private suspend fun onSelectCommand(botUser: BotUser, counterName: String) {
         if (counterName.isNotEmpty()) {
-            val counter = counterRepository.findCounterByName(user.userId, counterName)
+            val counter = counterRepository.findCounterByName(botUser.userId, counterName)
             if (counter != null) {
-                doSelectCounter(user, counter)
+                doSelectCounter(botUser, counter)
                 return
             }
         }
 
-        val counters = counterRepository.getCounters(user.userId)
-        val keyboard = createCountersSelectKeyboard(user, counters)
+        val counters = counterRepository.getCounters(botUser.userId)
+        val keyboard = createCountersSelectKeyboard(botUser, counters)
 
-        user.chatId.sendMarkdown(UserStrings["selectCounters"], replyMarkup = keyboard)
+        botUser.chatId.sendMarkdown(UserStrings["selectCounters"], replyMarkup = keyboard)
     }
 
-    private fun createCountersSelectKeyboard(user: User, counters: List<UserCounter>) = inlineKeyboard {
+    private fun createCountersSelectKeyboard(botUser: BotUser, counters: List<UserCounter>) = inlineKeyboard {
         rowsChunked(2) {
             for (counter in counters) {
-                val data = "${user.userId.value}/${QueryCallbackName.SELECT}/${counter.id}"
+                val data = "${botUser.userId.value}/${QueryCallbackName.SELECT}/${counter.id}"
                 button(text = counter.name, callbackData = data)
             }
         }
     }
 
-    private suspend fun onChatMessageInAwaitNameForNewCounter(user: User, msg: Message) {
+    private suspend fun onChatMessageInAwaitNameForNewCounter(botUser: BotUser, msg: Message) {
         val text = msg.text.orEmpty().trim()
-        onCreateCounterWithName(user, text)
+        onCreateCounterWithName(botUser, text)
     }
 
-    private suspend fun onCreateCounterWithName(user: User, newCounterName: String) {
+    private suspend fun onCreateCounterWithName(botUser: BotUser, newCounterName: String) {
         if (newCounterName.isEmpty()) {
-            user.chatId.sendMarkdown(UserStrings["createCounter"])
-            user.state = UserChatState.AwaitNameForNewCounter
+            botUser.chatId.sendMarkdown(UserStrings["createCounter"])
+            botUser.state = UserChatState.AwaitNameForNewCounter
             return
         } else if (newCounterName.length > 100) {
-            user.chatId.sendMarkdown(UserStrings["counterNameTooLong"])
-            user.state = UserChatState.AwaitNameForNewCounter
+            botUser.chatId.sendMarkdown(UserStrings["counterNameTooLong"])
+            botUser.state = UserChatState.AwaitNameForNewCounter
             return
         }
 
-        val existingCounter = counterRepository.findCounterByName(user.userId, newCounterName)
+        val existingCounter = counterRepository.findCounterByName(botUser.userId, newCounterName)
         if (existingCounter != null) {
-            user.chatId.sendMarkdown(UserStrings["counterAlreadyExists"].format(existingCounter.name))
-            user.state = UserChatState.AwaitNameForNewCounter
+            botUser.chatId.sendMarkdown(UserStrings["counterAlreadyExists"].format(existingCounter.name))
+            botUser.state = UserChatState.AwaitNameForNewCounter
             return
         }
 
-        user.state = UserChatState.Idle
+        botUser.state = UserChatState.Idle
 
-        val counter = counterRepository.addCounter(user.userId, newCounterName)
+        val counter = counterRepository.addCounter(botUser.userId, newCounterName)
         val responseText = UserStrings["createdCounter"].format(counter.name)
-        user.chatId.sendMarkdown(responseText)
+        botUser.chatId.sendMarkdown(responseText)
 
-        doSelectCounter(user, counter)
+        doSelectCounter(botUser, counter)
     }
 
     private suspend fun onChatMessageInAwaitNewNameForCounter(
-        user: User,
+        botUser: BotUser,
         msg: Message,
         state: UserChatState.AwaitNewNameForCounter
     ) {
         val counterId = state.counterId
         val counter = counterRepository.getCounterOrNull(counterId)
-        if (counter == null || counter.userId != user.userId) {
+        if (counter == null || counter.userId != botUser.userId) {
             log.error("Renaming invalid counter: $counterId")
-            api.sendMessage(user.chatId, UserStrings["somethingWentWrong"])
+            api.sendMessage(botUser.chatId, UserStrings["somethingWentWrong"])
             return
         }
 
@@ -210,7 +210,7 @@ class MyCountyBot(
             return
         }
 
-        user.state = UserChatState.Idle
+        botUser.state = UserChatState.Idle
 
         counter.setName(text)
 
@@ -218,35 +218,35 @@ class MyCountyBot(
         msg.chat.sendMarkdown(responseText)
     }
 
-    private suspend fun onSummaryCommand(user: User, counterName: String) {
+    private suspend fun onSummaryCommand(botUser: BotUser, counterName: String) {
         if (counterName.isNotEmpty()) {
-            val counter = counterRepository.findCounterByName(user.userId, counterName)
+            val counter = counterRepository.findCounterByName(botUser.userId, counterName)
             if (counter != null) {
-                user.chatId.sendMarkdown("`${counter.name}` = `${counter.getCountValue()}`")
+                botUser.chatId.sendMarkdown("`${counter.name}` = `${counter.getCountValue()}`")
                 return
             }
         }
 
-        val counters = counterRepository.getCounters(user.userId)
+        val counters = counterRepository.getCounters(botUser.userId)
         if (counters.isEmpty()) {
-            user.chatId.sendMarkdown(UserStrings["summaryNoCounters"])
+            botUser.chatId.sendMarkdown(UserStrings["summaryNoCounters"])
             return
         }
 
         val summaryText = counters.joinToString("\n") {
             "`${it.name}` = `${it.getCountValue()}`"
         }
-        user.chatId.sendMarkdown("Summary of ${counters.size} counters:\n$summaryText")
+        botUser.chatId.sendMarkdown("Summary of ${counters.size} counters:\n$summaryText")
     }
 
-    private suspend fun onCancelCommand(user: User) {
-        transitionToIdle(user)
+    private suspend fun onCancelCommand(botUser: BotUser) {
+        transitionToIdle(botUser)
     }
 
     /**
      * Returns true if answered to the callback
      */
-    private suspend fun onQueryCallbackImpl(user: User, query: CallbackQuery) {
+    private suspend fun onQueryCallbackImpl(botUser: BotUser, query: CallbackQuery) {
         val data = query.data ?: return
         val dataParts = data.split("/")
         if (dataParts.size !in 2..3) {
@@ -255,7 +255,7 @@ class MyCountyBot(
         }
 
         val userId = UserId(dataParts[0].toLong())
-        if (user.userId != userId) return
+        if (botUser.userId != userId) return
 
         val callbackNameStr = dataParts[1]
         val callbackName = QueryCallbackName.parse(callbackNameStr)
@@ -266,7 +266,7 @@ class MyCountyBot(
 
         return when (dataParts.size) {
             2 -> {
-                onCommonQueryCallback(user, callbackName)
+                onCommonQueryCallback(botUser, callbackName)
             }
 
             3 -> {
@@ -277,48 +277,48 @@ class MyCountyBot(
                 }
 
                 val counter = counterRepository.getCounterOrNull(counterId)
-                if (counter == null || counter.userId != user.userId) {
-                    log.error("[user@${user.userId.value}] No such counter: $counterId")
+                if (counter == null || counter.userId != botUser.userId) {
+                    log.error("[user@${botUser.userId.value}] No such counter: $counterId")
                     return
                 }
 
-                onCounterQueryCallback(user, query, callbackName, counter)
+                onCounterQueryCallback(botUser, query, callbackName, counter)
             }
 
             else -> error("unexpected size: ${dataParts.size}")
         }
     }
 
-    private suspend fun onCommonQueryCallback(user: User, callbackName: QueryCallbackName) {
+    private suspend fun onCommonQueryCallback(botUser: BotUser, callbackName: QueryCallbackName) {
         return when (callbackName) {
-            QueryCallbackName.CREATE -> onCreateCommand(user)
+            QueryCallbackName.CREATE -> onCreateCommand(botUser)
             else -> error("not a common callback: $callbackName")
         }
     }
 
     private suspend fun onCounterQueryCallback(
-        user: User,
+        botUser: BotUser,
         query: CallbackQuery,
         callbackName: QueryCallbackName,
         counter: UserCounter
     ) {
         return when (callbackName) {
-            QueryCallbackName.SELECT -> onSelectCounterCallback(user, query, counter, editQueryMessage = true)
-            QueryCallbackName.SELECT_SINGLE -> onSelectCounterCallback(user, query, counter, editQueryMessage = false)
-            QueryCallbackName.INC -> onIncCounterCallback(user, query, counter)
-            QueryCallbackName.UNDO -> onUndoCounterCallback(user, query, counter)
-            QueryCallbackName.UNDO_CONFIRM -> onUndoConfirmCounterCallback(user, query, counter)
-            QueryCallbackName.UNDO_CANCEL -> onUndoCancelCounterCallback(user, query, counter)
-            QueryCallbackName.RENAME -> onRenameCounterCallback(user, query, counter)
-            QueryCallbackName.DELETE -> onDeleteCounterCallback(user, query, counter)
-            QueryCallbackName.DELETE_CONFIRM -> onDeleteConfirmCounterCallback(user, query, counter)
-            QueryCallbackName.DELETE_CANCEL -> onDeleteCancelCounterCallback(user, query, counter)
+            QueryCallbackName.SELECT -> onSelectCounterCallback(botUser, query, counter, editQueryMessage = true)
+            QueryCallbackName.SELECT_SINGLE -> onSelectCounterCallback(botUser, query, counter, editQueryMessage = false)
+            QueryCallbackName.INC -> onIncCounterCallback(botUser, query, counter)
+            QueryCallbackName.UNDO -> onUndoCounterCallback(botUser, query, counter)
+            QueryCallbackName.UNDO_CONFIRM -> onUndoConfirmCounterCallback(botUser, query, counter)
+            QueryCallbackName.UNDO_CANCEL -> onUndoCancelCounterCallback(botUser, query, counter)
+            QueryCallbackName.RENAME -> onRenameCounterCallback(botUser, query, counter)
+            QueryCallbackName.DELETE -> onDeleteCounterCallback(botUser, query, counter)
+            QueryCallbackName.DELETE_CONFIRM -> onDeleteConfirmCounterCallback(botUser, query, counter)
+            QueryCallbackName.DELETE_CANCEL -> onDeleteCancelCounterCallback(botUser, query, counter)
             else -> error("not a counter callback: $callbackName")
         }
     }
 
     private suspend fun onSelectCounterCallback(
-        user: User,
+        botUser: BotUser,
         query: CallbackQuery,
         counter: UserCounter,
         editQueryMessage: Boolean
@@ -329,37 +329,37 @@ class MyCountyBot(
             return
         }
 
-        val keyboard = createSelectedCounterKeyboard(user, counter)
+        val keyboard = createSelectedCounterKeyboard(botUser, counter)
         val replyText = UserStrings["selectedCounter"].format(counter.name)
         if (editQueryMessage) {
             queryMessage.editTextMarkdown(replyText, replyMarkup = keyboard)
         } else {
-            user.chatId.sendMarkdown(replyText, replyMarkup = keyboard)
+            botUser.chatId.sendMarkdown(replyText, replyMarkup = keyboard)
         }
     }
 
-    private suspend fun doSelectCounter(user: User, counter: UserCounter) {
-        val keyboard = createSelectedCounterKeyboard(user, counter)
-        user.chatId.sendMarkdown(UserStrings["selectedCounter"].format(counter.name), replyMarkup = keyboard)
+    private suspend fun doSelectCounter(botUser: BotUser, counter: UserCounter) {
+        val keyboard = createSelectedCounterKeyboard(botUser, counter)
+        botUser.chatId.sendMarkdown(UserStrings["selectedCounter"].format(counter.name), replyMarkup = keyboard)
     }
 
-    private fun createSelectedCounterKeyboard(user: User, counter: UserCounter): InlineKeyboardMarkup {
+    private fun createSelectedCounterKeyboard(botUser: BotUser, counter: UserCounter): InlineKeyboardMarkup {
         return inlineKeyboard {
-            button("Inc", "${user.userId.value}/${QueryCallbackName.INC}/${counter.id}")
-            button("Drop Last", "${user.userId.value}/${QueryCallbackName.UNDO}/${counter.id}")
+            button("Inc", "${botUser.userId.value}/${QueryCallbackName.INC}/${counter.id}")
+            button("Drop Last", "${botUser.userId.value}/${QueryCallbackName.UNDO}/${counter.id}")
             row {
-                button("Rename", "${user.userId.value}/${QueryCallbackName.RENAME}/${counter.id}")
-                button("Delete", "${user.userId.value}/${QueryCallbackName.DELETE}/${counter.id}")
+                button("Rename", "${botUser.userId.value}/${QueryCallbackName.RENAME}/${counter.id}")
+                button("Delete", "${botUser.userId.value}/${QueryCallbackName.DELETE}/${counter.id}")
             }
         }
     }
 
-    private suspend fun onIncCounterCallback(user: User, query: CallbackQuery, counter: UserCounter) {
-        doIncCounter(user, counter)
+    private suspend fun onIncCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
+        doIncCounter(botUser, counter)
         query.message?.deleteLater()
     }
 
-    private suspend fun onUndoCounterCallback(user: User, query: CallbackQuery, counter: UserCounter) {
+    private suspend fun onUndoCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
         val queryMessage = query.message
         if (queryMessage == null) {
             log.error("Missing query message: $query")
@@ -370,50 +370,50 @@ class MyCountyBot(
             text = UserStrings["askCounterUndoConfirmation"].format(counter.name),
             replyMarkup = inlineKeyboard {
                 row {
-                    button("Remove", "${user.userId.value}/${QueryCallbackName.UNDO_CONFIRM}/${counter.id}")
-                    button("Cancel", "${user.userId.value}/${QueryCallbackName.UNDO_CANCEL}/${counter.id}")
+                    button("Remove", "${botUser.userId.value}/${QueryCallbackName.UNDO_CONFIRM}/${counter.id}")
+                    button("Cancel", "${botUser.userId.value}/${QueryCallbackName.UNDO_CANCEL}/${counter.id}")
                 }
             }
         )
     }
 
-    private suspend fun onUndoConfirmCounterCallback(user: User, query: CallbackQuery, counter: UserCounter) {
-        if (counter.userId != user.userId) {
+    private suspend fun onUndoConfirmCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
+        if (counter.userId != botUser.userId) {
             log.error("Trying to undo invalid counter: ${counter.id}")
-            api.sendMessage(user.chatId, UserStrings["somethingWentWrong"])
+            api.sendMessage(botUser.chatId, UserStrings["somethingWentWrong"])
             return
         }
 
         val newCount = counter.removeLast()
-        user.chatId.sendMarkdown(UserStrings["undidLast"].format(counter.name, newCount))
+        botUser.chatId.sendMarkdown(UserStrings["undidLast"].format(counter.name, newCount))
 
         query.message?.deleteLater()
     }
 
-    private suspend fun onUndoCancelCounterCallback(user: User, query: CallbackQuery, counter: UserCounter) {
-        onSelectCounterCallback(user, query, counter, editQueryMessage = true)
+    private suspend fun onUndoCancelCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
+        onSelectCounterCallback(botUser, query, counter, editQueryMessage = true)
     }
 
-    private suspend fun doIncCounter(user: User, counter: UserCounter) {
+    private suspend fun doIncCounter(botUser: BotUser, counter: UserCounter) {
         val now = Instant.now()
-        val time = ZonedDateTime.ofInstant(now, user.timezone)
+        val time = ZonedDateTime.ofInstant(now, botUser.timezone)
         val newValue = counter.register(time)
 
         val replyText = UserStrings["incrementedCounter"].format(counter.name, newValue)
-        user.chatId.sendMarkdown(replyText, replyMarkup = inlineKeyboard {
-            button("Select", "${user.userId.value}/${QueryCallbackName.SELECT_SINGLE}/${counter.id}")
+        botUser.chatId.sendMarkdown(replyText, replyMarkup = inlineKeyboard {
+            button("Select", "${botUser.userId.value}/${QueryCallbackName.SELECT_SINGLE}/${counter.id}")
         })
 
-        transitionToIdle(user)
+        transitionToIdle(botUser)
     }
 
-    private suspend fun onRenameCounterCallback(user: User, query: CallbackQuery, counter: UserCounter) {
-        user.state = UserChatState.AwaitNewNameForCounter(counter.id)
-        user.chatId.sendMarkdown(UserStrings["renameCounter"].format(counter.name))
+    private suspend fun onRenameCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
+        botUser.state = UserChatState.AwaitNewNameForCounter(counter.id)
+        botUser.chatId.sendMarkdown(UserStrings["renameCounter"].format(counter.name))
         query.message?.deleteLater()
     }
 
-    private suspend fun onDeleteCounterCallback(user: User, query: CallbackQuery, counter: UserCounter) {
+    private suspend fun onDeleteCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
         val queryMessage = query.message
         if (queryMessage == null) {
             log.error("Missing query message: $query")
@@ -424,33 +424,33 @@ class MyCountyBot(
             text = UserStrings["askDeleteConfirmation"].format(counter.name),
             replyMarkup = inlineKeyboard {
                 row {
-                    button("Delete", "${user.userId.value}/${QueryCallbackName.DELETE_CONFIRM}/${counter.id}")
-                    button("Cancel", "${user.userId.value}/${QueryCallbackName.DELETE_CANCEL}/${counter.id}")
+                    button("Delete", "${botUser.userId.value}/${QueryCallbackName.DELETE_CONFIRM}/${counter.id}")
+                    button("Cancel", "${botUser.userId.value}/${QueryCallbackName.DELETE_CANCEL}/${counter.id}")
                 }
             }
         )
     }
 
-    private suspend fun onDeleteConfirmCounterCallback(user: User, query: CallbackQuery, counter: UserCounter) {
-        if (counter.userId != user.userId) {
+    private suspend fun onDeleteConfirmCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
+        if (counter.userId != botUser.userId) {
             log.error("Trying to delete invalid counter: ${counter.id}")
-            api.sendMessage(user.chatId, UserStrings["somethingWentWrong"])
+            api.sendMessage(botUser.chatId, UserStrings["somethingWentWrong"])
             return
         }
 
         counterRepository.removeCounter(counter.id)
-        user.chatId.sendMarkdown(UserStrings["deletedCounter"].format(counter.name))
+        botUser.chatId.sendMarkdown(UserStrings["deletedCounter"].format(counter.name))
 
         query.message?.deleteLater()
     }
 
-    private suspend fun onDeleteCancelCounterCallback(user: User, query: CallbackQuery, counter: UserCounter) {
-        onSelectCounterCallback(user, query, counter, editQueryMessage = true)
+    private suspend fun onDeleteCancelCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
+        onSelectCounterCallback(botUser, query, counter, editQueryMessage = true)
     }
 
-    private suspend fun transitionToIdle(user: User) {
-        user.state = UserChatState.Idle
-        user.chatId.sendMarkdown(UserStrings["readyToCount"])
+    private suspend fun transitionToIdle(botUser: BotUser) {
+        botUser.state = UserChatState.Idle
+        botUser.chatId.sendMarkdown(UserStrings["readyToCount"])
     }
 
     private fun Message.deleteLater() {
@@ -459,17 +459,17 @@ class MyCountyBot(
         }
     }
 
-    private suspend fun onCreateCommand(user: User, newCounterName: String = "") {
+    private suspend fun onCreateCommand(botUser: BotUser, newCounterName: String = "") {
         if (newCounterName.isNotEmpty()) {
-            onCreateCounterWithName(user, newCounterName)
+            onCreateCounterWithName(botUser, newCounterName)
             return
         }
 
-        user.state = UserChatState.AwaitNameForNewCounter
-        user.chatId.sendMarkdown(UserStrings["createCounter"])
+        botUser.state = UserChatState.AwaitNameForNewCounter
+        botUser.chatId.sendMarkdown(UserStrings["createCounter"])
     }
 
-    private suspend fun getOrCreateUser(chatId: ChatId): User {
+    private suspend fun getOrCreateUser(chatId: ChatId): BotUser {
         return userRepository.getOrCreateUser(chatId, DEFAULT_ZONE_ID)
     }
 

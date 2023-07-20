@@ -32,21 +32,23 @@ class Main(
     private val bot: MyCountyBot
 
     init {
-        api = TelegramBotApiClient(config.api.token, host = config.api.host, engine = Java) {
+        api = TelegramBotApiClient(
+            apiToken = config.api.token,
+            host = config.api.host,
+            engine = Java,
+            onRequest = { requestMethod, requestBody ->
+                log.debug { "Request: /$requestMethod ${requestBody ?: ""}" }
+            },
+            onResponse = { requestMethod, requestBody, responseBody ->
+                if (responseBody.ok) return@TelegramBotApiClient
+                log.debug { "Bad Response: /$requestMethod $requestBody -> $responseBody" }
+            }
+        ) {
             engine {
                 config {
                     followRedirects(HttpClient.Redirect.NORMAL)
                     connectTimeout(Duration.ofSeconds(30))
                 }
-            }
-            install(Logging) {
-                logger = object : Logger {
-                    private val log = LogManager.getLogger("tbot-api")
-                    override fun log(message: String) {
-                        log.info(message)
-                    }
-                }
-                level = LogLevel.INFO
             }
         }
         apiPoller = TelegramBotApiPoller(api, pollingTimeout = 10.seconds)

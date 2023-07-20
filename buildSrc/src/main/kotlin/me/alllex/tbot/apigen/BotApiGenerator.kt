@@ -111,14 +111,19 @@ class BotApiGenerator {
 
         val typesFileText = generateTypesFile(allTypes, unionTypeParentByChild, packageName)
         val requestTypesFileText = generateRequestTypesFile(allMethods, packageName)
-        val methodsFileText = generateMethodsFile(allMethods, packageName, wrapperPackageName)
+
+        val methodsSourceCodes = generateMethodsSourceCode(allMethods, packageName, wrapperPackageName)
 
         val outputPackageDir = outputDirectory.resolve(packageName.replace(".", "/"))
         outputPackageDir.mkdirs()
 
         outputPackageDir.resolve("Types.kt").writeText(typesFileText)
         outputPackageDir.resolve("RequestTypes.kt").writeText(requestTypesFileText)
-        outputPackageDir.resolve("Methods.kt").writeText(methodsFileText)
+        outputPackageDir.resolve("TryRequestMethods.kt").writeText(methodsSourceCodes.tryRequestMethodSourceCode)
+        outputPackageDir.resolve("TryMethods.kt").writeText(methodsSourceCodes.tryMethodSourceCode)
+        outputPackageDir.resolve("TryWithContextMethods.kt").writeText(methodsSourceCodes.tryWithContextMethodSourceCode)
+        outputPackageDir.resolve("Methods.kt").writeText(methodsSourceCodes.methodSourceCode)
+        outputPackageDir.resolve("WithContextMethods.kt").writeText(methodsSourceCodes.withContextMethodSourceCode)
     }
 
     private fun collectUnionTypes(elements: List<BotApiElement>): Map<BotApiElementName, List<BotApiElementName>> {
@@ -180,35 +185,115 @@ class BotApiGenerator {
         }
     }
 
-    private fun generateMethodsFile(
-        methodElements: List<BotApiMethod>,
-        packageName: String,
-        wrapperPackageName: String
-    ): String = buildString {
+    private fun StringBuilder.header(packageName: String, wrapperPackageName: String, imports: List<String> = emptyList()) {
         if (packageName.isNotEmpty()) {
             appendLine("package $packageName")
         }
         appendLine()
-        appendLine("import io.ktor.client.call.*")
-        appendLine("import io.ktor.client.request.*")
-        appendLine("import io.ktor.http.*")
+        for (importStatement in imports) {
+            appendLine(importStatement)
+        }
         if (wrapperPackageName.isNotEmpty() && wrapperPackageName != packageName) {
             appendLine("import $wrapperPackageName.*")
         }
         appendLine()
         appendLine()
+    }
 
-        for (el in methodElements) {
-            appendLine(generateMethodSourceCode(el.name, el.description, el.parameters, el.returnType))
+    private fun generateMethodsSourceCode(
+        methodElements: List<BotApiMethod>,
+        packageName: String,
+        wrapperPackageName: String
+    ): MethodOverloadsSourceCode {
+
+        val methodsSourceCodes = methodElements.map { generateMethodSourceCode(it) }
+
+        val tryRequestMethodsSourceCode = buildString {
+            header(
+                packageName, wrapperPackageName, listOf(
+                    "import io.ktor.client.call.*",
+                    "import io.ktor.client.request.*",
+                    "import io.ktor.http.*",
+                )
+            )
+
+            methodsSourceCodes.map { it.tryRequestMethodSourceCode }.filter { it.isNotEmpty() }
+                .forEach { appendLine(it) }
+        }
+
+        val tryMethodsSourceCode = buildString {
+            header(packageName, wrapperPackageName)
+            methodsSourceCodes.map { it.tryMethodSourceCode }.filter { it.isNotEmpty() }
+                .forEach { append(it) }
+        }
+
+        val tryWithContextMethodsSourceCode = buildString {
+            header(packageName, wrapperPackageName)
+            methodsSourceCodes.map { it.tryWithContextMethodSourceCode }.filter { it.isNotEmpty() }
+                .forEach { append(it) }
+        }
+
+        val methodsSourceCode = buildString {
+            header(packageName, wrapperPackageName)
+            methodsSourceCodes.map { it.methodSourceCode }.filter { it.isNotEmpty() }
+                .forEach { append(it) }
+        }
+
+        val withContextMethodsSourceCode = buildString {
+            header(packageName, wrapperPackageName)
+            methodsSourceCodes.map { it.withContextMethodSourceCode }.filter { it.isNotEmpty() }
+                .forEach { append(it) }
+        }
+
+        return MethodOverloadsSourceCode(
+            tryRequestMethodsSourceCode,
+            tryMethodsSourceCode,
+            tryWithContextMethodsSourceCode,
+            methodsSourceCode,
+            withContextMethodsSourceCode
+        )
+    }
+
+    private fun StringBuilder.appendDescriptionDoc(description: String) {
+        description.split("\n").forEach {
+            appendLine(" * $it")
         }
     }
 
-    private fun generateMethodSourceCode(
-        elementName: BotApiElementName,
-        description: String,
-        parameters: List<BotApiElement.Field>,
-        returnType: KotlinType,
-    ): String = buildString {
+    private fun StringBuilder.appendParameters(elementName: BotApiElementName, parameters: List<BotApiElement.Field>) {
+        if (parameters.isNotEmpty()) {
+            appendLine()
+        }
+        for (parameter in parameters) {
+            appendFieldLine(elementName, parameter, isProperty = false)
+        }
+    }
+
+    private fun StringBuilder.appendMethodDoc(description: String, parameters: List<BotApiElement.Field>) {
+        appendLine("/**")
+        appendDescriptionDoc(description)
+        if (parameters.isNotEmpty()) {
+            appendLine(" *")
+        }
+        parameters.filter { it.description.isNotEmpty() }.forEach {
+            appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
+        }
+        appendLine(" */")
+    }
+
+    data class MethodOverloadsSourceCode(
+        val tryRequestMethodSourceCode: String,
+        val tryMethodSourceCode: String,
+        val tryWithContextMethodSourceCode: String,
+        val methodSourceCode: String,
+        val withContextMethodSourceCode: String,
+    )
+
+    private fun generateMethodSourceCode(method: BotApiMethod): MethodOverloadsSourceCode {
+        val elementName = method.name
+        val description = method.description
+        val parameters = method.parameters
+        val returnType = method.returnType
 
         val requestTypeName = elementName.asMethodNameToRequestTypeName()
         val mainMethodName = elementName.value
@@ -218,94 +303,84 @@ class BotApiGenerator {
             if (parameters.isEmpty()) ""
             else "${requestTypeName}(${parameters.joinToString { it.name.snakeToCamelCase() }})"
 
-
-        fun StringBuilder.appendDescriptionDoc() {
-            description.split("\n").forEach {
-                appendLine(" * $it")
-            }
-        }
-
         // Core try-prefixed method that does the actual request
         val httpMethod = if (parameters.isEmpty()) "get" else "post"
-        appendLine("/**")
-        appendDescriptionDoc()
-        appendLine(" */")
-        append("suspend fun TelegramBotApiClient.$tryMethodName(")
-        if (parameters.isNotEmpty()) {
-            append("requestBody: $requestTypeName")
-        }
-        appendLine("): TelegramResponse<${returnType.value}> =")
-        appendLine("    httpClient.$httpMethod {")
-        appendLine("        url {")
-        appendLine("            protocol = apiProtocol")
-        appendLine("            host = apiHost")
-        appendLine("            port = apiPort")
-        appendLine("            path(\"bot\$apiToken\", \"${elementName.value}\")")
-        appendLine("        }")
-        if (parameters.isNotEmpty()) {
-            appendLine("        contentType(ContentType.Application.Json)")
-            appendLine("        setBody(requestBody)")
-        }
-        appendLine("    }.body()")
 
-        fun StringBuilder.appendMethodDoc() {
+        val tryRequestMethodSourceCode = buildString {
             appendLine("/**")
-            appendDescriptionDoc()
-            if (parameters.isNotEmpty()) {
-                appendLine(" *")
-            }
-            parameters.filter { it.description.isNotEmpty() }.forEach {
-                appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
-            }
+            appendDescriptionDoc(description)
             appendLine(" */")
+            append("suspend fun TelegramBotApiClient.$tryMethodName(")
+            if (parameters.isNotEmpty()) {
+                append("requestBody: $requestTypeName")
+            }
+            appendLine("): TelegramResponse<${returnType.value}> =")
+            appendLine("    httpClient.$httpMethod {")
+            appendLine("        url {")
+            appendLine("            protocol = apiProtocol")
+            appendLine("            host = apiHost")
+            appendLine("            port = apiPort")
+            appendLine("            path(\"bot\$apiToken\", \"${elementName.value}\")")
+            appendLine("        }")
+            if (parameters.isNotEmpty()) {
+                appendLine("        contentType(ContentType.Application.Json)")
+                appendLine("        setBody(requestBody)")
+            }
+            appendLine("    }.body()")
         }
 
-        fun StringBuilder.appendParameters() {
+        val tryMethodSourceCode = buildString {
             if (parameters.isNotEmpty()) {
                 appendLine()
+                appendMethodDoc(description, parameters)
+                append("suspend fun TelegramBotApiClient.$tryMethodName(")
+                appendParameters(elementName, parameters)
+                appendLine("): TelegramResponse<${returnType.value}> =")
+                appendLine("    $tryMethodName($requestValueArg)")
             }
-            for (parameter in parameters) {
-                appendFieldLine(elementName, parameter, isProperty = false)
-            }
-        }
-
-        // Convenience try-prefixed method
-        if (parameters.isNotEmpty()) {
-            appendLine()
-            appendMethodDoc()
-            append("suspend fun TelegramBotApiClient.$tryMethodName(")
-            appendParameters()
-            appendLine("): TelegramResponse<${returnType.value}> =")
-            appendLine("    $tryMethodName($requestValueArg)")
         }
 
         // Convenience try-prefixed method with context
-        appendLine()
-        appendMethodDoc()
-        appendLine("context(TelegramBotApiContext)")
-        append("suspend fun $tryMethodName(")
-        appendParameters()
-        appendLine("): TelegramResponse<${returnType.value}> =")
-        appendLine("    botApiClient.$tryMethodName($requestValueArg)")
+        val tryWithContextMethodSourceCode = buildString {
+            appendLine()
+            appendMethodDoc(description, parameters)
+            appendLine("context(TelegramBotApiContext)")
+            append("suspend fun $tryMethodName(")
+            appendParameters(elementName, parameters)
+            appendLine("): TelegramResponse<${returnType.value}> =")
+            appendLine("    botApiClient.$tryMethodName($requestValueArg)")
+        }
 
         // Convenience method
-        appendLine()
-        appendMethodDoc()
-        appendLine("@Throws(TelegramBotApiException::class)")
-        append("suspend fun TelegramBotApiClient.$mainMethodName(")
-        appendParameters()
-        appendLine("): ${returnType.value} =")
-        appendLine("    $tryMethodName($requestValueArg).getResultOrThrow()")
+        val methodSourceCode = buildString {
+            appendLine()
+            appendMethodDoc(description, parameters)
+            appendLine("@Throws(TelegramBotApiException::class)")
+            append("suspend fun TelegramBotApiClient.$mainMethodName(")
+            appendParameters(elementName, parameters)
+            appendLine("): ${returnType.value} =")
+            appendLine("    $tryMethodName($requestValueArg).getResultOrThrow()")
+        }
 
         // Convenience method with context
-        appendLine()
-        appendMethodDoc()
-        appendLine("context(TelegramBotApiContext)")
-        appendLine("@Throws(TelegramBotApiException::class)")
-        append("suspend fun $mainMethodName(")
-        appendParameters()
-        appendLine("): ${returnType.value} =")
-        appendLine("    botApiClient.$tryMethodName($requestValueArg).getResultOrThrow()")
+        val methodWithContextSourceCode = buildString {
+            appendLine()
+            appendMethodDoc(description, parameters)
+            appendLine("context(TelegramBotApiContext)")
+            appendLine("@Throws(TelegramBotApiException::class)")
+            append("suspend fun $mainMethodName(")
+            appendParameters(elementName, parameters)
+            appendLine("): ${returnType.value} =")
+            appendLine("    botApiClient.$tryMethodName($requestValueArg).getResultOrThrow()")
+        }
+
+        return MethodOverloadsSourceCode(
+            tryRequestMethodSourceCode,
+            tryMethodSourceCode,
+            tryWithContextMethodSourceCode,
+            methodSourceCode,
+            methodWithContextSourceCode,
+        )
     }
 
     private fun generateTypesFile(

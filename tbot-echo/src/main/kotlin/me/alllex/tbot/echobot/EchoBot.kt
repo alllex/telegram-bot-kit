@@ -1,13 +1,9 @@
 package me.alllex.tbot.echobot
 
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.client.TelegramBotApiContext
-import me.alllex.tbot.api.model.Message
-import me.alllex.tbot.api.model.delete
-import me.alllex.tbot.api.model.getMe
-import me.alllex.tbot.api.model.reply
+import me.alllex.tbot.api.model.*
 import me.alllex.tbot.bot.TelegramBotApiPoller
 import me.alllex.tbot.bot.TelegramBotUpdateListener
 import java.util.concurrent.CountDownLatch
@@ -34,15 +30,11 @@ fun main(args: Array<String>) {
                 println("Received stop command, stopping...")
                 countDownLatch.countDown()
             } else {
-                println("Waiting...")
-                delay(3_000)
-                val botReplyMessage = message.reply("Thanks!")
-                delay(1_000)
-                println("Deleting bot reply message...")
-                println(botReplyMessage.delete())
-                delay(1_000)
-                println("Deleting bot reply message... again")
-                println(botReplyMessage.delete())
+                println("Echoing the message back to the chat...")
+//                delay(5000)
+                message.copyMessage(message.chat.id, replyToMessageId = message.messageId, replyMarkup = inlineKeyboard {
+                    button("Wow", "wowwow")
+                })
             }
         }
     })

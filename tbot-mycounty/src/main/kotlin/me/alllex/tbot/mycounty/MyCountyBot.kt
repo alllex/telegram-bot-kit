@@ -121,15 +121,15 @@ class MyCountyBot(
         }
 
         val keyboard = createCountersSelectKeyboard(user, counters)
-        api.sendMarkdown(user.chatId, UserStrings["selectCountersMatching"].format(msgText), replyMarkup = keyboard)
+        user.chatId.sendMarkdown(UserStrings["selectCountersMatching"].format(msgText), replyMarkup = keyboard)
     }
 
     private suspend fun onStartCommand(user: User) {
-        api.sendMarkdown(user.chatId, UserStrings["startGreeting"])
+        user.chatId.sendMarkdown(UserStrings["startGreeting"])
     }
 
     private suspend fun onHelpCommand(user: User) {
-        api.sendMarkdown(user.chatId, UserStrings["userHelp"])
+        user.chatId.sendMarkdown(UserStrings["userHelp"])
     }
 
     private suspend fun onSelectCommand(user: User, counterName: String) {
@@ -144,7 +144,7 @@ class MyCountyBot(
         val counters = counterRepository.getCounters(user.userId)
         val keyboard = createCountersSelectKeyboard(user, counters)
 
-        api.sendMarkdown(user.chatId, UserStrings["selectCounters"], replyMarkup = keyboard)
+        user.chatId.sendMarkdown(UserStrings["selectCounters"], replyMarkup = keyboard)
     }
 
     private fun createCountersSelectKeyboard(user: User, counters: List<UserCounter>) = inlineKeyboard {
@@ -163,18 +163,18 @@ class MyCountyBot(
 
     private suspend fun onCreateCounterWithName(user: User, newCounterName: String) {
         if (newCounterName.isEmpty()) {
-            api.sendMarkdown(user.chatId, UserStrings["createCounter"])
+            user.chatId.sendMarkdown(UserStrings["createCounter"])
             user.state = UserChatState.AwaitNameForNewCounter
             return
         } else if (newCounterName.length > 100) {
-            api.sendMarkdown(user.chatId, UserStrings["counterNameTooLong"])
+            user.chatId.sendMarkdown(UserStrings["counterNameTooLong"])
             user.state = UserChatState.AwaitNameForNewCounter
             return
         }
 
         val existingCounter = counterRepository.findCounterByName(user.userId, newCounterName)
         if (existingCounter != null) {
-            api.sendMarkdown(user.chatId, UserStrings["counterAlreadyExists"].format(existingCounter.name))
+            user.chatId.sendMarkdown(UserStrings["counterAlreadyExists"].format(existingCounter.name))
             user.state = UserChatState.AwaitNameForNewCounter
             return
         }
@@ -183,7 +183,7 @@ class MyCountyBot(
 
         val counter = counterRepository.addCounter(user.userId, newCounterName)
         val responseText = UserStrings["createdCounter"].format(counter.name)
-        api.sendMarkdown(user.chatId, responseText)
+        user.chatId.sendMarkdown(responseText)
 
         doSelectCounter(user, counter)
     }
@@ -222,21 +222,21 @@ class MyCountyBot(
         if (counterName.isNotEmpty()) {
             val counter = counterRepository.findCounterByName(user.userId, counterName)
             if (counter != null) {
-                api.sendMarkdown(user.chatId, "`${counter.name}` = `${counter.getCountValue()}`")
+                user.chatId.sendMarkdown("`${counter.name}` = `${counter.getCountValue()}`")
                 return
             }
         }
 
         val counters = counterRepository.getCounters(user.userId)
         if (counters.isEmpty()) {
-            api.sendMarkdown(user.chatId, UserStrings["summaryNoCounters"])
+            user.chatId.sendMarkdown(UserStrings["summaryNoCounters"])
             return
         }
 
         val summaryText = counters.joinToString("\n") {
             "`${it.name}` = `${it.getCountValue()}`"
         }
-        api.sendMarkdown(user.chatId, "Summary of ${counters.size} counters:\n$summaryText")
+        user.chatId.sendMarkdown("Summary of ${counters.size} counters:\n$summaryText")
     }
 
     private suspend fun onCancelCommand(user: User) {
@@ -332,15 +332,15 @@ class MyCountyBot(
         val keyboard = createSelectedCounterKeyboard(user, counter)
         val replyText = UserStrings["selectedCounter"].format(counter.name)
         if (editQueryMessage) {
-            queryMessage.editMarkdown(replyText, replyMarkup = keyboard)
+            queryMessage.editTextMarkdown(replyText, replyMarkup = keyboard)
         } else {
-            api.sendMarkdown(user.chatId, replyText, replyMarkup = keyboard)
+            user.chatId.sendMarkdown(replyText, replyMarkup = keyboard)
         }
     }
 
     private suspend fun doSelectCounter(user: User, counter: UserCounter) {
         val keyboard = createSelectedCounterKeyboard(user, counter)
-        api.sendMarkdown(user.chatId, UserStrings["selectedCounter"].format(counter.name), replyMarkup = keyboard)
+        user.chatId.sendMarkdown(UserStrings["selectedCounter"].format(counter.name), replyMarkup = keyboard)
     }
 
     private fun createSelectedCounterKeyboard(user: User, counter: UserCounter): InlineKeyboardMarkup {
@@ -366,7 +366,7 @@ class MyCountyBot(
             return
         }
 
-        queryMessage.editMarkdown(
+        queryMessage.editTextMarkdown(
             text = UserStrings["askCounterUndoConfirmation"].format(counter.name),
             replyMarkup = inlineKeyboard {
                 row {
@@ -385,7 +385,7 @@ class MyCountyBot(
         }
 
         val newCount = counter.removeLast()
-        api.sendMarkdown(user.chatId, UserStrings["undidLast"].format(counter.name, newCount))
+        user.chatId.sendMarkdown(UserStrings["undidLast"].format(counter.name, newCount))
 
         query.message?.deleteLater()
     }
@@ -400,7 +400,7 @@ class MyCountyBot(
         val newValue = counter.register(time)
 
         val replyText = UserStrings["incrementedCounter"].format(counter.name, newValue)
-        api.sendMarkdown(user.chatId, replyText, replyMarkup = inlineKeyboard {
+        user.chatId.sendMarkdown(replyText, replyMarkup = inlineKeyboard {
             button("Select", "${user.userId.value}/${QueryCallbackName.SELECT_SINGLE}/${counter.id}")
         })
 
@@ -409,7 +409,7 @@ class MyCountyBot(
 
     private suspend fun onRenameCounterCallback(user: User, query: CallbackQuery, counter: UserCounter) {
         user.state = UserChatState.AwaitNewNameForCounter(counter.id)
-        api.sendMarkdown(user.chatId, UserStrings["renameCounter"].format(counter.name))
+        user.chatId.sendMarkdown(UserStrings["renameCounter"].format(counter.name))
         query.message?.deleteLater()
     }
 
@@ -420,7 +420,7 @@ class MyCountyBot(
             return
         }
 
-        queryMessage.editMarkdown(
+        queryMessage.editTextMarkdown(
             text = UserStrings["askDeleteConfirmation"].format(counter.name),
             replyMarkup = inlineKeyboard {
                 row {
@@ -439,7 +439,7 @@ class MyCountyBot(
         }
 
         counterRepository.removeCounter(counter.id)
-        api.sendMarkdown(user.chatId, UserStrings["deletedCounter"].format(counter.name))
+        user.chatId.sendMarkdown(UserStrings["deletedCounter"].format(counter.name))
 
         query.message?.deleteLater()
     }
@@ -450,7 +450,7 @@ class MyCountyBot(
 
     private suspend fun transitionToIdle(user: User) {
         user.state = UserChatState.Idle
-        api.sendMarkdown(user.chatId, UserStrings["readyToCount"])
+        user.chatId.sendMarkdown(UserStrings["readyToCount"])
     }
 
     private fun Message.deleteLater() {
@@ -466,7 +466,7 @@ class MyCountyBot(
         }
 
         user.state = UserChatState.AwaitNameForNewCounter
-        api.sendMarkdown(user.chatId, UserStrings["createCounter"])
+        user.chatId.sendMarkdown(UserStrings["createCounter"])
     }
 
     private suspend fun getOrCreateUser(chatId: ChatId): User {

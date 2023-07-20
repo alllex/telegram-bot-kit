@@ -79,6 +79,89 @@ fun BotApiElement.getUnionDiscriminatorFieldName(): String? {
 
 private fun BotApiElementName.asMethodNameToRequestTypeName() = "${value.toTitleCase()}Request"
 
+data class FluentContextMethod(
+    val receiver: String,
+    val name: String,
+    val originalName: String,
+    val args: Map<String, String>
+) {
+    constructor(receiver: String, name: String, args: Map<String, String>) : this(receiver, name, name, args)
+}
+
+val fluentMethods = listOf(
+    FluentContextMethod("Chat", "sendMessage", "sendMessage", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendMarkdown", "sendMessage", mapOf("chatId" to "id", "parseMode" to "ParseMode.MARKDOWN.value")),
+    FluentContextMethod("ChatId", "sendMessage", "sendMessage", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendMarkdown", "sendMessage", mapOf("chatId" to "this", "parseMode" to "ParseMode.MARKDOWN.value")),
+
+    FluentContextMethod("Message", "reply", "sendMessage", mapOf("chatId" to "chat.id", "replyMessageId" to "messageId")),
+    FluentContextMethod(
+        "Message", "replyMarkdown",
+        "sendMessage", mapOf("chatId" to "chat.id", "replyMessageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN.value")
+    ),
+
+    FluentContextMethod("Message", "forward", "forwardMessage", mapOf("fromChatId" to "chat.id", "messageId" to "messageId")),
+    FluentContextMethod("Message", "copyMessage", "copyMessage", mapOf("fromChatId" to "chat.id", "messageId" to "messageId")),
+
+    FluentContextMethod("Chat", "sendPhoto", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendAudio", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendDocument", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendVideo", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendAnimation", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendVoice", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendVideoNote", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendMediaGroup", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendLocation", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendVenue", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendContact", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendPoll", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendDice", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "sendChatAction", mapOf("chatId" to "id")),
+
+    FluentContextMethod("Chat", "getMemberCount", "getChatMemberCount", mapOf("chatId" to "id")),
+    FluentContextMethod("Chat", "getMember", "getChatMember", mapOf("chatId" to "id")),
+
+    FluentContextMethod("ChatId", "sendPhoto", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendAudio", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendDocument", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendVideo", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendAnimation", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendVoice", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendVideoNote", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendMediaGroup", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendLocation", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendVenue", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendContact", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendPoll", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendDice", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "sendChatAction", mapOf("chatId" to "this")),
+
+    FluentContextMethod("ChatId", "getMemberCount", "getChatMemberCount", mapOf("chatId" to "this")),
+    FluentContextMethod("ChatId", "getMember", "getChatMember", mapOf("chatId" to "this")),
+
+    FluentContextMethod("User", "getProfilePhotos", mapOf("userId" to "id")),
+
+    FluentContextMethod("UserId", "getProfilePhotos", mapOf("userId" to "this")),
+
+    FluentContextMethod(
+        "Message", "editText",
+        "editMessageText", mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null")
+    ),
+    FluentContextMethod(
+        "Message", "editTextMarkdown",
+        "editMessageText",
+        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.MARKDOWN.value")
+    ),
+
+    FluentContextMethod("Message", "delete", "deleteMessage", mapOf("chatId" to "chat.id", "messageId" to "messageId")),
+
+    FluentContextMethod("CallbackQuery", "answer", "answerCallbackQuery", mapOf("callbackQueryId" to "id")),
+    FluentContextMethod("CallbackQueryId", "answer", "answerCallbackQuery", mapOf("callbackQueryId" to "this")),
+
+    FluentContextMethod("InlineQuery", "answer", "answerInlineQuery", mapOf("inlineQueryId" to "id")),
+    FluentContextMethod("InlineQueryId", "answer", "answerInlineQuery", mapOf("inlineQueryId" to "this")),
+)
+
 class BotApiGenerator {
 
     fun run(
@@ -290,13 +373,13 @@ class BotApiGenerator {
     )
 
     private fun generateMethodSourceCode(method: BotApiMethod): MethodOverloadsSourceCode {
-        val elementName = method.name
+        val methodName = method.name
         val description = method.description
         val parameters = method.parameters
         val returnType = method.returnType
 
-        val requestTypeName = elementName.asMethodNameToRequestTypeName()
-        val mainMethodName = elementName.value
+        val requestTypeName = methodName.asMethodNameToRequestTypeName()
+        val mainMethodName = methodName.value
         val tryMethodName = "try${mainMethodName.toTitleCase()}"
 
         val requestValueArg =
@@ -320,7 +403,7 @@ class BotApiGenerator {
             appendLine("            protocol = apiProtocol")
             appendLine("            host = apiHost")
             appendLine("            port = apiPort")
-            appendLine("            path(\"bot\$apiToken\", \"${elementName.value}\")")
+            appendLine("            path(\"bot\$apiToken\", \"${methodName.value}\")")
             appendLine("        }")
             if (parameters.isNotEmpty()) {
                 appendLine("        contentType(ContentType.Application.Json)")
@@ -334,7 +417,7 @@ class BotApiGenerator {
                 appendLine()
                 appendMethodDoc(description, parameters)
                 append("suspend fun TelegramBotApiClient.$tryMethodName(")
-                appendParameters(elementName, parameters)
+                appendParameters(methodName, parameters)
                 appendLine("): TelegramResponse<${returnType.value}> =")
                 appendLine("    $tryMethodName($requestValueArg)")
             }
@@ -346,7 +429,7 @@ class BotApiGenerator {
             appendMethodDoc(description, parameters)
             appendLine("context(TelegramBotApiContext)")
             append("suspend fun $tryMethodName(")
-            appendParameters(elementName, parameters)
+            appendParameters(methodName, parameters)
             appendLine("): TelegramResponse<${returnType.value}> =")
             appendLine("    botApiClient.$tryMethodName($requestValueArg)")
         }
@@ -357,7 +440,7 @@ class BotApiGenerator {
             appendMethodDoc(description, parameters)
             appendLine("@Throws(TelegramBotApiException::class)")
             append("suspend fun TelegramBotApiClient.$mainMethodName(")
-            appendParameters(elementName, parameters)
+            appendParameters(methodName, parameters)
             appendLine("): ${returnType.value} =")
             appendLine("    $tryMethodName($requestValueArg).getResultOrThrow()")
         }
@@ -369,9 +452,30 @@ class BotApiGenerator {
             appendLine("context(TelegramBotApiContext)")
             appendLine("@Throws(TelegramBotApiException::class)")
             append("suspend fun $mainMethodName(")
-            appendParameters(elementName, parameters)
+            appendParameters(methodName, parameters)
             appendLine("): ${returnType.value} =")
             appendLine("    botApiClient.$tryMethodName($requestValueArg).getResultOrThrow()")
+        }
+
+        val fluentContextMethods = fluentMethods.filter { it.originalName == mainMethodName }.map { fluent ->
+            buildString {
+//                appendMethodDoc() // TODO
+                appendLine("context(TelegramBotApiContext)")
+                appendLine("@Throws(TelegramBotApiException::class)")
+                append("suspend fun ${fluent.receiver}.${fluent.name}(")
+                appendParameters(methodName, parameters.filter { it.name.snakeToCamelCase() !in fluent.args })
+                appendLine("): ${returnType.value} =")
+                val adjustedRequestArg = parameters.map { it.name.snakeToCamelCase() }.joinToString { fluent.args[it] ?: it }
+                appendLine("    ${fluent.originalName}($adjustedRequestArg)")
+            }
+        }
+
+        val combinedMethodWithContextSourceCode = buildString {
+            append(methodWithContextSourceCode)
+            fluentContextMethods.forEach {
+                appendLine()
+                append(it)
+            }
         }
 
         return MethodOverloadsSourceCode(
@@ -379,7 +483,7 @@ class BotApiGenerator {
             tryMethodSourceCode,
             tryWithContextMethodSourceCode,
             methodSourceCode,
-            methodWithContextSourceCode,
+            combinedMethodWithContextSourceCode,
         )
     }
 

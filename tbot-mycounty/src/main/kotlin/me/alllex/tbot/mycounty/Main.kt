@@ -1,12 +1,11 @@
 package me.alllex.tbot.mycounty
 
 import io.ktor.client.engine.java.*
-import io.ktor.client.plugins.logging.*
 import kotlinx.coroutines.runBlocking
 import me.alllex.tbot.Build
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.model.getMe
-import me.alllex.tbot.bot.TelegramBotApiPoller
+import me.alllex.tbot.api.client.TelegramBotApiPoller
 import me.alllex.tbot.bot.util.getSystemPropertyOrThrow
 import me.alllex.tbot.bot.util.log.loggerForClass
 import me.alllex.tbot.bot.util.runForever
@@ -69,7 +68,7 @@ class Main(
     fun stop() {
         log.info("Stopping")
 
-        apiPoller.stop()
+        apiPoller.stopBlocking()
         bot.stop()
         api.closeHttpClient()
         db.stop()
@@ -114,11 +113,9 @@ class Main(
 
             val main = Main(config)
 
-            Runtime.getRuntime().addShutdownHook(
-                thread(name = "main-shutdown-hook", start = false) {
-                    doMainShutdown(main)
-                }
-            )
+            Runtime.getRuntime().addShutdownHook(thread(name = "main-shutdown-hook", start = false) {
+                doMainShutdown(main)
+            })
 
             main.start()
         }

@@ -17,9 +17,10 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
 
 dependencies {
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ktor.serialization.kotlinx.json)
     api(libs.ktor.client.core)
     implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.slf4j.api)
 
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.ktor.client.mock)

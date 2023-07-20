@@ -1,6 +1,5 @@
-package me.alllex.tbot.bot
+package me.alllex.tbot.api.client
 
-import me.alllex.tbot.api.client.TelegramBotApiContext
 import me.alllex.tbot.api.model.*
 
 

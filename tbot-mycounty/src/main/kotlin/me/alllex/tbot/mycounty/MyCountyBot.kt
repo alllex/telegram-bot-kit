@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.client.TelegramBotApiContext
 import me.alllex.tbot.api.client.TelegramBotApiException
-import me.alllex.tbot.bot.TelegramBotUpdateListener
+import me.alllex.tbot.api.client.TelegramBotUpdateListener
 import me.alllex.tbot.api.model.*
 import me.alllex.tbot.bot.util.log.loggerForClass
 import me.alllex.tbot.bot.util.newSingleThreadExecutor

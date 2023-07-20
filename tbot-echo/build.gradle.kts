@@ -9,18 +9,14 @@ group = "me.alllex.tbot.echobot"
 version = "0.0.1"
 
 val javaVersion: String by project
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(javaVersion)
-    }
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation(projects.tbotBot)
+    implementation(projects.tbotApi)
 
     implementation(platform(libs.kotlin.bom))
     implementation(platform(libs.kotlinx.coroutines.bom))

@@ -1,37 +1,36 @@
-package me.alllex.tbot.bot
+package me.alllex.tbot.api.client
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import me.alllex.tbot.api.client.TelegramBotApiClient
-import me.alllex.tbot.api.client.TelegramBotApiContext
-import me.alllex.tbot.bot.util.log.loggerForClass
-import me.alllex.tbot.bot.util.newSingleThreadExecutor
-import me.alllex.tbot.bot.util.shutdownAndAwaitTermination
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.takeWhile
 import me.alllex.tbot.api.model.Update
 import me.alllex.tbot.api.model.asSeconds
 import me.alllex.tbot.api.model.tryGetUpdates
-import me.alllex.tbot.bot.util.awaitCollectors
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class TelegramBotApiPoller(
     private val client: TelegramBotApiClient,
     private val pollingTimeout: Duration = 10.seconds
-) : CoroutineScope {
+) {
 
     private val started = AtomicBoolean(false)
     private val updateOffset = AtomicLong(0)
 
-    private val pollerJob = SupervisorJob()
-    private val pollerExecutor = newSingleThreadExecutor("tbot-polling")
-    override val coroutineContext = pollerJob +
-        pollerExecutor.asCoroutineDispatcher() +
-        CoroutineExceptionHandler { _, t -> onCoroutineError(t) }
+    private val dispatcher = Dispatchers.IO.limitedParallelism(1)
+    // should not need sync as long as start/stop are ordered by happens-before
+    private var pollerCoroutineScope: CoroutineScope? = null
 
     /**
      * When a batch of updates is emitted into this flow,
@@ -55,13 +54,16 @@ class TelegramBotApiPoller(
     fun start(listener: TelegramBotUpdateListener) {
         check(started.compareAndSet(false, true)) { "Already started" }
 
-        launch {
+        val coroutineScope = CoroutineScope(SupervisorJob() + dispatcher + CoroutineExceptionHandler(::onUnhandledCoroutineException))
+        this.pollerCoroutineScope = coroutineScope
+
+        coroutineScope.launch {
             _updates.collect { update ->
                 listener.onUpdateSafely(update)
             }
         }
 
-        launch {
+        coroutineScope.launch {
             // have to await, because the collector registration happens concurrently
             // and as soon as there is at least one collector the polling will start immediately
             // which could lead to the remaining collectors to skip updates if they start collecting later
@@ -69,18 +71,28 @@ class TelegramBotApiPoller(
 
             runPollingForever()
         }
+
         log.info("Started")
     }
 
-    fun stop() {
+    suspend fun stop() {
+        val pollerJob = pollerCoroutineScope!!.coroutineContext.job
+        try {
+            pollerJob.cancelAndJoin()
+            log.info("Polling job stopped successfully")
+        } finally {
+            pollerCoroutineScope = null
+            started.set(false)
+            log.info("Stopped")
+        }
+    }
+
+    fun stopBlocking(gracefulAwait: Duration = 500.milliseconds) {
         runBlocking {
-            withTimeout(500.milliseconds) {
-                pollerJob.cancelAndJoin()
-                log.info("Polling job stopped successfully")
+            withTimeout(gracefulAwait) {
+                stop()
             }
         }
-        pollerExecutor.shutdownAndAwaitTermination()
-        log.info("Stopped")
     }
 
     private suspend fun TelegramBotUpdateListener.onUpdateSafely(update: Update) {
@@ -96,14 +108,14 @@ class TelegramBotApiPoller(
     }
 
     private suspend fun runPollingForever() {
-        while (isActive) {
+        while (coroutineContext.isActive) {
             runPollingIteration()
         }
     }
 
     private suspend fun runPollingIteration() {
         val updates = fetchUpdatesSafelyRetryingForever() ?: return
-        log.debug { "Received ${updates.size} updates" }
+        log.debug("Received ${updates.size} updates")
 
         for (update in updates) {
             _updates.emit(update) // cancellable
@@ -120,11 +132,11 @@ class TelegramBotApiPoller(
         val retryDelaySeconds = generateSequence(1) { it * 2 }.map { it.coerceAtMost(10) }
 
         for (delaySeconds in retryDelaySeconds) {
-            if (!isActive) break
+            if (!coroutineContext.isActive) break
 
             fetchUpdatesSafely()?.let { return it }
 
-            log.debug { "Retrying update fetching in $delaySeconds seconds" }
+            log.warn("Retrying update fetching in $delaySeconds seconds...")
             delay(delaySeconds * 1000L)
         }
 
@@ -148,7 +160,7 @@ class TelegramBotApiPoller(
 
     private suspend fun fetchUpdates(): List<Update>? {
         val updateOffsetValue = updateOffset.get()
-        log.debug { "Fetching updates with offset $updateOffsetValue" }
+        log.debug("Fetching updates with offset $updateOffsetValue")
         val response = client.tryGetUpdates(updateOffsetValue, timeout = pollingTimeout.asSeconds)
         if (response.ok) {
             return response.result
@@ -166,11 +178,15 @@ class TelegramBotApiPoller(
         return null
     }
 
-    private fun onCoroutineError(t: Throwable) {
-        log.error("Unexpected coroutine error: ", t)
-    }
-
     companion object {
-        private val log = loggerForClass<TelegramBotApiPoller>()
+        private val log: Logger = LoggerFactory.getLogger(TelegramBotApiPoller::class.java)
+
+        private fun onUnhandledCoroutineException(context: CoroutineContext, throwable: Throwable) {
+            log.error("Unhandled coroutine exception in $context", throwable)
+        }
+
+        private suspend fun <T> MutableSharedFlow<T>.awaitCollectors(n: Int = 1) {
+            subscriptionCount.takeWhile { it < n }.collect()
+        }
     }
 }

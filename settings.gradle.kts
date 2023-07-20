@@ -58,6 +58,7 @@ dependencyResolutionManagement {
             lib("io.ktor", "ktor-serialization-kotlinx-json").versionRef(ktor)
 
             val slf4j = version("slf4j", "1.7.36")
+            lib("org.slf4j", "slf4j-api").versionRef(slf4j)
             lib("org.slf4j", "slf4j-simple").versionRef(slf4j)
 
             val log4j = version("log4j", "2.20.0")

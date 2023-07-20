@@ -1,11 +1,12 @@
 package me.alllex.tbot.echobot
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.client.TelegramBotApiContext
 import me.alllex.tbot.api.model.*
-import me.alllex.tbot.bot.TelegramBotApiPoller
-import me.alllex.tbot.bot.TelegramBotUpdateListener
+import me.alllex.tbot.api.client.TelegramBotApiPoller
+import me.alllex.tbot.api.client.TelegramBotUpdateListener
 import java.util.concurrent.CountDownLatch
 
 
@@ -24,14 +25,13 @@ fun main(args: Array<String>) {
         context(TelegramBotApiContext)
         override suspend fun onMessage(message: Message) {
             println("Received message: $message")
-            println()
             val text = message.text
             if (text.equals("stop", ignoreCase = true)) {
                 println("Received stop command, stopping...")
                 countDownLatch.countDown()
             } else {
                 println("Echoing the message back to the chat...")
-//                delay(5000)
+                delay(15000)
                 message.copyMessage(message.chat.id, replyToMessageId = message.messageId, replyMarkup = inlineKeyboard {
                     button("Wow", "wowwow")
                 })
@@ -40,7 +40,7 @@ fun main(args: Array<String>) {
     })
 
     countDownLatch.await()
-    updatePolling.stop()
+    updatePolling.stopBlocking()
 
     println("Done")
 }

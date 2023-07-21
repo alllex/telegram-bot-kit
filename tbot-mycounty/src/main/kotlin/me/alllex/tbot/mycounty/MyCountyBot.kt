@@ -222,7 +222,7 @@ class MyCountyBot(
         if (counterName.isNotEmpty()) {
             val counter = counterRepository.findCounterByName(botUser.userId, counterName)
             if (counter != null) {
-                botUser.chatId.sendMarkdown("`${counter.name}` = `${counter.getCountValue()}`")
+                botUser.chatId.sendMarkdown("`${counter.name}` \\= `${counter.getCountValue()}`")
                 return
             }
         }
@@ -234,7 +234,7 @@ class MyCountyBot(
         }
 
         val summaryText = counters.joinToString("\n") {
-            "`${it.name}` = `${it.getCountValue()}`"
+            "`${it.name}` \\= `${it.getCountValue()}`"
         }
         botUser.chatId.sendMarkdown("Summary of ${counters.size} counters:\n$summaryText")
     }

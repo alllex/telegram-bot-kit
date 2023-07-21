@@ -2,18 +2,18 @@
 strings:
   startGreeting: |-
     Hi there!
-    I am a counter bot. I keep track of what _counts_!
+    I am a counter bot. I keep track of what _counts_\!
     Think of me as an accountant for simple things.
 
     Use /create to create a new counter.
 
   userHelp: |-
     Commands:
-    /create - create new counter
-    /select - manage a counter
-    /summary - summary of counters
-    /cancel - cancel ongoing task
-    /help - this help
+    /create \- create new counter
+    /select \- manage a counter
+    /summary \- summary of counters
+    /cancel \- cancel ongoing task
+    /help \- this help
 
   unknownCommand: |-
     Sorry, I don't know this command.
@@ -47,7 +47,7 @@ strings:
 
   undidLast: |-
     Dropped last inc, new count:
-    `%s` = `%s`
+    `%s` \= `%s`
 
   renameCounter: |-
     Send a new name for the counter `%s`.
@@ -66,7 +66,7 @@ strings:
     Counter `%s` has been reset
 
   incrementedCounter: |-
-    `%s` = `%s`
+    `%s` \= `%s`
 
   summaryNoCounters: |-
     There are no counters...

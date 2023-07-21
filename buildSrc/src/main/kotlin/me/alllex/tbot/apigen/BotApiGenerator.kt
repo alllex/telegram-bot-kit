@@ -94,10 +94,10 @@ val fluentMethods = listOf(
     FluentContextMethod("ChatId", "sendMessage", "sendMessage", mapOf("chatId" to "this")),
     FluentContextMethod("ChatId", "sendMarkdown", "sendMessage", mapOf("chatId" to "this", "parseMode" to "ParseMode.MARKDOWN.value")),
 
-    FluentContextMethod("Message", "reply", "sendMessage", mapOf("chatId" to "chat.id", "replyMessageId" to "messageId")),
+    FluentContextMethod("Message", "reply", "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId")),
     FluentContextMethod(
         "Message", "replyMarkdown",
-        "sendMessage", mapOf("chatId" to "chat.id", "replyMessageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN.value")
+        "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN.value")
     ),
 
     FluentContextMethod("Message", "forward", "forwardMessage", mapOf("fromChatId" to "chat.id", "messageId" to "messageId")),
@@ -462,6 +462,9 @@ class BotApiGenerator {
         }
 
         val fluentContextMethods = fluentMethods.filter { it.originalName == mainMethodName }.map { fluent ->
+            val unexpectedArgs = fluent.args.keys - parameters.map { it.name.snakeToCamelCase() }.toSet()
+            check(unexpectedArgs.isEmpty()) { "Unexpected replacement args for fluent method ${fluent.name}/$mainMethodName: $unexpectedArgs" }
+
             buildString {
                 appendLine("context(TelegramBotApiContext)")
                 appendLine("@Throws(TelegramBotApiException::class)")

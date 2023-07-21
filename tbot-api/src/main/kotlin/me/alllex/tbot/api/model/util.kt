@@ -5,6 +5,11 @@ internal fun quoteWhenWhitespace(v: Any?) =
 
 internal fun quoteWhenWhitespace(s: CharSequence): String = if (s.any { it.isWhitespace() }) "'$s'" else s.toString()
 
+internal fun joinLines(v: Any?) =
+    if (v != null && v is CharSequence) joinLines(v) else v
+
+internal fun joinLines(s: CharSequence): String = s.splitToSequence('\n').joinToString(separator = "\\n")
+
 class DebugStringBuilder(name: String) {
 
     private val sb = StringBuilder(name).append('(')
@@ -18,7 +23,7 @@ class DebugStringBuilder(name: String) {
         } else {
             sb.append(", ")
         }
-        sb.append(name).append('=').append(quoteWhenWhitespace(value))
+        sb.append(name).append('=').append(quoteWhenWhitespace(joinLines(value)))
     }
 
     override fun toString(): String {

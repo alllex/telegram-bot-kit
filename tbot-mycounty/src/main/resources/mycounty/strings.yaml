@@ -2,10 +2,10 @@
 strings:
   startGreeting: |-
     Hi there!
-    I am a counter bot. I keep track of what _counts_\!
-    Think of me as an accountant for simple things.
+    I am a counter bot\. I keep track of what _counts_\!
+    Think of me as an accountant for simple things\.
 
-    Use /create to create a new counter.
+    Use /create to create a new counter\.
 
   userHelp: |-
     Commands:
@@ -16,19 +16,20 @@ strings:
     /help \- this help
 
   unknownCommand: |-
-    Sorry, I don't know this command.
+    Sorry, I don't know this command\.
     When in doubt, seek /help 😉
 
-  somethingWentWrong: "Something went wrong..."
+  somethingWentWrong: |-
+    Something went wrong\.\.\.
 
   createCounter: |-
-    Send a *name* for the new counter.
+    Send a *name* for the new counter\.
 
   counterNameTooLong: |-
-    The name is a bit too long. Please try a shorter one.
+    The name is a bit too long\. Please try a shorter one\.
 
   counterAlreadyExists: |-
-    Counter with name `%s` already exists. Please use another name.
+    Counter with name `%s` already exists\. Please use another name\.
 
   createdCounter: |-
     Created new counter: `%s`
@@ -43,21 +44,24 @@ strings:
     Selected `%s`
 
   askCounterUndoConfirmation: |-
-    Remove last inc in `%s`?
+    Drop last increment of `%s`?
 
   undidLast: |-
-    Dropped last inc, new count:
+    Dropped last increment, new count:
     `%s` \= `%s`
 
+  editingCounter: |-
+    Editing counter: `%s`
+
   renameCounter: |-
-    Send a new name for the counter `%s`.
+    Send a new name for the counter `%s`\.
 
   renamedCounter: |-
     Renamed counter: `%s`
 
   askDeleteConfirmation: |-
     Are you sure you want to delete `%s` and all its updates?
-    *This action cannot be undone.*
+    *This action cannot be undone\.*
 
   deletedCounter: |-
     Deleted counter: `%s`
@@ -66,10 +70,11 @@ strings:
     Counter `%s` has been reset
 
   incrementedCounter: |-
+    Incremented, new count:
     `%s` \= `%s`
 
   summaryNoCounters: |-
-    There are no counters...
+    There are no counters\.\.\.
 
     First, /create a new counter
 

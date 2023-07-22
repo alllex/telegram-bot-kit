@@ -116,7 +116,10 @@ class MyCountyBot(
         val msgText = msg.text?.trim() ?: ""
         val counters = counterRepository.findCountersMatchingName(botUser.userId, msgText)
         if (counters.isEmpty()) {
-            msg.reply(UserStrings["unknownCommand"])
+            val text = "No matching counters were found\\. Do you want to create a new counter with this name?"
+            msg.replyMarkdown(text, replyMarkup = inlineKeyboard {
+                button("Create", "${botUser.userId.value}/${QueryCallbackName.CREATE}")
+            })
             return
         }
 
@@ -243,9 +246,6 @@ class MyCountyBot(
         transitionToIdle(botUser)
     }
 
-    /**
-     * Returns true if answered to the callback
-     */
     private suspend fun onQueryCallbackImpl(botUser: BotUser, query: CallbackQuery) {
         val data = query.data ?: return
         val dataParts = data.split("/")
@@ -266,7 +266,7 @@ class MyCountyBot(
 
         return when (dataParts.size) {
             2 -> {
-                onCommonQueryCallback(botUser, callbackName)
+                onCommonQueryCallback(botUser, callbackName, query)
             }
 
             3 -> {
@@ -289,9 +289,13 @@ class MyCountyBot(
         }
     }
 
-    private suspend fun onCommonQueryCallback(botUser: BotUser, callbackName: QueryCallbackName) {
+    private suspend fun onCommonQueryCallback(botUser: BotUser, callbackName: QueryCallbackName, query: CallbackQuery) {
         return when (callbackName) {
-            QueryCallbackName.CREATE -> onCreateCommand(botUser)
+            QueryCallbackName.CREATE -> {
+                val newName = query.message?.replyToMessage?.text ?: ""
+                onCreateCommand(botUser, newName)
+            }
+
             else -> error("not a common callback: $callbackName")
         }
     }
@@ -306,9 +310,11 @@ class MyCountyBot(
             QueryCallbackName.SELECT -> onSelectCounterCallback(botUser, query, counter, editQueryMessage = true)
             QueryCallbackName.SELECT_SINGLE -> onSelectCounterCallback(botUser, query, counter, editQueryMessage = false)
             QueryCallbackName.INC -> onIncCounterCallback(botUser, query, counter)
-            QueryCallbackName.UNDO -> onUndoCounterCallback(botUser, query, counter)
-            QueryCallbackName.UNDO_CONFIRM -> onUndoConfirmCounterCallback(botUser, query, counter)
-            QueryCallbackName.UNDO_CANCEL -> onUndoCancelCounterCallback(botUser, query, counter)
+            QueryCallbackName.UNDO_LAST_INC -> onUndoCounterCallback(botUser, query, counter)
+            QueryCallbackName.UNDO_LAST_INC_CONFIRM -> onUndoConfirmCounterCallback(botUser, query, counter)
+            QueryCallbackName.UNDO_LAST_INC_CANCEL -> onUndoCancelCounterCallback(botUser, query, counter)
+            QueryCallbackName.EDIT -> onEditCounterCallback(botUser, query, counter)
+            QueryCallbackName.EDIT_CANCEL -> onEditCancelCounterCallback(botUser, query, counter)
             QueryCallbackName.RENAME -> onRenameCounterCallback(botUser, query, counter)
             QueryCallbackName.DELETE -> onDeleteCounterCallback(botUser, query, counter)
             QueryCallbackName.DELETE_CONFIRM -> onDeleteConfirmCounterCallback(botUser, query, counter)
@@ -345,12 +351,11 @@ class MyCountyBot(
 
     private fun createSelectedCounterKeyboard(botUser: BotUser, counter: UserCounter): InlineKeyboardMarkup {
         return inlineKeyboard {
-            button("Inc", "${botUser.userId.value}/${QueryCallbackName.INC}/${counter.id}")
-            button("Drop Last", "${botUser.userId.value}/${QueryCallbackName.UNDO}/${counter.id}")
             row {
-                button("Rename", "${botUser.userId.value}/${QueryCallbackName.RENAME}/${counter.id}")
-                button("Delete", "${botUser.userId.value}/${QueryCallbackName.DELETE}/${counter.id}")
+                button("Edit", "${botUser.userId.value}/${QueryCallbackName.EDIT}/${counter.id}")
+                button("Drop Last", "${botUser.userId.value}/${QueryCallbackName.UNDO_LAST_INC}/${counter.id}")
             }
+            button("Increment", "${botUser.userId.value}/${QueryCallbackName.INC}/${counter.id}")
         }
     }
 
@@ -370,8 +375,8 @@ class MyCountyBot(
             text = UserStrings["askCounterUndoConfirmation"].format(counter.name),
             replyMarkup = inlineKeyboard {
                 row {
-                    button("Remove", "${botUser.userId.value}/${QueryCallbackName.UNDO_CONFIRM}/${counter.id}")
-                    button("Cancel", "${botUser.userId.value}/${QueryCallbackName.UNDO_CANCEL}/${counter.id}")
+                    button("Remove", "${botUser.userId.value}/${QueryCallbackName.UNDO_LAST_INC_CONFIRM}/${counter.id}")
+                    button("Cancel", "${botUser.userId.value}/${QueryCallbackName.UNDO_LAST_INC_CANCEL}/${counter.id}")
                 }
             }
         )
@@ -407,6 +412,25 @@ class MyCountyBot(
         transitionToIdle(botUser)
     }
 
+    private suspend fun onEditCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
+        val queryMessage = query.message ?: return run { log.error("Missing query message: $query") }
+
+        queryMessage.editTextMarkdown(
+            text = UserStrings["editingCounter"].format(counter.name),
+            replyMarkup = inlineKeyboard {
+                row {
+                    button("Rename", "${botUser.userId.value}/${QueryCallbackName.RENAME}/${counter.id}")
+                    button("Delete", "${botUser.userId.value}/${QueryCallbackName.DELETE}/${counter.id}")
+                }
+                button("Cancel", "${botUser.userId.value}/${QueryCallbackName.EDIT_CANCEL}/${counter.id}")
+            }
+        )
+    }
+
+    private suspend fun onEditCancelCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
+        onSelectCounterCallback(botUser, query, counter, editQueryMessage = true)
+    }
+
     private suspend fun onRenameCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
         botUser.state = UserChatState.AwaitNewNameForCounter(counter.id)
         botUser.chatId.sendMarkdown(UserStrings["renameCounter"].format(counter.name))
@@ -414,11 +438,7 @@ class MyCountyBot(
     }
 
     private suspend fun onDeleteCounterCallback(botUser: BotUser, query: CallbackQuery, counter: UserCounter) {
-        val queryMessage = query.message
-        if (queryMessage == null) {
-            log.error("Missing query message: $query")
-            return
-        }
+        val queryMessage = query.message ?: return run { log.error("Missing query message: $query") }
 
         queryMessage.editTextMarkdown(
             text = UserStrings["askDeleteConfirmation"].format(counter.name),

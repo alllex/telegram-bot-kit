@@ -1,7 +1,7 @@
 
 strings:
   startGreeting: |-
-    Hi there!
+    Hi there\!
     I am a counter bot\. I keep track of what _counts_\!
     Think of me as an accountant for simple things\.
 
@@ -79,4 +79,4 @@ strings:
     First, /create a new counter
 
   readyToCount: |-
-    Ready to count!
+    Ready to count\!

@@ -58,4 +58,10 @@ class UserCounter(
     override fun toString(): String {
         return "Counter@$id(name='$name', value=$state)"
     }
+
+    companion object {
+        val NAME_IGNORE_CASE_COMPARATOR = compareBy<UserCounter> { it.name.lowercase() }
+    }
 }
+
+fun List<UserCounter>.sortedByNameIgnoreCase() = sortedWith(UserCounter.NAME_IGNORE_CASE_COMPARATOR)

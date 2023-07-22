@@ -158,7 +158,7 @@ class MyCountyBot(
 
     private fun createCountersSelectKeyboard(botUser: BotUser, counters: List<UserCounter>) = inlineKeyboard {
         rowsChunked(2) {
-            for (counter in counters) {
+            for (counter in counters.sortedByNameIgnoreCase()) {
                 val data = "${botUser.userId.value}/${QueryCallbackName.SELECT}/${counter.id}"
                 button(text = counter.name, callbackData = data)
             }
@@ -242,10 +242,18 @@ class MyCountyBot(
             return
         }
 
-        val summaryText = counters.joinToString("\n") {
-            "`${it.name}` \\= `${it.getCountValue()}`"
+        val counterGroups = counters.sortedByNameIgnoreCase().groupBy { it.name.first().uppercase() }
+        val summaryTextMarkdown = buildString {
+            appendLine("Summary of ${counters.size} counters:")
+            for ((groupName, groupCounters) in counterGroups.entries) {
+                appendLine()
+                appendLine("*$groupName*")
+                for (counter in groupCounters) {
+                    appendLine("`${counter.name}` \\= `${counter.getCountValue()}`")
+                }
+            }
         }
-        botUser.chatId.sendMarkdown("Summary of ${counters.size} counters:\n$summaryText")
+        botUser.chatId.sendMarkdown(summaryTextMarkdown)
     }
 
     private suspend fun onCancelCommand(botUser: BotUser) {

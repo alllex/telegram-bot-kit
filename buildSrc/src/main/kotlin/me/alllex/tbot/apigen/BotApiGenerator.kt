@@ -92,15 +92,48 @@ data class FluentContextMethod(
 val fluentMethods = listOf(
     FluentContextMethod("Chat", "sendMessage", "sendMessage", mapOf("chatId" to "id")),
     FluentContextMethod("Chat", "sendMarkdown", "sendMessage", mapOf("chatId" to "id", "parseMode" to "ParseMode.MARKDOWN")),
+    FluentContextMethod("Chat", "sendMarkdownV2", "sendMessage", mapOf("chatId" to "id", "parseMode" to "ParseMode.MARKDOWN_V2")),
+    FluentContextMethod("Chat", "sendHtml", "sendMessage", mapOf("chatId" to "id", "parseMode" to "ParseMode.HTML")),
     FluentContextMethod("ChatId", "sendMessage", "sendMessage", mapOf("chatId" to "this")),
     FluentContextMethod("ChatId", "sendMarkdown", "sendMessage", mapOf("chatId" to "this", "parseMode" to "ParseMode.MARKDOWN")),
+    FluentContextMethod("ChatId", "sendMarkdownV2", "sendMessage", mapOf("chatId" to "this", "parseMode" to "ParseMode.MARKDOWN_V2")),
+    FluentContextMethod("ChatId", "sendHtml", "sendMessage", mapOf("chatId" to "this", "parseMode" to "ParseMode.HTML")),
 
     FluentContextMethod("Message", "reply", "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId")),
     FluentContextMethod(
         "Message", "replyMarkdown",
         "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN")
     ),
+    FluentContextMethod(
+        "Message", "replyMarkdownV2",
+        "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN_V2")
+    ),
+    FluentContextMethod(
+        "Message", "replyHtml",
+        "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId", "parseMode" to "ParseMode.HTML")
+    ),
 
+    FluentContextMethod(
+        "Message", "editText",
+        "editMessageText", mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null")
+    ),
+    FluentContextMethod(
+        "Message", "editTextMarkdown",
+        "editMessageText",
+        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.MARKDOWN")
+    ),
+    FluentContextMethod(
+        "Message", "editTextMarkdownV2",
+        "editMessageText",
+        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.MARKDOWN_V2")
+    ),
+    FluentContextMethod(
+        "Message", "editTextHtml",
+        "editMessageText",
+        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.HTML")
+    ),
+
+    FluentContextMethod("Message", "delete", "deleteMessage", mapOf("chatId" to "chat.id", "messageId" to "messageId")),
     FluentContextMethod("Message", "forward", "forwardMessage", mapOf("fromChatId" to "chat.id", "messageId" to "messageId")),
     FluentContextMethod("Message", "copyMessage", "copyMessage", mapOf("fromChatId" to "chat.id", "messageId" to "messageId")),
 
@@ -143,18 +176,6 @@ val fluentMethods = listOf(
     FluentContextMethod("User", "getProfilePhotos", mapOf("userId" to "id")),
 
     FluentContextMethod("UserId", "getProfilePhotos", mapOf("userId" to "this")),
-
-    FluentContextMethod(
-        "Message", "editText",
-        "editMessageText", mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null")
-    ),
-    FluentContextMethod(
-        "Message", "editTextMarkdown",
-        "editMessageText",
-        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.MARKDOWN")
-    ),
-
-    FluentContextMethod("Message", "delete", "deleteMessage", mapOf("chatId" to "chat.id", "messageId" to "messageId")),
 
     FluentContextMethod("CallbackQuery", "answer", "answerCallbackQuery", mapOf("callbackQueryId" to "id")),
     FluentContextMethod("CallbackQueryId", "answer", "answerCallbackQuery", mapOf("callbackQueryId" to "this")),

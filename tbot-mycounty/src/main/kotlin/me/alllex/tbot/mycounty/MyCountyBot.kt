@@ -118,7 +118,7 @@ class MyCountyBot(
 
         when (counters.size) {
             0 -> {
-                val text = "No matching counters were found\\. Do you want to create a new counter with this name?"
+                val text = "No matching counters were found. Do you want to create a new counter with this name?"
                 msg.replyMarkdown(text, replyMarkup = inlineKeyboard {
                     button("Create", "${botUser.userId.value}/${QueryCallbackName.CREATE}")
                 })
@@ -231,7 +231,7 @@ class MyCountyBot(
         if (counterName.isNotEmpty()) {
             val counter = counterRepository.findCounterByName(botUser.userId, counterName)
             if (counter != null) {
-                botUser.chatId.sendMarkdown("`${counter.name}` \\= `${counter.getCountValue()}`")
+                botUser.chatId.sendMarkdown("`${counter.name}` = `${counter.getCountValue()}`")
                 return
             }
         }
@@ -249,7 +249,7 @@ class MyCountyBot(
                 appendLine()
                 appendLine("*$groupName*")
                 for (counter in groupCounters) {
-                    appendLine("`${counter.name}` \\= `${counter.getCountValue()}`")
+                    appendLine("`${counter.name}` = `${counter.getCountValue()}`")
                 }
             }
         }
@@ -389,7 +389,7 @@ class MyCountyBot(
             text = UserStrings["askCounterUndoConfirmation"].format(counter.name),
             replyMarkup = inlineKeyboard {
                 row {
-                    button("Remove", "${botUser.userId.value}/${QueryCallbackName.UNDO_LAST_INC_CONFIRM}/${counter.id}")
+                    button("Drop", "${botUser.userId.value}/${QueryCallbackName.UNDO_LAST_INC_CONFIRM}/${counter.id}")
                     button("Cancel", "${botUser.userId.value}/${QueryCallbackName.UNDO_LAST_INC_CANCEL}/${counter.id}")
                 }
             }

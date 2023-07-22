@@ -12,13 +12,13 @@ import kotlinx.serialization.Serializable
 enum class ParseMode(val value: String) {
 
     @SerialName("MarkdownV2")
-    MARKDOWN("MarkdownV2"),
+    MARKDOWN_V2("MarkdownV2"),
 
     @SerialName("HTML")
     HTML("HTML"),
 
     @SerialName("Markdown")
-    MARKDOWN_LEGACY("Markdown");
+    MARKDOWN("Markdown");
 
     override fun toString() = value
 }

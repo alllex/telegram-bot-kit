@@ -8,6 +8,7 @@ private val unionTypesWithExplicitMarker = setOf(
 
 private val fieldTypeSubstitutions = mapOf(
     "allowed_updates" to "List<UpdateType>",
+    "parse_mode" to "ParseMode",
 )
 
 data class ValueType(
@@ -90,14 +91,14 @@ data class FluentContextMethod(
 
 val fluentMethods = listOf(
     FluentContextMethod("Chat", "sendMessage", "sendMessage", mapOf("chatId" to "id")),
-    FluentContextMethod("Chat", "sendMarkdown", "sendMessage", mapOf("chatId" to "id", "parseMode" to "ParseMode.MARKDOWN.value")),
+    FluentContextMethod("Chat", "sendMarkdown", "sendMessage", mapOf("chatId" to "id", "parseMode" to "ParseMode.MARKDOWN")),
     FluentContextMethod("ChatId", "sendMessage", "sendMessage", mapOf("chatId" to "this")),
-    FluentContextMethod("ChatId", "sendMarkdown", "sendMessage", mapOf("chatId" to "this", "parseMode" to "ParseMode.MARKDOWN.value")),
+    FluentContextMethod("ChatId", "sendMarkdown", "sendMessage", mapOf("chatId" to "this", "parseMode" to "ParseMode.MARKDOWN")),
 
     FluentContextMethod("Message", "reply", "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId")),
     FluentContextMethod(
         "Message", "replyMarkdown",
-        "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN.value")
+        "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN")
     ),
 
     FluentContextMethod("Message", "forward", "forwardMessage", mapOf("fromChatId" to "chat.id", "messageId" to "messageId")),
@@ -150,7 +151,7 @@ val fluentMethods = listOf(
     FluentContextMethod(
         "Message", "editTextMarkdown",
         "editMessageText",
-        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.MARKDOWN.value")
+        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.MARKDOWN")
     ),
 
     FluentContextMethod("Message", "delete", "deleteMessage", mapOf("chatId" to "chat.id", "messageId" to "messageId")),

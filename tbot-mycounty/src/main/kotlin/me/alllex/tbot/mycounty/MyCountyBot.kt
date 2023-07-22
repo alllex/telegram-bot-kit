@@ -115,16 +115,22 @@ class MyCountyBot(
     private suspend fun onUnknownCommand(botUser: BotUser, msg: Message) {
         val msgText = msg.text?.trim() ?: ""
         val counters = counterRepository.findCountersMatchingName(botUser.userId, msgText)
-        if (counters.isEmpty()) {
-            val text = "No matching counters were found\\. Do you want to create a new counter with this name?"
-            msg.replyMarkdown(text, replyMarkup = inlineKeyboard {
-                button("Create", "${botUser.userId.value}/${QueryCallbackName.CREATE}")
-            })
-            return
-        }
 
-        val keyboard = createCountersSelectKeyboard(botUser, counters)
-        botUser.chatId.sendMarkdown(UserStrings["selectCountersMatching"].format(msgText), replyMarkup = keyboard)
+        when (counters.size) {
+            0 -> {
+                val text = "No matching counters were found\\. Do you want to create a new counter with this name?"
+                msg.replyMarkdown(text, replyMarkup = inlineKeyboard {
+                    button("Create", "${botUser.userId.value}/${QueryCallbackName.CREATE}")
+                })
+            }
+            1 -> {
+                doSelectCounter(botUser, counters.first())
+            }
+            else -> {
+                val keyboard = createCountersSelectKeyboard(botUser, counters)
+                botUser.chatId.sendMarkdown(UserStrings["selectCountersMatching"].format(msgText), replyMarkup = keyboard)
+            }
+        }
     }
 
     private suspend fun onStartCommand(botUser: BotUser) {

@@ -1,4 +1,4 @@
-package me.alllex.tbot.bot.util.log
+package me.alllex.tbot.mycounty.util
 
 import org.apache.logging.log4j.LogManager
 

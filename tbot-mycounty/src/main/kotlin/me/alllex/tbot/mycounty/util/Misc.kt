@@ -1,9 +1,4 @@
-package me.alllex.tbot.bot.util
-
-import me.alllex.tbot.bot.util.log.Logger
-
-inline operator fun <T> Boolean.times(lazy: () -> T?): T? =
-    if (!this) null else lazy()
+package me.alllex.tbot.mycounty.util
 
 fun getSystemPropertyOrThrow(name: String, def: String? = null) =
     System.getProperty(name, def) ?: error("System property is not found: $name")

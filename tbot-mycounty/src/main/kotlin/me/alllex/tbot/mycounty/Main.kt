@@ -6,10 +6,10 @@ import me.alllex.tbot.Build
 import me.alllex.tbot.api.client.TelegramBotApiClient
 import me.alllex.tbot.api.model.getMe
 import me.alllex.tbot.api.client.TelegramBotApiPoller
-import me.alllex.tbot.bot.util.getSystemPropertyOrThrow
-import me.alllex.tbot.bot.util.log.loggerForClass
-import me.alllex.tbot.bot.util.runForever
 import me.alllex.tbot.mycounty.db.Db
+import me.alllex.tbot.mycounty.util.getSystemPropertyOrThrow
+import me.alllex.tbot.mycounty.util.loggerForClass
+import me.alllex.tbot.mycounty.util.runForever
 import me.alllex.tbot.util.parseYaml
 import me.alllex.tbot.util.serialiseAsYamlIntoString
 import org.apache.logging.log4j.LogManager

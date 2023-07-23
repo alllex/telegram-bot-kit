@@ -6,10 +6,10 @@ import me.alllex.tbot.api.client.TelegramBotApiContext
 import me.alllex.tbot.api.client.TelegramBotApiException
 import me.alllex.tbot.api.client.TelegramBotUpdateListener
 import me.alllex.tbot.api.model.*
-import me.alllex.tbot.bot.util.log.loggerForClass
-import me.alllex.tbot.bot.util.newSingleThreadExecutor
-import me.alllex.tbot.bot.util.shutdownAndAwaitTermination
 import me.alllex.tbot.mycounty.db.*
+import me.alllex.tbot.mycounty.util.loggerForClass
+import me.alllex.tbot.mycounty.util.newSingleThreadExecutor
+import me.alllex.tbot.mycounty.util.shutdownAndAwaitTermination
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime

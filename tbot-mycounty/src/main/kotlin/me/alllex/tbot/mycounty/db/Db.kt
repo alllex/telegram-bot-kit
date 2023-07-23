@@ -3,8 +3,8 @@ package me.alllex.tbot.mycounty.db
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
-import me.alllex.tbot.bot.util.newSingleThreadExecutor
-import me.alllex.tbot.bot.util.shutdownAndAwaitTermination
+import me.alllex.tbot.mycounty.util.newSingleThreadExecutor
+import me.alllex.tbot.mycounty.util.shutdownAndAwaitTermination
 import org.sqlite.SQLiteConfig
 import java.sql.Connection
 import java.sql.DriverManager

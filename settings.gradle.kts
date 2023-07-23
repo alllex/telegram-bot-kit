@@ -14,7 +14,6 @@ plugins {
 rootProject.name = "telegram-bot-kit"
 
 include("tbot-api")
-include("tbot-bot")
 include("tbot-echo")
 include("tbot-mycounty")
 

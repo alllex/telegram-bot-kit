@@ -1,6 +1,5 @@
-package me.alllex.tbot.bot.util
+package me.alllex.tbot.mycounty.util
 
-import me.alllex.tbot.bot.util.log.Logger
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicInteger
 

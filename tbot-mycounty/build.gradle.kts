@@ -27,7 +27,6 @@ repositories {
 
 dependencies {
     implementation(projects.tbotApi)
-    implementation(projects.tbotBot)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.ktor.client.logging)
     implementation(libs.ktor.client.java)

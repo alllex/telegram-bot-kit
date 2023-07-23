@@ -12,25 +12,94 @@ data class MethodVariation(
     val skipParams: List<String>,
     val newMethodName: String,
     val returnType: String,
-    val descriptionSubstitutions: Map<String, String> = emptyMap(),
+    val descriptionSubstitutions: List<Pair<Regex, String>> = emptyList(),
+)
+
+private val editedMessageDescriptionSubstitutions = listOf(
+    "On success, if the( edited)? message is not an inline message, the( edited)? Message is returned, otherwise True is returned.".toRegex() to "On success the edited Message is returned."
+)
+
+private val editedInlineMessageDescriptionSubstitutions = listOf(
+    "On success, if the( edited)? message is not an inline message, the( edited)? Message is returned, otherwise True is returned.".toRegex() to "On success True is returned."
 )
 
 val methodVariations = listOf(
     MethodVariation(
         "editMessageText", listOf("chat_id", "message_id"), listOf("inline_message_id"),
         "editMessageText", "Message",
-        mapOf(
-            "On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned." to "On success the edited Message is returned."
-        )
+        editedMessageDescriptionSubstitutions,
     ),
     MethodVariation(
         "editMessageText", listOf("inline_message_id"), listOf("chat_id", "message_id"),
         "editInlineMessageText", "Boolean",
-        mapOf(
-            "On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned." to "On success True is returned."
-        )
+        editedInlineMessageDescriptionSubstitutions,
     ),
-    // TODO: editMessageCaption, editMessageMedia, editMessageLiveLocation, stopMessageLiveLocation, editMessageReplyMarkup, setGameScore
+
+    MethodVariation(
+        "editMessageCaption", listOf("chat_id", "message_id"), listOf("inline_message_id"),
+        "editMessageCaption", "Message",
+        editedMessageDescriptionSubstitutions,
+    ),
+    MethodVariation(
+        "editMessageCaption", listOf("inline_message_id"), listOf("chat_id", "message_id"),
+        "editInlineMessageCaption", "Boolean",
+        editedInlineMessageDescriptionSubstitutions,
+    ),
+
+    MethodVariation(
+        "editMessageMedia", listOf("chat_id", "message_id"), listOf("inline_message_id"),
+        "editMessageMedia", "Message",
+        editedMessageDescriptionSubstitutions,
+    ),
+    MethodVariation(
+        "editMessageMedia", listOf("inline_message_id"), listOf("chat_id", "message_id"),
+        "editInlineMessageMedia", "Boolean",
+        editedInlineMessageDescriptionSubstitutions,
+    ),
+
+    MethodVariation(
+        "editMessageLiveLocation", listOf("chat_id", "message_id"), listOf("inline_message_id"),
+        "editMessageLiveLocation", "Message",
+        editedMessageDescriptionSubstitutions,
+    ),
+    MethodVariation(
+        "editMessageLiveLocation", listOf("inline_message_id"), listOf("chat_id", "message_id"),
+        "editInlineMessageLiveLocation", "Boolean",
+        editedInlineMessageDescriptionSubstitutions,
+    ),
+
+    MethodVariation(
+        "editMessageReplyMarkup", listOf("chat_id", "message_id"), listOf("inline_message_id"),
+        "editMessageReplyMarkup", "Message",
+        editedMessageDescriptionSubstitutions,
+    ),
+    MethodVariation(
+        "editMessageReplyMarkup", listOf("inline_message_id"), listOf("chat_id", "message_id"),
+        "editInlineMessageReplyMarkup", "Boolean",
+        editedInlineMessageDescriptionSubstitutions,
+    ),
+
+    MethodVariation(
+        "stopMessageLiveLocation", listOf("chat_id", "message_id"), listOf("inline_message_id"),
+        "stopMessageLiveLocation", "Message",
+        editedMessageDescriptionSubstitutions,
+    ),
+    MethodVariation(
+        "stopMessageLiveLocation", listOf("inline_message_id"), listOf("chat_id", "message_id"),
+        "stopInlineMessageLiveLocation", "Boolean",
+        editedInlineMessageDescriptionSubstitutions,
+    ),
+
+    MethodVariation(
+        "setGameScore", listOf("chat_id", "message_id"), listOf("inline_message_id"),
+        "setGameScore", "Message",
+        editedMessageDescriptionSubstitutions,
+    ),
+    MethodVariation(
+        "setGameScore", listOf("inline_message_id"), listOf("chat_id", "message_id"),
+        "setInlineGameScore", "Boolean",
+        editedInlineMessageDescriptionSubstitutions,
+    ),
 )
 
 data class ValueType(
@@ -348,8 +417,8 @@ class BotApiGenerator {
                             if (it.serialName in variation.requiredParams) it.copy(isOptional = false, defaultValue = null) else it
                         },
                     returnType = KotlinType(variation.returnType),
-                    description = variation.descriptionSubstitutions.entries.fold(method.description) { acc, replacement ->
-                        acc.replace(replacement.key, replacement.value)
+                    description = variation.descriptionSubstitutions.fold(method.description) { acc, replacement ->
+                        acc.replace(replacement.first, replacement.second)
                     }
                 )
 

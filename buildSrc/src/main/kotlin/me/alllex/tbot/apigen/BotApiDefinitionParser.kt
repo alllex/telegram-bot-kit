@@ -11,8 +11,17 @@ val typeSubstitutions = mapOf(
     "MessageId" to "MessageIdResult"
 )
 
+private val fieldTypeSubstitutionsByFieldName = mapOf(
+    "allowed_updates" to "List<UpdateType>",
+    "parse_mode" to "ParseMode",
+)
+
 fun resolveElementTypeName(name: String): String {
     return typeSubstitutions[name] ?: name
+}
+
+fun resolveFieldTypeName(serialFieldName: String, serialFieldType: String): String {
+    return fieldTypeSubstitutionsByFieldName[serialFieldName] ?: serialFieldType
 }
 
 data class ApiEntityDefinition(
@@ -53,12 +62,14 @@ data class BotApiElement(
     val unionTypes: List<BotApiElementName>? = null
 ) {
     data class Field(
-        val name: String,
+        val serialName: String,
         val description: String,
         val type: KotlinType,
         val isOptional: Boolean,
         val defaultValue: String?
-    )
+    ) {
+        val name = serialName.snakeToCamelCase()
+    }
 }
 
 data class BotApiMethod(
@@ -234,7 +245,7 @@ class BotApiDefinitionParser {
     private fun parseMethodReturnType(methodDescriptionText: String): KotlinType {
         val returnTypeText = findResponseTypeFromDescription(methodDescriptionText)
         val typeFieldInfo = try {
-            fieldTypeToKotlinTypeString(returnTypeText, isOptional = false)
+            serialTypeToKotlinTypeString(returnTypeText, isOptional = false)
         } catch (e: Exception) {
             throw RuntimeException("Failed to parse return type from '$returnTypeText' in description:\n---\n$methodDescriptionText\n---\n", e)
         }
@@ -279,12 +290,12 @@ class BotApiDefinitionParser {
             val typeEl = row.child(1)
             val descriptionEl = row.child(2)
             val isOptional = descriptionEl.text().startsWith("Optional")
-            val name = nameEl.text().trim()
+            val serialFieldName = nameEl.text().trim()
             val typeText = typeEl.text().trim()
-            val typeFieldInfo = fieldTypeToKotlinTypeString(typeText, isOptional)
+            val typeFieldInfo = serialTypeToKotlinTypeString(typeText, isOptional, serialFieldName)
             val description = descriptionEl.text().trim()
 
-            fields.add(BotApiElement.Field(name, description, typeFieldInfo.kotlinType, isOptional, typeFieldInfo.defaultValue))
+            fields.add(BotApiElement.Field(serialFieldName, description, typeFieldInfo.kotlinType, isOptional, typeFieldInfo.defaultValue))
         }
 
         return fields
@@ -314,28 +325,30 @@ class BotApiDefinitionParser {
             val requiredEl = row.child(2)
             val descriptionEl = row.child(3)
             val isOptional = requiredEl.text().startsWith("Optional")
-            val name = nameEl.text().trim()
+            val serialFieldName = nameEl.text().trim()
             val typeText = typeEl.text().trim()
-            val typeFieldInfo = fieldTypeToKotlinTypeString(typeText, isOptional)
+            val typeFieldInfo = serialTypeToKotlinTypeString(typeText, isOptional, serialFieldName)
             val description = descriptionEl.text().trim()
 
-            fields.add(BotApiElement.Field(name, description, typeFieldInfo.kotlinType, isOptional, typeFieldInfo.defaultValue))
+            fields.add(BotApiElement.Field(serialFieldName, description, typeFieldInfo.kotlinType, isOptional, typeFieldInfo.defaultValue))
         }
 
         return fields
     }
 
-    private data class TypeFieldInfo(val kotlinType: KotlinType, val defaultValue: String?)
+    private data class ResolvedTypeInfo(val kotlinType: KotlinType, val defaultValue: String?)
 
-    private fun fieldTypeToKotlinTypeString(fieldType: String, isOptional: Boolean): TypeFieldInfo {
-        val result = FieldTypeGrammar.parseEntire(fieldType)
+    private fun serialTypeToKotlinTypeString(serialType: String, isOptional: Boolean, serialFieldName: String? = null): ResolvedTypeInfo {
+        val result = FieldTypeGrammar.parseEntire(serialType)
 
-        val kotlinTypeString = result.getOrElse {
-            throw RuntimeException("Could not parse field type: '$fieldType'", ParseException(it))
+        val parsedType = result.getOrElse {
+            throw RuntimeException("Could not parse field type: '$serialType'", ParseException(it))
         }
 
+        val resolvedType = serialFieldName?.let { resolveFieldTypeName(it, parsedType) } ?: parsedType
+
         val defaultValue = if (isOptional) "null" else null
-        return TypeFieldInfo(KotlinType(kotlinTypeString), defaultValue)
+        return ResolvedTypeInfo(KotlinType(resolvedType), defaultValue)
     }
 
 }

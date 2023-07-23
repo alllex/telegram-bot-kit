@@ -6,11 +6,6 @@ private val unionTypesWithExplicitMarker = setOf(
     "PassportElementError"
 )
 
-private val fieldTypeSubstitutions = mapOf(
-    "allowed_updates" to "List<UpdateType>",
-    "parse_mode" to "ParseMode",
-)
-
 data class ValueType(
     val name: String,
     val backingType: String,
@@ -19,50 +14,50 @@ data class ValueType(
 
 val valueTypes = listOf(
     ValueType("ChatId", "Long") { type, field ->
-        (type.value == "Chat" && field.name == "id") || field.name.endsWith("chat_id")
+        (type.value == "Chat" && field.serialName == "id") || field.serialName.endsWith("chat_id")
     },
     ValueType("UserId", "Long") { type, field ->
-        (type.value == "User" && field.name == "id") || field.name.endsWith("user_id")
+        (type.value == "User" && field.serialName == "id") || field.serialName.endsWith("user_id")
     },
     ValueType("MessageId", "Long") { _, field ->
-        !field.name.endsWith("inline_message_id") && field.name.endsWith("message_id")
+        !field.serialName.endsWith("inline_message_id") && field.serialName.endsWith("message_id")
     },
     ValueType("InlineMessageId", "String") { _, field ->
-        field.name.endsWith("inline_message_id")
+        field.serialName.endsWith("inline_message_id")
     },
     ValueType("MessageThreadId", "Long") { _, field ->
-        field.name.endsWith("message_thread_id")
+        field.serialName.endsWith("message_thread_id")
     },
     ValueType("CallbackQueryId", "String") { type, field ->
-        (type.value == "CallbackQuery" && field.name == "id") || field.name.endsWith("callback_query_id")
+        (type.value == "CallbackQuery" && field.serialName == "id") || field.serialName.endsWith("callback_query_id")
     },
     ValueType("InlineQueryId", "String") { type, field ->
-        (type.value == "InlineQuery" && field.name == "id") || field.name.endsWith("inline_query_id")
+        (type.value == "InlineQuery" && field.serialName == "id") || field.serialName.endsWith("inline_query_id")
     },
     ValueType("InlineQueryResultId", "String") { type, field ->
-        (type.value.startsWith("InlineQuery") && field.name == "id") ||
-            (type.value == "ChosenInlineResult" && field.name == "result_id")
+        (type.value.startsWith("InlineQuery") && field.serialName == "id") ||
+            (type.value == "ChosenInlineResult" && field.serialName == "result_id")
     },
     ValueType("FileId", "String") { _, field ->
-        field.name.endsWith("file_id")
+        field.serialName.endsWith("file_id")
     },
     ValueType("FileUniqueId", "String") { _, field ->
-        field.name.endsWith("file_unique_id")
+        field.serialName.endsWith("file_unique_id")
     },
     ValueType("ShippingQueryId", "String") { type, field ->
-        (type.value == "ShippingQuery" && field.name == "id") || field.name.endsWith("shipping_query_id")
+        (type.value == "ShippingQuery" && field.serialName == "id") || field.serialName.endsWith("shipping_query_id")
     },
     ValueType("WebAppQueryId", "String") { _, field ->
-        field.name.endsWith("web_app_query_id")
+        field.serialName.endsWith("web_app_query_id")
     },
     ValueType("CustomEmojiId", "String") { _, field ->
-        field.name.endsWith("custom_emoji_id")
+        field.serialName.endsWith("custom_emoji_id")
     },
     ValueType("Seconds", "Long") { _, field ->
-        field.name in setOf("cache_time", "duration", "life_period", "open_period", "timeout", "retry_after")
+        field.serialName in setOf("cache_time", "duration", "life_period", "open_period", "timeout", "retry_after")
     },
     ValueType("UnixTimestamp", "Long") { _, field ->
-        field.name in setOf("close_date", "expire_date", "until_date")
+        field.serialName in setOf("close_date", "expire_date", "until_date")
     },
 )
 
@@ -71,11 +66,11 @@ private val unionMarkerValueInDescriptionRe = Regex("""(?:must be|always) ["â€œâ
 private val unionMarkerFieldNames = setOf("type", "status")
 
 fun BotApiElement.Field.isUnionDiscriminator(): Boolean {
-    return name in unionMarkerFieldNames
+    return serialName in unionMarkerFieldNames
 }
 
 fun BotApiElement.getUnionDiscriminatorFieldName(): String? {
-    return fields?.find { it.isUnionDiscriminator() }?.name
+    return fields?.find { it.isUnionDiscriminator() }?.serialName
 }
 
 private fun BotApiElementName.asMethodNameToRequestTypeName() = "${value.toTitleCase()}Request"
@@ -275,7 +270,7 @@ class BotApiGenerator {
             appendLine(" * Request body for [${elementName.value}].")
             appendLine(" * ")
             parameters.filter { it.description.isNotEmpty() }.forEach {
-                appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
+                appendLine(" * @param ${it.name} ${it.description}")
             }
             appendLine(" */")
             appendLine("@Serializable")
@@ -381,7 +376,7 @@ class BotApiGenerator {
             appendLine(" *")
         }
         parameters.filter { it.description.isNotEmpty() }.forEach {
-            appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
+            appendLine(" * @param ${it.name} ${it.description}")
         }
         appendLine(" */")
     }
@@ -408,7 +403,7 @@ class BotApiGenerator {
 
         val requestValueArg =
             if (!hasParams) ""
-            else "${requestTypeName}(${parameters.joinToString { it.name.snakeToCamelCase() }})"
+            else "${requestTypeName}(${parameters.joinToString { it.name }})"
 
         // Core try-prefixed method that does the actual request
         val httpMethod = if (parameters.isEmpty()) "get" else "post"
@@ -484,16 +479,16 @@ class BotApiGenerator {
         }
 
         val fluentContextMethods = fluentMethods.filter { it.originalName == mainMethodName }.map { fluent ->
-            val unexpectedArgs = fluent.args.keys - parameters.map { it.name.snakeToCamelCase() }.toSet()
+            val unexpectedArgs = fluent.args.keys - parameters.map { it.name }.toSet()
             check(unexpectedArgs.isEmpty()) { "Unexpected replacement args for fluent method ${fluent.name}/$mainMethodName: $unexpectedArgs" }
 
             buildString {
                 appendLine("context(TelegramBotApiContext)")
                 appendLine("@Throws(TelegramBotApiException::class)")
                 append("suspend fun ${fluent.receiver}.${fluent.name}(")
-                appendParameters(methodName, parameters.filter { it.name.snakeToCamelCase() !in fluent.args })
+                appendParameters(methodName, parameters.filter { it.name !in fluent.args })
                 appendLine("): ${returnType.value} =")
-                val adjustedRequestArg = parameters.map { it.name.snakeToCamelCase() }.joinToString { fluent.args[it] ?: it }
+                val adjustedRequestArg = parameters.map { it.name }.joinToString { fluent.args[it] ?: it }
                 appendLine("    ${fluent.originalName}($adjustedRequestArg)")
             }
         }
@@ -581,12 +576,15 @@ class BotApiGenerator {
         val name = updateTypeElement.name.value
         val types = updateTypeElement.fields?.filter { it.isOptional } ?: emptyList()
 
+        fun BotApiElement.Field.enumValue() = serialName.snakeToLoudSnakeCase()
+        fun BotApiElement.Field.updateTypeName() = serialName.snakeToPascalCase() + "Update"
+
         appendLine("/**")
         appendLine(" * Type of updates Telegram Bot can receive.")
         appendLine(" */")
         appendLine("enum class ${name}Type {")
-        for (updateType in types) {
-            appendLine("    @SerialName(\"${updateType.name}\") ${updateType.name.snakeToLoudSnakeCase()},")
+        for (updateField in types) {
+            appendLine("    @SerialName(\"${updateField.serialName}\") ${updateField.enumValue()},")
         }
         appendLine("}")
 
@@ -600,7 +598,7 @@ class BotApiGenerator {
         appendLine(" *")
         appendLine(" * Sub-types:")
         for (updateType in types) {
-            appendLine(" * - [${updateType.name.snakeToPascalCase()}Update]")
+            appendLine(" * - [${updateType.updateTypeName()}]")
         }
         appendLine(" */ ")
         appendLine("@Serializable(with = ${name}Serializer::class)")
@@ -608,19 +606,19 @@ class BotApiGenerator {
         appendLine("    abstract val updateId: Long")
         appendLine("    abstract val updateType: UpdateType")
         appendLine("}")
-        for (updateType in types) {
+        for (updateField in types) {
             appendLine()
             appendLine("/**")
-            updateType.description.removePrefix("Optional.").split("\n").forEach {
+            updateField.description.removePrefix("Optional.").split("\n").forEach {
                 appendLine(" * ${it.trim()}")
             }
             appendLine(" */")
             appendLine("@Serializable")
-            appendLine("data class ${updateType.name.snakeToPascalCase()}Update(")
+            appendLine("data class ${updateField.updateTypeName()}(")
             appendLine("    override val updateId: Long,")
-            appendLine("    val ${updateType.name.snakeToCamelCase()}: ${updateType.type.value},")
+            appendLine("    val ${updateField.name}: ${updateField.type},")
             appendLine("): $name() {")
-            appendLine("    override val updateType: UpdateType get() = UpdateType.${updateType.name.snakeToLoudSnakeCase()}")
+            appendLine("    override val updateType: UpdateType get() = UpdateType.${updateField.enumValue()}")
             appendLine("}")
         }
 
@@ -629,8 +627,8 @@ class BotApiGenerator {
         appendLine("    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<$name> {")
         appendLine("        val json = element.jsonObject")
         appendLine("        return when {")
-        for (field in types) {
-            appendLine("            \"${field.name}\" in json -> ${field.name.snakeToPascalCase()}Update.serializer()")
+        for (updateField in types) {
+            appendLine("            \"${updateField.serialName}\" in json -> ${updateField.updateTypeName()}.serializer()")
         }
         // TODO: do not fail here, as new update types may be added in the future, and we want the bot to gracefully ignore them
         appendLine("            else -> error(\"Failed to deserialize an update type: \$json\")")
@@ -678,10 +676,10 @@ class BotApiGenerator {
                 val otherFieldNames = unionTypes
                     .filter { it != unionType }
                     .flatMap { it.fields ?: emptyList() }
-                    .map { it.name }
+                    .map { it.serialName }
                     .toSet()
-                val discriminatorField = unionType.fields?.find { it.name !in otherFieldNames && it.name !in avoidFields }
-                    ?: error("Failed to find discriminator field for type ${unionType.name}, with fields: ${unionType.fields?.map { it.name }}")
+                val discriminatorField = unionType.fields?.find { it.serialName !in otherFieldNames && it.serialName !in avoidFields }
+                    ?: error("Failed to find discriminator field for type ${unionType.name}, with fields: ${unionType.fields?.map { it.serialName }}")
                 unionType.name to discriminatorField
             }
 
@@ -693,7 +691,7 @@ class BotApiGenerator {
             for (unionType in unionTypes) {
                 val discriminatorField = discriminatorFieldByType[unionType.name]
                     ?: error("Failed to find discriminator field for type ${unionType.name}")
-                appendLine("            \"${discriminatorField.name}\" in json -> ${unionType.name.value}.serializer()")
+                appendLine("            \"${discriminatorField.serialName}\" in json -> ${unionType.name.value}.serializer()")
             }
             appendLine("            else -> error(\"Failed to deserialize an update type: \$json\")")
             appendLine("        }")
@@ -726,7 +724,7 @@ class BotApiGenerator {
             appendLine(" * $it")
         }
         trueFields.filter { it.description.isNotEmpty() }.forEach {
-            appendLine(" * @param ${it.name.snakeToCamelCase()} ${it.description}")
+            appendLine(" * @param ${it.name} ${it.description}")
         }
         appendLine(" */")
         appendLine("@Serializable")
@@ -768,14 +766,18 @@ class BotApiGenerator {
 
     private fun generateDebugToString(typeName: String, fields: List<BotApiElement.Field>): String = buildString {
         append("override fun toString() = DebugStringBuilder(\"$typeName\")")
-        append(fields.map { it.name.snakeToCamelCase() }.joinToString("") { ".prop(\"$it\", $it)" })
+        append(fields.map { it.name }.joinToString("") { ".prop(\"$it\", $it)" })
         append(".toString()")
     }
 
     private fun resolveFieldType(elementType: BotApiElementName, field: BotApiElement.Field): String {
         val specType = field.type.value
-        val valueTyped = valueTypes.find { it.backingType == specType && it.fieldPredicate(elementType, field) }?.name ?: specType
-        return fieldTypeSubstitutions[field.name] ?: valueTyped
+
+        valueTypes.find { it.backingType == specType && it.fieldPredicate(elementType, field) }?.let {
+            return it.name
+        }
+
+        return specType
     }
 
     private fun StringBuilder.appendFieldLine(elementType: BotApiElementName, field: BotApiElement.Field, isProperty: Boolean) {
@@ -784,7 +786,7 @@ class BotApiGenerator {
             if (isProperty) {
                 append("val ")
             }
-            append(field.name.snakeToCamelCase())
+            append(field.name)
             append(": ")
             val type = resolveFieldType(elementType, field)
             append(type)

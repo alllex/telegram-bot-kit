@@ -7,7 +7,7 @@ import org.intellij.lang.annotations.Language
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
-val typeSubstitutions = mapOf(
+private val typeSubstitutions = mapOf(
     "MessageId" to "MessageIdResult"
 )
 

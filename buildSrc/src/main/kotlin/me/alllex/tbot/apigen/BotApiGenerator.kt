@@ -6,6 +6,33 @@ private val unionTypesWithExplicitMarker = setOf(
     "PassportElementError"
 )
 
+data class MethodVariation(
+    val methodName: String,
+    val requiredParams: List<String>,
+    val skipParams: List<String>,
+    val newMethodName: String,
+    val returnType: String,
+    val descriptionSubstitutions: Map<String, String> = emptyMap(),
+)
+
+val methodVariations = listOf(
+    MethodVariation(
+        "editMessageText", listOf("chat_id", "message_id"), listOf("inline_message_id"),
+        "editMessageText", "Message",
+        mapOf(
+            "On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned." to "On success the edited Message is returned."
+        )
+    ),
+    MethodVariation(
+        "editMessageText", listOf("inline_message_id"), listOf("chat_id", "message_id"),
+        "editInlineMessageText", "Boolean",
+        mapOf(
+            "On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned." to "On success True is returned."
+        )
+    ),
+    // TODO: editMessageCaption, editMessageMedia, editMessageLiveLocation, stopMessageLiveLocation, editMessageReplyMarkup, setGameScore
+)
+
 data class ValueType(
     val name: String,
     val backingType: String,
@@ -78,12 +105,19 @@ private fun BotApiElementName.asMethodNameToRequestTypeName() = "${value.toTitle
 data class FluentContextMethod(
     val receiver: String,
     val name: String,
-    val originalName: String,
+    val delegateName: String,
     val args: Map<String, String>
 ) {
     constructor(receiver: String, name: String, args: Map<String, String>) : this(receiver, name, name, args)
 }
 
+/**
+ * Fluent methods move some of the parameters from the base method signatures
+ * into a direct receiver of the function, thus making it more idiomatic.
+ * The ability to call a base method is retained by having `TelegramBotApiContext` as a context receiver.
+ *
+ * Fluent methods generation happens after the [methodVariations] are expanded.
+ */
 val fluentMethods = listOf(
     FluentContextMethod("Chat", "sendMessage", "sendMessage", mapOf("chatId" to "id")),
     FluentContextMethod("Chat", "sendMarkdown", "sendMessage", mapOf("chatId" to "id", "parseMode" to "ParseMode.MARKDOWN")),
@@ -110,22 +144,22 @@ val fluentMethods = listOf(
 
     FluentContextMethod(
         "Message", "editText",
-        "editMessageText", mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null")
+        "editMessageText", mapOf("chatId" to "chat.id", "messageId" to "messageId")
     ),
     FluentContextMethod(
         "Message", "editTextMarkdown",
         "editMessageText",
-        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.MARKDOWN")
+        mapOf("chatId" to "chat.id", "messageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN")
     ),
     FluentContextMethod(
         "Message", "editTextMarkdownV2",
         "editMessageText",
-        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.MARKDOWN_V2")
+        mapOf("chatId" to "chat.id", "messageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN_V2")
     ),
     FluentContextMethod(
         "Message", "editTextHtml",
         "editMessageText",
-        mapOf("chatId" to "chat.id", "messageId" to "messageId", "inlineMessageId" to "null", "parseMode" to "ParseMode.HTML")
+        mapOf("chatId" to "chat.id", "messageId" to "messageId", "parseMode" to "ParseMode.HTML")
     ),
 
     FluentContextMethod("Message", "delete", "deleteMessage", mapOf("chatId" to "chat.id", "messageId" to "messageId")),
@@ -194,15 +228,6 @@ class BotApiGenerator {
         println("Parsed ${allTypes.size} types")
         val allMethods = botApi.methods
         println("Parsed ${allMethods.size} methods")
-
-//        println("All unique fields and parameters:")
-//        allTypes.flatMap { it.fields ?: emptyList() } + allMethods.flatMap { it.parameters }
-//            .map { it.name to it.type.value }
-//            .toSet()
-//            .sortedBy { it.first }
-//            .forEach {
-//                println("${it.first}: ${it.second}")
-//            }
 
         val unionTypes = collectUnionTypes(allTypes)
         val unionTypeParentByChild = unionTypes
@@ -306,7 +331,31 @@ class BotApiGenerator {
         wrapperPackageName: String
     ): MethodOverloadsSourceCode {
 
-        val methodsSourceCodes = methodElements.map { generateMethodSourceCode(it) }
+        val methodsSourceCodes = methodElements.flatMap { method ->
+            val requestTypeName = method.name.asMethodNameToRequestTypeName()
+
+            val variations = methodVariations.filter { it.methodName == method.name.value }
+
+            if (variations.isEmpty()) {
+                return@flatMap listOf(generateMethodSourceCode(method, method.name.value, requestTypeName, useArgNames = false))
+            }
+
+            variations.map { variation ->
+                val variationMethod = method.copy(
+                    parameters = method.parameters
+                        .filterNot { it.serialName in variation.skipParams }
+                        .map {
+                            if (it.serialName in variation.requiredParams) it.copy(isOptional = false, defaultValue = null) else it
+                        },
+                    returnType = KotlinType(variation.returnType),
+                    description = variation.descriptionSubstitutions.entries.fold(method.description) { acc, replacement ->
+                        acc.replace(replacement.key, replacement.value)
+                    }
+                )
+
+                generateMethodSourceCode(variationMethod, variation.newMethodName, requestTypeName, useArgNames = true)
+            }
+        }
 
         val tryRequestMethodsSourceCode = buildString {
             header(
@@ -389,21 +438,25 @@ class BotApiGenerator {
         val withContextMethodSourceCode: String,
     )
 
-    private fun generateMethodSourceCode(method: BotApiMethod): MethodOverloadsSourceCode {
-        val methodName = method.name
+    private fun generateMethodSourceCode(
+        method: BotApiMethod,
+        methodBaseName: String,
+        requestTypeName: String,
+        useArgNames: Boolean
+    ): MethodOverloadsSourceCode {
+
+        val apiMethodName = method.name
         val description = method.description
         val parameters = method.parameters
         val returnType = method.returnType
 
-        val requestTypeName = methodName.asMethodNameToRequestTypeName()
-        val mainMethodName = methodName.value
-        val tryMethodName = "try${mainMethodName.toTitleCase()}"
+        val tryMethodName = "try${methodBaseName.toTitleCase()}"
 
         val hasParams = parameters.isNotEmpty()
 
         val requestValueArg =
             if (!hasParams) ""
-            else "${requestTypeName}(${parameters.joinToString { it.name }})"
+            else "${requestTypeName}(${parameters.joinToString { if (useArgNames) "${it.name} = ${it.name}" else it.name }})"
 
         // Core try-prefixed method that does the actual request
         val httpMethod = if (parameters.isEmpty()) "get" else "post"
@@ -417,13 +470,13 @@ class BotApiGenerator {
                 append("requestBody: $requestTypeName")
             }
             appendLine("): TelegramResponse<${returnType.value}> =")
-            appendLine("    executeRequest(\"$methodName\", ${if (hasParams) "requestBody" else "null"}) {")
+            appendLine("    executeRequest(\"$apiMethodName\", ${if (hasParams) "requestBody" else "null"}) {")
             appendLine("        httpClient.$httpMethod {")
             appendLine("            url {")
             appendLine("                protocol = apiProtocol")
             appendLine("                host = apiHost")
             appendLine("                port = apiPort")
-            appendLine("                path(\"bot\$apiToken\", \"$methodName\")")
+            appendLine("                path(\"bot\$apiToken\", \"$apiMethodName\")")
             appendLine("            }")
             if (hasParams) {
                 appendLine("            contentType(ContentType.Application.Json)")
@@ -434,14 +487,14 @@ class BotApiGenerator {
         }
 
         val tryMethodSourceCode = buildString {
-            if (hasParams) {
-                appendLine()
-                appendMethodDoc(description, parameters)
-                append("suspend fun TelegramBotApiClient.$tryMethodName(")
-                appendParameters(methodName, parameters)
-                appendLine("): TelegramResponse<${returnType.value}> =")
-                appendLine("    $tryMethodName($requestValueArg)")
-            }
+            if (!hasParams) return@buildString
+
+            appendLine()
+            appendMethodDoc(description, parameters)
+            append("suspend fun TelegramBotApiClient.$tryMethodName(")
+            appendParameters(apiMethodName, parameters)
+            appendLine("): TelegramResponse<${returnType.value}> =")
+            appendLine("    $tryMethodName($requestValueArg)")
         }
 
         // Convenience try-prefixed method with context
@@ -450,7 +503,7 @@ class BotApiGenerator {
             appendMethodDoc(description, parameters)
             appendLine("context(TelegramBotApiContext)")
             append("suspend fun $tryMethodName(")
-            appendParameters(methodName, parameters)
+            appendParameters(apiMethodName, parameters)
             appendLine("): TelegramResponse<${returnType.value}> =")
             appendLine("    botApiClient.$tryMethodName($requestValueArg)")
         }
@@ -460,8 +513,8 @@ class BotApiGenerator {
             appendLine()
             appendMethodDoc(description, parameters)
             appendLine("@Throws(TelegramBotApiException::class)")
-            append("suspend fun TelegramBotApiClient.$mainMethodName(")
-            appendParameters(methodName, parameters)
+            append("suspend fun TelegramBotApiClient.$methodBaseName(")
+            appendParameters(apiMethodName, parameters)
             appendLine("): ${returnType.value} =")
             appendLine("    $tryMethodName($requestValueArg).getResultOrThrow()")
         }
@@ -472,24 +525,24 @@ class BotApiGenerator {
             appendMethodDoc(description, parameters)
             appendLine("context(TelegramBotApiContext)")
             appendLine("@Throws(TelegramBotApiException::class)")
-            append("suspend fun $mainMethodName(")
-            appendParameters(methodName, parameters)
+            append("suspend fun $methodBaseName(")
+            appendParameters(apiMethodName, parameters)
             appendLine("): ${returnType.value} =")
             appendLine("    botApiClient.$tryMethodName($requestValueArg).getResultOrThrow()")
         }
 
-        val fluentContextMethods = fluentMethods.filter { it.originalName == mainMethodName }.map { fluent ->
+        val fluentContextMethods = fluentMethods.filter { it.delegateName == methodBaseName }.map { fluent ->
             val unexpectedArgs = fluent.args.keys - parameters.map { it.name }.toSet()
-            check(unexpectedArgs.isEmpty()) { "Unexpected replacement args for fluent method ${fluent.name}/$mainMethodName: $unexpectedArgs" }
+            check(unexpectedArgs.isEmpty()) { "Unexpected replacement args for fluent method ${fluent.name}/$methodBaseName: $unexpectedArgs" }
 
             buildString {
                 appendLine("context(TelegramBotApiContext)")
                 appendLine("@Throws(TelegramBotApiException::class)")
                 append("suspend fun ${fluent.receiver}.${fluent.name}(")
-                appendParameters(methodName, parameters.filter { it.name !in fluent.args })
+                appendParameters(apiMethodName, parameters.filter { it.name !in fluent.args })
                 appendLine("): ${returnType.value} =")
                 val adjustedRequestArg = parameters.map { it.name }.joinToString { fluent.args[it] ?: it }
-                appendLine("    ${fluent.originalName}($adjustedRequestArg)")
+                appendLine("    ${fluent.delegateName}($adjustedRequestArg)")
             }
         }
 

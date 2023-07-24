@@ -6,26 +6,6 @@ import me.alllex.tbot.api.model.*
 interface TelegramBotUpdateListener {
 
     context(TelegramBotApiContext)
-    suspend fun onUpdate(update: Update) {
-        when (update) {
-            is MessageUpdate -> onMessage(update.message)
-            is EditedMessageUpdate -> onEditedMessage(update.editedMessage)
-            is ChannelPostUpdate -> onChannelPost(update.channelPost)
-            is EditedChannelPostUpdate -> onEditedChannelPost(update.editedChannelPost)
-            is InlineQueryUpdate -> onInlineQuery(update.inlineQuery)
-            is ChosenInlineResultUpdate -> onChosenInlineResult(update.chosenInlineResult)
-            is CallbackQueryUpdate -> onCallbackQuery(update.callbackQuery)
-            is ShippingQueryUpdate -> onShippingQuery(update.shippingQuery)
-            is PreCheckoutQueryUpdate -> onPreCheckoutQuery(update.preCheckoutQuery)
-            is PollUpdate -> onPoll(update.poll)
-            is PollAnswerUpdate -> onPollAnswer(update.pollAnswer)
-            is MyChatMemberUpdate -> onMyChatMember(update.myChatMember)
-            is ChatMemberUpdate -> onChatMember(update.chatMember)
-            is ChatJoinRequestUpdate -> onChatJoinRequest(update.chatJoinRequest)
-        }
-    }
-
-    context(TelegramBotApiContext)
     suspend fun onMessage(message: Message) {
     }
 
@@ -79,6 +59,26 @@ interface TelegramBotUpdateListener {
 
     context(TelegramBotApiContext)
     suspend fun onChatJoinRequest(chatJoinRequest: ChatJoinRequest) {
+    }
+
+    context(TelegramBotApiContext)
+    suspend fun onUpdate(update: Update) {
+        when (update) {
+            is MessageUpdate -> onMessage(update.message)
+            is EditedMessageUpdate -> onEditedMessage(update.editedMessage)
+            is ChannelPostUpdate -> onChannelPost(update.channelPost)
+            is EditedChannelPostUpdate -> onEditedChannelPost(update.editedChannelPost)
+            is InlineQueryUpdate -> onInlineQuery(update.inlineQuery)
+            is ChosenInlineResultUpdate -> onChosenInlineResult(update.chosenInlineResult)
+            is CallbackQueryUpdate -> onCallbackQuery(update.callbackQuery)
+            is ShippingQueryUpdate -> onShippingQuery(update.shippingQuery)
+            is PreCheckoutQueryUpdate -> onPreCheckoutQuery(update.preCheckoutQuery)
+            is PollUpdate -> onPoll(update.poll)
+            is PollAnswerUpdate -> onPollAnswer(update.pollAnswer)
+            is MyChatMemberUpdate -> onMyChatMember(update.myChatMember)
+            is ChatMemberUpdate -> onChatMember(update.chatMember)
+            is ChatJoinRequestUpdate -> onChatJoinRequest(update.chatJoinRequest)
+        }
     }
 }
 

@@ -33,6 +33,18 @@ dependencies {
     implementation(libs.bundles.log4j)
     implementation(libs.bundles.jackson.kotlin.yaml)
     implementation(libs.sqlite.jdbc)
+
+    testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.ktor.client.mock)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.assertk.jvm)
+
+    testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.ktor.serialization.kotlinx.json)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 kotlin.compilerOptions {

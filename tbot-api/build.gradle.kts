@@ -4,14 +4,15 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
+    `maven-publish`
 }
 
 repositories {
     mavenCentral()
 }
 
-group = "me.alllex.tbot.api"
-version = "0.0.1"
+group = "me.alllex.telegram.botkit"
+version = "0.1.0"
 
 val javaVersion: String by project
 java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
@@ -47,4 +48,18 @@ kotlin.sourceSets.main {
 
 kotlin.compilerOptions {
     freeCompilerArgs.add("-Xcontext-receivers")
+}
+
+val sourcesJar by tasks.registering(Jar::class) {
+    this.archiveClassifier = "sources"
+    from(sourceSets.main.map { it.allSource })
+}
+
+publishing {
+    publications {
+        register("mavenJava", MavenPublication::class) {
+            from(components["java"])
+            artifact(sourcesJar.get())
+        }
+    }
 }

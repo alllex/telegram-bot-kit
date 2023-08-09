@@ -15,7 +15,6 @@ rootProject.name = "telegram-bot-kit"
 
 include("tbot-api")
 include("tbot-echo")
-include("tbot-mycounty")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

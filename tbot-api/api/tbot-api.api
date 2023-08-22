@@ -923,30 +923,31 @@ public final class me/alllex/tbot/api/model/ChannelPostUpdate$Companion {
 
 public final class me/alllex/tbot/api/model/Chat {
 	public static final field Companion Lme/alllex/tbot/api/model/Chat$Companion;
-	public synthetic fun <init> (ILme/alllex/tbot/api/model/ChatId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILme/alllex/tbot/api/model/ChatId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-dK1lXec ()J
 	public final fun component10-b1Wa8Lk ()Ljava/lang/String;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/Boolean;
+	public final fun component11-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
+	public final fun component12 ()Ljava/lang/String;
 	public final fun component13 ()Ljava/lang/Boolean;
 	public final fun component14 ()Ljava/lang/Boolean;
 	public final fun component15 ()Ljava/lang/Boolean;
-	public final fun component16 ()Ljava/lang/String;
+	public final fun component16 ()Ljava/lang/Boolean;
 	public final fun component17 ()Ljava/lang/String;
-	public final fun component18 ()Lme/alllex/tbot/api/model/Message;
-	public final fun component19 ()Lme/alllex/tbot/api/model/ChatPermissions;
+	public final fun component18 ()Ljava/lang/String;
+	public final fun component19 ()Lme/alllex/tbot/api/model/Message;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun component20 ()Ljava/lang/Long;
+	public final fun component20 ()Lme/alllex/tbot/api/model/ChatPermissions;
 	public final fun component21 ()Ljava/lang/Long;
-	public final fun component22 ()Ljava/lang/Boolean;
+	public final fun component22 ()Ljava/lang/Long;
 	public final fun component23 ()Ljava/lang/Boolean;
 	public final fun component24 ()Ljava/lang/Boolean;
-	public final fun component25 ()Ljava/lang/String;
-	public final fun component26 ()Ljava/lang/Boolean;
-	public final fun component27-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
-	public final fun component28 ()Lme/alllex/tbot/api/model/ChatLocation;
+	public final fun component25 ()Ljava/lang/Boolean;
+	public final fun component26 ()Ljava/lang/String;
+	public final fun component27 ()Ljava/lang/Boolean;
+	public final fun component28-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
+	public final fun component29 ()Lme/alllex/tbot/api/model/ChatLocation;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Ljava/lang/String;
 	public final fun component5 ()Ljava/lang/String;
@@ -954,14 +955,15 @@ public final class me/alllex/tbot/api/model/Chat {
 	public final fun component7 ()Ljava/lang/Boolean;
 	public final fun component8 ()Lme/alllex/tbot/api/model/ChatPhoto;
 	public final fun component9 ()Ljava/util/List;
-	public final fun copy-Iu1-Ow0 (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;)Lme/alllex/tbot/api/model/Chat;
-	public static synthetic fun copy-Iu1-Ow0$default (Lme/alllex/tbot/api/model/Chat;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;ILjava/lang/Object;)Lme/alllex/tbot/api/model/Chat;
+	public final fun copy-tMjj6LI (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;)Lme/alllex/tbot/api/model/Chat;
+	public static synthetic fun copy-tMjj6LI$default (Lme/alllex/tbot/api/model/Chat;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;ILjava/lang/Object;)Lme/alllex/tbot/api/model/Chat;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getActiveUsernames ()Ljava/util/List;
 	public final fun getBio ()Ljava/lang/String;
 	public final fun getCanSetStickerSet ()Ljava/lang/Boolean;
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getEmojiStatusCustomEmojiId-b1Wa8Lk ()Ljava/lang/String;
+	public final fun getEmojiStatusExpirationDate-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun getFirstName ()Ljava/lang/String;
 	public final fun getHasAggressiveAntiSpamEnabled ()Ljava/lang/Boolean;
 	public final fun getHasHiddenMembers ()Ljava/lang/Boolean;
@@ -6057,18 +6059,18 @@ public final class me/alllex/tbot/api/model/MenuButtonWebApp$Companion {
 
 public final class me/alllex/tbot/api/model/Message {
 	public static final field Companion Lme/alllex/tbot/api/model/Message$Companion;
-	public synthetic fun <init> (IIILme/alllex/tbot/api/model/MessageId;JLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (IIILme/alllex/tbot/api/model/MessageId;JLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-2OzcLEE ()J
 	public final fun component10 ()Ljava/lang/String;
 	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/Long;
+	public final fun component12-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun component13 ()Ljava/lang/Boolean;
 	public final fun component14 ()Ljava/lang/Boolean;
 	public final fun component15 ()Lme/alllex/tbot/api/model/Message;
 	public final fun component16 ()Lme/alllex/tbot/api/model/User;
-	public final fun component17 ()Ljava/lang/Long;
+	public final fun component17-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun component18 ()Ljava/lang/Boolean;
 	public final fun component19 ()Ljava/lang/String;
 	public final fun component2 ()J
@@ -6080,59 +6082,60 @@ public final class me/alllex/tbot/api/model/Message {
 	public final fun component25 ()Lme/alllex/tbot/api/model/Document;
 	public final fun component26 ()Ljava/util/List;
 	public final fun component27 ()Lme/alllex/tbot/api/model/Sticker;
-	public final fun component28 ()Lme/alllex/tbot/api/model/Video;
-	public final fun component29 ()Lme/alllex/tbot/api/model/VideoNote;
+	public final fun component28 ()Lme/alllex/tbot/api/model/Story;
+	public final fun component29 ()Lme/alllex/tbot/api/model/Video;
 	public final fun component3 ()Lme/alllex/tbot/api/model/Chat;
-	public final fun component30 ()Lme/alllex/tbot/api/model/Voice;
-	public final fun component31 ()Ljava/lang/String;
-	public final fun component32 ()Ljava/util/List;
-	public final fun component33 ()Ljava/lang/Boolean;
-	public final fun component34 ()Lme/alllex/tbot/api/model/Contact;
-	public final fun component35 ()Lme/alllex/tbot/api/model/Dice;
-	public final fun component36 ()Lme/alllex/tbot/api/model/Game;
-	public final fun component37 ()Lme/alllex/tbot/api/model/Poll;
-	public final fun component38 ()Lme/alllex/tbot/api/model/Venue;
-	public final fun component39 ()Lme/alllex/tbot/api/model/Location;
+	public final fun component30 ()Lme/alllex/tbot/api/model/VideoNote;
+	public final fun component31 ()Lme/alllex/tbot/api/model/Voice;
+	public final fun component32 ()Ljava/lang/String;
+	public final fun component33 ()Ljava/util/List;
+	public final fun component34 ()Ljava/lang/Boolean;
+	public final fun component35 ()Lme/alllex/tbot/api/model/Contact;
+	public final fun component36 ()Lme/alllex/tbot/api/model/Dice;
+	public final fun component37 ()Lme/alllex/tbot/api/model/Game;
+	public final fun component38 ()Lme/alllex/tbot/api/model/Poll;
+	public final fun component39 ()Lme/alllex/tbot/api/model/Venue;
 	public final fun component4-dizcC0o ()Lme/alllex/tbot/api/model/MessageThreadId;
-	public final fun component40 ()Ljava/util/List;
-	public final fun component41 ()Lme/alllex/tbot/api/model/User;
-	public final fun component42 ()Ljava/lang/String;
-	public final fun component43 ()Ljava/util/List;
-	public final fun component44 ()Ljava/lang/Boolean;
+	public final fun component40 ()Lme/alllex/tbot/api/model/Location;
+	public final fun component41 ()Ljava/util/List;
+	public final fun component42 ()Lme/alllex/tbot/api/model/User;
+	public final fun component43 ()Ljava/lang/String;
+	public final fun component44 ()Ljava/util/List;
 	public final fun component45 ()Ljava/lang/Boolean;
 	public final fun component46 ()Ljava/lang/Boolean;
 	public final fun component47 ()Ljava/lang/Boolean;
-	public final fun component48 ()Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;
-	public final fun component49-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
+	public final fun component48 ()Ljava/lang/Boolean;
+	public final fun component49 ()Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;
 	public final fun component5 ()Lme/alllex/tbot/api/model/User;
 	public final fun component50-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
-	public final fun component51 ()Lme/alllex/tbot/api/model/Message;
-	public final fun component52 ()Lme/alllex/tbot/api/model/Invoice;
-	public final fun component53 ()Lme/alllex/tbot/api/model/SuccessfulPayment;
-	public final fun component54 ()Lme/alllex/tbot/api/model/UserShared;
-	public final fun component55 ()Lme/alllex/tbot/api/model/ChatShared;
-	public final fun component56 ()Ljava/lang/String;
-	public final fun component57 ()Lme/alllex/tbot/api/model/WriteAccessAllowed;
-	public final fun component58 ()Lme/alllex/tbot/api/model/PassportData;
-	public final fun component59 ()Lme/alllex/tbot/api/model/ProximityAlertTriggered;
+	public final fun component51-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
+	public final fun component52 ()Lme/alllex/tbot/api/model/Message;
+	public final fun component53 ()Lme/alllex/tbot/api/model/Invoice;
+	public final fun component54 ()Lme/alllex/tbot/api/model/SuccessfulPayment;
+	public final fun component55 ()Lme/alllex/tbot/api/model/UserShared;
+	public final fun component56 ()Lme/alllex/tbot/api/model/ChatShared;
+	public final fun component57 ()Ljava/lang/String;
+	public final fun component58 ()Lme/alllex/tbot/api/model/WriteAccessAllowed;
+	public final fun component59 ()Lme/alllex/tbot/api/model/PassportData;
 	public final fun component6 ()Lme/alllex/tbot/api/model/Chat;
-	public final fun component60 ()Lme/alllex/tbot/api/model/ForumTopicCreated;
-	public final fun component61 ()Lme/alllex/tbot/api/model/ForumTopicEdited;
-	public final fun component62 ()Lme/alllex/tbot/api/model/ForumTopicClosed;
-	public final fun component63 ()Lme/alllex/tbot/api/model/ForumTopicReopened;
-	public final fun component64 ()Lme/alllex/tbot/api/model/GeneralForumTopicHidden;
-	public final fun component65 ()Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;
-	public final fun component66 ()Lme/alllex/tbot/api/model/VideoChatScheduled;
-	public final fun component67 ()Lme/alllex/tbot/api/model/VideoChatStarted;
-	public final fun component68 ()Lme/alllex/tbot/api/model/VideoChatEnded;
-	public final fun component69 ()Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;
+	public final fun component60 ()Lme/alllex/tbot/api/model/ProximityAlertTriggered;
+	public final fun component61 ()Lme/alllex/tbot/api/model/ForumTopicCreated;
+	public final fun component62 ()Lme/alllex/tbot/api/model/ForumTopicEdited;
+	public final fun component63 ()Lme/alllex/tbot/api/model/ForumTopicClosed;
+	public final fun component64 ()Lme/alllex/tbot/api/model/ForumTopicReopened;
+	public final fun component65 ()Lme/alllex/tbot/api/model/GeneralForumTopicHidden;
+	public final fun component66 ()Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;
+	public final fun component67 ()Lme/alllex/tbot/api/model/VideoChatScheduled;
+	public final fun component68 ()Lme/alllex/tbot/api/model/VideoChatStarted;
+	public final fun component69 ()Lme/alllex/tbot/api/model/VideoChatEnded;
 	public final fun component7 ()Lme/alllex/tbot/api/model/User;
-	public final fun component70 ()Lme/alllex/tbot/api/model/WebAppData;
-	public final fun component71 ()Lme/alllex/tbot/api/model/InlineKeyboardMarkup;
+	public final fun component70 ()Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;
+	public final fun component71 ()Lme/alllex/tbot/api/model/WebAppData;
+	public final fun component72 ()Lme/alllex/tbot/api/model/InlineKeyboardMarkup;
 	public final fun component8 ()Lme/alllex/tbot/api/model/Chat;
 	public final fun component9-XcDfd4U ()Lme/alllex/tbot/api/model/MessageId;
-	public final fun copy-4dfTE1A (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;)Lme/alllex/tbot/api/model/Message;
-	public static synthetic fun copy-4dfTE1A$default (Lme/alllex/tbot/api/model/Message;JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;IIILjava/lang/Object;)Lme/alllex/tbot/api/model/Message;
+	public final fun copy-cBQNP2g (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;)Lme/alllex/tbot/api/model/Message;
+	public static synthetic fun copy-cBQNP2g$default (Lme/alllex/tbot/api/model/Message;JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UserShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;IIILjava/lang/Object;)Lme/alllex/tbot/api/model/Message;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAnimation ()Lme/alllex/tbot/api/model/Animation;
 	public final fun getAudio ()Lme/alllex/tbot/api/model/Audio;
@@ -6148,13 +6151,13 @@ public final class me/alllex/tbot/api/model/Message {
 	public final fun getDeleteChatPhoto ()Ljava/lang/Boolean;
 	public final fun getDice ()Lme/alllex/tbot/api/model/Dice;
 	public final fun getDocument ()Lme/alllex/tbot/api/model/Document;
-	public final fun getEditDate ()Ljava/lang/Long;
+	public final fun getEditDate-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun getEntities ()Ljava/util/List;
 	public final fun getForumTopicClosed ()Lme/alllex/tbot/api/model/ForumTopicClosed;
 	public final fun getForumTopicCreated ()Lme/alllex/tbot/api/model/ForumTopicCreated;
 	public final fun getForumTopicEdited ()Lme/alllex/tbot/api/model/ForumTopicEdited;
 	public final fun getForumTopicReopened ()Lme/alllex/tbot/api/model/ForumTopicReopened;
-	public final fun getForwardDate ()Ljava/lang/Long;
+	public final fun getForwardDate-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun getForwardFrom ()Lme/alllex/tbot/api/model/User;
 	public final fun getForwardFromChat ()Lme/alllex/tbot/api/model/Chat;
 	public final fun getForwardFromMessageId-XcDfd4U ()Lme/alllex/tbot/api/model/MessageId;
@@ -6188,6 +6191,7 @@ public final class me/alllex/tbot/api/model/Message {
 	public final fun getReplyToMessage ()Lme/alllex/tbot/api/model/Message;
 	public final fun getSenderChat ()Lme/alllex/tbot/api/model/Chat;
 	public final fun getSticker ()Lme/alllex/tbot/api/model/Sticker;
+	public final fun getStory ()Lme/alllex/tbot/api/model/Story;
 	public final fun getSuccessfulPayment ()Lme/alllex/tbot/api/model/SuccessfulPayment;
 	public final fun getSupergroupChatCreated ()Ljava/lang/Boolean;
 	public final fun getText ()Ljava/lang/String;
@@ -6610,6 +6614,7 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static final fun unhideGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinAllChatMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinAllForumTopicMessages-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun unpinAllGeneralForumTopicMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinChatMessage-6XJKVkg (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun unpinChatMessage-6XJKVkg$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun uploadStickerFile-CnxUCFs (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -7060,16 +7065,16 @@ public final class me/alllex/tbot/api/model/PassportElementErrorUnspecified$Comp
 
 public final class me/alllex/tbot/api/model/PassportFile {
 	public static final field Companion Lme/alllex/tbot/api/model/PassportFile$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;JJLkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;JLme/alllex/tbot/api/model/UnixTimestamp;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;JJLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-s0A8duU ()Ljava/lang/String;
 	public final fun component2-HnHFhuI ()Ljava/lang/String;
 	public final fun component3 ()J
-	public final fun component4 ()J
-	public final fun copy-HbyD_44 (Ljava/lang/String;Ljava/lang/String;JJ)Lme/alllex/tbot/api/model/PassportFile;
-	public static synthetic fun copy-HbyD_44$default (Lme/alllex/tbot/api/model/PassportFile;Ljava/lang/String;Ljava/lang/String;JJILjava/lang/Object;)Lme/alllex/tbot/api/model/PassportFile;
+	public final fun component4-GuijAhI ()J
+	public final fun copy-nwGPe1Y (Ljava/lang/String;Ljava/lang/String;JJ)Lme/alllex/tbot/api/model/PassportFile;
+	public static synthetic fun copy-nwGPe1Y$default (Lme/alllex/tbot/api/model/PassportFile;Ljava/lang/String;Ljava/lang/String;JJILjava/lang/Object;)Lme/alllex/tbot/api/model/PassportFile;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getFileDate ()J
+	public final fun getFileDate-GuijAhI ()J
 	public final fun getFileId-s0A8duU ()Ljava/lang/String;
 	public final fun getFileSize ()J
 	public final fun getFileUniqueId-HnHFhuI ()Ljava/lang/String;
@@ -7221,17 +7226,20 @@ public final class me/alllex/tbot/api/model/Poll$Companion {
 
 public final class me/alllex/tbot/api/model/PollAnswer {
 	public static final field Companion Lme/alllex/tbot/api/model/PollAnswer$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Lme/alllex/tbot/api/model/User;Ljava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (Ljava/lang/String;Lme/alllex/tbot/api/model/User;Ljava/util/List;)V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lme/alllex/tbot/api/model/User;
-	public final fun component3 ()Ljava/util/List;
-	public final fun copy (Ljava/lang/String;Lme/alllex/tbot/api/model/User;Ljava/util/List;)Lme/alllex/tbot/api/model/PollAnswer;
-	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/PollAnswer;Ljava/lang/String;Lme/alllex/tbot/api/model/User;Ljava/util/List;ILjava/lang/Object;)Lme/alllex/tbot/api/model/PollAnswer;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Lme/alllex/tbot/api/model/Chat;
+	public final fun component4 ()Lme/alllex/tbot/api/model/User;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;)Lme/alllex/tbot/api/model/PollAnswer;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/PollAnswer;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;ILjava/lang/Object;)Lme/alllex/tbot/api/model/PollAnswer;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getOptionIds ()Ljava/util/List;
 	public final fun getPollId ()Ljava/lang/String;
 	public final fun getUser ()Lme/alllex/tbot/api/model/User;
+	public final fun getVoterChat ()Lme/alllex/tbot/api/model/Chat;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/PollAnswer;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -9842,6 +9850,14 @@ public final class me/alllex/tbot/api/model/StopPollRequest$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class me/alllex/tbot/api/model/Story {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/Story;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class me/alllex/tbot/api/model/SuccessfulPayment {
 	public static final field Companion Lme/alllex/tbot/api/model/SuccessfulPayment$Companion;
 	public synthetic fun <init> (ILjava/lang/String;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/OrderInfo;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -10111,6 +10127,7 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static final fun tryUnhideGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllChatMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllForumTopicMessages-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun tryUnpinAllGeneralForumTopicMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinChatMessage-6XJKVkg (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryUnpinChatMessage-6XJKVkg$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryUploadStickerFile-CnxUCFs (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -10235,6 +10252,7 @@ public final class me/alllex/tbot/api/model/TryRequestMethodsKt {
 	public static final fun tryUnhideGeneralForumTopic (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/UnhideGeneralForumTopicRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllChatMessages (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/UnpinAllChatMessagesRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllForumTopicMessages (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/UnpinAllForumTopicMessagesRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun tryUnpinAllGeneralForumTopicMessages (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinChatMessage (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/UnpinChatMessageRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUploadStickerFile (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/UploadStickerFileRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
@@ -10432,6 +10450,7 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static final fun tryUnhideGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllChatMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllForumTopicMessages-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun tryUnpinAllGeneralForumTopicMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinChatMessage-6XJKVkg (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryUnpinChatMessage-6XJKVkg$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryUploadStickerFile-CnxUCFs (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -10618,6 +10637,35 @@ public final class me/alllex/tbot/api/model/UnpinAllForumTopicMessagesRequest$$s
 }
 
 public final class me/alllex/tbot/api/model/UnpinAllForumTopicMessagesRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest {
+	public static final field Companion Lme/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest$Companion;
+	public synthetic fun <init> (ILme/alllex/tbot/api/model/ChatId;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-dK1lXec ()J
+	public final fun copy-97icWJs (J)Lme/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest;
+	public static synthetic fun copy-97icWJs$default (Lme/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest;JILjava/lang/Object;)Lme/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChatId-dK1lXec ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class me/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesRequest$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
@@ -11010,13 +11058,13 @@ public final class me/alllex/tbot/api/model/VideoChatParticipantsInvited$Compani
 
 public final class me/alllex/tbot/api/model/VideoChatScheduled {
 	public static final field Companion Lme/alllex/tbot/api/model/VideoChatScheduled$Companion;
-	public synthetic fun <init> (IJLkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (J)V
-	public final fun component1 ()J
-	public final fun copy (J)Lme/alllex/tbot/api/model/VideoChatScheduled;
-	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/VideoChatScheduled;JILjava/lang/Object;)Lme/alllex/tbot/api/model/VideoChatScheduled;
+	public synthetic fun <init> (ILme/alllex/tbot/api/model/UnixTimestamp;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-GuijAhI ()J
+	public final fun copy-iOOD0yg (J)Lme/alllex/tbot/api/model/VideoChatScheduled;
+	public static synthetic fun copy-iOOD0yg$default (Lme/alllex/tbot/api/model/VideoChatScheduled;JILjava/lang/Object;)Lme/alllex/tbot/api/model/VideoChatScheduled;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getStartDate ()J
+	public final fun getStartDate-GuijAhI ()J
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/VideoChatScheduled;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -11215,27 +11263,27 @@ public final class me/alllex/tbot/api/model/WebAppQueryId$Companion {
 
 public final class me/alllex/tbot/api/model/WebhookInfo {
 	public static final field Companion Lme/alllex/tbot/api/model/WebhookInfo$Companion;
-	public synthetic fun <init> (ILjava/lang/String;ZJLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (Ljava/lang/String;ZJLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/util/List;)V
-	public synthetic fun <init> (Ljava/lang/String;ZJLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILjava/lang/String;ZJLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;ZJLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;ZJLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Z
 	public final fun component3 ()J
 	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/Long;
+	public final fun component5-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/Long;
+	public final fun component7-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun component8 ()Ljava/lang/Long;
 	public final fun component9 ()Ljava/util/List;
-	public final fun copy (Ljava/lang/String;ZJLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/util/List;)Lme/alllex/tbot/api/model/WebhookInfo;
-	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/WebhookInfo;Ljava/lang/String;ZJLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/util/List;ILjava/lang/Object;)Lme/alllex/tbot/api/model/WebhookInfo;
+	public final fun copy-qn1_ADc (Ljava/lang/String;ZJLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/util/List;)Lme/alllex/tbot/api/model/WebhookInfo;
+	public static synthetic fun copy-qn1_ADc$default (Lme/alllex/tbot/api/model/WebhookInfo;Ljava/lang/String;ZJLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/util/List;ILjava/lang/Object;)Lme/alllex/tbot/api/model/WebhookInfo;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAllowedUpdates ()Ljava/util/List;
 	public final fun getHasCustomCertificate ()Z
 	public final fun getIpAddress ()Ljava/lang/String;
-	public final fun getLastErrorDate ()Ljava/lang/Long;
+	public final fun getLastErrorDate-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun getLastErrorMessage ()Ljava/lang/String;
-	public final fun getLastSynchronizationErrorDate ()Ljava/lang/Long;
+	public final fun getLastSynchronizationErrorDate-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun getMaxConnections ()Ljava/lang/Long;
 	public final fun getPendingUpdateCount ()J
 	public final fun getUrl ()Ljava/lang/String;
@@ -11557,6 +11605,7 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static final fun unhideGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinAllChatMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinAllForumTopicMessages-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun unpinAllGeneralForumTopicMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinChatMessage-6XJKVkg (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun unpinChatMessage-6XJKVkg$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun uploadStickerFile-CnxUCFs (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

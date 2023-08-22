@@ -153,7 +153,18 @@ val valueTypes = listOf(
         field.serialName in setOf("cache_time", "duration", "life_period", "open_period", "timeout", "retry_after")
     },
     ValueType("UnixTimestamp", "Long") { _, field ->
-        field.serialName in setOf("close_date", "expire_date", "until_date")
+        field.serialName in setOf(
+            "last_error_date",
+            "last_synchronization_error_date",
+            "emoji_status_expiration_date",
+            "forward_date",
+            "edit_date",
+            "close_date",
+            "start_date",
+            "expire_date",
+            "until_date",
+            "file_date",
+        )
     },
 )
 

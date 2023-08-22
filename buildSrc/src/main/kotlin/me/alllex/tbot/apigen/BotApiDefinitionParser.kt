@@ -1,9 +1,7 @@
 package me.alllex.tbot.apigen
 
 import me.alllex.parsus.parser.*
-import me.alllex.parsus.token.RegexToken
 import me.alllex.parsus.token.regexToken
-import org.intellij.lang.annotations.Language
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
@@ -339,7 +337,7 @@ class BotApiDefinitionParser {
     private data class ResolvedTypeInfo(val kotlinType: KotlinType, val defaultValue: String?)
 
     private fun serialTypeToKotlinTypeString(serialType: String, isOptional: Boolean, serialFieldName: String? = null): ResolvedTypeInfo {
-        val result = FieldTypeGrammar.parseEntire(serialType)
+        val result = FieldTypeGrammar.parse(serialType)
 
         val parsedType = result.getOrElse {
             throw RuntimeException("Could not parse field type: '$serialType'", ParseException(it))
@@ -353,27 +351,20 @@ class BotApiDefinitionParser {
 
 }
 
-fun Grammar<*>.regexAnyCaseToken(
-    @Language("RegExp", "", "")
-    pattern: String,
-    name: String? = null,
-    ignored: Boolean = false
-): RegexToken = regexToken(pattern.toRegex(RegexOption.IGNORE_CASE), name, ignored)
-
 @Suppress("MemberVisibilityCanBePrivate")
-object FieldTypeGrammar : Grammar<String>() {
+object FieldTypeGrammar : Grammar<String>(ignoreCase = true) {
     init {
         regexToken("\\s+", ignored = true)
     }
 
-    val arrayOf by regexAnyCaseToken("Array of")
-    val int by regexAnyCaseToken("Integer or String|Integer") map { "Long" }
-    val double by regexAnyCaseToken("Float number|Float") map { "Double" }
-    val boolean by regexAnyCaseToken("Boolean|False|True") map { "Boolean" }
-    val string by regexAnyCaseToken("InputFile or String|InputFile") map { "String" }
-    val message by regexAnyCaseToken("Messages") map { "Message" } // typo in the original HTML spec
-    val replayMarkup by regexAnyCaseToken("InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply") map { "ReplyMarkup" } // this is a custom sealed type
-    val inputMedia by regexAnyCaseToken("InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo") map { "InputMedia" }
+    val arrayOf by regexToken("Array of")
+    val int by regexToken("Integer or String|Integer") map { "Long" }
+    val double by regexToken("Float number|Float") map { "Double" }
+    val boolean by regexToken("Boolean|False|True") map { "Boolean" }
+    val string by regexToken("InputFile or String|InputFile") map { "String" }
+    val message by regexToken("Messages") map { "Message" } // typo in the original HTML spec
+    val replayMarkup by regexToken("InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply") map { "ReplyMarkup" } // this is a custom sealed type
+    val inputMedia by regexToken("InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo") map { "InputMedia" }
     val apiType by regexToken("\\w+") map { typeSubstitutions[it.text] ?: it.text }
 
     val simpleType by int or double or boolean or string or message or replayMarkup or inputMedia or apiType
@@ -383,7 +374,9 @@ object FieldTypeGrammar : Grammar<String>() {
         "List<".repeat(listDepth) + atom + ">".repeat(listDepth)
     }
 
-    override val root: Parser<String> by listType or simpleType
+    val fieldType by listType or simpleType
+
+    override val root by fieldType
 }
 
 private fun <T> List<T>.selectSections(startsSection: (T) -> Boolean, stopsSequence: (T) -> Boolean = { false }): List<List<T>> {

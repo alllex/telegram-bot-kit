@@ -12,7 +12,7 @@ repositories {
 }
 
 group = "me.alllex.telegram.botkit"
-version = "0.2.1-SNAPSHOT"
+version = "0.2.2-SNAPSHOT"
 
 val javaVersion: String by project
 java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)

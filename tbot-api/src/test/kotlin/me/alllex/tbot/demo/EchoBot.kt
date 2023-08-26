@@ -1,11 +1,10 @@
-package me.alllex.tbot.echobot
+package me.alllex.tbot.demo
 
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import me.alllex.tbot.api.client.TelegramBotApiClient
-import me.alllex.tbot.api.model.*
 import me.alllex.tbot.api.client.TelegramBotApiPoller
 import me.alllex.tbot.api.client.TelegramBotUpdateListener
+import me.alllex.tbot.api.model.*
 import java.util.concurrent.CountDownLatch
 
 
@@ -15,7 +14,9 @@ fun main(args: Array<String>) {
 
     val client = TelegramBotApiClient(botApiToken)
 
+    println("Checking bot info...")
     runBlocking { client.selfCheck(botUsername) }
+    println("Bot info is OK")
 
     val poller = TelegramBotApiPoller(client)
     val countDownLatch = CountDownLatch(1)
@@ -29,9 +30,8 @@ fun main(args: Array<String>) {
                 countDownLatch.countDown()
             } else {
                 println("Echoing the message back to the chat...")
-                delay(5000)
                 message.copyMessage(message.chat.id, replyToMessageId = message.messageId, replyMarkup = inlineKeyboard {
-                    button("Wow", "wowwow")
+                    button("Button", "wow")
                 })
             }
         },
@@ -41,7 +41,10 @@ fun main(args: Array<String>) {
         }
     )
 
+    println("Starting bot...")
     poller.start(listener)
+    println("Bot started")
+
     countDownLatch.await()
     poller.stopBlocking()
 

@@ -14,7 +14,6 @@ plugins {
 rootProject.name = "telegram-bot-kit"
 
 include("tbot-api")
-include("tbot-echo")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

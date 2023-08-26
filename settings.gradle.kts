@@ -15,8 +15,6 @@ rootProject.name = "telegram-bot-kit"
 
 include("tbot-api")
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
 gradleEnterprise {
     buildScan {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"

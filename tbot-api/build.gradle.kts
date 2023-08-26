@@ -1,9 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlinx.binaryCompatibilityValidator)
     `maven-publish`
 }
 

@@ -3964,8 +3964,10 @@ public final class me/alllex/tbot/api/model/InlineKeyboardMarkupBuilder$ButtonBu
 	public final fun build ()Lme/alllex/tbot/api/model/InlineKeyboardButton;
 	public final fun getCallbackData ()Ljava/lang/String;
 	public final fun getText ()Ljava/lang/String;
+	public final fun getUrl ()Ljava/lang/String;
 	public final fun setCallbackData (Ljava/lang/String;)V
 	public final fun setText (Ljava/lang/String;)V
+	public final fun setUrl (Ljava/lang/String;)V
 }
 
 public final class me/alllex/tbot/api/model/InlineKeyboardMarkupBuilder$RowBuilder {
@@ -3977,6 +3979,8 @@ public final class me/alllex/tbot/api/model/InlineKeyboardMarkupBuilder$RowBuild
 public final class me/alllex/tbot/api/model/InlineKeyboardMarkupBuilderKt {
 	public static final fun button (Lme/alllex/tbot/api/model/InlineKeyboardMarkupBuilder$RowBuilder;Ljava/lang/String;Ljava/lang/String;)V
 	public static final fun button (Lme/alllex/tbot/api/model/InlineKeyboardMarkupBuilder;Ljava/lang/String;Ljava/lang/String;)V
+	public static final fun buttonLink (Lme/alllex/tbot/api/model/InlineKeyboardMarkupBuilder$RowBuilder;Ljava/lang/String;Ljava/lang/String;)V
+	public static final fun buttonLink (Lme/alllex/tbot/api/model/InlineKeyboardMarkupBuilder;Ljava/lang/String;Ljava/lang/String;)V
 	public static final fun inlineKeyboard (Lkotlin/jvm/functions/Function1;)Lme/alllex/tbot/api/model/InlineKeyboardMarkup;
 	public static final fun row (Lme/alllex/tbot/api/model/InlineKeyboardMarkupBuilder;Lkotlin/jvm/functions/Function1;)V
 	public static final fun rowsChunked (Lme/alllex/tbot/api/model/InlineKeyboardMarkupBuilder;ILkotlin/jvm/functions/Function1;)V

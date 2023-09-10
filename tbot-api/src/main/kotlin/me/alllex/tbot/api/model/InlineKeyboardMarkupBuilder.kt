@@ -71,6 +71,27 @@ fun InlineKeyboardMarkupBuilder.button(text: String, callbackData: String) {
 }
 
 /**
+ * Adds a link-button to the row in the inline keyboard.
+ */
+@InlineKeyboardMarkupDsl
+fun InlineKeyboardMarkupBuilder.RowBuilder.buttonLink(text: String, url: String) {
+    val buttonBuilder = InlineKeyboardMarkupBuilder.ButtonBuilder()
+    buttonBuilder.text = text
+    buttonBuilder.url = url
+    addButton(buttonBuilder)
+}
+
+/**
+ * Adds a row with a single link-button to the inline keyboard.
+ */
+@InlineKeyboardMarkupDsl
+fun InlineKeyboardMarkupBuilder.buttonLink(text: String, url: String) {
+    row {
+        buttonLink(text, url)
+    }
+}
+
+/**
  * Builder for [InlineKeyboardMarkup]. Best used with DSL functions such as [inlineKeyboard].
  */
 @InlineKeyboardMarkupDsl
@@ -107,20 +128,23 @@ class InlineKeyboardMarkupBuilder {
     class ButtonBuilder {
 
         var text: String? = null
+        var url: String? = null
         var callbackData: String? = null
 
         fun build(): InlineKeyboardButton {
             val text = text ?: error("text is not set")
             check(text.isNotEmpty()) { "text is empty" }
+
+            val url = url
             val callbackData = callbackData
 
-            if (callbackData != null) {
-                check(callbackData.isNotEmpty()) { "callbackData is empty" }
-                return InlineKeyboardButton(text, callbackData = callbackData)
-            } else {
-                error("At least one of optional fields must be set")
+            check(listOfNotNull(url, callbackData).size == 1) {
+                "Exactly one of optional fields must be set"
             }
+            check(url == null || url.isNotEmpty()) { "url is empty" }
+            check(callbackData == null || callbackData.isNotEmpty()) { "callbackData is empty" }
 
+            return InlineKeyboardButton(text, url = url, callbackData = callbackData)
         }
 
     }

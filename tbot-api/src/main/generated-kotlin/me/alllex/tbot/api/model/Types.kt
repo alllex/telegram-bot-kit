@@ -300,7 +300,7 @@ data class User(
  * @param photo Optional. Chat photo. Returned only in getChat.
  * @param activeUsernames Optional. If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.
  * @param emojiStatusCustomEmojiId Optional. Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.
- * @param emojiStatusExpirationDate Optional. Expiration date of the emoji status of the other party in a private chat, if any. Returned only in getChat.
+ * @param emojiStatusExpirationDate Optional. Expiration date of the emoji status of the other party in a private chat in Unix time, if any. Returned only in getChat.
  * @param bio Optional. Bio of the other party in a private chat. Returned only in getChat.
  * @param hasPrivateForwards Optional. True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id> links only in chats with the user. Returned only in getChat.
  * @param hasRestrictedVoiceAndVideoMessages Optional. True, if the privacy settings of the other party restrict sending voice and video note messages in the private chat. Returned only in getChat.
@@ -414,7 +414,7 @@ data class Chat(
  * @param userShared Optional. Service message: a user was shared with the bot
  * @param chatShared Optional. Service message: a chat was shared with the bot
  * @param connectedWebsite Optional. The domain name of the website on which the user has logged in. More about Telegram Login »
- * @param writeAccessAllowed Optional. Service message: the user allowed the bot added to the attachment menu to write messages
+ * @param writeAccessAllowed Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess
  * @param passportData Optional. Telegram Passport data
  * @param proximityAlertTriggered Optional. Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
  * @param forumTopicCreated Optional. Service message: forum topic created
@@ -968,14 +968,18 @@ data class ChatShared(
 }
 
 /**
- * This object represents a service message about a user allowing a bot to write messages after adding the bot to the attachment menu or launching a Web App from a link.
- * @param webAppName Optional. Name of the Web App which was launched from a link
+ * This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess.
+ * @param fromRequest Optional. True, if the access was granted after the user accepted an explicit request from a Web App sent by the method requestWriteAccess
+ * @param webAppName Optional. Name of the Web App, if the access was granted when the Web App was launched from a link
+ * @param fromAttachmentMenu Optional. True, if the access was granted when the bot was added to the attachment or side menu
  */
 @Serializable
 data class WriteAccessAllowed(
+    val fromRequest: Boolean? = null,
     val webAppName: String? = null,
+    val fromAttachmentMenu: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("WriteAccessAllowed").prop("webAppName", webAppName).toString()
+    override fun toString() = DebugStringBuilder("WriteAccessAllowed").prop("fromRequest", fromRequest).prop("webAppName", webAppName).prop("fromAttachmentMenu", fromAttachmentMenu).toString()
 }
 
 /**
@@ -1335,16 +1339,19 @@ data class ChatInviteLink(
 /**
  * Represents the rights of an administrator in a chat.
  * @param isAnonymous True, if the user's presence in the chat is hidden
- * @param canManageChat True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+ * @param canManageChat True, if the administrator can access the chat event log, chat statistics, boost list in channels, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
  * @param canDeleteMessages True, if the administrator can delete messages of other users
  * @param canManageVideoChats True, if the administrator can manage video chats
  * @param canRestrictMembers True, if the administrator can restrict, ban or unban chat members
  * @param canPromoteMembers True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
  * @param canChangeInfo True, if the user is allowed to change the chat title, photo and other settings
  * @param canInviteUsers True, if the user is allowed to invite new users to the chat
- * @param canPostMessages Optional. True, if the administrator can post in the channel; channels only
+ * @param canPostMessages Optional. True, if the administrator can post messages in the channel; channels only
  * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; channels only
  * @param canPinMessages Optional. True, if the user is allowed to pin messages; groups and supergroups only
+ * @param canPostStories Optional. True, if the administrator can post stories in the channel; channels only
+ * @param canEditStories Optional. True, if the administrator can edit stories posted by other users; channels only
+ * @param canDeleteStories Optional. True, if the administrator can delete stories posted by other users; channels only
  * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
  */
 @Serializable
@@ -1360,9 +1367,12 @@ data class ChatAdministratorRights(
     val canPostMessages: Boolean? = null,
     val canEditMessages: Boolean? = null,
     val canPinMessages: Boolean? = null,
+    val canPostStories: Boolean? = null,
+    val canEditStories: Boolean? = null,
+    val canDeleteStories: Boolean? = null,
     val canManageTopics: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatAdministratorRights").prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).toString()
+    override fun toString() = DebugStringBuilder("ChatAdministratorRights").prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canManageTopics", canManageTopics).toString()
 }
 
 /**
@@ -1399,16 +1409,19 @@ data class ChatMemberOwner(
  * @param user Information about the user
  * @param canBeEdited True, if the bot is allowed to edit administrator privileges of that user
  * @param isAnonymous True, if the user's presence in the chat is hidden
- * @param canManageChat True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+ * @param canManageChat True, if the administrator can access the chat event log, chat statistics, boost list in channels, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
  * @param canDeleteMessages True, if the administrator can delete messages of other users
  * @param canManageVideoChats True, if the administrator can manage video chats
  * @param canRestrictMembers True, if the administrator can restrict, ban or unban chat members
  * @param canPromoteMembers True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
  * @param canChangeInfo True, if the user is allowed to change the chat title, photo and other settings
  * @param canInviteUsers True, if the user is allowed to invite new users to the chat
- * @param canPostMessages Optional. True, if the administrator can post in the channel; channels only
+ * @param canPostMessages Optional. True, if the administrator can post messages in the channel; channels only
  * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; channels only
  * @param canPinMessages Optional. True, if the user is allowed to pin messages; groups and supergroups only
+ * @param canPostStories Optional. True, if the administrator can post stories in the channel; channels only
+ * @param canEditStories Optional. True, if the administrator can edit stories posted by other users; channels only
+ * @param canDeleteStories Optional. True, if the administrator can delete stories posted by other users; channels only
  * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
  * @param customTitle Optional. Custom title for this user
  */
@@ -1428,10 +1441,13 @@ data class ChatMemberAdministrator(
     val canPostMessages: Boolean? = null,
     val canEditMessages: Boolean? = null,
     val canPinMessages: Boolean? = null,
+    val canPostStories: Boolean? = null,
+    val canEditStories: Boolean? = null,
+    val canDeleteStories: Boolean? = null,
     val canManageTopics: Boolean? = null,
     val customTitle: String? = null,
 ) : ChatMember() {
-    override fun toString() = DebugStringBuilder("ChatMemberAdministrator").prop("user", user).prop("canBeEdited", canBeEdited).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("customTitle", customTitle).toString()
+    override fun toString() = DebugStringBuilder("ChatMemberAdministrator").prop("user", user).prop("canBeEdited", canBeEdited).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canManageTopics", canManageTopics).prop("customTitle", customTitle).toString()
 }
 
 /**
@@ -1464,7 +1480,7 @@ data class ChatMemberMember(
  * @param canInviteUsers True, if the user is allowed to invite new users to the chat
  * @param canPinMessages True, if the user is allowed to pin messages
  * @param canManageTopics True, if the user is allowed to create forum topics
- * @param untilDate Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever
+ * @param untilDate Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
  */
 @Serializable
 @SerialName("restricted")
@@ -1505,7 +1521,7 @@ data class ChatMemberLeft(
 /**
  * Represents a chat member that was banned in the chat and can't return to the chat or view chat messages.
  * @param user Information about the user
- * @param untilDate Date when restrictions will be lifted for this user; unix time. If 0, then the user is banned forever
+ * @param untilDate Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever
  */
 @Serializable
 @SerialName("kicked")

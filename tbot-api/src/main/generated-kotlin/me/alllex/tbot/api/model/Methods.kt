@@ -677,7 +677,7 @@ suspend fun TelegramBotApiClient.getFile(
  *
  * @param chatId Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
- * @param untilDate Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
+ * @param untilDate Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
  * @param revokeMessages Pass True to delete all messages from the chat for the user that is being removed. If False, the user will be able to see messages in the group that were sent before the user was removed. Always True for supergroups and channels.
  */
 @Throws(TelegramBotApiException::class)
@@ -711,7 +711,7 @@ suspend fun TelegramBotApiClient.unbanChatMember(
  * @param userId Unique identifier of the target user
  * @param permissions A JSON-serialized object for new user permissions
  * @param useIndependentChatPermissions Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission.
- * @param untilDate Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
+ * @param untilDate Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.restrictChatMember(
@@ -729,10 +729,13 @@ suspend fun TelegramBotApiClient.restrictChatMember(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  * @param isAnonymous Pass True if the administrator's presence in the chat is hidden
- * @param canManageChat Pass True if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
- * @param canPostMessages Pass True if the administrator can create channel posts, channels only
- * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages, channels only
+ * @param canManageChat Pass True if the administrator can access the chat event log, chat statistics, boost list in channels, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+ * @param canPostMessages Pass True if the administrator can post messages in the channel; channels only
+ * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; channels only
  * @param canDeleteMessages Pass True if the administrator can delete messages of other users
+ * @param canPostStories Pass True if the administrator can post stories in the channel; channels only
+ * @param canEditStories Pass True if the administrator can edit stories posted by other users; channels only
+ * @param canDeleteStories Pass True if the administrator can delete stories posted by other users; channels only
  * @param canManageVideoChats Pass True if the administrator can manage video chats
  * @param canRestrictMembers Pass True if the administrator can restrict, ban or unban chat members
  * @param canPromoteMembers Pass True if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by him)
@@ -750,6 +753,9 @@ suspend fun TelegramBotApiClient.promoteChatMember(
     canPostMessages: Boolean? = null,
     canEditMessages: Boolean? = null,
     canDeleteMessages: Boolean? = null,
+    canPostStories: Boolean? = null,
+    canEditStories: Boolean? = null,
+    canDeleteStories: Boolean? = null,
     canManageVideoChats: Boolean? = null,
     canRestrictMembers: Boolean? = null,
     canPromoteMembers: Boolean? = null,
@@ -758,7 +764,7 @@ suspend fun TelegramBotApiClient.promoteChatMember(
     canPinMessages: Boolean? = null,
     canManageTopics: Boolean? = null,
 ): Boolean =
-    tryPromoteChatMember(PromoteChatMemberRequest(chatId, userId, isAnonymous, canManageChat, canPostMessages, canEditMessages, canDeleteMessages, canManageVideoChats, canRestrictMembers, canPromoteMembers, canChangeInfo, canInviteUsers, canPinMessages, canManageTopics)).getResultOrThrow()
+    tryPromoteChatMember(PromoteChatMemberRequest(chatId, userId, isAnonymous, canManageChat, canPostMessages, canEditMessages, canDeleteMessages, canPostStories, canEditStories, canDeleteStories, canManageVideoChats, canRestrictMembers, canPromoteMembers, canChangeInfo, canInviteUsers, canPinMessages, canManageTopics)).getResultOrThrow()
 
 /**
  * Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success.

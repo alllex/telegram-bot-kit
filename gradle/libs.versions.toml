@@ -1,5 +1,8 @@
 [versions]
-kotlin = "1.9.0"
+jdkTarget = "8"
+jvmToolchain = "21"
+kotlinTarget = "1.9.0"
+kotlinPlugin = "1.9.10"
 kotlinx-coroutines = "1.6.4"
 kotlinx-serialization = "1.5.1"
 ktor = "2.3.2"
@@ -7,7 +10,7 @@ log4j = "2.20.0"
 junit5 = "5.9.2"
 
 [libraries]
-kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlinPlugin" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
@@ -35,7 +38,7 @@ assertk-jvm = { module = "com.willowtreeapps.assertk:assertk-jvm", version = "0.
 log4j = ["log4j-api", "log4j-core", "log4j-slf4j-impl"]
 
 [plugins]
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinTarget" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinTarget" }
 kotlinx-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 #versions = { id = "com.github.ben-manes.versions", version = "0.45.0" }

@@ -1009,13 +1009,16 @@ public final class me/alllex/tbot/api/model/Chat$Companion {
 
 public final class me/alllex/tbot/api/model/ChatAdministratorRights {
 	public static final field Companion Lme/alllex/tbot/api/model/ChatAdministratorRights$Companion;
-	public synthetic fun <init> (IZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (ZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)V
-	public synthetic fun <init> (ZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (IZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (ZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)V
+	public synthetic fun <init> (ZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Z
 	public final fun component10 ()Ljava/lang/Boolean;
 	public final fun component11 ()Ljava/lang/Boolean;
 	public final fun component12 ()Ljava/lang/Boolean;
+	public final fun component13 ()Ljava/lang/Boolean;
+	public final fun component14 ()Ljava/lang/Boolean;
+	public final fun component15 ()Ljava/lang/Boolean;
 	public final fun component2 ()Z
 	public final fun component3 ()Z
 	public final fun component4 ()Z
@@ -1024,18 +1027,21 @@ public final class me/alllex/tbot/api/model/ChatAdministratorRights {
 	public final fun component7 ()Z
 	public final fun component8 ()Z
 	public final fun component9 ()Ljava/lang/Boolean;
-	public final fun copy (ZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/ChatAdministratorRights;
-	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/ChatAdministratorRights;ZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatAdministratorRights;
+	public final fun copy (ZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/ChatAdministratorRights;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/ChatAdministratorRights;ZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatAdministratorRights;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCanChangeInfo ()Z
 	public final fun getCanDeleteMessages ()Z
+	public final fun getCanDeleteStories ()Ljava/lang/Boolean;
 	public final fun getCanEditMessages ()Ljava/lang/Boolean;
+	public final fun getCanEditStories ()Ljava/lang/Boolean;
 	public final fun getCanInviteUsers ()Z
 	public final fun getCanManageChat ()Z
 	public final fun getCanManageTopics ()Ljava/lang/Boolean;
 	public final fun getCanManageVideoChats ()Z
 	public final fun getCanPinMessages ()Ljava/lang/Boolean;
 	public final fun getCanPostMessages ()Ljava/lang/Boolean;
+	public final fun getCanPostStories ()Ljava/lang/Boolean;
 	public final fun getCanPromoteMembers ()Z
 	public final fun getCanRestrictMembers ()Z
 	public fun hashCode ()I
@@ -1250,16 +1256,19 @@ public final class me/alllex/tbot/api/model/ChatMember$Companion {
 
 public final class me/alllex/tbot/api/model/ChatMemberAdministrator : me/alllex/tbot/api/model/ChatMember {
 	public static final field Companion Lme/alllex/tbot/api/model/ChatMemberAdministrator$Companion;
-	public synthetic fun <init> (ILme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (Lme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;)V
-	public synthetic fun <init> (Lme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;)V
+	public synthetic fun <init> (Lme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lme/alllex/tbot/api/model/User;
 	public final fun component10 ()Z
 	public final fun component11 ()Ljava/lang/Boolean;
 	public final fun component12 ()Ljava/lang/Boolean;
 	public final fun component13 ()Ljava/lang/Boolean;
 	public final fun component14 ()Ljava/lang/Boolean;
-	public final fun component15 ()Ljava/lang/String;
+	public final fun component15 ()Ljava/lang/Boolean;
+	public final fun component16 ()Ljava/lang/Boolean;
+	public final fun component17 ()Ljava/lang/Boolean;
+	public final fun component18 ()Ljava/lang/String;
 	public final fun component2 ()Z
 	public final fun component3 ()Z
 	public final fun component4 ()Z
@@ -1268,19 +1277,22 @@ public final class me/alllex/tbot/api/model/ChatMemberAdministrator : me/alllex/
 	public final fun component7 ()Z
 	public final fun component8 ()Z
 	public final fun component9 ()Z
-	public final fun copy (Lme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;)Lme/alllex/tbot/api/model/ChatMemberAdministrator;
-	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/ChatMemberAdministrator;Lme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatMemberAdministrator;
+	public final fun copy (Lme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;)Lme/alllex/tbot/api/model/ChatMemberAdministrator;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/ChatMemberAdministrator;Lme/alllex/tbot/api/model/User;ZZZZZZZZZLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatMemberAdministrator;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCanBeEdited ()Z
 	public final fun getCanChangeInfo ()Z
 	public final fun getCanDeleteMessages ()Z
+	public final fun getCanDeleteStories ()Ljava/lang/Boolean;
 	public final fun getCanEditMessages ()Ljava/lang/Boolean;
+	public final fun getCanEditStories ()Ljava/lang/Boolean;
 	public final fun getCanInviteUsers ()Z
 	public final fun getCanManageChat ()Z
 	public final fun getCanManageTopics ()Ljava/lang/Boolean;
 	public final fun getCanManageVideoChats ()Z
 	public final fun getCanPinMessages ()Ljava/lang/Boolean;
 	public final fun getCanPostMessages ()Ljava/lang/Boolean;
+	public final fun getCanPostStories ()Ljava/lang/Boolean;
 	public final fun getCanPromoteMembers ()Z
 	public final fun getCanRestrictMembers ()Z
 	public final fun getCustomTitle ()Ljava/lang/String;
@@ -6525,8 +6537,8 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static final fun logOut (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun pinChatMessage-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun pinChatMessage-LHA2_7E$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun promoteChatMember-hAtVCtg (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun promoteChatMember-hAtVCtg$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun promoteChatMember-c53S_gM (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun promoteChatMember-c53S_gM$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun reopenForumTopic-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun reopenGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun restrictChatMember-v_H8p6g (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/UnixTimestamp;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -7435,15 +7447,18 @@ public final class me/alllex/tbot/api/model/PreCheckoutQueryUpdate$Companion {
 
 public final class me/alllex/tbot/api/model/PromoteChatMemberRequest {
 	public static final field Companion Lme/alllex/tbot/api/model/PromoteChatMemberRequest$Companion;
-	public synthetic fun <init> (ILme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/UserId;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/UserId;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-dK1lXec ()J
 	public final fun component10 ()Ljava/lang/Boolean;
 	public final fun component11 ()Ljava/lang/Boolean;
 	public final fun component12 ()Ljava/lang/Boolean;
 	public final fun component13 ()Ljava/lang/Boolean;
 	public final fun component14 ()Ljava/lang/Boolean;
+	public final fun component15 ()Ljava/lang/Boolean;
+	public final fun component16 ()Ljava/lang/Boolean;
+	public final fun component17 ()Ljava/lang/Boolean;
 	public final fun component2-BHTGnbw ()J
 	public final fun component3 ()Ljava/lang/Boolean;
 	public final fun component4 ()Ljava/lang/Boolean;
@@ -7452,18 +7467,21 @@ public final class me/alllex/tbot/api/model/PromoteChatMemberRequest {
 	public final fun component7 ()Ljava/lang/Boolean;
 	public final fun component8 ()Ljava/lang/Boolean;
 	public final fun component9 ()Ljava/lang/Boolean;
-	public final fun copy-m4GU4Rw (JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/PromoteChatMemberRequest;
-	public static synthetic fun copy-m4GU4Rw$default (Lme/alllex/tbot/api/model/PromoteChatMemberRequest;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/PromoteChatMemberRequest;
+	public final fun copy-Bx3TrVI (JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/PromoteChatMemberRequest;
+	public static synthetic fun copy-Bx3TrVI$default (Lme/alllex/tbot/api/model/PromoteChatMemberRequest;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/PromoteChatMemberRequest;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCanChangeInfo ()Ljava/lang/Boolean;
 	public final fun getCanDeleteMessages ()Ljava/lang/Boolean;
+	public final fun getCanDeleteStories ()Ljava/lang/Boolean;
 	public final fun getCanEditMessages ()Ljava/lang/Boolean;
+	public final fun getCanEditStories ()Ljava/lang/Boolean;
 	public final fun getCanInviteUsers ()Ljava/lang/Boolean;
 	public final fun getCanManageChat ()Ljava/lang/Boolean;
 	public final fun getCanManageTopics ()Ljava/lang/Boolean;
 	public final fun getCanManageVideoChats ()Ljava/lang/Boolean;
 	public final fun getCanPinMessages ()Ljava/lang/Boolean;
 	public final fun getCanPostMessages ()Ljava/lang/Boolean;
+	public final fun getCanPostStories ()Ljava/lang/Boolean;
 	public final fun getCanPromoteMembers ()Ljava/lang/Boolean;
 	public final fun getCanRestrictMembers ()Ljava/lang/Boolean;
 	public final fun getChatId-dK1lXec ()J
@@ -10038,8 +10056,8 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static final fun tryLeaveChat-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryPinChatMessage-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryPinChatMessage-LHA2_7E$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun tryPromoteChatMember-hAtVCtg (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryPromoteChatMember-hAtVCtg$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryPromoteChatMember-c53S_gM (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryPromoteChatMember-c53S_gM$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryReopenForumTopic-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryReopenGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryRestrictChatMember-v_H8p6g (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/UnixTimestamp;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -10361,8 +10379,8 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static final fun tryLogOut (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryPinChatMessage-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryPinChatMessage-LHA2_7E$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun tryPromoteChatMember-hAtVCtg (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryPromoteChatMember-hAtVCtg$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryPromoteChatMember-c53S_gM (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryPromoteChatMember-c53S_gM$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryReopenForumTopic-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryReopenGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryRestrictChatMember-v_H8p6g (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/UnixTimestamp;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -11436,8 +11454,8 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static final fun logOut (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun pinChatMessage-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun pinChatMessage-LHA2_7E$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun promoteChatMember-hAtVCtg (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun promoteChatMember-hAtVCtg$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun promoteChatMember-c53S_gM (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun promoteChatMember-c53S_gM$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun reopenForumTopic-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun reopenGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun reply-KTBsg6M (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Message;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -11618,13 +11636,17 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 public final class me/alllex/tbot/api/model/WriteAccessAllowed {
 	public static final field Companion Lme/alllex/tbot/api/model/WriteAccessAllowed$Companion;
 	public fun <init> ()V
-	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;)Lme/alllex/tbot/api/model/WriteAccessAllowed;
-	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/WriteAccessAllowed;Ljava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/WriteAccessAllowed;
+	public synthetic fun <init> (ILjava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;)V
+	public synthetic fun <init> (Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Boolean;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/Boolean;
+	public final fun copy (Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/WriteAccessAllowed;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/WriteAccessAllowed;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/WriteAccessAllowed;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFromAttachmentMenu ()Ljava/lang/Boolean;
+	public final fun getFromRequest ()Ljava/lang/Boolean;
 	public final fun getWebAppName ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

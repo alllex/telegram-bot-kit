@@ -9,12 +9,6 @@ repositories {
 dependencies {
     implementation("org.jsoup:jsoup:1.16.1")
     implementation("me.alllex.parsus:parsus-jvm:0.5.5")
-
-    testImplementation(kotlin("test"))
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
 
 val updateApiSpec by tasks.registering {

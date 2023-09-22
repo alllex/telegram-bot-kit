@@ -2,9 +2,6 @@
 
 
 
-
-
-
 ## Developing
 
 ### Updating the API spec

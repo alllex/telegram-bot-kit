@@ -42,7 +42,7 @@ val generateTelegramBotApi by tasks.registering(GenerateTelegramBotApiTask::clas
     apiSpecFile = layout.projectDirectory.file("../api-spec/telegram-bot-api.html")
     packageName = "me.alllex.tbot.api.model"
     telegramClientPackage = "me.alllex.tbot.api.client"
-    outputDirectory = layout.buildDirectory.dir("generated-api-sources")
+    outputDirectory = layout.projectDirectory.dir("src/main/generated-kotlin")
 }
 
 kotlin.sourceSets.main {

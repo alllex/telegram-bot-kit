@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.slf4j.api)
 
+    testImplementation(libs.junit.jupiter)
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.kotlinx.coroutines.test)

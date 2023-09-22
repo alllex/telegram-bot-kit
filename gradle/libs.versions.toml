@@ -7,7 +7,7 @@ kotlinx-coroutines = "1.6.4"
 kotlinx-serialization = "1.5.1"
 ktor = "2.3.2"
 log4j = "2.20.0"
-junit5 = "5.9.2"
+junit5 = "5.10.0"
 
 [libraries]
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlinPlugin" }

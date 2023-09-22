@@ -4,10 +4,13 @@
 
 ## Developing
 
-### Updating the API spec
+### Updating API to a new version of Telegram Bot API
 
 ```
-./gradlew :buildSrc:updateApiSpec
+./gradlew :buildSrc:updateApiSpec --no-configuration-cache
+./gradlew generateTelegramBotApi
+./gradlew apiDump
+./gradlew check
 ```
 
 ## Roadmap

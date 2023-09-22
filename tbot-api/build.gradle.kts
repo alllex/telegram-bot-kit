@@ -10,14 +10,18 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlinx.binaryCompatibilityValidator)
     `maven-publish`
+    signing
+    alias(libs.plugins.dokka)
 }
 
 repositories {
     mavenCentral()
 }
 
+val publishVersion = project.layout.projectDirectory.file("../version.txt").asFile.readText().trim()
+
 group = "me.alllex.telegram.botkit"
-version = "0.3.0-SNAPSHOT"
+version = publishVersion
 
 java.toolchain.languageVersion = libs.versions.jvmToolchain.map { JavaLanguageVersion.of(it) }
 
@@ -89,11 +93,65 @@ val sourcesJar by tasks.registering(Jar::class) {
     from(sourceSets.main.map { it.allSource })
 }
 
+val javadocJar by tasks.registering(Jar::class) {
+    description = "Produce javadoc with Dokka HTML inside"
+    dependsOn(tasks.dokkaHtml)
+    from(tasks.dokkaHtml)
+    archiveClassifier = "javadoc"
+}
+
 publishing {
     publications {
         register("mavenJava", MavenPublication::class) {
+            artifactId = "tbot-api-jvm"
             from(components["java"])
-            artifact(sourcesJar.get())
+            artifact(sourcesJar)
+            artifact(javadocJar)
+        }
+    }
+}
+
+// Gradle hasn't updated the signing plugin to be compatible with lazy-configuration, so it needs weird workarounds:
+afterEvaluate {
+    // Register signatures in afterEvaluate, otherwise the signing plugin creates the signing tasks
+    // too early, before all the publications are added.
+    signing {
+        val signingKeyId: String? by project
+        val signingKey: String? by project
+        val signingPassword: String? by project
+
+        if (signingKeyId != null) {
+            useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+            sign(publishing.publications)
+        }
+    }
+}
+
+publishing {
+    publications.withType<MavenPublication>().configureEach {
+        pom {
+            name = "Telegram BotKit"
+            description = "Fluent Kotlin bindings for Telegram Bot API"
+            url = "https://github.com/alllex/telegram-bot-kit"
+            licenses {
+                license {
+                    name = "MIT"
+                    url = "https://opensource.org/licenses/MIT"
+                }
+            }
+            developers {
+                developer {
+                    id = "alllex"
+                    name = "Alex by Software"
+                    email = "software@alllex.me"
+                    url = "https://alllex.me"
+                }
+            }
+            scm {
+                connection = "scm:git:git@github.com:alllex/telegram-bot-kit.git"
+                developerConnection = "scm:git:git@github.com:alllex/telegram-bot-kit.git"
+                url = "https://github.com/alllex/telegram-bot-kit"
+            }
         }
     }
 }

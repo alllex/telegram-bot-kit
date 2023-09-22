@@ -52,6 +52,7 @@ The bindings are generated directly from the source-of-truth [Bot API spec](http
 
 ### Alpha
 
+- [ ] License
 - [ ] Squash history
 - [ ] Error handling
 

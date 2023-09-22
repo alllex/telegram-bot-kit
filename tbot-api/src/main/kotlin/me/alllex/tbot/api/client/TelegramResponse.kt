@@ -15,7 +15,7 @@ data class TelegramResponse<out T>(
 
 @Throws(TelegramBotApiException::class)
 fun <T> TelegramResponse<T>.getResultOrThrow(): T {
-    if(ok && result != null) {
+    if (ok && result != null) {
         return result
     }
 

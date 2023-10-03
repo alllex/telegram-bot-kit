@@ -1,5 +1,9 @@
 # Telegram Bot API in Kotlin
 
+[![Maven Central](https://img.shields.io/maven-central/v/me.alllex.telegram.botkit/tbot-api-jvm.svg?color=success)](https://central.sonatype.com/namespace/me.alllex.telegram.botkit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Gradle build](https://github.com/alllex/telegram-bot-kit/actions/workflows/check.yml/badge.svg)](https://github.com/alllex/telegram-bot-kit/actions/workflows/check.yml
+
 Idiomatic, fluent and type-safe Kotlin bindings for [Telegram Bot API](https://core.telegram.org/bots/api).
 
 ```kotlin
@@ -27,6 +31,32 @@ poller.start(TelegramBotUpdateListener(
     }
 ))
 ```
+
+## Usage
+
+<details open>
+<summary>Using with Gradle for JVM projects</summary>
+
+```kotlin
+dependencies {
+    implementation("me.alllex.telegram.botkit:tbot-api-jvm:0.4.0")
+}
+```
+
+</details>
+
+<details>
+<summary>Using with Maven for JVM projects</summary>
+
+```xml
+<dependency>
+  <groupId>me.alllex.telegram.botkit</groupId>
+  <artifactId>tbot-api-jvm</artifactId>
+  <version>0.4.0</version>
+</dependency>
+```
+
+</details>
 
 ## Compatibility
 

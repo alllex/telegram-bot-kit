@@ -60,3 +60,7 @@ The bindings are generated directly from the source-of-truth [Bot API spec](http
 - [ ] Strict library member visibility
 - [ ] Forward compatibility: published versions of the library should not break with new API versions (union types and enums)
 - [ ] Support for integration tests bots
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.

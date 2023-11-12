@@ -47,7 +47,7 @@ enum class UpdateType {
  * - [MyChatMemberUpdate]
  * - [ChatMemberUpdate]
  * - [ChatJoinRequestUpdate]
- */ 
+ */
 @Serializable(with = UpdateSerializer::class)
 sealed class Update {
     abstract val updateId: Long
@@ -1036,7 +1036,7 @@ data class UserProfilePhotos(
 
 /**
  * This object represents a file ready to be downloaded. The file can be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile.
- * 
+ *
  * The maximum file size to download is 20 MB
  * @param fileId Identifier for this file, which can be used to download or reuse the file
  * @param fileUniqueId Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
@@ -1214,11 +1214,9 @@ data class InlineKeyboardButton(
 
 /**
  * This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
- * 
- * 
- * 
+ *
  * Telegram apps support these buttons as of version 5.7.
- * 
+ *
  * Sample bot: @discussbot
  * @param url An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data. NOTE: You must always check the hash of the received data to verify the authentication and the integrity of the data as described in Checking authorization.
  * @param forwardText Optional. New text of the button in forwarded messages.
@@ -1383,7 +1381,7 @@ data class ChatAdministratorRights(
  * - [ChatMemberRestricted]
  * - [ChatMemberLeft]
  * - [ChatMemberBanned]
- */ 
+ */
 @Serializable
 @JsonClassDiscriminator("status")
 sealed class ChatMember
@@ -1665,7 +1663,7 @@ data class BotCommand(
  * - [BotCommandScopeChat]
  * - [BotCommandScopeChatAdministrators]
  * - [BotCommandScopeChatMember]
- */ 
+ */
 @Serializable
 @JsonClassDiscriminator("type")
 sealed class BotCommandScope
@@ -1774,7 +1772,7 @@ data class BotShortDescription(
  * - [MenuButtonCommands]
  * - [MenuButtonWebApp]
  * - [MenuButtonDefault]
- */ 
+ */
 @Serializable
 @JsonClassDiscriminator("type")
 sealed class MenuButton
@@ -1827,7 +1825,7 @@ data class ResponseParameters(
  * - [InputMediaAudio]
  * - [InputMediaPhoto]
  * - [InputMediaVideo]
- */ 
+ */
 @Serializable
 @JsonClassDiscriminator("type")
 sealed class InputMedia
@@ -2112,7 +2110,7 @@ data class InlineQueryResultsButton(
  * - [InlineQueryResultVenue]
  * - [InlineQueryResultVideo]
  * - [InlineQueryResultVoice]
- */ 
+ */
 @Serializable
 @JsonClassDiscriminator("type")
 sealed class InlineQueryResult
@@ -2255,7 +2253,7 @@ data class InlineQueryResultMpeg4Gif(
 
 /**
  * Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
- * 
+ *
  * If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you must replace its content using input_message_content.
  * @param id Unique identifier for this result, 1-64 bytes
  * @param videoUrl A valid URL for the embedded video player or video file
@@ -2718,7 +2716,7 @@ data class InlineQueryResultCachedAudio(
  * - [InputVenueMessageContent]
  * - [InputContactMessageContent]
  * - [InputInvoiceMessageContent]
- */ 
+ */
 @Serializable(with = InputMessageContentSerializer::class)
 sealed class InputMessageContent
 
@@ -3128,7 +3126,7 @@ data class EncryptedCredentials(
  * - [PassportElementErrorTranslationFile]
  * - [PassportElementErrorTranslationFiles]
  * - [PassportElementErrorUnspecified]
- */ 
+ */
 @Serializable
 @JsonClassDiscriminator("type")
 sealed class PassportElementError
@@ -3336,7 +3334,7 @@ data class GameHighScore(
  * - [ReplyKeyboardMarkup]
  * - [ReplyKeyboardRemove]
  * - [ForceReply]
- */ 
+ */
 @Serializable(with = ReplyMarkupSerializer::class)
 sealed class ReplyMarkup
 
@@ -3436,7 +3434,7 @@ value class FileId(val value: String) {
 
 /**
  * Unique identifier for a file, which is supposed to be the same over time and for different bots.
- * 
+ *
  * It can't be used to download or reuse the file.
  */
 @Serializable

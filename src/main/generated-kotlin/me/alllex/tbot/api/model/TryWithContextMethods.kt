@@ -23,7 +23,7 @@ suspend fun tryGetUpdates(
 
 /**
  * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
- * 
+ *
  * If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
  *
  * @param url HTTPS URL to send updates to. Use an empty string to remove webhook integration
@@ -205,7 +205,7 @@ suspend fun trySendPhoto(
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
- * 
+ *
  * For sending voice messages, use the sendVoice method instead.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -629,9 +629,9 @@ suspend fun trySendDice(
 
 /**
  * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
- * 
+ *
  * Example: The ImageBot needs some time to process a request and upload the image. Instead of sending a text message along the lines of “Retrieving image, please wait…”, the bot may use sendChatAction with action = upload_photo. The user will see a “sending photo” status for the bot.
- * 
+ *
  * We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -1245,7 +1245,7 @@ suspend fun tryUnpinAllGeneralForumTopicMessages(
 
 /**
  * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
- * 
+ *
  * Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via @BotFather and accept the terms. Otherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
  *
  * @param callbackQueryId Unique identifier for the query to be answered
@@ -2072,7 +2072,7 @@ suspend fun tryAnswerPreCheckoutQuery(
 
 /**
  * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
- * 
+ *
  * Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues.
  *
  * @param userId User identifier
@@ -2152,7 +2152,7 @@ suspend fun trySetInlineGameScore(
 
 /**
  * Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. Returns an Array of GameHighScore objects.
- * 
+ *
  * This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
  *
  * @param userId Target user id

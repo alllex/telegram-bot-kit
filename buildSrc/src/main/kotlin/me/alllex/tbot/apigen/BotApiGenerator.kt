@@ -383,7 +383,7 @@ class BotApiGenerator {
 
             appendLine("/**")
             appendLine(" * Request body for [${elementName.value}].")
-            appendLine(" * ")
+            appendLine(" *")
             parameters.filter { it.description.isNotEmpty() }.forEach {
                 appendLine(" * @param ${it.name} ${it.description}")
             }
@@ -493,12 +493,6 @@ class BotApiGenerator {
         )
     }
 
-    private fun StringBuilder.appendDescriptionDoc(description: String) {
-        description.split("\n").forEach {
-            appendLine(" * $it")
-        }
-    }
-
     private fun StringBuilder.appendParameters(elementName: BotApiElementName, parameters: List<BotApiElement.Field>) {
         if (parameters.isNotEmpty()) {
             appendLine()
@@ -510,7 +504,7 @@ class BotApiGenerator {
 
     private fun StringBuilder.appendMethodDoc(description: String, parameters: List<BotApiElement.Field>) {
         appendLine("/**")
-        appendDescriptionDoc(description)
+        appendKdocLines(description)
         if (parameters.isNotEmpty()) {
             appendLine(" *")
         }
@@ -553,7 +547,7 @@ class BotApiGenerator {
 
         val tryRequestMethodSourceCode = buildString {
             appendLine("/**")
-            appendDescriptionDoc(description)
+            appendKdocLines(description)
             appendLine(" */")
             append("suspend fun TelegramBotApiClient.$tryMethodName(")
             if (hasParams) {
@@ -708,13 +702,7 @@ class BotApiGenerator {
     }
 
     private fun generateValueTypeSourceCode(valueType: ValueType): String = buildString {
-        valueType.docString?.let {
-            appendLine("/**")
-            it.lines().forEach { line ->
-                appendLine(" * $line")
-            }
-            appendLine(" */")
-        }
+        valueType.docString?.let { appendKdoc(it) }
         appendLine("@Serializable")
         appendLine("@JvmInline")
         appendLine("value class ${valueType.name}(val value: ${valueType.backingType}) {")
@@ -742,15 +730,13 @@ class BotApiGenerator {
         appendLine("/**")
         updateTypeElement.description.split("\n")
             .filterNot { it.startsWith("At most one of the optional parameters") }
-            .forEach {
-                appendLine(" * $it")
-            }
+            .let { appendKdocLines(it) }
         appendLine(" *")
         appendLine(" * Sub-types:")
         for (updateType in types) {
             appendLine(" * - [${updateType.updateTypeName()}]")
         }
-        appendLine(" */ ")
+        appendLine(" */")
         appendLine("@Serializable(with = ${name}Serializer::class)")
         appendLine("sealed class $name {")
         appendLine("    abstract val updateId: Long")
@@ -758,11 +744,7 @@ class BotApiGenerator {
         appendLine("}")
         for (updateField in types) {
             appendLine()
-            appendLine("/**")
-            updateField.description.removePrefix("Optional.").split("\n").forEach {
-                appendLine(" * ${it.trim()}")
-            }
-            appendLine(" */")
+            appendKdoc(updateField.description.removePrefix("Optional."))
             appendLine("@Serializable")
             appendLine("data class ${updateField.updateTypeName()}(")
             appendLine("    override val updateId: Long,")
@@ -794,13 +776,11 @@ class BotApiGenerator {
     ): String = buildString {
 
         appendLine("/**")
-        description.split("\n").forEach {
-            appendLine(" * $it")
-        }
+        appendKdocLines(description)
         for (unionType in unionTypes) {
             appendLine(" * - [${unionType.name.value}]")
         }
-        appendLine(" */ ")
+        appendLine(" */")
 
         val discriminatorFieldNames = unionTypes.mapNotNull { it.getUnionDiscriminatorFieldName() }
             .toSet()
@@ -870,9 +850,7 @@ class BotApiGenerator {
         }
 
         appendLine("/**")
-        description.split("\n").forEach {
-            appendLine(" * $it")
-        }
+        appendKdocLines(description)
         trueFields.filter { it.description.isNotEmpty() }.forEach {
             appendLine(" * @param ${it.name} ${it.description}")
         }

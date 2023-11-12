@@ -6,7 +6,7 @@ import kotlinx.serialization.encodeToString
 
 /**
  * Request body for [getUpdates].
- * 
+ *
  * @param offset Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will be forgotten.
  * @param limit Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100.
  * @param timeout Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
@@ -24,7 +24,7 @@ data class GetUpdatesRequest(
 
 /**
  * Request body for [setWebhook].
- * 
+ *
  * @param url HTTPS URL to send updates to. Use an empty string to remove webhook integration
  * @param certificate Upload your public key certificate so that the root certificate in use can be checked. See our self-signed guide for details.
  * @param ipAddress The fixed IP address which will be used to send webhook requests instead of the IP address resolved through DNS
@@ -48,7 +48,7 @@ data class SetWebhookRequest(
 
 /**
  * Request body for [deleteWebhook].
- * 
+ *
  * @param dropPendingUpdates Pass True to drop all pending updates
  */
 @Serializable
@@ -60,7 +60,7 @@ data class DeleteWebhookRequest(
 
 /**
  * Request body for [sendMessage].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param text Text of the message to be sent, 1-4096 characters after entities parsing
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -92,7 +92,7 @@ data class SendMessageRequest(
 
 /**
  * Request body for [forwardMessage].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param fromChatId Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
  * @param messageId Message identifier in the chat specified in from_chat_id
@@ -114,7 +114,7 @@ data class ForwardMessageRequest(
 
 /**
  * Request body for [copyMessage].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param fromChatId Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
  * @param messageId Message identifier in the chat specified in from_chat_id
@@ -148,7 +148,7 @@ data class CopyMessageRequest(
 
 /**
  * Request body for [sendPhoto].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param photo Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. More information on Sending Files »
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -182,7 +182,7 @@ data class SendPhotoRequest(
 
 /**
  * Request body for [sendAudio].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param audio Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -222,7 +222,7 @@ data class SendAudioRequest(
 
 /**
  * Request body for [sendDocument].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param document File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -258,7 +258,7 @@ data class SendDocumentRequest(
 
 /**
  * Request body for [sendVideo].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param video Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. More information on Sending Files »
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -302,7 +302,7 @@ data class SendVideoRequest(
 
 /**
  * Request body for [sendAnimation].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param animation Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. More information on Sending Files »
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -344,7 +344,7 @@ data class SendAnimationRequest(
 
 /**
  * Request body for [sendVoice].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param voice Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -378,7 +378,7 @@ data class SendVoiceRequest(
 
 /**
  * Request body for [sendVideoNote].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param videoNote Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files ». Sending video notes by a URL is currently unsupported
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -410,7 +410,7 @@ data class SendVideoNoteRequest(
 
 /**
  * Request body for [sendMediaGroup].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param media A JSON-serialized array describing messages to be sent, must include 2-10 items
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -434,7 +434,7 @@ data class SendMediaGroupRequest(
 
 /**
  * Request body for [sendLocation].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param latitude Latitude of the location
  * @param longitude Longitude of the location
@@ -470,7 +470,7 @@ data class SendLocationRequest(
 
 /**
  * Request body for [sendVenue].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param latitude Latitude of the venue
  * @param longitude Longitude of the venue
@@ -510,7 +510,7 @@ data class SendVenueRequest(
 
 /**
  * Request body for [sendContact].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param phoneNumber Contact's phone number
  * @param firstName Contact's first name
@@ -542,7 +542,7 @@ data class SendContactRequest(
 
 /**
  * Request body for [sendPoll].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param question Poll question, 1-300 characters
  * @param options A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
@@ -590,7 +590,7 @@ data class SendPollRequest(
 
 /**
  * Request body for [sendDice].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param emoji Emoji on which the dice throw animation is based. Currently, must be one of “”, “”, “”, “”, “”, or “”. Dice can have values 1-6 for “”, “” and “”, values 1-5 for “” and “”, and values 1-64 for “”. Defaults to “”
@@ -616,7 +616,7 @@ data class SendDiceRequest(
 
 /**
  * Request body for [sendChatAction].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param action Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes.
  * @param messageThreadId Unique identifier for the target message thread; supergroups only
@@ -632,7 +632,7 @@ data class SendChatActionRequest(
 
 /**
  * Request body for [getUserProfilePhotos].
- * 
+ *
  * @param userId Unique identifier of the target user
  * @param offset Sequential number of the first photo to be returned. By default, all photos are returned.
  * @param limit Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
@@ -648,7 +648,7 @@ data class GetUserProfilePhotosRequest(
 
 /**
  * Request body for [getFile].
- * 
+ *
  * @param fileId File identifier to get information about
  */
 @Serializable
@@ -660,7 +660,7 @@ data class GetFileRequest(
 
 /**
  * Request body for [banChatMember].
- * 
+ *
  * @param chatId Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  * @param untilDate Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
@@ -678,7 +678,7 @@ data class BanChatMemberRequest(
 
 /**
  * Request body for [unbanChatMember].
- * 
+ *
  * @param chatId Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  * @param onlyIfBanned Do nothing if the user is not banned
@@ -694,7 +694,7 @@ data class UnbanChatMemberRequest(
 
 /**
  * Request body for [restrictChatMember].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param userId Unique identifier of the target user
  * @param permissions A JSON-serialized object for new user permissions
@@ -714,7 +714,7 @@ data class RestrictChatMemberRequest(
 
 /**
  * Request body for [promoteChatMember].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  * @param isAnonymous Pass True if the administrator's presence in the chat is hidden
@@ -758,7 +758,7 @@ data class PromoteChatMemberRequest(
 
 /**
  * Request body for [setChatAdministratorCustomTitle].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param userId Unique identifier of the target user
  * @param customTitle New custom title for the administrator; 0-16 characters, emoji are not allowed
@@ -774,7 +774,7 @@ data class SetChatAdministratorCustomTitleRequest(
 
 /**
  * Request body for [banChatSenderChat].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param senderChatId Unique identifier of the target sender chat
  */
@@ -788,7 +788,7 @@ data class BanChatSenderChatRequest(
 
 /**
  * Request body for [unbanChatSenderChat].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param senderChatId Unique identifier of the target sender chat
  */
@@ -802,7 +802,7 @@ data class UnbanChatSenderChatRequest(
 
 /**
  * Request body for [setChatPermissions].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param permissions A JSON-serialized object for new default chat permissions
  * @param useIndependentChatPermissions Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission.
@@ -818,7 +818,7 @@ data class SetChatPermissionsRequest(
 
 /**
  * Request body for [exportChatInviteLink].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  */
 @Serializable
@@ -830,7 +830,7 @@ data class ExportChatInviteLinkRequest(
 
 /**
  * Request body for [createChatInviteLink].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param name Invite link name; 0-32 characters
  * @param expireDate Point in time (Unix timestamp) when the link will expire
@@ -850,7 +850,7 @@ data class CreateChatInviteLinkRequest(
 
 /**
  * Request body for [editChatInviteLink].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param inviteLink The invite link to edit
  * @param name Invite link name; 0-32 characters
@@ -872,7 +872,7 @@ data class EditChatInviteLinkRequest(
 
 /**
  * Request body for [revokeChatInviteLink].
- * 
+ *
  * @param chatId Unique identifier of the target chat or username of the target channel (in the format @channelusername)
  * @param inviteLink The invite link to revoke
  */
@@ -886,7 +886,7 @@ data class RevokeChatInviteLinkRequest(
 
 /**
  * Request body for [approveChatJoinRequest].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  */
@@ -900,7 +900,7 @@ data class ApproveChatJoinRequestRequest(
 
 /**
  * Request body for [declineChatJoinRequest].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  */
@@ -914,7 +914,7 @@ data class DeclineChatJoinRequestRequest(
 
 /**
  * Request body for [setChatPhoto].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param photo New chat photo, uploaded using multipart/form-data
  */
@@ -928,7 +928,7 @@ data class SetChatPhotoRequest(
 
 /**
  * Request body for [deleteChatPhoto].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  */
 @Serializable
@@ -940,7 +940,7 @@ data class DeleteChatPhotoRequest(
 
 /**
  * Request body for [setChatTitle].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param title New chat title, 1-128 characters
  */
@@ -954,7 +954,7 @@ data class SetChatTitleRequest(
 
 /**
  * Request body for [setChatDescription].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param description New chat description, 0-255 characters
  */
@@ -968,7 +968,7 @@ data class SetChatDescriptionRequest(
 
 /**
  * Request body for [pinChatMessage].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of a message to pin
  * @param disableNotification Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.
@@ -984,7 +984,7 @@ data class PinChatMessageRequest(
 
 /**
  * Request body for [unpinChatMessage].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned.
  */
@@ -998,7 +998,7 @@ data class UnpinChatMessageRequest(
 
 /**
  * Request body for [unpinAllChatMessages].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  */
 @Serializable
@@ -1010,7 +1010,7 @@ data class UnpinAllChatMessagesRequest(
 
 /**
  * Request body for [leaveChat].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
  */
 @Serializable
@@ -1022,7 +1022,7 @@ data class LeaveChatRequest(
 
 /**
  * Request body for [getChat].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
  */
 @Serializable
@@ -1034,7 +1034,7 @@ data class GetChatRequest(
 
 /**
  * Request body for [getChatAdministrators].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
  */
 @Serializable
@@ -1046,7 +1046,7 @@ data class GetChatAdministratorsRequest(
 
 /**
  * Request body for [getChatMemberCount].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
  */
 @Serializable
@@ -1058,7 +1058,7 @@ data class GetChatMemberCountRequest(
 
 /**
  * Request body for [getChatMember].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  */
@@ -1072,7 +1072,7 @@ data class GetChatMemberRequest(
 
 /**
  * Request body for [setChatStickerSet].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param stickerSetName Name of the sticker set to be set as the group sticker set
  */
@@ -1086,7 +1086,7 @@ data class SetChatStickerSetRequest(
 
 /**
  * Request body for [deleteChatStickerSet].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  */
 @Serializable
@@ -1098,7 +1098,7 @@ data class DeleteChatStickerSetRequest(
 
 /**
  * Request body for [createForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param name Topic name, 1-128 characters
  * @param iconColor Color of the topic icon in RGB format. Currently, must be one of 7322096 (0x6FB9F0), 16766590 (0xFFD67E), 13338331 (0xCB86DB), 9367192 (0x8EEE98), 16749490 (0xFF93B2), or 16478047 (0xFB6F5F)
@@ -1116,7 +1116,7 @@ data class CreateForumTopicRequest(
 
 /**
  * Request body for [editForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param messageThreadId Unique identifier for the target message thread of the forum topic
  * @param name New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept
@@ -1134,7 +1134,7 @@ data class EditForumTopicRequest(
 
 /**
  * Request body for [closeForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param messageThreadId Unique identifier for the target message thread of the forum topic
  */
@@ -1148,7 +1148,7 @@ data class CloseForumTopicRequest(
 
 /**
  * Request body for [reopenForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param messageThreadId Unique identifier for the target message thread of the forum topic
  */
@@ -1162,7 +1162,7 @@ data class ReopenForumTopicRequest(
 
 /**
  * Request body for [deleteForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param messageThreadId Unique identifier for the target message thread of the forum topic
  */
@@ -1176,7 +1176,7 @@ data class DeleteForumTopicRequest(
 
 /**
  * Request body for [unpinAllForumTopicMessages].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param messageThreadId Unique identifier for the target message thread of the forum topic
  */
@@ -1190,7 +1190,7 @@ data class UnpinAllForumTopicMessagesRequest(
 
 /**
  * Request body for [editGeneralForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param name New topic name, 1-128 characters
  */
@@ -1204,7 +1204,7 @@ data class EditGeneralForumTopicRequest(
 
 /**
  * Request body for [closeGeneralForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  */
 @Serializable
@@ -1216,7 +1216,7 @@ data class CloseGeneralForumTopicRequest(
 
 /**
  * Request body for [reopenGeneralForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  */
 @Serializable
@@ -1228,7 +1228,7 @@ data class ReopenGeneralForumTopicRequest(
 
 /**
  * Request body for [hideGeneralForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  */
 @Serializable
@@ -1240,7 +1240,7 @@ data class HideGeneralForumTopicRequest(
 
 /**
  * Request body for [unhideGeneralForumTopic].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  */
 @Serializable
@@ -1252,7 +1252,7 @@ data class UnhideGeneralForumTopicRequest(
 
 /**
  * Request body for [unpinAllGeneralForumTopicMessages].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  */
 @Serializable
@@ -1264,7 +1264,7 @@ data class UnpinAllGeneralForumTopicMessagesRequest(
 
 /**
  * Request body for [answerCallbackQuery].
- * 
+ *
  * @param callbackQueryId Unique identifier for the query to be answered
  * @param text Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
  * @param showAlert If True, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
@@ -1284,7 +1284,7 @@ data class AnswerCallbackQueryRequest(
 
 /**
  * Request body for [setMyCommands].
- * 
+ *
  * @param commands A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified.
  * @param scope A JSON-serialized object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault.
  * @param languageCode A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
@@ -1300,7 +1300,7 @@ data class SetMyCommandsRequest(
 
 /**
  * Request body for [deleteMyCommands].
- * 
+ *
  * @param scope A JSON-serialized object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault.
  * @param languageCode A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
  */
@@ -1314,7 +1314,7 @@ data class DeleteMyCommandsRequest(
 
 /**
  * Request body for [getMyCommands].
- * 
+ *
  * @param scope A JSON-serialized object, describing scope of users. Defaults to BotCommandScopeDefault.
  * @param languageCode A two-letter ISO 639-1 language code or an empty string
  */
@@ -1328,7 +1328,7 @@ data class GetMyCommandsRequest(
 
 /**
  * Request body for [setMyName].
- * 
+ *
  * @param name New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language.
  * @param languageCode A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name.
  */
@@ -1342,7 +1342,7 @@ data class SetMyNameRequest(
 
 /**
  * Request body for [getMyName].
- * 
+ *
  * @param languageCode A two-letter ISO 639-1 language code or an empty string
  */
 @Serializable
@@ -1354,7 +1354,7 @@ data class GetMyNameRequest(
 
 /**
  * Request body for [setMyDescription].
- * 
+ *
  * @param description New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language.
  * @param languageCode A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description.
  */
@@ -1368,7 +1368,7 @@ data class SetMyDescriptionRequest(
 
 /**
  * Request body for [getMyDescription].
- * 
+ *
  * @param languageCode A two-letter ISO 639-1 language code or an empty string
  */
 @Serializable
@@ -1380,7 +1380,7 @@ data class GetMyDescriptionRequest(
 
 /**
  * Request body for [setMyShortDescription].
- * 
+ *
  * @param shortDescription New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language.
  * @param languageCode A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description.
  */
@@ -1394,7 +1394,7 @@ data class SetMyShortDescriptionRequest(
 
 /**
  * Request body for [getMyShortDescription].
- * 
+ *
  * @param languageCode A two-letter ISO 639-1 language code or an empty string
  */
 @Serializable
@@ -1406,7 +1406,7 @@ data class GetMyShortDescriptionRequest(
 
 /**
  * Request body for [setChatMenuButton].
- * 
+ *
  * @param chatId Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
  * @param menuButton A JSON-serialized object for the bot's new menu button. Defaults to MenuButtonDefault
  */
@@ -1420,7 +1420,7 @@ data class SetChatMenuButtonRequest(
 
 /**
  * Request body for [getChatMenuButton].
- * 
+ *
  * @param chatId Unique identifier for the target private chat. If not specified, default bot's menu button will be returned
  */
 @Serializable
@@ -1432,7 +1432,7 @@ data class GetChatMenuButtonRequest(
 
 /**
  * Request body for [setMyDefaultAdministratorRights].
- * 
+ *
  * @param rights A JSON-serialized object describing new default administrator rights. If not specified, the default administrator rights will be cleared.
  * @param forChannels Pass True to change the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be changed.
  */
@@ -1446,7 +1446,7 @@ data class SetMyDefaultAdministratorRightsRequest(
 
 /**
  * Request body for [getMyDefaultAdministratorRights].
- * 
+ *
  * @param forChannels Pass True to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned.
  */
 @Serializable
@@ -1458,7 +1458,7 @@ data class GetMyDefaultAdministratorRightsRequest(
 
 /**
  * Request body for [editMessageText].
- * 
+ *
  * @param text New text of the message, 1-4096 characters after entities parsing
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
@@ -1484,7 +1484,7 @@ data class EditMessageTextRequest(
 
 /**
  * Request body for [editMessageCaption].
- * 
+ *
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
@@ -1508,7 +1508,7 @@ data class EditMessageCaptionRequest(
 
 /**
  * Request body for [editMessageMedia].
- * 
+ *
  * @param media A JSON-serialized object for a new media content of the message
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
@@ -1528,7 +1528,7 @@ data class EditMessageMediaRequest(
 
 /**
  * Request body for [editMessageLiveLocation].
- * 
+ *
  * @param latitude Latitude of new location
  * @param longitude Longitude of new location
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -1556,7 +1556,7 @@ data class EditMessageLiveLocationRequest(
 
 /**
  * Request body for [stopMessageLiveLocation].
- * 
+ *
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message with live location to stop
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
@@ -1574,7 +1574,7 @@ data class StopMessageLiveLocationRequest(
 
 /**
  * Request body for [editMessageReplyMarkup].
- * 
+ *
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
@@ -1592,7 +1592,7 @@ data class EditMessageReplyMarkupRequest(
 
 /**
  * Request body for [stopPoll].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of the original message with the poll
  * @param replyMarkup A JSON-serialized object for a new message inline keyboard.
@@ -1608,7 +1608,7 @@ data class StopPollRequest(
 
 /**
  * Request body for [deleteMessage].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of the message to delete
  */
@@ -1622,7 +1622,7 @@ data class DeleteMessageRequest(
 
 /**
  * Request body for [sendSticker].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param sticker Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP or .TGS sticker using multipart/form-data. More information on Sending Files ». Video stickers can only be sent by a file_id. Animated stickers can't be sent via an HTTP URL.
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -1650,7 +1650,7 @@ data class SendStickerRequest(
 
 /**
  * Request body for [getStickerSet].
- * 
+ *
  * @param name Name of the sticker set
  */
 @Serializable
@@ -1662,7 +1662,7 @@ data class GetStickerSetRequest(
 
 /**
  * Request body for [getCustomEmojiStickers].
- * 
+ *
  * @param customEmojiIds List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
  */
 @Serializable
@@ -1674,7 +1674,7 @@ data class GetCustomEmojiStickersRequest(
 
 /**
  * Request body for [uploadStickerFile].
- * 
+ *
  * @param userId User identifier of sticker file owner
  * @param sticker A file with the sticker in .WEBP, .PNG, .TGS, or .WEBM format. See https://core.telegram.org/stickers for technical requirements. More information on Sending Files »
  * @param stickerFormat Format of the sticker, must be one of “static”, “animated”, “video”
@@ -1690,7 +1690,7 @@ data class UploadStickerFileRequest(
 
 /**
  * Request body for [createNewStickerSet].
- * 
+ *
  * @param userId User identifier of created sticker set owner
  * @param name Short name of sticker set, to be used in t.me/addstickers/ URLs (e.g., animals). Can contain only English letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and must end in "_by_<bot_username>". <bot_username> is case insensitive. 1-64 characters.
  * @param title Sticker set title, 1-64 characters
@@ -1714,7 +1714,7 @@ data class CreateNewStickerSetRequest(
 
 /**
  * Request body for [addStickerToSet].
- * 
+ *
  * @param userId User identifier of sticker set owner
  * @param name Sticker set name
  * @param sticker A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set isn't changed.
@@ -1730,7 +1730,7 @@ data class AddStickerToSetRequest(
 
 /**
  * Request body for [setStickerPositionInSet].
- * 
+ *
  * @param sticker File identifier of the sticker
  * @param position New sticker position in the set, zero-based
  */
@@ -1744,7 +1744,7 @@ data class SetStickerPositionInSetRequest(
 
 /**
  * Request body for [deleteStickerFromSet].
- * 
+ *
  * @param sticker File identifier of the sticker
  */
 @Serializable
@@ -1756,7 +1756,7 @@ data class DeleteStickerFromSetRequest(
 
 /**
  * Request body for [setStickerEmojiList].
- * 
+ *
  * @param sticker File identifier of the sticker
  * @param emojiList A JSON-serialized list of 1-20 emoji associated with the sticker
  */
@@ -1770,7 +1770,7 @@ data class SetStickerEmojiListRequest(
 
 /**
  * Request body for [setStickerKeywords].
- * 
+ *
  * @param sticker File identifier of the sticker
  * @param keywords A JSON-serialized list of 0-20 search keywords for the sticker with total length of up to 64 characters
  */
@@ -1784,7 +1784,7 @@ data class SetStickerKeywordsRequest(
 
 /**
  * Request body for [setStickerMaskPosition].
- * 
+ *
  * @param sticker File identifier of the sticker
  * @param maskPosition A JSON-serialized object with the position where the mask should be placed on faces. Omit the parameter to remove the mask position.
  */
@@ -1798,7 +1798,7 @@ data class SetStickerMaskPositionRequest(
 
 /**
  * Request body for [setStickerSetTitle].
- * 
+ *
  * @param name Sticker set name
  * @param title Sticker set title, 1-64 characters
  */
@@ -1812,7 +1812,7 @@ data class SetStickerSetTitleRequest(
 
 /**
  * Request body for [setStickerSetThumbnail].
- * 
+ *
  * @param name Sticker set name
  * @param userId User identifier of the sticker set owner
  * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
@@ -1828,7 +1828,7 @@ data class SetStickerSetThumbnailRequest(
 
 /**
  * Request body for [setCustomEmojiStickerSetThumbnail].
- * 
+ *
  * @param name Sticker set name
  * @param customEmojiId Custom emoji identifier of a sticker from the sticker set; pass an empty string to drop the thumbnail and use the first sticker as the thumbnail.
  */
@@ -1842,7 +1842,7 @@ data class SetCustomEmojiStickerSetThumbnailRequest(
 
 /**
  * Request body for [deleteStickerSet].
- * 
+ *
  * @param name Sticker set name
  */
 @Serializable
@@ -1854,7 +1854,7 @@ data class DeleteStickerSetRequest(
 
 /**
  * Request body for [answerInlineQuery].
- * 
+ *
  * @param inlineQueryId Unique identifier for the answered query
  * @param results A JSON-serialized array of results for the inline query
  * @param cacheTime The maximum amount of time in seconds that the result of the inline query may be cached on the server. Defaults to 300.
@@ -1876,7 +1876,7 @@ data class AnswerInlineQueryRequest(
 
 /**
  * Request body for [answerWebAppQuery].
- * 
+ *
  * @param webAppQueryId Unique identifier for the query to be answered
  * @param result A JSON-serialized object describing the message to be sent
  */
@@ -1890,7 +1890,7 @@ data class AnswerWebAppQueryRequest(
 
 /**
  * Request body for [sendInvoice].
- * 
+ *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param title Product name, 1-32 characters
  * @param description Product description, 1-255 characters
@@ -1956,7 +1956,7 @@ data class SendInvoiceRequest(
 
 /**
  * Request body for [createInvoiceLink].
- * 
+ *
  * @param title Product name, 1-32 characters
  * @param description Product description, 1-255 characters
  * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
@@ -2006,7 +2006,7 @@ data class CreateInvoiceLinkRequest(
 
 /**
  * Request body for [answerShippingQuery].
- * 
+ *
  * @param shippingQueryId Unique identifier for the query to be answered
  * @param ok Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)
  * @param shippingOptions Required if ok is True. A JSON-serialized array of available shipping options.
@@ -2024,7 +2024,7 @@ data class AnswerShippingQueryRequest(
 
 /**
  * Request body for [answerPreCheckoutQuery].
- * 
+ *
  * @param preCheckoutQueryId Unique identifier for the query to be answered
  * @param ok Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. Use False if there are any problems.
  * @param errorMessage Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user.
@@ -2040,7 +2040,7 @@ data class AnswerPreCheckoutQueryRequest(
 
 /**
  * Request body for [setPassportDataErrors].
- * 
+ *
  * @param userId User identifier
  * @param errors A JSON-serialized array describing the errors
  */
@@ -2054,7 +2054,7 @@ data class SetPassportDataErrorsRequest(
 
 /**
  * Request body for [sendGame].
- * 
+ *
  * @param chatId Unique identifier for the target chat
  * @param gameShortName Short name of the game, serves as the unique identifier for the game. Set up your games via @BotFather.
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -2080,7 +2080,7 @@ data class SendGameRequest(
 
 /**
  * Request body for [setGameScore].
- * 
+ *
  * @param userId User identifier
  * @param score New score, must be non-negative
  * @param force Pass True if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters
@@ -2104,7 +2104,7 @@ data class SetGameScoreRequest(
 
 /**
  * Request body for [getGameHighScores].
- * 
+ *
  * @param userId Target user id
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat
  * @param messageId Required if inline_message_id is not specified. Identifier of the sent message

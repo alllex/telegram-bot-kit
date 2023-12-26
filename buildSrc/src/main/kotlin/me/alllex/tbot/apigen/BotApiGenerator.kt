@@ -554,20 +554,18 @@ class BotApiGenerator {
                 append("requestBody: $requestTypeName")
             }
             appendLine("): TelegramResponse<${returnType.value}> =")
-            appendLine("    executeRequest(\"$apiMethodName\", ${if (hasParams) "requestBody" else "null"}) {")
-            appendLine("        httpClient.$httpMethod {")
-            appendLine("            url {")
-            appendLine("                protocol = apiProtocol")
-            appendLine("                host = apiHost")
-            appendLine("                port = apiPort")
-            appendLine("                path(\"bot\$apiToken\", \"$apiMethodName\")")
-            appendLine("            }")
+            appendLine("    httpClient.$httpMethod {")
+            appendLine("        url {")
+            appendLine("            protocol = apiProtocol")
+            appendLine("            host = apiHost")
+            appendLine("            port = apiPort")
+            appendLine("            path(\"bot\$apiToken\", \"$apiMethodName\")")
+            appendLine("        }")
             if (hasParams) {
-                appendLine("            contentType(ContentType.Application.Json)")
-                appendLine("            setBody(requestBody)")
+                appendLine("        contentType(ContentType.Application.Json)")
+                appendLine("        setBody(requestBody)")
             }
-            appendLine("        }.body()")
-            appendLine("    }")
+            appendLine("    }.body()")
         }
 
         val tryMethodSourceCode = buildString {
@@ -738,9 +736,9 @@ class BotApiGenerator {
         }
         appendLine(" */")
         appendLine("@Serializable(with = ${name}Serializer::class)")
-        appendLine("sealed class $name {")
-        appendLine("    abstract val updateId: Long")
-        appendLine("    abstract val updateType: UpdateType")
+        appendLine("sealed interface $name {")
+        appendLine("    val updateId: Long")
+        appendLine("    val updateType: UpdateType")
         appendLine("}")
         for (updateField in types) {
             appendLine()
@@ -749,7 +747,7 @@ class BotApiGenerator {
             appendLine("data class ${updateField.updateTypeName()}(")
             appendLine("    override val updateId: Long,")
             appendLine("    val ${updateField.name}: ${updateField.type},")
-            appendLine("): $name() {")
+            appendLine("): $name {")
             appendLine("    override val updateType: UpdateType get() = UpdateType.${updateField.enumValue()}")
             appendLine("}")
         }
@@ -798,7 +796,7 @@ class BotApiGenerator {
             appendLine("@JsonClassDiscriminator(\"$discriminatorFieldName\")")
         }
 
-        appendLine("sealed class ${name.value}")
+        appendLine("sealed interface ${name.value}")
 
         if (discriminatorFieldName == null) {
             val avoidFields = setOf("description")
@@ -872,7 +870,7 @@ class BotApiGenerator {
             append("data object ")
             append(typeName.value)
             if (sealedParentName != null) {
-                append(" : ${sealedParentName.value}()")
+                append(" : ${sealedParentName.value}")
             }
             appendLine()
         } else {
@@ -884,7 +882,7 @@ class BotApiGenerator {
 
             append(")")
             if (sealedParentName != null) {
-                append(" : ${sealedParentName.value}()")
+                append(" : ${sealedParentName.value}")
             }
             appendLine(" {")
             appendLine("    ${generateDebugToString(typeName.value, trueFields)}")

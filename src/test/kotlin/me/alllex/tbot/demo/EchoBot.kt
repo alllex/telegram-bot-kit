@@ -1,14 +1,19 @@
 package me.alllex.tbot.demo
 
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
 import me.alllex.tbot.api.client.TelegramBotApiClient
-import me.alllex.tbot.api.client.TelegramBotApiPoller
-import me.alllex.tbot.api.client.TelegramBotUpdateListener
-import me.alllex.tbot.api.model.*
-import java.util.concurrent.CountDownLatch
+import me.alllex.tbot.api.dsl.startPolling
+import me.alllex.tbot.api.model.answer
+import me.alllex.tbot.api.model.button
+import me.alllex.tbot.api.model.copyMessage
+import me.alllex.tbot.api.model.inlineKeyboard
+import me.alllex.tbot.api.model.selfCheck
 
 
-fun main(args: Array<String>) {
+suspend fun main(args: Array<String>) = coroutineScope {
     check(args.size >= 2) { "Expected 2 arguments" }
     val (botApiToken, botUsername) = args
 
@@ -17,36 +22,36 @@ fun main(args: Array<String>) {
     println("Checking bot info...")
     runBlocking { client.selfCheck(botUsername) }
     println("Bot info is OK")
-
-    val poller = TelegramBotApiPoller(client)
-    val countDownLatch = CountDownLatch(1)
-
-    val listener = TelegramBotUpdateListener(
-        onMessage = { message ->
-            println("Received message: $message")
-            val text = message.text
-            if (text.equals("stop", ignoreCase = true)) {
-                println("Received stop command, stopping...")
-                countDownLatch.countDown()
-            } else {
-                println("Echoing the message back to the chat...")
-                message.copyMessage(message.chat.id, replyToMessageId = message.messageId, replyMarkup = inlineKeyboard {
-                    button("Button", "wow")
-                })
-            }
-        },
-        onCallbackQuery = { callbackQuery ->
-            println("Received callback query: $callbackQuery")
-            callbackQuery.answer("Wow!")
-        }
-    )
+    val mutex = Mutex(true)
 
     println("Starting bot...")
-    poller.start(listener)
-    println("Bot started")
+    val poller = launch {
+        client.startPolling {
+            onMessage { message ->
+                println("Received message: $message")
+                val text = message.text
+                if (text.equals("stop", ignoreCase = true)) {
+                    println("Received stop command, stopping...")
+                    mutex.unlock()
+                } else {
+                    println("Echoing the message back to the chat...")
+                    message.copyMessage(
+                        message.chat.id,
+                        replyToMessageId = message.messageId,
+                        replyMarkup = inlineKeyboard {
+                            button("Button", "wow")
+                        })
+                }
+            }
+            onCallbackQuery { callbackQuery ->
+                println("Received callback query: $callbackQuery")
+                callbackQuery.answer("Wow!")
+            }
+        }
+    }
 
-    countDownLatch.await()
-    poller.stopBlocking()
+    mutex.lock()
+    poller.cancel()
 
     println("Done")
 }

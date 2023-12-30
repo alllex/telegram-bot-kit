@@ -7,8 +7,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jsoup:jsoup:1.16.1")
-    implementation("me.alllex.parsus:parsus-jvm:0.5.5")
+    implementation("org.jsoup:jsoup:1.17.1")
+    implementation("me.alllex.parsus:parsus-jvm:0.6.1")
 }
 
 val updateApiSpec by tasks.registering {

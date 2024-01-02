@@ -75,14 +75,24 @@ tasks.test {
 }
 
 val generateTelegramBotApi by tasks.registering(GenerateTelegramBotApiTask::class) {
+    group = "telegram"
     apiSpecFile = layout.projectDirectory.file("api-spec/telegram-bot-api.html")
     packageName = "me.alllex.tbot.api.model"
     telegramClientPackage = "me.alllex.tbot.api.client"
     outputDirectory = layout.projectDirectory.dir("src/main/generated-kotlin")
 }
 
-kotlin.sourceSets.main {
-    kotlin.srcDir(generateTelegramBotApi)
+kotlin.sourceSets {
+    all {
+        languageSettings {
+            optIn("me.alllex.tbot.api.client.BotKitInternalAPI")
+            optIn("kotlinx.serialization.ExperimentalSerializationApi")
+            optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+        }
+    }
+    main {
+        kotlin.srcDir(generateTelegramBotApi)
+    }
 }
 
 kotlin.compilerOptions {

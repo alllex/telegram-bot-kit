@@ -1,22 +1,42 @@
 public final class me/alllex/tbot/api/client/TelegramBotApiClient {
-	public static final field Companion Lme/alllex/tbot/api/client/TelegramBotApiClient$Companion;
-	public synthetic fun <init> (Lio/ktor/client/HttpClient;Ljava/lang/String;Lio/ktor/http/URLProtocol;Ljava/lang/String;ILkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun closeHttpClient ()V
+	public static final field Defaults Lme/alllex/tbot/api/client/TelegramBotApiClient$Defaults;
+	public fun <init> (Ljava/lang/String;Lio/ktor/client/HttpClient;Lio/ktor/http/URLProtocol;Ljava/lang/String;I)V
+	public synthetic fun <init> (Ljava/lang/String;Lio/ktor/client/HttpClient;Lio/ktor/http/URLProtocol;Ljava/lang/String;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getApiHost ()Ljava/lang/String;
+	public final fun getApiPort ()I
+	public final fun getApiProtocol ()Lio/ktor/http/URLProtocol;
+	public final fun getApiToken ()Ljava/lang/String;
+	public final fun getHttpClient ()Lio/ktor/client/HttpClient;
 }
 
-public final class me/alllex/tbot/api/client/TelegramBotApiClient$Companion {
-	public final fun invoke (Ljava/lang/String;Lio/ktor/client/engine/HttpClientEngineFactory;Lio/ktor/http/URLProtocol;Ljava/lang/String;ILkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function1;)Lme/alllex/tbot/api/client/TelegramBotApiClient;
-	public final fun invoke (Ljava/lang/String;Lio/ktor/http/URLProtocol;Lio/ktor/client/engine/HttpClientEngine;Ljava/lang/String;ILkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function1;)Lme/alllex/tbot/api/client/TelegramBotApiClient;
-	public static synthetic fun invoke$default (Lme/alllex/tbot/api/client/TelegramBotApiClient$Companion;Ljava/lang/String;Lio/ktor/client/engine/HttpClientEngineFactory;Lio/ktor/http/URLProtocol;Ljava/lang/String;ILkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lme/alllex/tbot/api/client/TelegramBotApiClient;
-	public static synthetic fun invoke$default (Lme/alllex/tbot/api/client/TelegramBotApiClient$Companion;Ljava/lang/String;Lio/ktor/http/URLProtocol;Lio/ktor/client/engine/HttpClientEngine;Ljava/lang/String;ILkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lme/alllex/tbot/api/client/TelegramBotApiClient;
+public final class me/alllex/tbot/api/client/TelegramBotApiClient$Defaults {
+	public final fun defaultConfiguration (Lio/ktor/client/HttpClientConfig;)V
+	public final fun getJSON ()Lkotlinx/serialization/json/Json;
+	public final fun httpClient (Lio/ktor/client/engine/HttpClientEngine;Lkotlin/jvm/functions/Function1;)Lio/ktor/client/HttpClient;
+	public final fun httpClient (Lio/ktor/client/engine/HttpClientEngineFactory;Lkotlin/jvm/functions/Function1;)Lio/ktor/client/HttpClient;
+	public final fun httpClient (Lkotlin/jvm/functions/Function1;)Lio/ktor/client/HttpClient;
+	public static synthetic fun httpClient$default (Lme/alllex/tbot/api/client/TelegramBotApiClient$Defaults;Lio/ktor/client/engine/HttpClientEngine;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/ktor/client/HttpClient;
+	public static synthetic fun httpClient$default (Lme/alllex/tbot/api/client/TelegramBotApiClient$Defaults;Lio/ktor/client/engine/HttpClientEngineFactory;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/ktor/client/HttpClient;
+	public static synthetic fun httpClient$default (Lme/alllex/tbot/api/client/TelegramBotApiClient$Defaults;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/ktor/client/HttpClient;
 }
 
 public final class me/alllex/tbot/api/client/TelegramBotApiClientKt {
 	public static final field DEFAULT_TELEGRAM_API_HOST Ljava/lang/String;
 }
 
-public abstract interface class me/alllex/tbot/api/client/TelegramBotApiContext {
-	public abstract fun getBotApiClient ()Lme/alllex/tbot/api/client/TelegramBotApiClient;
+public final class me/alllex/tbot/api/client/TelegramBotApiContext {
+	public fun <init> (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lorg/slf4j/Logger;Lkotlinx/serialization/json/Json;)V
+	public final fun component1 ()Lme/alllex/tbot/api/client/TelegramBotApiClient;
+	public final fun component2 ()Lorg/slf4j/Logger;
+	public final fun component3 ()Lkotlinx/serialization/json/Json;
+	public final fun copy (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lorg/slf4j/Logger;Lkotlinx/serialization/json/Json;)Lme/alllex/tbot/api/client/TelegramBotApiContext;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/client/TelegramBotApiClient;Lorg/slf4j/Logger;Lkotlinx/serialization/json/Json;ILjava/lang/Object;)Lme/alllex/tbot/api/client/TelegramBotApiContext;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBotApiClient ()Lme/alllex/tbot/api/client/TelegramBotApiClient;
+	public final fun getJson ()Lkotlinx/serialization/json/Json;
+	public final fun getLogger ()Lorg/slf4j/Logger;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class me/alllex/tbot/api/client/TelegramBotApiException : java/lang/RuntimeException {
@@ -25,18 +45,9 @@ public final class me/alllex/tbot/api/client/TelegramBotApiException : java/lang
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class me/alllex/tbot/api/client/TelegramBotApiPoller {
-	public static final field Companion Lme/alllex/tbot/api/client/TelegramBotApiPoller$Companion;
-	public synthetic fun <init> (Lme/alllex/tbot/api/client/TelegramBotApiClient;JILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun runForever (Lme/alllex/tbot/api/client/TelegramBotUpdateListener;)V
-	public final fun start (Lme/alllex/tbot/api/client/TelegramBotUpdateListener;)V
-	public final fun stop (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun stopBlocking-LRDsOJo (J)V
-	public static synthetic fun stopBlocking-LRDsOJo$default (Lme/alllex/tbot/api/client/TelegramBotApiPoller;JILjava/lang/Object;)V
-}
-
-public final class me/alllex/tbot/api/client/TelegramBotApiPoller$Companion {
+public final class me/alllex/tbot/api/client/TelegramBotApiPollerKt {
+	public static final fun startPolling-45ZY6uE (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/client/TelegramBotUpdateListener;Lkotlin/jvm/functions/Function2;JJLorg/slf4j/Logger;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun startPolling-45ZY6uE$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/client/TelegramBotUpdateListener;Lkotlin/jvm/functions/Function2;JJLorg/slf4j/Logger;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class me/alllex/tbot/api/client/TelegramBotUpdateHandler {
@@ -122,6 +133,30 @@ public final class me/alllex/tbot/api/client/TelegramResponse$Companion {
 
 public final class me/alllex/tbot/api/client/TelegramResponseKt {
 	public static final fun getResultOrThrow (Lme/alllex/tbot/api/client/TelegramResponse;)Ljava/lang/Object;
+}
+
+public final class me/alllex/tbot/api/dsl/TelegramBotUpdateBuilder {
+	public fun <init> ()V
+	public final fun build ()Lme/alllex/tbot/api/client/TelegramBotUpdateListener;
+	public final fun onCallbackQuery (Lkotlin/jvm/functions/Function3;)V
+	public final fun onChannelPost (Lkotlin/jvm/functions/Function3;)V
+	public final fun onChatJoinRequest (Lkotlin/jvm/functions/Function3;)V
+	public final fun onChatMember (Lkotlin/jvm/functions/Function3;)V
+	public final fun onChosenInlineResult (Lkotlin/jvm/functions/Function3;)V
+	public final fun onEditedChannelPost (Lkotlin/jvm/functions/Function3;)V
+	public final fun onEditedMessage (Lkotlin/jvm/functions/Function3;)V
+	public final fun onInlineQuery (Lkotlin/jvm/functions/Function3;)V
+	public final fun onMessage (Lkotlin/jvm/functions/Function3;)V
+	public final fun onMyChatMember (Lkotlin/jvm/functions/Function3;)V
+	public final fun onPoll (Lkotlin/jvm/functions/Function3;)V
+	public final fun onPollAnswer (Lkotlin/jvm/functions/Function3;)V
+	public final fun onPreCheckoutQuery (Lkotlin/jvm/functions/Function3;)V
+	public final fun onShippingQuery (Lkotlin/jvm/functions/Function3;)V
+}
+
+public final class me/alllex/tbot/api/dsl/TelegramBotUpdateBuilderKt {
+	public static final fun startPolling-nRVORKE (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLorg/slf4j/Logger;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun startPolling-nRVORKE$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLorg/slf4j/Logger;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public final class me/alllex/tbot/api/model/AddStickerToSetRequest {
@@ -533,10 +568,8 @@ public final class me/alllex/tbot/api/model/BotCommand$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/BotCommandScope {
+public abstract interface class me/alllex/tbot/api/model/BotCommandScope {
 	public static final field Companion Lme/alllex/tbot/api/model/BotCommandScope$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/BotCommandScope;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/BotCommandScope$Companion {
@@ -1188,10 +1221,8 @@ public final class me/alllex/tbot/api/model/ChatLocation$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/ChatMember {
+public abstract interface class me/alllex/tbot/api/model/ChatMember {
 	public static final field Companion Lme/alllex/tbot/api/model/ChatMember$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/ChatMember;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/ChatMember$Companion {
@@ -3900,10 +3931,8 @@ public final class me/alllex/tbot/api/model/InlineQueryId$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/InlineQueryResult {
+public abstract interface class me/alllex/tbot/api/model/InlineQueryResult {
 	public static final field Companion Lme/alllex/tbot/api/model/InlineQueryResult$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/InlineQueryResult;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/InlineQueryResult$Companion {
@@ -5052,10 +5081,8 @@ public final class me/alllex/tbot/api/model/InputLocationMessageContent$Companio
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/InputMedia {
+public abstract interface class me/alllex/tbot/api/model/InputMedia {
 	public static final field Companion Lme/alllex/tbot/api/model/InputMedia$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/InputMedia;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/InputMedia$Companion {
@@ -5268,7 +5295,7 @@ public final class me/alllex/tbot/api/model/InputMediaVideo$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/InputMessageContent {
+public abstract interface class me/alllex/tbot/api/model/InputMessageContent {
 	public static final field Companion Lme/alllex/tbot/api/model/InputMessageContent$Companion;
 }
 
@@ -5729,10 +5756,8 @@ public final class me/alllex/tbot/api/model/MaskPosition$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/MenuButton {
+public abstract interface class me/alllex/tbot/api/model/MenuButton {
 	public static final field Companion Lme/alllex/tbot/api/model/MenuButton$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/MenuButton;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/MenuButton$Companion {
@@ -6447,10 +6472,8 @@ public final class me/alllex/tbot/api/model/PassportData$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/PassportElementError {
+public abstract interface class me/alllex/tbot/api/model/PassportElementError {
 	public static final field Companion Lme/alllex/tbot/api/model/PassportElementError$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/PassportElementError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/PassportElementError$Companion {
@@ -7317,7 +7340,7 @@ public final class me/alllex/tbot/api/model/ReplyKeyboardRemove$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/ReplyMarkup {
+public abstract interface class me/alllex/tbot/api/model/ReplyMarkup {
 	public static final field Companion Lme/alllex/tbot/api/model/ReplyMarkup$Companion;
 }
 
@@ -10246,7 +10269,7 @@ public final class me/alllex/tbot/api/model/UnpinChatMessageRequest$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/Update {
+public abstract interface class me/alllex/tbot/api/model/Update {
 	public static final field Companion Lme/alllex/tbot/api/model/Update$Companion;
 	public abstract fun getUpdateId ()J
 	public abstract fun getUpdateType ()Lme/alllex/tbot/api/model/UpdateType;

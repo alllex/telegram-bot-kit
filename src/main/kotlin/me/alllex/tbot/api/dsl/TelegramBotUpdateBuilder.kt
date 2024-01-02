@@ -118,7 +118,7 @@ suspend fun TelegramBotApiClient.startPolling(
     listener: TelegramBotUpdateBuilder.() -> Unit
 ) = startPolling(
     listener = TelegramBotUpdateBuilder().apply(listener).build(),
-    onUpdateOffset = onUpdateOffset,
+    onUpdateOffsetChanged = onUpdateOffset,
     pollingTimeout = pollingTimeout,
     startingUpdateOffset = startingUpdateOffset,
     logger = logger

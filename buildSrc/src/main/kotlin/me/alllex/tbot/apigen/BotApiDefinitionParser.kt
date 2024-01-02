@@ -1,6 +1,12 @@
 package me.alllex.tbot.apigen
 
-import me.alllex.parsus.parser.*
+import me.alllex.parsus.parser.Grammar
+import me.alllex.parsus.parser.ParseException
+import me.alllex.parsus.parser.getOrElse
+import me.alllex.parsus.parser.map
+import me.alllex.parsus.parser.or
+import me.alllex.parsus.parser.parser
+import me.alllex.parsus.parser.repeatOneOrMore
 import me.alllex.parsus.token.regexToken
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element

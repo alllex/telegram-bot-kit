@@ -1,10 +1,14 @@
 package me.alllex.tbot.api.client
 
-import io.ktor.client.*
-import io.ktor.client.engine.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.HttpClientEngineConfig
+import io.ktor.client.engine.HttpClientEngineFactory
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.http.DEFAULT_PORT
+import io.ktor.http.URLProtocol
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
@@ -22,7 +26,12 @@ class TelegramBotApiClient private constructor(
     private val onResponse: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?, responseBody: TelegramResponse<*>) -> Unit)? = null,
 ) {
 
-    internal inline fun <T> executeRequest(requestMethod: String, requestBody: Any?, request: () -> TelegramResponse<T>): TelegramResponse<T> {
+    internal inline fun <T> executeRequest(
+        requestMethod: String,
+        requestBody: Any?,
+        request: () -> TelegramResponse<T>
+    ): TelegramResponse<T> {
+
         onRequest?.invoke(this, requestMethod, requestBody)
         val responseBody = request()
         onResponse?.invoke(this, requestMethod, requestBody, responseBody)

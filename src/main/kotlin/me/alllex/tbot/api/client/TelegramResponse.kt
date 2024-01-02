@@ -2,7 +2,6 @@ package me.alllex.tbot.api.client
 
 import kotlinx.serialization.Serializable
 import me.alllex.tbot.api.model.ResponseParameters
-import kotlin.jvm.Throws
 
 @Serializable
 data class TelegramResponse<out T>(

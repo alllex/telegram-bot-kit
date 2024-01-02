@@ -1,6 +1,6 @@
 package me.alllex.tbot.apigen
 
-import java.util.*
+import java.util.Locale
 
 
 /**

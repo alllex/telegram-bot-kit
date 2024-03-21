@@ -738,9 +738,9 @@ class BotApiGenerator {
         }
         appendLine(" */")
         appendLine("@Serializable(with = ${name}Serializer::class)")
-        appendLine("sealed class $name {")
-        appendLine("    abstract val updateId: Long")
-        appendLine("    abstract val updateType: UpdateType")
+        appendLine("sealed interface $name {")
+        appendLine("    val updateId: Long")
+        appendLine("    val updateType: UpdateType")
         appendLine("}")
         for (updateField in types) {
             appendLine()
@@ -749,7 +749,7 @@ class BotApiGenerator {
             appendLine("data class ${updateField.updateTypeName()}(")
             appendLine("    override val updateId: Long,")
             appendLine("    val ${updateField.name}: ${updateField.type},")
-            appendLine("): $name() {")
+            appendLine("): $name {")
             appendLine("    override val updateType: UpdateType get() = UpdateType.${updateField.enumValue()}")
             appendLine("}")
         }
@@ -798,7 +798,7 @@ class BotApiGenerator {
             appendLine("@JsonClassDiscriminator(\"$discriminatorFieldName\")")
         }
 
-        appendLine("sealed class ${name.value}")
+        appendLine("sealed interface ${name.value}")
 
         if (discriminatorFieldName == null) {
             val avoidFields = setOf("description")
@@ -872,7 +872,7 @@ class BotApiGenerator {
             append("data object ")
             append(typeName.value)
             if (sealedParentName != null) {
-                append(" : ${sealedParentName.value}()")
+                append(" : ${sealedParentName.value}")
             }
             appendLine()
         } else {
@@ -884,7 +884,7 @@ class BotApiGenerator {
 
             append(")")
             if (sealedParentName != null) {
-                append(" : ${sealedParentName.value}()")
+                append(" : ${sealedParentName.value}")
             }
             appendLine(" {")
             appendLine("    ${generateDebugToString(typeName.value, trueFields)}")

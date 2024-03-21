@@ -49,9 +49,9 @@ enum class UpdateType {
  * - [ChatJoinRequestUpdate]
  */
 @Serializable(with = UpdateSerializer::class)
-sealed class Update {
-    abstract val updateId: Long
-    abstract val updateType: UpdateType
+sealed interface Update {
+    val updateId: Long
+    val updateType: UpdateType
 }
 
 /**
@@ -61,7 +61,7 @@ sealed class Update {
 data class MessageUpdate(
     override val updateId: Long,
     val message: Message,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.MESSAGE
 }
 
@@ -72,7 +72,7 @@ data class MessageUpdate(
 data class EditedMessageUpdate(
     override val updateId: Long,
     val editedMessage: Message,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.EDITED_MESSAGE
 }
 
@@ -83,7 +83,7 @@ data class EditedMessageUpdate(
 data class ChannelPostUpdate(
     override val updateId: Long,
     val channelPost: Message,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.CHANNEL_POST
 }
 
@@ -94,7 +94,7 @@ data class ChannelPostUpdate(
 data class EditedChannelPostUpdate(
     override val updateId: Long,
     val editedChannelPost: Message,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.EDITED_CHANNEL_POST
 }
 
@@ -105,7 +105,7 @@ data class EditedChannelPostUpdate(
 data class InlineQueryUpdate(
     override val updateId: Long,
     val inlineQuery: InlineQuery,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.INLINE_QUERY
 }
 
@@ -116,7 +116,7 @@ data class InlineQueryUpdate(
 data class ChosenInlineResultUpdate(
     override val updateId: Long,
     val chosenInlineResult: ChosenInlineResult,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.CHOSEN_INLINE_RESULT
 }
 
@@ -127,7 +127,7 @@ data class ChosenInlineResultUpdate(
 data class CallbackQueryUpdate(
     override val updateId: Long,
     val callbackQuery: CallbackQuery,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.CALLBACK_QUERY
 }
 
@@ -138,7 +138,7 @@ data class CallbackQueryUpdate(
 data class ShippingQueryUpdate(
     override val updateId: Long,
     val shippingQuery: ShippingQuery,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.SHIPPING_QUERY
 }
 
@@ -149,7 +149,7 @@ data class ShippingQueryUpdate(
 data class PreCheckoutQueryUpdate(
     override val updateId: Long,
     val preCheckoutQuery: PreCheckoutQuery,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.PRE_CHECKOUT_QUERY
 }
 
@@ -160,7 +160,7 @@ data class PreCheckoutQueryUpdate(
 data class PollUpdate(
     override val updateId: Long,
     val poll: Poll,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.POLL
 }
 
@@ -171,7 +171,7 @@ data class PollUpdate(
 data class PollAnswerUpdate(
     override val updateId: Long,
     val pollAnswer: PollAnswer,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.POLL_ANSWER
 }
 
@@ -182,7 +182,7 @@ data class PollAnswerUpdate(
 data class MyChatMemberUpdate(
     override val updateId: Long,
     val myChatMember: ChatMemberUpdated,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.MY_CHAT_MEMBER
 }
 
@@ -193,7 +193,7 @@ data class MyChatMemberUpdate(
 data class ChatMemberUpdate(
     override val updateId: Long,
     val chatMember: ChatMemberUpdated,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.CHAT_MEMBER
 }
 
@@ -204,7 +204,7 @@ data class ChatMemberUpdate(
 data class ChatJoinRequestUpdate(
     override val updateId: Long,
     val chatJoinRequest: ChatJoinRequest,
-): Update() {
+): Update {
     override val updateType: UpdateType get() = UpdateType.CHAT_JOIN_REQUEST
 }
 
@@ -1081,7 +1081,7 @@ data class ReplyKeyboardMarkup(
     val oneTimeKeyboard: Boolean? = null,
     val inputFieldPlaceholder: String? = null,
     val selective: Boolean? = null,
-) : ReplyMarkup() {
+) : ReplyMarkup {
     override fun toString() = DebugStringBuilder("ReplyKeyboardMarkup").prop("keyboard", keyboard).prop("isPersistent", isPersistent).prop("resizeKeyboard", resizeKeyboard).prop("oneTimeKeyboard", oneTimeKeyboard).prop("inputFieldPlaceholder", inputFieldPlaceholder).prop("selective", selective).toString()
 }
 
@@ -1168,7 +1168,7 @@ data class KeyboardButtonPollType(
 data class ReplyKeyboardRemove(
     val removeKeyboard: Boolean,
     val selective: Boolean? = null,
-) : ReplyMarkup() {
+) : ReplyMarkup {
     override fun toString() = DebugStringBuilder("ReplyKeyboardRemove").prop("removeKeyboard", removeKeyboard).prop("selective", selective).toString()
 }
 
@@ -1179,7 +1179,7 @@ data class ReplyKeyboardRemove(
 @Serializable
 data class InlineKeyboardMarkup(
     val inlineKeyboard: List<List<InlineKeyboardButton>>,
-) : ReplyMarkup() {
+) : ReplyMarkup {
     override fun toString() = DebugStringBuilder("InlineKeyboardMarkup").prop("inlineKeyboard", inlineKeyboard).toString()
 }
 
@@ -1286,7 +1286,7 @@ data class ForceReply(
     val forceReply: Boolean,
     val inputFieldPlaceholder: String? = null,
     val selective: Boolean? = null,
-) : ReplyMarkup() {
+) : ReplyMarkup {
     override fun toString() = DebugStringBuilder("ForceReply").prop("forceReply", forceReply).prop("inputFieldPlaceholder", inputFieldPlaceholder).prop("selective", selective).toString()
 }
 
@@ -1384,7 +1384,7 @@ data class ChatAdministratorRights(
  */
 @Serializable
 @JsonClassDiscriminator("status")
-sealed class ChatMember
+sealed interface ChatMember
 
 /**
  * Represents a chat member that owns the chat and has all administrator privileges.
@@ -1398,7 +1398,7 @@ data class ChatMemberOwner(
     val user: User,
     val isAnonymous: Boolean,
     val customTitle: String? = null,
-) : ChatMember() {
+) : ChatMember {
     override fun toString() = DebugStringBuilder("ChatMemberOwner").prop("user", user).prop("isAnonymous", isAnonymous).prop("customTitle", customTitle).toString()
 }
 
@@ -1444,7 +1444,7 @@ data class ChatMemberAdministrator(
     val canDeleteStories: Boolean? = null,
     val canManageTopics: Boolean? = null,
     val customTitle: String? = null,
-) : ChatMember() {
+) : ChatMember {
     override fun toString() = DebugStringBuilder("ChatMemberAdministrator").prop("user", user).prop("canBeEdited", canBeEdited).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canManageTopics", canManageTopics).prop("customTitle", customTitle).toString()
 }
 
@@ -1456,7 +1456,7 @@ data class ChatMemberAdministrator(
 @SerialName("member")
 data class ChatMemberMember(
     val user: User,
-) : ChatMember() {
+) : ChatMember {
     override fun toString() = DebugStringBuilder("ChatMemberMember").prop("user", user).toString()
 }
 
@@ -1500,7 +1500,7 @@ data class ChatMemberRestricted(
     val canPinMessages: Boolean,
     val canManageTopics: Boolean,
     val untilDate: UnixTimestamp,
-) : ChatMember() {
+) : ChatMember {
     override fun toString() = DebugStringBuilder("ChatMemberRestricted").prop("user", user).prop("isMember", isMember).prop("canSendMessages", canSendMessages).prop("canSendAudios", canSendAudios).prop("canSendDocuments", canSendDocuments).prop("canSendPhotos", canSendPhotos).prop("canSendVideos", canSendVideos).prop("canSendVideoNotes", canSendVideoNotes).prop("canSendVoiceNotes", canSendVoiceNotes).prop("canSendPolls", canSendPolls).prop("canSendOtherMessages", canSendOtherMessages).prop("canAddWebPagePreviews", canAddWebPagePreviews).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("untilDate", untilDate).toString()
 }
 
@@ -1512,7 +1512,7 @@ data class ChatMemberRestricted(
 @SerialName("left")
 data class ChatMemberLeft(
     val user: User,
-) : ChatMember() {
+) : ChatMember {
     override fun toString() = DebugStringBuilder("ChatMemberLeft").prop("user", user).toString()
 }
 
@@ -1526,7 +1526,7 @@ data class ChatMemberLeft(
 data class ChatMemberBanned(
     val user: User,
     val untilDate: UnixTimestamp,
-) : ChatMember() {
+) : ChatMember {
     override fun toString() = DebugStringBuilder("ChatMemberBanned").prop("user", user).prop("untilDate", untilDate).toString()
 }
 
@@ -1666,35 +1666,35 @@ data class BotCommand(
  */
 @Serializable
 @JsonClassDiscriminator("type")
-sealed class BotCommandScope
+sealed interface BotCommandScope
 
 /**
  * Represents the default scope of bot commands. Default commands are used if no commands with a narrower scope are specified for the user.
  */
 @Serializable
 @SerialName("default")
-data object BotCommandScopeDefault : BotCommandScope()
+data object BotCommandScopeDefault : BotCommandScope
 
 /**
  * Represents the scope of bot commands, covering all private chats.
  */
 @Serializable
 @SerialName("all_private_chats")
-data object BotCommandScopeAllPrivateChats : BotCommandScope()
+data object BotCommandScopeAllPrivateChats : BotCommandScope
 
 /**
  * Represents the scope of bot commands, covering all group and supergroup chats.
  */
 @Serializable
 @SerialName("all_group_chats")
-data object BotCommandScopeAllGroupChats : BotCommandScope()
+data object BotCommandScopeAllGroupChats : BotCommandScope
 
 /**
  * Represents the scope of bot commands, covering all group and supergroup chat administrators.
  */
 @Serializable
 @SerialName("all_chat_administrators")
-data object BotCommandScopeAllChatAdministrators : BotCommandScope()
+data object BotCommandScopeAllChatAdministrators : BotCommandScope
 
 /**
  * Represents the scope of bot commands, covering a specific chat.
@@ -1704,7 +1704,7 @@ data object BotCommandScopeAllChatAdministrators : BotCommandScope()
 @SerialName("chat")
 data class BotCommandScopeChat(
     val chatId: ChatId,
-) : BotCommandScope() {
+) : BotCommandScope {
     override fun toString() = DebugStringBuilder("BotCommandScopeChat").prop("chatId", chatId).toString()
 }
 
@@ -1716,7 +1716,7 @@ data class BotCommandScopeChat(
 @SerialName("chat_administrators")
 data class BotCommandScopeChatAdministrators(
     val chatId: ChatId,
-) : BotCommandScope() {
+) : BotCommandScope {
     override fun toString() = DebugStringBuilder("BotCommandScopeChatAdministrators").prop("chatId", chatId).toString()
 }
 
@@ -1730,7 +1730,7 @@ data class BotCommandScopeChatAdministrators(
 data class BotCommandScopeChatMember(
     val chatId: ChatId,
     val userId: UserId,
-) : BotCommandScope() {
+) : BotCommandScope {
     override fun toString() = DebugStringBuilder("BotCommandScopeChatMember").prop("chatId", chatId).prop("userId", userId).toString()
 }
 
@@ -1775,14 +1775,14 @@ data class BotShortDescription(
  */
 @Serializable
 @JsonClassDiscriminator("type")
-sealed class MenuButton
+sealed interface MenuButton
 
 /**
  * Represents a menu button, which opens the bot's list of commands.
  */
 @Serializable
 @SerialName("commands")
-data object MenuButtonCommands : MenuButton()
+data object MenuButtonCommands : MenuButton
 
 /**
  * Represents a menu button, which launches a Web App.
@@ -1794,7 +1794,7 @@ data object MenuButtonCommands : MenuButton()
 data class MenuButtonWebApp(
     val text: String,
     val webApp: WebAppInfo,
-) : MenuButton() {
+) : MenuButton {
     override fun toString() = DebugStringBuilder("MenuButtonWebApp").prop("text", text).prop("webApp", webApp).toString()
 }
 
@@ -1803,7 +1803,7 @@ data class MenuButtonWebApp(
  */
 @Serializable
 @SerialName("default")
-data object MenuButtonDefault : MenuButton()
+data object MenuButtonDefault : MenuButton
 
 /**
  * Describes why a request was unsuccessful.
@@ -1828,7 +1828,7 @@ data class ResponseParameters(
  */
 @Serializable
 @JsonClassDiscriminator("type")
-sealed class InputMedia
+sealed interface InputMedia
 
 /**
  * Represents a photo to be sent.
@@ -1846,7 +1846,7 @@ data class InputMediaPhoto(
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
     val hasSpoiler: Boolean? = null,
-) : InputMedia() {
+) : InputMedia {
     override fun toString() = DebugStringBuilder("InputMediaPhoto").prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("hasSpoiler", hasSpoiler).toString()
 }
 
@@ -1876,7 +1876,7 @@ data class InputMediaVideo(
     val duration: Seconds? = null,
     val supportsStreaming: Boolean? = null,
     val hasSpoiler: Boolean? = null,
-) : InputMedia() {
+) : InputMedia {
     override fun toString() = DebugStringBuilder("InputMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).prop("hasSpoiler", hasSpoiler).toString()
 }
 
@@ -1904,7 +1904,7 @@ data class InputMediaAnimation(
     val height: Long? = null,
     val duration: Seconds? = null,
     val hasSpoiler: Boolean? = null,
-) : InputMedia() {
+) : InputMedia {
     override fun toString() = DebugStringBuilder("InputMediaAnimation").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("width", width).prop("height", height).prop("duration", duration).prop("hasSpoiler", hasSpoiler).toString()
 }
 
@@ -1930,7 +1930,7 @@ data class InputMediaAudio(
     val duration: Seconds? = null,
     val performer: String? = null,
     val title: String? = null,
-) : InputMedia() {
+) : InputMedia {
     override fun toString() = DebugStringBuilder("InputMediaAudio").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("performer", performer).prop("title", title).toString()
 }
 
@@ -1952,7 +1952,7 @@ data class InputMediaDocument(
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
     val disableContentTypeDetection: Boolean? = null,
-) : InputMedia() {
+) : InputMedia {
     override fun toString() = DebugStringBuilder("InputMediaDocument").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableContentTypeDetection", disableContentTypeDetection).toString()
 }
 
@@ -2113,7 +2113,7 @@ data class InlineQueryResultsButton(
  */
 @Serializable
 @JsonClassDiscriminator("type")
-sealed class InlineQueryResult
+sealed interface InlineQueryResult
 
 /**
  * Represents a link to an article or web page.
@@ -2141,7 +2141,7 @@ data class InlineQueryResultArticle(
     val thumbnailUrl: String? = null,
     val thumbnailWidth: Long? = null,
     val thumbnailHeight: Long? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultArticle").prop("id", id).prop("title", title).prop("inputMessageContent", inputMessageContent).prop("replyMarkup", replyMarkup).prop("url", url).prop("hideUrl", hideUrl).prop("description", description).prop("thumbnailUrl", thumbnailUrl).prop("thumbnailWidth", thumbnailWidth).prop("thumbnailHeight", thumbnailHeight).toString()
 }
 
@@ -2175,7 +2175,7 @@ data class InlineQueryResultPhoto(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultPhoto").prop("id", id).prop("photoUrl", photoUrl).prop("thumbnailUrl", thumbnailUrl).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("title", title).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2211,7 +2211,7 @@ data class InlineQueryResultGif(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultGif").prop("id", id).prop("gifUrl", gifUrl).prop("thumbnailUrl", thumbnailUrl).prop("gifWidth", gifWidth).prop("gifHeight", gifHeight).prop("gifDuration", gifDuration).prop("thumbnailMimeType", thumbnailMimeType).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2247,7 +2247,7 @@ data class InlineQueryResultMpeg4Gif(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultMpeg4Gif").prop("id", id).prop("mpeg4Url", mpeg4Url).prop("thumbnailUrl", thumbnailUrl).prop("mpeg4Width", mpeg4Width).prop("mpeg4Height", mpeg4Height).prop("mpeg4Duration", mpeg4Duration).prop("thumbnailMimeType", thumbnailMimeType).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2287,7 +2287,7 @@ data class InlineQueryResultVideo(
     val description: String? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultVideo").prop("id", id).prop("videoUrl", videoUrl).prop("mimeType", mimeType).prop("thumbnailUrl", thumbnailUrl).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("videoWidth", videoWidth).prop("videoHeight", videoHeight).prop("videoDuration", videoDuration).prop("description", description).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2317,7 +2317,7 @@ data class InlineQueryResultAudio(
     val audioDuration: Long? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultAudio").prop("id", id).prop("audioUrl", audioUrl).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("performer", performer).prop("audioDuration", audioDuration).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2345,7 +2345,7 @@ data class InlineQueryResultVoice(
     val voiceDuration: Long? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultVoice").prop("id", id).prop("voiceUrl", voiceUrl).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("voiceDuration", voiceDuration).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2381,7 +2381,7 @@ data class InlineQueryResultDocument(
     val thumbnailUrl: String? = null,
     val thumbnailWidth: Long? = null,
     val thumbnailHeight: Long? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultDocument").prop("id", id).prop("title", title).prop("documentUrl", documentUrl).prop("mimeType", mimeType).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("description", description).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).prop("thumbnailUrl", thumbnailUrl).prop("thumbnailWidth", thumbnailWidth).prop("thumbnailHeight", thumbnailHeight).toString()
 }
 
@@ -2417,7 +2417,7 @@ data class InlineQueryResultLocation(
     val thumbnailUrl: String? = null,
     val thumbnailWidth: Long? = null,
     val thumbnailHeight: Long? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultLocation").prop("id", id).prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).prop("thumbnailUrl", thumbnailUrl).prop("thumbnailWidth", thumbnailWidth).prop("thumbnailHeight", thumbnailHeight).toString()
 }
 
@@ -2455,7 +2455,7 @@ data class InlineQueryResultVenue(
     val thumbnailUrl: String? = null,
     val thumbnailWidth: Long? = null,
     val thumbnailHeight: Long? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultVenue").prop("id", id).prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("address", address).prop("foursquareId", foursquareId).prop("foursquareType", foursquareType).prop("googlePlaceId", googlePlaceId).prop("googlePlaceType", googlePlaceType).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).prop("thumbnailUrl", thumbnailUrl).prop("thumbnailWidth", thumbnailWidth).prop("thumbnailHeight", thumbnailHeight).toString()
 }
 
@@ -2485,7 +2485,7 @@ data class InlineQueryResultContact(
     val thumbnailUrl: String? = null,
     val thumbnailWidth: Long? = null,
     val thumbnailHeight: Long? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultContact").prop("id", id).prop("phoneNumber", phoneNumber).prop("firstName", firstName).prop("lastName", lastName).prop("vcard", vcard).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).prop("thumbnailUrl", thumbnailUrl).prop("thumbnailWidth", thumbnailWidth).prop("thumbnailHeight", thumbnailHeight).toString()
 }
 
@@ -2501,7 +2501,7 @@ data class InlineQueryResultGame(
     val id: InlineQueryResultId,
     val gameShortName: String,
     val replyMarkup: InlineKeyboardMarkup? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultGame").prop("id", id).prop("gameShortName", gameShortName).prop("replyMarkup", replyMarkup).toString()
 }
 
@@ -2529,7 +2529,7 @@ data class InlineQueryResultCachedPhoto(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultCachedPhoto").prop("id", id).prop("photoFileId", photoFileId).prop("title", title).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2555,7 +2555,7 @@ data class InlineQueryResultCachedGif(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultCachedGif").prop("id", id).prop("gifFileId", gifFileId).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2581,7 +2581,7 @@ data class InlineQueryResultCachedMpeg4Gif(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultCachedMpeg4Gif").prop("id", id).prop("mpeg4FileId", mpeg4FileId).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2599,7 +2599,7 @@ data class InlineQueryResultCachedSticker(
     val stickerFileId: FileId,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultCachedSticker").prop("id", id).prop("stickerFileId", stickerFileId).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2627,7 +2627,7 @@ data class InlineQueryResultCachedDocument(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultCachedDocument").prop("id", id).prop("title", title).prop("documentFileId", documentFileId).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2655,7 +2655,7 @@ data class InlineQueryResultCachedVideo(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultCachedVideo").prop("id", id).prop("videoFileId", videoFileId).prop("title", title).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2681,7 +2681,7 @@ data class InlineQueryResultCachedVoice(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultCachedVoice").prop("id", id).prop("voiceFileId", voiceFileId).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2705,7 +2705,7 @@ data class InlineQueryResultCachedAudio(
     val captionEntities: List<MessageEntity>? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
-) : InlineQueryResult() {
+) : InlineQueryResult {
     override fun toString() = DebugStringBuilder("InlineQueryResultCachedAudio").prop("id", id).prop("audioFileId", audioFileId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
@@ -2718,7 +2718,7 @@ data class InlineQueryResultCachedAudio(
  * - [InputInvoiceMessageContent]
  */
 @Serializable(with = InputMessageContentSerializer::class)
-sealed class InputMessageContent
+sealed interface InputMessageContent
 
 object InputMessageContentSerializer : JsonContentPolymorphicSerializer<InputMessageContent>(InputMessageContent::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<InputMessageContent> {
@@ -2747,7 +2747,7 @@ data class InputTextMessageContent(
     val parseMode: ParseMode? = null,
     val entities: List<MessageEntity>? = null,
     val disableWebPagePreview: Boolean? = null,
-) : InputMessageContent() {
+) : InputMessageContent {
     override fun toString() = DebugStringBuilder("InputTextMessageContent").prop("messageText", messageText).prop("parseMode", parseMode).prop("entities", entities).prop("disableWebPagePreview", disableWebPagePreview).toString()
 }
 
@@ -2768,7 +2768,7 @@ data class InputLocationMessageContent(
     val livePeriod: Long? = null,
     val heading: Long? = null,
     val proximityAlertRadius: Long? = null,
-) : InputMessageContent() {
+) : InputMessageContent {
     override fun toString() = DebugStringBuilder("InputLocationMessageContent").prop("latitude", latitude).prop("longitude", longitude).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).toString()
 }
 
@@ -2793,7 +2793,7 @@ data class InputVenueMessageContent(
     val foursquareType: String? = null,
     val googlePlaceId: String? = null,
     val googlePlaceType: String? = null,
-) : InputMessageContent() {
+) : InputMessageContent {
     override fun toString() = DebugStringBuilder("InputVenueMessageContent").prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("address", address).prop("foursquareId", foursquareId).prop("foursquareType", foursquareType).prop("googlePlaceId", googlePlaceId).prop("googlePlaceType", googlePlaceType).toString()
 }
 
@@ -2810,7 +2810,7 @@ data class InputContactMessageContent(
     val firstName: String,
     val lastName: String? = null,
     val vcard: String? = null,
-) : InputMessageContent() {
+) : InputMessageContent {
     override fun toString() = DebugStringBuilder("InputContactMessageContent").prop("phoneNumber", phoneNumber).prop("firstName", firstName).prop("lastName", lastName).prop("vcard", vcard).toString()
 }
 
@@ -2859,7 +2859,7 @@ data class InputInvoiceMessageContent(
     val sendPhoneNumberToProvider: Boolean? = null,
     val sendEmailToProvider: Boolean? = null,
     val isFlexible: Boolean? = null,
-) : InputMessageContent() {
+) : InputMessageContent {
     override fun toString() = DebugStringBuilder("InputInvoiceMessageContent").prop("title", title).prop("description", description).prop("payload", payload).prop("providerToken", providerToken).prop("currency", currency).prop("prices", prices).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).toString()
 }
 
@@ -3129,7 +3129,7 @@ data class EncryptedCredentials(
  */
 @Serializable
 @JsonClassDiscriminator("type")
-sealed class PassportElementError
+sealed interface PassportElementError
 
 /**
  * Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes.
@@ -3146,7 +3146,7 @@ data class PassportElementErrorDataField(
     val fieldName: String,
     val dataHash: String,
     val message: String,
-) : PassportElementError() {
+) : PassportElementError {
     override fun toString() = DebugStringBuilder("PassportElementErrorDataField").prop("source", source).prop("type", type).prop("fieldName", fieldName).prop("dataHash", dataHash).prop("message", message).toString()
 }
 
@@ -3163,7 +3163,7 @@ data class PassportElementErrorFrontSide(
     val type: String,
     val fileHash: String,
     val message: String,
-) : PassportElementError() {
+) : PassportElementError {
     override fun toString() = DebugStringBuilder("PassportElementErrorFrontSide").prop("source", source).prop("type", type).prop("fileHash", fileHash).prop("message", message).toString()
 }
 
@@ -3180,7 +3180,7 @@ data class PassportElementErrorReverseSide(
     val type: String,
     val fileHash: String,
     val message: String,
-) : PassportElementError() {
+) : PassportElementError {
     override fun toString() = DebugStringBuilder("PassportElementErrorReverseSide").prop("source", source).prop("type", type).prop("fileHash", fileHash).prop("message", message).toString()
 }
 
@@ -3197,7 +3197,7 @@ data class PassportElementErrorSelfie(
     val type: String,
     val fileHash: String,
     val message: String,
-) : PassportElementError() {
+) : PassportElementError {
     override fun toString() = DebugStringBuilder("PassportElementErrorSelfie").prop("source", source).prop("type", type).prop("fileHash", fileHash).prop("message", message).toString()
 }
 
@@ -3214,7 +3214,7 @@ data class PassportElementErrorFile(
     val type: String,
     val fileHash: String,
     val message: String,
-) : PassportElementError() {
+) : PassportElementError {
     override fun toString() = DebugStringBuilder("PassportElementErrorFile").prop("source", source).prop("type", type).prop("fileHash", fileHash).prop("message", message).toString()
 }
 
@@ -3231,7 +3231,7 @@ data class PassportElementErrorFiles(
     val type: String,
     val fileHashes: List<String>,
     val message: String,
-) : PassportElementError() {
+) : PassportElementError {
     override fun toString() = DebugStringBuilder("PassportElementErrorFiles").prop("source", source).prop("type", type).prop("fileHashes", fileHashes).prop("message", message).toString()
 }
 
@@ -3248,7 +3248,7 @@ data class PassportElementErrorTranslationFile(
     val type: String,
     val fileHash: String,
     val message: String,
-) : PassportElementError() {
+) : PassportElementError {
     override fun toString() = DebugStringBuilder("PassportElementErrorTranslationFile").prop("source", source).prop("type", type).prop("fileHash", fileHash).prop("message", message).toString()
 }
 
@@ -3265,7 +3265,7 @@ data class PassportElementErrorTranslationFiles(
     val type: String,
     val fileHashes: List<String>,
     val message: String,
-) : PassportElementError() {
+) : PassportElementError {
     override fun toString() = DebugStringBuilder("PassportElementErrorTranslationFiles").prop("source", source).prop("type", type).prop("fileHashes", fileHashes).prop("message", message).toString()
 }
 
@@ -3282,7 +3282,7 @@ data class PassportElementErrorUnspecified(
     val type: String,
     val elementHash: String,
     val message: String,
-) : PassportElementError() {
+) : PassportElementError {
     override fun toString() = DebugStringBuilder("PassportElementErrorUnspecified").prop("source", source).prop("type", type).prop("elementHash", elementHash).prop("message", message).toString()
 }
 
@@ -3336,7 +3336,7 @@ data class GameHighScore(
  * - [ForceReply]
  */
 @Serializable(with = ReplyMarkupSerializer::class)
-sealed class ReplyMarkup
+sealed interface ReplyMarkup
 
 object ReplyMarkupSerializer : JsonContentPolymorphicSerializer<ReplyMarkup>(ReplyMarkup::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<ReplyMarkup> {

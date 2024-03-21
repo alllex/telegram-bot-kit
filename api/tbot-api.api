@@ -533,10 +533,8 @@ public final class me/alllex/tbot/api/model/BotCommand$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/BotCommandScope {
+public abstract interface class me/alllex/tbot/api/model/BotCommandScope {
 	public static final field Companion Lme/alllex/tbot/api/model/BotCommandScope$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/BotCommandScope;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/BotCommandScope$Companion {
@@ -1188,10 +1186,8 @@ public final class me/alllex/tbot/api/model/ChatLocation$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/ChatMember {
+public abstract interface class me/alllex/tbot/api/model/ChatMember {
 	public static final field Companion Lme/alllex/tbot/api/model/ChatMember$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/ChatMember;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/ChatMember$Companion {
@@ -3900,10 +3896,8 @@ public final class me/alllex/tbot/api/model/InlineQueryId$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/InlineQueryResult {
+public abstract interface class me/alllex/tbot/api/model/InlineQueryResult {
 	public static final field Companion Lme/alllex/tbot/api/model/InlineQueryResult$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/InlineQueryResult;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/InlineQueryResult$Companion {
@@ -5052,10 +5046,8 @@ public final class me/alllex/tbot/api/model/InputLocationMessageContent$Companio
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/InputMedia {
+public abstract interface class me/alllex/tbot/api/model/InputMedia {
 	public static final field Companion Lme/alllex/tbot/api/model/InputMedia$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/InputMedia;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/InputMedia$Companion {
@@ -5268,7 +5260,7 @@ public final class me/alllex/tbot/api/model/InputMediaVideo$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/InputMessageContent {
+public abstract interface class me/alllex/tbot/api/model/InputMessageContent {
 	public static final field Companion Lme/alllex/tbot/api/model/InputMessageContent$Companion;
 }
 
@@ -5729,10 +5721,8 @@ public final class me/alllex/tbot/api/model/MaskPosition$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/MenuButton {
+public abstract interface class me/alllex/tbot/api/model/MenuButton {
 	public static final field Companion Lme/alllex/tbot/api/model/MenuButton$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/MenuButton;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/MenuButton$Companion {
@@ -6447,10 +6437,8 @@ public final class me/alllex/tbot/api/model/PassportData$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/PassportElementError {
+public abstract interface class me/alllex/tbot/api/model/PassportElementError {
 	public static final field Companion Lme/alllex/tbot/api/model/PassportElementError$Companion;
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lme/alllex/tbot/api/model/PassportElementError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class me/alllex/tbot/api/model/PassportElementError$Companion {
@@ -7317,7 +7305,7 @@ public final class me/alllex/tbot/api/model/ReplyKeyboardRemove$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/ReplyMarkup {
+public abstract interface class me/alllex/tbot/api/model/ReplyMarkup {
 	public static final field Companion Lme/alllex/tbot/api/model/ReplyMarkup$Companion;
 }
 
@@ -10246,7 +10234,7 @@ public final class me/alllex/tbot/api/model/UnpinChatMessageRequest$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class me/alllex/tbot/api/model/Update {
+public abstract interface class me/alllex/tbot/api/model/Update {
 	public static final field Companion Lme/alllex/tbot/api/model/Update$Companion;
 	public abstract fun getUpdateId ()J
 	public abstract fun getUpdateType ()Lme/alllex/tbot/api/model/UpdateType;

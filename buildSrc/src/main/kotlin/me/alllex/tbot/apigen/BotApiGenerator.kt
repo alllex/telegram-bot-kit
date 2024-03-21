@@ -554,20 +554,18 @@ class BotApiGenerator {
                 append("requestBody: $requestTypeName")
             }
             appendLine("): TelegramResponse<${returnType.value}> =")
-            appendLine("    executeRequest(\"$apiMethodName\", ${if (hasParams) "requestBody" else "null"}) {")
-            appendLine("        httpClient.$httpMethod {")
-            appendLine("            url {")
-            appendLine("                protocol = apiProtocol")
-            appendLine("                host = apiHost")
-            appendLine("                port = apiPort")
-            appendLine("                path(\"bot\$apiToken\", \"$apiMethodName\")")
-            appendLine("            }")
+            appendLine("    httpClient.$httpMethod {")
+            appendLine("        url {")
+            appendLine("            protocol = apiProtocol")
+            appendLine("            host = apiHost")
+            appendLine("            port = apiPort")
+            appendLine("            path(\"bot\$apiToken\", \"$apiMethodName\")")
+            appendLine("        }")
             if (hasParams) {
-                appendLine("            contentType(ContentType.Application.Json)")
-                appendLine("            setBody(requestBody)")
+                appendLine("        contentType(ContentType.Application.Json)")
+                appendLine("        setBody(requestBody)")
             }
-            appendLine("        }.body()")
-            appendLine("    }")
+            appendLine("    }.body()")
         }
 
         val tryMethodSourceCode = buildString {

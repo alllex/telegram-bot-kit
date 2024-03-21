@@ -5,100 +5,71 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.http.DEFAULT_PORT
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
+import kotlin.time.Duration.Companion.seconds
 
 
 const val DEFAULT_TELEGRAM_API_HOST = "api.telegram.org"
 
-class TelegramBotApiClient private constructor(
-    internal val httpClient: HttpClient,
-    internal val apiToken: String,
-    internal val apiProtocol: URLProtocol = URLProtocol.HTTPS,
-    internal val apiHost: String = DEFAULT_TELEGRAM_API_HOST,
-    internal val apiPort: Int = DEFAULT_PORT,
-    private val onRequest: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?) -> Unit)? = null,
-    private val onResponse: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?, responseBody: TelegramResponse<*>) -> Unit)? = null,
+class TelegramBotApiClient(
+    val apiToken: String,
+    val httpClient: HttpClient = httpClient(),
+    val apiProtocol: URLProtocol = URLProtocol.HTTPS,
+    val apiHost: String = DEFAULT_TELEGRAM_API_HOST,
+    val apiPort: Int = DEFAULT_PORT,
 ) {
 
-    internal inline fun <T> executeRequest(
-        requestMethod: String,
-        requestBody: Any?,
-        request: () -> TelegramResponse<T>
-    ): TelegramResponse<T> {
+    companion object Defaults {
 
-        onRequest?.invoke(this, requestMethod, requestBody)
-        val responseBody = request()
-        onResponse?.invoke(this, requestMethod, requestBody, responseBody)
-        return responseBody
-    }
+        val JSON
+            get() = Json {
+                // chat_id to chatId
+                namingStrategy = JsonNamingStrategy.SnakeCase
+                // To avoid the deserialization breaking when Telegram introduces new fields
+                ignoreUnknownKeys = true
+                // Smaller payloads
+                explicitNulls = false
+            }
 
-    fun closeHttpClient() {
-        httpClient.close()
-    }
-
-    companion object {
-
-        @OptIn(ExperimentalSerializationApi::class)
-        private fun HttpClientConfig<*>.applyDefaultConfiguration() {
+        fun HttpClientConfig<*>.defaultConfiguration() {
             install(ContentNegotiation) {
-                json(Json {
-                    // chat_id to chatId
-                    namingStrategy = JsonNamingStrategy.SnakeCase
-                    // To avoid the deserialization breaking when Telegram introduces new fields
-                    ignoreUnknownKeys = true
-                    // Smaller payloads
-                    explicitNulls = false
-                })
+                json(JSON)
+            }
+            install(HttpTimeout) {
+                requestTimeout = 10.seconds
+            }
+            install(HttpRequestRetry) {
+                constantDelay()
             }
         }
 
-        operator fun invoke(
-            apiToken: String,
-            protocol: URLProtocol = URLProtocol.HTTPS,
-            engine: HttpClientEngine? = null,
-            host: String = DEFAULT_TELEGRAM_API_HOST,
-            port: Int = DEFAULT_PORT,
-            onRequest: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?) -> Unit)? = null,
-            onResponse: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?, responseBody: TelegramResponse<*>) -> Unit)? = null,
-            configuration: (HttpClientConfig<*>.() -> Unit)? = null,
-        ): TelegramBotApiClient {
-            val httpClient = if (engine == null) {
-                HttpClient {
-                    applyDefaultConfiguration()
-                    configuration?.invoke(this)
-                }
-            } else {
-                HttpClient(engine) {
-                    applyDefaultConfiguration()
-                    configuration?.invoke(this)
-                }
-            }
-            return TelegramBotApiClient(httpClient, apiToken, protocol, host, port, onRequest, onResponse)
+        fun httpClient(config: HttpClientConfig<*>.() -> Unit = {}) = HttpClient {
+            defaultConfiguration()
+            config()
         }
 
-        operator fun <T : HttpClientEngineConfig> invoke(
-            apiToken: String,
-            engine: HttpClientEngineFactory<T>,
-            protocol: URLProtocol = URLProtocol.HTTPS,
-            host: String = DEFAULT_TELEGRAM_API_HOST,
-            port: Int = DEFAULT_PORT,
-            onRequest: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?) -> Unit)? = null,
-            onResponse: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?, responseBody: TelegramResponse<*>) -> Unit)? = null,
-            configuration: (HttpClientConfig<T>.() -> Unit)? = null,
-        ): TelegramBotApiClient {
-            val httpClient = HttpClient(engine) {
-                applyDefaultConfiguration()
-                configuration?.let { it() }
-            }
-            return TelegramBotApiClient(httpClient, apiToken, protocol, host, port, onRequest, onResponse)
+        fun <T : HttpClientEngineConfig> httpClient(
+            engineFactory: HttpClientEngineFactory<T>,
+            config: HttpClientConfig<T>.() -> Unit = {}
+        ) = HttpClient(engineFactory) {
+            defaultConfiguration()
+            config()
         }
 
+        fun httpClient(
+            engine: HttpClientEngine,
+            config: HttpClientConfig<*>.() -> Unit = {}
+        ) = HttpClient(engine) {
+            defaultConfiguration()
+            config()
+        }
     }
 
 }

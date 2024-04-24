@@ -4,15 +4,34 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import assertk.assertions.prop
-import io.ktor.client.engine.mock.*
-import io.ktor.client.utils.*
-import io.ktor.content.*
-import io.ktor.http.*
-import org.junit.jupiter.api.Test
-
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.client.utils.EmptyContent
+import io.ktor.content.TextContent
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteReadChannel
 import kotlinx.coroutines.test.runTest
-import me.alllex.tbot.api.model.*
+import me.alllex.tbot.api.model.Chat
+import me.alllex.tbot.api.model.ChatId
+import me.alllex.tbot.api.model.InlineKeyboardButton
+import me.alllex.tbot.api.model.InlineKeyboardMarkup
+import me.alllex.tbot.api.model.InlineQuery
+import me.alllex.tbot.api.model.InlineQueryId
+import me.alllex.tbot.api.model.InlineQueryUpdate
+import me.alllex.tbot.api.model.Message
+import me.alllex.tbot.api.model.MessageId
+import me.alllex.tbot.api.model.MessageUpdate
+import me.alllex.tbot.api.model.UnixTimestamp
+import me.alllex.tbot.api.model.UpdateType
+import me.alllex.tbot.api.model.User
+import me.alllex.tbot.api.model.UserId
+import me.alllex.tbot.api.model.tryGetMe
+import me.alllex.tbot.api.model.tryGetUpdates
+import me.alllex.tbot.api.model.trySendMessage
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 
@@ -32,7 +51,11 @@ class TelegramBotApiClientTest {
             )
         }
 
-        val client = TelegramBotApiClient("Token", host = "bot.test", engine = engine)
+        val client = TelegramBotApiClient(
+            apiToken = "Token",
+            apiHost = "bot.test",
+            httpClient = TelegramBotApiClient.httpClient(engine)
+        )
 
         val actualResponse = client.tryGetMe()
 
@@ -64,7 +87,11 @@ class TelegramBotApiClientTest {
             )
         }
 
-        val client = TelegramBotApiClient("Token", host = "bot.test", engine = engine)
+        val client = TelegramBotApiClient(
+            apiToken = "Token",
+            apiHost = "bot.test",
+            httpClient = TelegramBotApiClient.httpClient(engine)
+        )
 
         val actualResponse = client.tryGetMe()
 
@@ -100,7 +127,11 @@ class TelegramBotApiClientTest {
             )
         }
 
-        val client = TelegramBotApiClient("Token", host = "bot.test", engine = engine)
+        val client = TelegramBotApiClient(
+            apiToken = "Token",
+            apiHost = "bot.test",
+            httpClient = TelegramBotApiClient.httpClient(engine)
+        )
 
         val actualResponse = client.tryGetUpdates(
             allowedUpdates = listOf(UpdateType.MESSAGE, UpdateType.INLINE_QUERY)
@@ -147,7 +178,8 @@ class TelegramBotApiClientTest {
             assertThat(request.url.toString()).isEqualTo("https://bot.test/botToken/sendMessage")
             assertThat(request.method).isEqualTo(HttpMethod.Post)
             assertThat(request.body).isInstanceOf<TextContent>()
-                .prop(TextContent::text).isEqualTo("""{"chat_id":1,"text":"Hello","reply_markup":{"inline_keyboard":[[{"text":"Button"}]]}}""")
+                .prop(TextContent::text)
+                .isEqualTo("""{"chat_id":1,"text":"Hello","reply_markup":{"inline_keyboard":[[{"text":"Button"}]]}}""")
 
             respond(
                 content = ByteReadChannel(
@@ -166,7 +198,11 @@ class TelegramBotApiClientTest {
             )
         }
 
-        val client = TelegramBotApiClient("Token", host = "bot.test", engine = engine)
+        val client = TelegramBotApiClient(
+            apiToken = "Token",
+            apiHost = "bot.test",
+            httpClient = TelegramBotApiClient.httpClient(engine)
+        )
 
         val actualResponse = client.trySendMessage(
             chatId = ChatId(1),

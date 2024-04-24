@@ -75,6 +75,7 @@ tasks.test {
 }
 
 val generateTelegramBotApi by tasks.registering(GenerateTelegramBotApiTask::class) {
+    group = "telegram"
     apiSpecFile = layout.projectDirectory.file("api-spec/telegram-bot-api.html")
     packageName = "me.alllex.tbot.api.model"
     telegramClientPackage = "me.alllex.tbot.api.client"

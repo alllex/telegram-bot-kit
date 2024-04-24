@@ -12,6 +12,7 @@ dependencies {
 }
 
 val updateApiSpec by tasks.registering {
+    group = "telegram"
     val specFile = layout.projectDirectory.file("../api-spec/telegram-bot-api.html")
     outputs.file(specFile)
     outputs.upToDateWhen { false }

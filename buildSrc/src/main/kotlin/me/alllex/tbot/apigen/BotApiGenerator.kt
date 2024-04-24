@@ -448,13 +448,7 @@ class BotApiGenerator {
         }
 
         val tryRequestMethodsSourceCode = buildString {
-            header(
-                packageName, wrapperPackageName, listOf(
-                    "import io.ktor.client.call.*",
-                    "import io.ktor.client.request.*",
-                    "import io.ktor.http.*",
-                )
-            )
+            header(packageName, wrapperPackageName)
 
             methodsSourceCodes.map { it.tryRequestMethodSourceCode }.filter { it.isNotEmpty() }
                 .forEach { appendLine(it) }
@@ -543,7 +537,7 @@ class BotApiGenerator {
             else "${requestTypeName}(${parameters.joinToString { if (useArgNames) "${it.name} = ${it.name}" else it.name }})"
 
         // Core try-prefixed method that does the actual request
-        val httpMethod = if (parameters.isEmpty()) "get" else "post"
+        val httpMethod = if (parameters.isEmpty()) "Get" else "Post"
 
         val tryRequestMethodSourceCode = buildString {
             appendLine("/**")
@@ -554,20 +548,7 @@ class BotApiGenerator {
                 append("requestBody: $requestTypeName")
             }
             appendLine("): TelegramResponse<${returnType.value}> =")
-            appendLine("    executeRequest(\"$apiMethodName\", ${if (hasParams) "requestBody" else "null"}) {")
-            appendLine("        httpClient.$httpMethod {")
-            appendLine("            url {")
-            appendLine("                protocol = apiProtocol")
-            appendLine("                host = apiHost")
-            appendLine("                port = apiPort")
-            appendLine("                path(\"bot\$apiToken\", \"$apiMethodName\")")
-            appendLine("            }")
-            if (hasParams) {
-                appendLine("            contentType(ContentType.Application.Json)")
-                appendLine("            setBody(requestBody)")
-            }
-            appendLine("        }.body()")
-            appendLine("    }")
+            appendLine("    telegram$httpMethod(\"$apiMethodName\"${if (hasParams) ", requestBody" else ""})")
         }
 
         val tryMethodSourceCode = buildString {

@@ -2,12 +2,20 @@ package me.alllex.tbot.api.client
 
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
+import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.DEFAULT_PORT
 import io.ktor.http.URLProtocol
+import io.ktor.http.contentType
+import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -26,7 +34,32 @@ class TelegramBotApiClient private constructor(
     private val onResponse: (TelegramBotApiClient.(requestMethod: String, requestBody: Any?, responseBody: TelegramResponse<*>) -> Unit)? = null,
 ) {
 
-    internal inline fun <T> executeRequest(
+    internal suspend inline fun <reified T> telegramGet(requestMethod: String): TelegramResponse<T> =
+        executeRequest(requestMethod, null) {
+            httpClient.get {
+                urlForTelegramMethod(requestMethod)
+            }.body()
+        }
+
+    internal suspend inline fun <reified T> telegramPost(requestMethod: String, requestBody: Any): TelegramResponse<T> =
+        executeRequest(requestMethod, requestBody) {
+            httpClient.post {
+                urlForTelegramMethod(requestMethod)
+                contentType(ContentType.Application.Json)
+                setBody(requestBody)
+            }.body()
+        }
+
+    private fun HttpRequestBuilder.urlForTelegramMethod(requestMethod: String) {
+        url {
+            protocol = apiProtocol
+            host = apiHost
+            port = apiPort
+            path("bot$apiToken", requestMethod)
+        }
+    }
+
+    private inline fun <T> executeRequest(
         requestMethod: String,
         requestBody: Any?,
         request: () -> TelegramResponse<T>

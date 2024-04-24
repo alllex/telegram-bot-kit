@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import me.alllex.tbot.api.model.ResponseParameters
 
 @Serializable
-data class TelegramResponse<out T>(
+data class TelegramResponse<T>(
     val result: T? = null,
     val ok: Boolean,
     val description: String? = null,

@@ -110,7 +110,7 @@ suspend fun TelegramBotApiClient.trySendAnimation(requestBody: SendAnimationRequ
     telegramPost("sendAnimation", requestBody)
 
 /**
- * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
  */
 suspend fun TelegramBotApiClient.trySendVoice(requestBody: SendVoiceRequest): TelegramResponse<Message> =
     telegramPost("sendVoice", requestBody)
@@ -318,9 +318,9 @@ suspend fun TelegramBotApiClient.tryLeaveChat(requestBody: LeaveChatRequest): Te
     telegramPost("leaveChat", requestBody)
 
 /**
- * Use this method to get up to date information about the chat. Returns a Chat object on success.
+ * Use this method to get up-to-date information about the chat. Returns a ChatFullInfo object on success.
  */
-suspend fun TelegramBotApiClient.tryGetChat(requestBody: GetChatRequest): TelegramResponse<Chat> =
+suspend fun TelegramBotApiClient.tryGetChat(requestBody: GetChatRequest): TelegramResponse<ChatFullInfo> =
     telegramPost("getChat", requestBody)
 
 /**

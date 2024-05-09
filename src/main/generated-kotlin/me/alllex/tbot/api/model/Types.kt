@@ -126,7 +126,7 @@ data class BusinessConnectionUpdate(
 }
 
 /**
- * New non-service message from a connected business account
+ * New message from a connected business account
  */
 @Serializable
 data class BusinessMessageUpdate(
@@ -405,52 +405,78 @@ data class User(
 /**
  * This object represents a chat.
  * @param id Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
- * @param type Type of chat, can be either “private”, “group”, “supergroup” or “channel”
+ * @param type Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
  * @param title Optional. Title, for supergroups, channels and group chats
  * @param username Optional. Username, for private chats, supergroups and channels if available
  * @param firstName Optional. First name of the other party in a private chat
  * @param lastName Optional. Last name of the other party in a private chat
  * @param isForum Optional. True, if the supergroup chat is a forum (has topics enabled)
- * @param photo Optional. Chat photo. Returned only in getChat.
- * @param activeUsernames Optional. If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.
- * @param birthdate Optional. For private chats, the date of birth of the user. Returned only in getChat.
- * @param businessIntro Optional. For private chats with business accounts, the intro of the business. Returned only in getChat.
- * @param businessLocation Optional. For private chats with business accounts, the location of the business. Returned only in getChat.
- * @param businessOpeningHours Optional. For private chats with business accounts, the opening hours of the business. Returned only in getChat.
- * @param personalChat Optional. For private chats, the personal channel of the user. Returned only in getChat.
- * @param availableReactions Optional. List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. Returned only in getChat.
- * @param accentColorId Optional. Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details. Returned only in getChat. Always returned in getChat.
- * @param backgroundCustomEmojiId Optional. Custom emoji identifier of emoji chosen by the chat for the reply header and link preview background. Returned only in getChat.
- * @param profileAccentColorId Optional. Identifier of the accent color for the chat's profile background. See profile accent colors for more details. Returned only in getChat.
- * @param profileBackgroundCustomEmojiId Optional. Custom emoji identifier of the emoji chosen by the chat for its profile background. Returned only in getChat.
- * @param emojiStatusCustomEmojiId Optional. Custom emoji identifier of the emoji status of the chat or the other party in a private chat. Returned only in getChat.
- * @param emojiStatusExpirationDate Optional. Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any. Returned only in getChat.
- * @param bio Optional. Bio of the other party in a private chat. Returned only in getChat.
- * @param hasPrivateForwards Optional. True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id> links only in chats with the user. Returned only in getChat.
- * @param hasRestrictedVoiceAndVideoMessages Optional. True, if the privacy settings of the other party restrict sending voice and video note messages in the private chat. Returned only in getChat.
- * @param joinToSendMessages Optional. True, if users need to join the supergroup before they can send messages. Returned only in getChat.
- * @param joinByRequest Optional. True, if all users directly joining the supergroup need to be approved by supergroup administrators. Returned only in getChat.
- * @param description Optional. Description, for groups, supergroups and channel chats. Returned only in getChat.
- * @param inviteLink Optional. Primary invite link, for groups, supergroups and channel chats. Returned only in getChat.
- * @param pinnedMessage Optional. The most recent pinned message (by sending date). Returned only in getChat.
- * @param permissions Optional. Default chat member permissions, for groups and supergroups. Returned only in getChat.
- * @param slowModeDelay Optional. For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds. Returned only in getChat.
- * @param unrestrictBoostCount Optional. For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions. Returned only in getChat.
- * @param messageAutoDeleteTime Optional. The time after which all messages sent to the chat will be automatically deleted; in seconds. Returned only in getChat.
- * @param hasAggressiveAntiSpamEnabled Optional. True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. Returned only in getChat.
- * @param hasHiddenMembers Optional. True, if non-administrators can only get the list of bots and administrators in the chat. Returned only in getChat.
- * @param hasProtectedContent Optional. True, if messages from the chat can't be forwarded to other chats. Returned only in getChat.
- * @param hasVisibleHistory Optional. True, if new chat members will have access to old messages; available only to chat administrators. Returned only in getChat.
- * @param stickerSetName Optional. For supergroups, name of group sticker set. Returned only in getChat.
- * @param canSetStickerSet Optional. True, if the bot can change the group sticker set. Returned only in getChat.
- * @param customEmojiStickerSetName Optional. For supergroups, the name of the group's custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group. Returned only in getChat.
- * @param linkedChatId Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat.
- * @param location Optional. For supergroups, the location to which the supergroup is connected. Returned only in getChat.
  */
 @Serializable
 data class Chat(
     val id: ChatId,
     val type: String,
+    val title: String? = null,
+    val username: String? = null,
+    val firstName: String? = null,
+    val lastName: String? = null,
+    val isForum: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("Chat").prop("id", id).prop("type", type).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).toString()
+}
+
+/**
+ * This object contains full information about a chat.
+ * @param id Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+ * @param type Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
+ * @param accentColorId Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details.
+ * @param maxReactionCount The maximum number of reactions that can be set on a message in the chat
+ * @param title Optional. Title, for supergroups, channels and group chats
+ * @param username Optional. Username, for private chats, supergroups and channels if available
+ * @param firstName Optional. First name of the other party in a private chat
+ * @param lastName Optional. Last name of the other party in a private chat
+ * @param isForum Optional. True, if the supergroup chat is a forum (has topics enabled)
+ * @param photo Optional. Chat photo
+ * @param activeUsernames Optional. If non-empty, the list of all active chat usernames; for private chats, supergroups and channels
+ * @param birthdate Optional. For private chats, the date of birth of the user
+ * @param businessIntro Optional. For private chats with business accounts, the intro of the business
+ * @param businessLocation Optional. For private chats with business accounts, the location of the business
+ * @param businessOpeningHours Optional. For private chats with business accounts, the opening hours of the business
+ * @param personalChat Optional. For private chats, the personal channel of the user
+ * @param availableReactions Optional. List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed.
+ * @param backgroundCustomEmojiId Optional. Custom emoji identifier of the emoji chosen by the chat for the reply header and link preview background
+ * @param profileAccentColorId Optional. Identifier of the accent color for the chat's profile background. See profile accent colors for more details.
+ * @param profileBackgroundCustomEmojiId Optional. Custom emoji identifier of the emoji chosen by the chat for its profile background
+ * @param emojiStatusCustomEmojiId Optional. Custom emoji identifier of the emoji status of the chat or the other party in a private chat
+ * @param emojiStatusExpirationDate Optional. Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any
+ * @param bio Optional. Bio of the other party in a private chat
+ * @param hasPrivateForwards Optional. True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id> links only in chats with the user
+ * @param hasRestrictedVoiceAndVideoMessages Optional. True, if the privacy settings of the other party restrict sending voice and video note messages in the private chat
+ * @param joinToSendMessages Optional. True, if users need to join the supergroup before they can send messages
+ * @param joinByRequest Optional. True, if all users directly joining the supergroup without using an invite link need to be approved by supergroup administrators
+ * @param description Optional. Description, for groups, supergroups and channel chats
+ * @param inviteLink Optional. Primary invite link, for groups, supergroups and channel chats
+ * @param pinnedMessage Optional. The most recent pinned message (by sending date)
+ * @param permissions Optional. Default chat member permissions, for groups and supergroups
+ * @param slowModeDelay Optional. For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds
+ * @param unrestrictBoostCount Optional. For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions
+ * @param messageAutoDeleteTime Optional. The time after which all messages sent to the chat will be automatically deleted; in seconds
+ * @param hasAggressiveAntiSpamEnabled Optional. True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators.
+ * @param hasHiddenMembers Optional. True, if non-administrators can only get the list of bots and administrators in the chat
+ * @param hasProtectedContent Optional. True, if messages from the chat can't be forwarded to other chats
+ * @param hasVisibleHistory Optional. True, if new chat members will have access to old messages; available only to chat administrators
+ * @param stickerSetName Optional. For supergroups, name of the group sticker set
+ * @param canSetStickerSet Optional. True, if the bot can change the group sticker set
+ * @param customEmojiStickerSetName Optional. For supergroups, the name of the group's custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group.
+ * @param linkedChatId Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
+ * @param location Optional. For supergroups, the location to which the supergroup is connected
+ */
+@Serializable
+data class ChatFullInfo(
+    val id: Long,
+    val type: String,
+    val accentColorId: Long,
+    val maxReactionCount: Long,
     val title: String? = null,
     val username: String? = null,
     val firstName: String? = null,
@@ -464,7 +490,6 @@ data class Chat(
     val businessOpeningHours: BusinessOpeningHours? = null,
     val personalChat: Chat? = null,
     val availableReactions: List<ReactionType>? = null,
-    val accentColorId: Long? = null,
     val backgroundCustomEmojiId: CustomEmojiId? = null,
     val profileAccentColorId: Long? = null,
     val profileBackgroundCustomEmojiId: CustomEmojiId? = null,
@@ -492,7 +517,7 @@ data class Chat(
     val linkedChatId: ChatId? = null,
     val location: ChatLocation? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Chat").prop("id", id).prop("type", type).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("accentColorId", accentColorId).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).toString()
+    override fun toString() = DebugStringBuilder("ChatFullInfo").prop("id", id).prop("type", type).prop("accentColorId", accentColorId).prop("maxReactionCount", maxReactionCount).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).toString()
 }
 
 /**
@@ -561,6 +586,7 @@ data class Chat(
  * @param passportData Optional. Telegram Passport data
  * @param proximityAlertTriggered Optional. Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
  * @param boostAdded Optional. Service message: user boosted the chat
+ * @param chatBackgroundSet Optional. Service message: chat background set
  * @param forumTopicCreated Optional. Service message: forum topic created
  * @param forumTopicEdited Optional. Service message: forum topic edited
  * @param forumTopicClosed Optional. Service message: forum topic closed
@@ -644,6 +670,7 @@ data class Message(
     val passportData: PassportData? = null,
     val proximityAlertTriggered: ProximityAlertTriggered? = null,
     val boostAdded: ChatBoostAdded? = null,
+    val chatBackgroundSet: ChatBackground? = null,
     val forumTopicCreated: ForumTopicCreated? = null,
     val forumTopicEdited: ForumTopicEdited? = null,
     val forumTopicClosed: ForumTopicClosed? = null,
@@ -661,7 +688,7 @@ data class Message(
     val webAppData: WebAppData? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -1076,13 +1103,30 @@ data class Dice(
  * This object contains information about one answer option in a poll.
  * @param text Option text, 1-100 characters
  * @param voterCount Number of users that voted for this option
+ * @param textEntities Optional. Special entities that appear in the option text. Currently, only custom emoji entities are allowed in poll option texts
  */
 @Serializable
 data class PollOption(
     val text: String,
     val voterCount: Long,
+    val textEntities: List<MessageEntity>? = null,
 ) {
-    override fun toString() = DebugStringBuilder("PollOption").prop("text", text).prop("voterCount", voterCount).toString()
+    override fun toString() = DebugStringBuilder("PollOption").prop("text", text).prop("voterCount", voterCount).prop("textEntities", textEntities).toString()
+}
+
+/**
+ * This object contains information about one answer option in a poll to send.
+ * @param text Option text, 1-100 characters
+ * @param textParseMode Optional. Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed
+ * @param textEntities Optional. A JSON-serialized list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode
+ */
+@Serializable
+data class InputPollOption(
+    val text: String,
+    val textParseMode: String? = null,
+    val textEntities: List<MessageEntity>? = null,
+) {
+    override fun toString() = DebugStringBuilder("InputPollOption").prop("text", text).prop("textParseMode", textParseMode).prop("textEntities", textEntities).toString()
 }
 
 /**
@@ -1112,6 +1156,7 @@ data class PollAnswer(
  * @param isAnonymous True, if the poll is anonymous
  * @param type Poll type, currently can be “regular” or “quiz”
  * @param allowsMultipleAnswers True, if the poll allows multiple answers
+ * @param questionEntities Optional. Special entities that appear in the question. Currently, only custom emoji entities are allowed in poll questions
  * @param correctOptionId Optional. 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot.
  * @param explanation Optional. Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters
  * @param explanationEntities Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the explanation
@@ -1128,13 +1173,14 @@ data class Poll(
     val isAnonymous: Boolean,
     val type: String,
     val allowsMultipleAnswers: Boolean,
+    val questionEntities: List<MessageEntity>? = null,
     val correctOptionId: Long? = null,
     val explanation: String? = null,
     val explanationEntities: List<MessageEntity>? = null,
     val openPeriod: Seconds? = null,
     val closeDate: UnixTimestamp? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Poll").prop("id", id).prop("question", question).prop("options", options).prop("totalVoterCount", totalVoterCount).prop("isClosed", isClosed).prop("isAnonymous", isAnonymous).prop("type", type).prop("allowsMultipleAnswers", allowsMultipleAnswers).prop("correctOptionId", correctOptionId).prop("explanation", explanation).prop("explanationEntities", explanationEntities).prop("openPeriod", openPeriod).prop("closeDate", closeDate).toString()
+    override fun toString() = DebugStringBuilder("Poll").prop("id", id).prop("question", question).prop("options", options).prop("totalVoterCount", totalVoterCount).prop("isClosed", isClosed).prop("isAnonymous", isAnonymous).prop("type", type).prop("allowsMultipleAnswers", allowsMultipleAnswers).prop("questionEntities", questionEntities).prop("correctOptionId", correctOptionId).prop("explanation", explanation).prop("explanationEntities", explanationEntities).prop("openPeriod", openPeriod).prop("closeDate", closeDate).toString()
 }
 
 /**
@@ -1232,6 +1278,142 @@ data class ChatBoostAdded(
 }
 
 /**
+ * This object describes the way a background is filled based on the selected colors. Currently, it can be one of
+ * - [BackgroundFillSolid]
+ * - [BackgroundFillGradient]
+ * - [BackgroundFillFreeformGradient]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface BackgroundFill
+
+/**
+ * The background is filled using the selected color.
+ * @param color The color of the background fill in the RGB24 format
+ */
+@Serializable
+@SerialName("solid")
+data class BackgroundFillSolid(
+    val color: Long,
+) : BackgroundFill {
+    override fun toString() = DebugStringBuilder("BackgroundFillSolid").prop("color", color).toString()
+}
+
+/**
+ * The background is a gradient fill.
+ * @param topColor Top color of the gradient in the RGB24 format
+ * @param bottomColor Bottom color of the gradient in the RGB24 format
+ * @param rotationAngle Clockwise rotation angle of the background fill in degrees; 0-359
+ */
+@Serializable
+@SerialName("gradient")
+data class BackgroundFillGradient(
+    val topColor: Long,
+    val bottomColor: Long,
+    val rotationAngle: Long,
+) : BackgroundFill {
+    override fun toString() = DebugStringBuilder("BackgroundFillGradient").prop("topColor", topColor).prop("bottomColor", bottomColor).prop("rotationAngle", rotationAngle).toString()
+}
+
+/**
+ * The background is a freeform gradient that rotates after every message in the chat.
+ * @param colors A list of the 3 or 4 base colors that are used to generate the freeform gradient in the RGB24 format
+ */
+@Serializable
+@SerialName("freeform_gradient")
+data class BackgroundFillFreeformGradient(
+    val colors: List<Long>,
+) : BackgroundFill {
+    override fun toString() = DebugStringBuilder("BackgroundFillFreeformGradient").prop("colors", colors).toString()
+}
+
+/**
+ * This object describes the type of a background. Currently, it can be one of
+ * - [BackgroundTypeFill]
+ * - [BackgroundTypeWallpaper]
+ * - [BackgroundTypePattern]
+ * - [BackgroundTypeChatTheme]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface BackgroundType
+
+/**
+ * The background is automatically filled based on the selected colors.
+ * @param fill The background fill
+ * @param darkThemeDimming Dimming of the background in dark themes, as a percentage; 0-100
+ */
+@Serializable
+@SerialName("fill")
+data class BackgroundTypeFill(
+    val fill: BackgroundFill,
+    val darkThemeDimming: Long,
+) : BackgroundType {
+    override fun toString() = DebugStringBuilder("BackgroundTypeFill").prop("fill", fill).prop("darkThemeDimming", darkThemeDimming).toString()
+}
+
+/**
+ * The background is a wallpaper in the JPEG format.
+ * @param document Document with the wallpaper
+ * @param darkThemeDimming Dimming of the background in dark themes, as a percentage; 0-100
+ * @param isBlurred Optional. True, if the wallpaper is downscaled to fit in a 450x450 square and then box-blurred with radius 12
+ * @param isMoving Optional. True, if the background moves slightly when the device is tilted
+ */
+@Serializable
+@SerialName("wallpaper")
+data class BackgroundTypeWallpaper(
+    val document: Document,
+    val darkThemeDimming: Long,
+    val isBlurred: Boolean? = null,
+    val isMoving: Boolean? = null,
+) : BackgroundType {
+    override fun toString() = DebugStringBuilder("BackgroundTypeWallpaper").prop("document", document).prop("darkThemeDimming", darkThemeDimming).prop("isBlurred", isBlurred).prop("isMoving", isMoving).toString()
+}
+
+/**
+ * The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
+ * @param document Document with the pattern
+ * @param fill The background fill that is combined with the pattern
+ * @param intensity Intensity of the pattern when it is shown above the filled background; 0-100
+ * @param isInverted Optional. True, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only
+ * @param isMoving Optional. True, if the background moves slightly when the device is tilted
+ */
+@Serializable
+@SerialName("pattern")
+data class BackgroundTypePattern(
+    val document: Document,
+    val fill: BackgroundFill,
+    val intensity: Long,
+    val isInverted: Boolean? = null,
+    val isMoving: Boolean? = null,
+) : BackgroundType {
+    override fun toString() = DebugStringBuilder("BackgroundTypePattern").prop("document", document).prop("fill", fill).prop("intensity", intensity).prop("isInverted", isInverted).prop("isMoving", isMoving).toString()
+}
+
+/**
+ * The background is taken directly from a built-in chat theme.
+ * @param themeName Name of the chat theme, which is usually an emoji
+ */
+@Serializable
+@SerialName("chat_theme")
+data class BackgroundTypeChatTheme(
+    val themeName: String,
+) : BackgroundType {
+    override fun toString() = DebugStringBuilder("BackgroundTypeChatTheme").prop("themeName", themeName).toString()
+}
+
+/**
+ * This object represents a chat background.
+ * @param type Type of the background
+ */
+@Serializable
+data class ChatBackground(
+    val type: BackgroundType,
+) {
+    override fun toString() = DebugStringBuilder("ChatBackground").prop("type", type).toString()
+}
+
+/**
  * This object represents a service message about a new forum topic created in the chat.
  * @param name Name of the topic
  * @param iconColor Color of the topic icon in RGB format
@@ -1284,7 +1466,7 @@ data object GeneralForumTopicHidden
 data object GeneralForumTopicUnhidden
 
 /**
- * This object contains information about a user that was shared with the bot using a KeyboardButtonRequestUser button.
+ * This object contains information about a user that was shared with the bot using a KeyboardButtonRequestUsers button.
  * @param userId Identifier of the shared user. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means.
  * @param firstName Optional. First name of the user, if the name was requested by the bot
  * @param lastName Optional. Last name of the user, if the name was requested by the bot
@@ -1528,7 +1710,7 @@ data class WebAppInfo(
 }
 
 /**
- * This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
+ * This object represents a custom keyboard with reply options (see Introduction to bots for details and examples). Not supported in channels and for messages sent on behalf of a Telegram Business account.
  * @param keyboard Array of button rows, each represented by an Array of KeyboardButton objects
  * @param isPersistent Optional. Requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.
  * @param resizeKeyboard Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
@@ -1577,9 +1759,9 @@ data class KeyboardButton(
  * @param userIsBot Optional. Pass True to request bots, pass False to request regular users. If not specified, no additional restrictions are applied.
  * @param userIsPremium Optional. Pass True to request premium users, pass False to request non-premium users. If not specified, no additional restrictions are applied.
  * @param maxQuantity Optional. The maximum number of users to be selected; 1-10. Defaults to 1.
- * @param requestName Optional. Pass True to request the users' first and last name
- * @param requestUsername Optional. Pass True to request the users' username
- * @param requestPhoto Optional. Pass True to request the users' photo
+ * @param requestName Optional. Pass True to request the users' first and last names
+ * @param requestUsername Optional. Pass True to request the users' usernames
+ * @param requestPhoto Optional. Pass True to request the users' photos
  */
 @Serializable
 data class KeyboardButtonRequestUsers(
@@ -1595,7 +1777,7 @@ data class KeyboardButtonRequestUsers(
 }
 
 /**
- * This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted requested rights in the сhat if appropriate More about requesting chats »
+ * This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted requested rights in the chat if appropriate. More about requesting chats ».
  * @param requestId Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message
  * @param chatIsChannel Pass True to request a channel chat, pass False to request a group or a supergroup chat.
  * @param chatIsForum Optional. Pass True to request a forum supergroup, pass False to request a non-forum chat. If not specified, no additional restrictions are applied.
@@ -1637,7 +1819,7 @@ data class KeyboardButtonPollType(
 }
 
 /**
- * Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup).
+ * Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup). Not supported in channels and for messages sent on behalf of a Telegram Business account.
  * @param removeKeyboard Requests clients to remove the custom keyboard (user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup)
  * @param selective Optional. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message. Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
  */
@@ -1664,12 +1846,12 @@ data class InlineKeyboardMarkup(
  * This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
  * @param text Label text on the button
  * @param url Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
- * @param callbackData Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
- * @param webApp Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot.
+ * @param callbackData Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes. Not supported for messages sent on behalf of a Telegram Business account.
+ * @param webApp Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a Telegram Business account.
  * @param loginUrl Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
- * @param switchInlineQuery Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted.
- * @param switchInlineQueryCurrentChat Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options.
- * @param switchInlineQueryChosenChat Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field
+ * @param switchInlineQuery Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent on behalf of a Telegram Business account.
+ * @param switchInlineQueryCurrentChat Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business account.
+ * @param switchInlineQueryChosenChat Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
  * @param callbackGame Optional. Description of the game that will be launched when the user presses the button. NOTE: This type of button must always be the first button in the first row.
  * @param pay Optional. Specify True, to send a Pay button. NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
  */
@@ -1753,7 +1935,7 @@ data class CallbackQuery(
 }
 
 /**
- * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode.
+ * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode. Not supported in channels and for messages sent on behalf of a Telegram Business account.
  * @param forceReply Shows reply interface to the user, as if they manually selected the bot's message and tapped 'Reply'
  * @param inputFieldPlaceholder Optional. The placeholder to be shown in the input field when the reply is active; 1-64 characters
  * @param selective Optional. Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.
@@ -1822,7 +2004,7 @@ data class ChatInviteLink(
  * @param canChangeInfo True, if the user is allowed to change the chat title, photo and other settings
  * @param canInviteUsers True, if the user is allowed to invite new users to the chat
  * @param canPostStories True, if the administrator can post stories to the chat
- * @param canEditStories True, if the administrator can edit stories posted by other users
+ * @param canEditStories True, if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
  * @param canDeleteStories True, if the administrator can delete stories posted by other users
  * @param canPostMessages Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only
  * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
@@ -1858,6 +2040,7 @@ data class ChatAdministratorRights(
  * @param oldChatMember Previous information about the chat member
  * @param newChatMember New information about the chat member
  * @param inviteLink Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
+ * @param viaJoinRequest Optional. True, if the user joined the chat after sending a direct join request without using an invite link and being approved by an administrator
  * @param viaChatFolderInviteLink Optional. True, if the user joined the chat via a chat folder invite link
  */
 @Serializable
@@ -1868,9 +2051,10 @@ data class ChatMemberUpdated(
     val oldChatMember: ChatMember,
     val newChatMember: ChatMember,
     val inviteLink: ChatInviteLink? = null,
+    val viaJoinRequest: Boolean? = null,
     val viaChatFolderInviteLink: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatMemberUpdated").prop("chat", chat).prop("from", from).prop("date", date).prop("oldChatMember", oldChatMember).prop("newChatMember", newChatMember).prop("inviteLink", inviteLink).prop("viaChatFolderInviteLink", viaChatFolderInviteLink).toString()
+    override fun toString() = DebugStringBuilder("ChatMemberUpdated").prop("chat", chat).prop("from", from).prop("date", date).prop("oldChatMember", oldChatMember).prop("newChatMember", newChatMember).prop("inviteLink", inviteLink).prop("viaJoinRequest", viaJoinRequest).prop("viaChatFolderInviteLink", viaChatFolderInviteLink).toString()
 }
 
 /**
@@ -1915,7 +2099,7 @@ data class ChatMemberOwner(
  * @param canChangeInfo True, if the user is allowed to change the chat title, photo and other settings
  * @param canInviteUsers True, if the user is allowed to invite new users to the chat
  * @param canPostStories True, if the administrator can post stories to the chat
- * @param canEditStories True, if the administrator can edit stories posted by other users
+ * @param canEditStories True, if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
  * @param canDeleteStories True, if the administrator can delete stories posted by other users
  * @param canPostMessages Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only
  * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
@@ -2089,7 +2273,7 @@ data class ChatPermissions(
 }
 
 /**
- *
+ * Describes the birthdate of a user.
  * @param day Day of the user's birth; 1-31
  * @param month Month of the user's birth; 1-12
  * @param year Optional. Year of the user's birth
@@ -2104,7 +2288,7 @@ data class Birthdate(
 }
 
 /**
- *
+ * Contains information about the start page settings of a Telegram Business account.
  * @param title Optional. Title text of the business intro
  * @param message Optional. Message text of the business intro
  * @param sticker Optional. Sticker of the business intro
@@ -2119,7 +2303,7 @@ data class BusinessIntro(
 }
 
 /**
- *
+ * Contains information about the location of a Telegram Business account.
  * @param address Address of the business
  * @param location Optional. Location of the business
  */
@@ -2132,7 +2316,7 @@ data class BusinessLocation(
 }
 
 /**
- *
+ * Describes an interval of time during which a business is open.
  * @param openingMinute The minute's sequence number in a week, starting on Monday, marking the start of the time interval during which the business is open; 0 - 7 * 24 * 60
  * @param closingMinute The minute's sequence number in a week, starting on Monday, marking the end of the time interval during which the business is open; 0 - 8 * 24 * 60
  */
@@ -2145,7 +2329,7 @@ data class BusinessOpeningHoursInterval(
 }
 
 /**
- *
+ * Describes the opening hours of a business.
  * @param timeZoneName Unique name of the time zone for which the opening hours are defined
  * @param openingHours List of time intervals describing business opening hours
  */
@@ -2570,7 +2754,7 @@ data class BusinessConnection(
  * This object is received when messages are deleted from a connected business account.
  * @param businessConnectionId Unique identifier of the business connection
  * @param chat Information about a chat in the business account. The bot may not have access to the chat or the corresponding user.
- * @param messageIds A JSON-serialized list of identifiers of deleted messages in the chat of the business account
+ * @param messageIds The list of identifiers of deleted messages in the chat of the business account
  */
 @Serializable
 data class BusinessMessagesDeleted(
@@ -3166,7 +3350,7 @@ data class InlineQueryResultDocument(
  * @param longitude Location longitude in degrees
  * @param title Location title
  * @param horizontalAccuracy Optional. The radius of uncertainty for the location, measured in meters; 0-1500
- * @param livePeriod Optional. Period in seconds for which the location can be updated, should be between 60 and 86400.
+ * @param livePeriod Optional. Period in seconds during which the location can be updated, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
  * @param heading Optional. For live locations, a direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param proximityAlertRadius Optional. For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
  * @param replyMarkup Optional. Inline keyboard attached to the message
@@ -3530,7 +3714,7 @@ data class InputTextMessageContent(
  * @param latitude Latitude of the location in degrees
  * @param longitude Longitude of the location in degrees
  * @param horizontalAccuracy Optional. The radius of uncertainty for the location, measured in meters; 0-1500
- * @param livePeriod Optional. Period in seconds for which the location can be updated, should be between 60 and 86400.
+ * @param livePeriod Optional. Period in seconds during which the location can be updated, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
  * @param heading Optional. For live locations, a direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param proximityAlertRadius Optional. For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
  */

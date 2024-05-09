@@ -457,6 +457,233 @@ public final class me/alllex/tbot/api/model/Audio$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public abstract interface class me/alllex/tbot/api/model/BackgroundFill {
+	public static final field Companion Lme/alllex/tbot/api/model/BackgroundFill$Companion;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFill$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFillFreeformGradient : me/alllex/tbot/api/model/BackgroundFill {
+	public static final field Companion Lme/alllex/tbot/api/model/BackgroundFillFreeformGradient$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lme/alllex/tbot/api/model/BackgroundFillFreeformGradient;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/BackgroundFillFreeformGradient;Ljava/util/List;ILjava/lang/Object;)Lme/alllex/tbot/api/model/BackgroundFillFreeformGradient;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColors ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFillFreeformGradient$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/BackgroundFillFreeformGradient$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/BackgroundFillFreeformGradient;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/BackgroundFillFreeformGradient;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFillFreeformGradient$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFillGradient : me/alllex/tbot/api/model/BackgroundFill {
+	public static final field Companion Lme/alllex/tbot/api/model/BackgroundFillGradient$Companion;
+	public fun <init> (JJJ)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()J
+	public final fun copy (JJJ)Lme/alllex/tbot/api/model/BackgroundFillGradient;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/BackgroundFillGradient;JJJILjava/lang/Object;)Lme/alllex/tbot/api/model/BackgroundFillGradient;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBottomColor ()J
+	public final fun getRotationAngle ()J
+	public final fun getTopColor ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFillGradient$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/BackgroundFillGradient$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/BackgroundFillGradient;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/BackgroundFillGradient;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFillGradient$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFillSolid : me/alllex/tbot/api/model/BackgroundFill {
+	public static final field Companion Lme/alllex/tbot/api/model/BackgroundFillSolid$Companion;
+	public fun <init> (J)V
+	public final fun component1 ()J
+	public final fun copy (J)Lme/alllex/tbot/api/model/BackgroundFillSolid;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/BackgroundFillSolid;JILjava/lang/Object;)Lme/alllex/tbot/api/model/BackgroundFillSolid;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColor ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFillSolid$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/BackgroundFillSolid$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/BackgroundFillSolid;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/BackgroundFillSolid;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundFillSolid$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class me/alllex/tbot/api/model/BackgroundType {
+	public static final field Companion Lme/alllex/tbot/api/model/BackgroundType$Companion;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundType$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypeChatTheme : me/alllex/tbot/api/model/BackgroundType {
+	public static final field Companion Lme/alllex/tbot/api/model/BackgroundTypeChatTheme$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lme/alllex/tbot/api/model/BackgroundTypeChatTheme;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/BackgroundTypeChatTheme;Ljava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/BackgroundTypeChatTheme;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getThemeName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypeChatTheme$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/BackgroundTypeChatTheme$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/BackgroundTypeChatTheme;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/BackgroundTypeChatTheme;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypeChatTheme$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypeFill : me/alllex/tbot/api/model/BackgroundType {
+	public static final field Companion Lme/alllex/tbot/api/model/BackgroundTypeFill$Companion;
+	public fun <init> (Lme/alllex/tbot/api/model/BackgroundFill;J)V
+	public final fun component1 ()Lme/alllex/tbot/api/model/BackgroundFill;
+	public final fun component2 ()J
+	public final fun copy (Lme/alllex/tbot/api/model/BackgroundFill;J)Lme/alllex/tbot/api/model/BackgroundTypeFill;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/BackgroundTypeFill;Lme/alllex/tbot/api/model/BackgroundFill;JILjava/lang/Object;)Lme/alllex/tbot/api/model/BackgroundTypeFill;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDarkThemeDimming ()J
+	public final fun getFill ()Lme/alllex/tbot/api/model/BackgroundFill;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypeFill$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/BackgroundTypeFill$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/BackgroundTypeFill;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/BackgroundTypeFill;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypeFill$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypePattern : me/alllex/tbot/api/model/BackgroundType {
+	public static final field Companion Lme/alllex/tbot/api/model/BackgroundTypePattern$Companion;
+	public fun <init> (Lme/alllex/tbot/api/model/Document;Lme/alllex/tbot/api/model/BackgroundFill;JLjava/lang/Boolean;Ljava/lang/Boolean;)V
+	public synthetic fun <init> (Lme/alllex/tbot/api/model/Document;Lme/alllex/tbot/api/model/BackgroundFill;JLjava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lme/alllex/tbot/api/model/Document;
+	public final fun component2 ()Lme/alllex/tbot/api/model/BackgroundFill;
+	public final fun component3 ()J
+	public final fun component4 ()Ljava/lang/Boolean;
+	public final fun component5 ()Ljava/lang/Boolean;
+	public final fun copy (Lme/alllex/tbot/api/model/Document;Lme/alllex/tbot/api/model/BackgroundFill;JLjava/lang/Boolean;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/BackgroundTypePattern;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/BackgroundTypePattern;Lme/alllex/tbot/api/model/Document;Lme/alllex/tbot/api/model/BackgroundFill;JLjava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/BackgroundTypePattern;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocument ()Lme/alllex/tbot/api/model/Document;
+	public final fun getFill ()Lme/alllex/tbot/api/model/BackgroundFill;
+	public final fun getIntensity ()J
+	public fun hashCode ()I
+	public final fun isInverted ()Ljava/lang/Boolean;
+	public final fun isMoving ()Ljava/lang/Boolean;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypePattern$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/BackgroundTypePattern$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/BackgroundTypePattern;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/BackgroundTypePattern;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypePattern$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypeWallpaper : me/alllex/tbot/api/model/BackgroundType {
+	public static final field Companion Lme/alllex/tbot/api/model/BackgroundTypeWallpaper$Companion;
+	public fun <init> (Lme/alllex/tbot/api/model/Document;JLjava/lang/Boolean;Ljava/lang/Boolean;)V
+	public synthetic fun <init> (Lme/alllex/tbot/api/model/Document;JLjava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lme/alllex/tbot/api/model/Document;
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/Boolean;
+	public final fun component4 ()Ljava/lang/Boolean;
+	public final fun copy (Lme/alllex/tbot/api/model/Document;JLjava/lang/Boolean;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/BackgroundTypeWallpaper;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/BackgroundTypeWallpaper;Lme/alllex/tbot/api/model/Document;JLjava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/BackgroundTypeWallpaper;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDarkThemeDimming ()J
+	public final fun getDocument ()Lme/alllex/tbot/api/model/Document;
+	public fun hashCode ()I
+	public final fun isBlurred ()Ljava/lang/Boolean;
+	public final fun isMoving ()Ljava/lang/Boolean;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypeWallpaper$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/BackgroundTypeWallpaper$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/BackgroundTypeWallpaper;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/BackgroundTypeWallpaper;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/BackgroundTypeWallpaper$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class me/alllex/tbot/api/model/BanChatMemberRequest {
 	public static final field Companion Lme/alllex/tbot/api/model/BanChatMemberRequest$Companion;
 	public synthetic fun <init> (JJLme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -1174,93 +1401,23 @@ public final class me/alllex/tbot/api/model/ChannelPostUpdate$Companion {
 
 public final class me/alllex/tbot/api/model/Chat {
 	public static final field Companion Lme/alllex/tbot/api/model/Chat$Companion;
-	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Lme/alllex/tbot/api/model/Birthdate;Lme/alllex/tbot/api/model/BusinessIntro;Lme/alllex/tbot/api/model/BusinessLocation;Lme/alllex/tbot/api/model/BusinessOpeningHours;Lme/alllex/tbot/api/model/Chat;Ljava/util/List;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Lme/alllex/tbot/api/model/Birthdate;Lme/alllex/tbot/api/model/BusinessIntro;Lme/alllex/tbot/api/model/BusinessLocation;Lme/alllex/tbot/api/model/BusinessOpeningHours;Lme/alllex/tbot/api/model/Chat;Ljava/util/List;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-dK1lXec ()J
-	public final fun component10 ()Lme/alllex/tbot/api/model/Birthdate;
-	public final fun component11 ()Lme/alllex/tbot/api/model/BusinessIntro;
-	public final fun component12 ()Lme/alllex/tbot/api/model/BusinessLocation;
-	public final fun component13 ()Lme/alllex/tbot/api/model/BusinessOpeningHours;
-	public final fun component14 ()Lme/alllex/tbot/api/model/Chat;
-	public final fun component15 ()Ljava/util/List;
-	public final fun component16 ()Ljava/lang/Long;
-	public final fun component17-b1Wa8Lk ()Ljava/lang/String;
-	public final fun component18 ()Ljava/lang/Long;
-	public final fun component19-b1Wa8Lk ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun component20-b1Wa8Lk ()Ljava/lang/String;
-	public final fun component21-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
-	public final fun component22 ()Ljava/lang/String;
-	public final fun component23 ()Ljava/lang/Boolean;
-	public final fun component24 ()Ljava/lang/Boolean;
-	public final fun component25 ()Ljava/lang/Boolean;
-	public final fun component26 ()Ljava/lang/Boolean;
-	public final fun component27 ()Ljava/lang/String;
-	public final fun component28 ()Ljava/lang/String;
-	public final fun component29 ()Lme/alllex/tbot/api/model/Message;
 	public final fun component3 ()Ljava/lang/String;
-	public final fun component30 ()Lme/alllex/tbot/api/model/ChatPermissions;
-	public final fun component31 ()Ljava/lang/Long;
-	public final fun component32 ()Ljava/lang/Long;
-	public final fun component33 ()Ljava/lang/Long;
-	public final fun component34 ()Ljava/lang/Boolean;
-	public final fun component35 ()Ljava/lang/Boolean;
-	public final fun component36 ()Ljava/lang/Boolean;
-	public final fun component37 ()Ljava/lang/Boolean;
-	public final fun component38 ()Ljava/lang/String;
-	public final fun component39 ()Ljava/lang/Boolean;
 	public final fun component4 ()Ljava/lang/String;
-	public final fun component40 ()Ljava/lang/String;
-	public final fun component41-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
-	public final fun component42 ()Lme/alllex/tbot/api/model/ChatLocation;
 	public final fun component5 ()Ljava/lang/String;
 	public final fun component6 ()Ljava/lang/String;
 	public final fun component7 ()Ljava/lang/Boolean;
-	public final fun component8 ()Lme/alllex/tbot/api/model/ChatPhoto;
-	public final fun component9 ()Ljava/util/List;
-	public final fun copy-DBYLfCw (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Lme/alllex/tbot/api/model/Birthdate;Lme/alllex/tbot/api/model/BusinessIntro;Lme/alllex/tbot/api/model/BusinessLocation;Lme/alllex/tbot/api/model/BusinessOpeningHours;Lme/alllex/tbot/api/model/Chat;Ljava/util/List;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;)Lme/alllex/tbot/api/model/Chat;
-	public static synthetic fun copy-DBYLfCw$default (Lme/alllex/tbot/api/model/Chat;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Lme/alllex/tbot/api/model/Birthdate;Lme/alllex/tbot/api/model/BusinessIntro;Lme/alllex/tbot/api/model/BusinessLocation;Lme/alllex/tbot/api/model/BusinessOpeningHours;Lme/alllex/tbot/api/model/Chat;Ljava/util/List;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;IILjava/lang/Object;)Lme/alllex/tbot/api/model/Chat;
+	public final fun copy-KE1ZXvg (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/Chat;
+	public static synthetic fun copy-KE1ZXvg$default (Lme/alllex/tbot/api/model/Chat;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/Chat;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAccentColorId ()Ljava/lang/Long;
-	public final fun getActiveUsernames ()Ljava/util/List;
-	public final fun getAvailableReactions ()Ljava/util/List;
-	public final fun getBackgroundCustomEmojiId-b1Wa8Lk ()Ljava/lang/String;
-	public final fun getBio ()Ljava/lang/String;
-	public final fun getBirthdate ()Lme/alllex/tbot/api/model/Birthdate;
-	public final fun getBusinessIntro ()Lme/alllex/tbot/api/model/BusinessIntro;
-	public final fun getBusinessLocation ()Lme/alllex/tbot/api/model/BusinessLocation;
-	public final fun getBusinessOpeningHours ()Lme/alllex/tbot/api/model/BusinessOpeningHours;
-	public final fun getCanSetStickerSet ()Ljava/lang/Boolean;
-	public final fun getCustomEmojiStickerSetName ()Ljava/lang/String;
-	public final fun getDescription ()Ljava/lang/String;
-	public final fun getEmojiStatusCustomEmojiId-b1Wa8Lk ()Ljava/lang/String;
-	public final fun getEmojiStatusExpirationDate-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun getFirstName ()Ljava/lang/String;
-	public final fun getHasAggressiveAntiSpamEnabled ()Ljava/lang/Boolean;
-	public final fun getHasHiddenMembers ()Ljava/lang/Boolean;
-	public final fun getHasPrivateForwards ()Ljava/lang/Boolean;
-	public final fun getHasProtectedContent ()Ljava/lang/Boolean;
-	public final fun getHasRestrictedVoiceAndVideoMessages ()Ljava/lang/Boolean;
-	public final fun getHasVisibleHistory ()Ljava/lang/Boolean;
 	public final fun getId-dK1lXec ()J
-	public final fun getInviteLink ()Ljava/lang/String;
-	public final fun getJoinByRequest ()Ljava/lang/Boolean;
-	public final fun getJoinToSendMessages ()Ljava/lang/Boolean;
 	public final fun getLastName ()Ljava/lang/String;
-	public final fun getLinkedChatId-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
-	public final fun getLocation ()Lme/alllex/tbot/api/model/ChatLocation;
-	public final fun getMessageAutoDeleteTime ()Ljava/lang/Long;
-	public final fun getPermissions ()Lme/alllex/tbot/api/model/ChatPermissions;
-	public final fun getPersonalChat ()Lme/alllex/tbot/api/model/Chat;
-	public final fun getPhoto ()Lme/alllex/tbot/api/model/ChatPhoto;
-	public final fun getPinnedMessage ()Lme/alllex/tbot/api/model/Message;
-	public final fun getProfileAccentColorId ()Ljava/lang/Long;
-	public final fun getProfileBackgroundCustomEmojiId-b1Wa8Lk ()Ljava/lang/String;
-	public final fun getSlowModeDelay ()Ljava/lang/Long;
-	public final fun getStickerSetName ()Ljava/lang/String;
 	public final fun getTitle ()Ljava/lang/String;
 	public final fun getType ()Ljava/lang/String;
-	public final fun getUnrestrictBoostCount ()Ljava/lang/Long;
 	public final fun getUsername ()Ljava/lang/String;
 	public fun hashCode ()I
 	public final fun isForum ()Ljava/lang/Boolean;
@@ -1335,6 +1492,33 @@ public final class me/alllex/tbot/api/model/ChatAdministratorRights$$serializer 
 }
 
 public final class me/alllex/tbot/api/model/ChatAdministratorRights$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/ChatBackground {
+	public static final field Companion Lme/alllex/tbot/api/model/ChatBackground$Companion;
+	public fun <init> (Lme/alllex/tbot/api/model/BackgroundType;)V
+	public final fun component1 ()Lme/alllex/tbot/api/model/BackgroundType;
+	public final fun copy (Lme/alllex/tbot/api/model/BackgroundType;)Lme/alllex/tbot/api/model/ChatBackground;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/ChatBackground;Lme/alllex/tbot/api/model/BackgroundType;ILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatBackground;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getType ()Lme/alllex/tbot/api/model/BackgroundType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/ChatBackground$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/ChatBackground$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/ChatBackground;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/ChatBackground;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/ChatBackground$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
@@ -1581,6 +1765,118 @@ public final class me/alllex/tbot/api/model/ChatBoostUpdated$$serializer : kotli
 }
 
 public final class me/alllex/tbot/api/model/ChatBoostUpdated$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/ChatFullInfo {
+	public static final field Companion Lme/alllex/tbot/api/model/ChatFullInfo$Companion;
+	public synthetic fun <init> (JLjava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Lme/alllex/tbot/api/model/Birthdate;Lme/alllex/tbot/api/model/BusinessIntro;Lme/alllex/tbot/api/model/BusinessLocation;Lme/alllex/tbot/api/model/BusinessOpeningHours;Lme/alllex/tbot/api/model/Chat;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Lme/alllex/tbot/api/model/Birthdate;Lme/alllex/tbot/api/model/BusinessIntro;Lme/alllex/tbot/api/model/BusinessLocation;Lme/alllex/tbot/api/model/BusinessOpeningHours;Lme/alllex/tbot/api/model/Chat;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component10 ()Lme/alllex/tbot/api/model/ChatPhoto;
+	public final fun component11 ()Ljava/util/List;
+	public final fun component12 ()Lme/alllex/tbot/api/model/Birthdate;
+	public final fun component13 ()Lme/alllex/tbot/api/model/BusinessIntro;
+	public final fun component14 ()Lme/alllex/tbot/api/model/BusinessLocation;
+	public final fun component15 ()Lme/alllex/tbot/api/model/BusinessOpeningHours;
+	public final fun component16 ()Lme/alllex/tbot/api/model/Chat;
+	public final fun component17 ()Ljava/util/List;
+	public final fun component18-b1Wa8Lk ()Ljava/lang/String;
+	public final fun component19 ()Ljava/lang/Long;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component20-b1Wa8Lk ()Ljava/lang/String;
+	public final fun component21-b1Wa8Lk ()Ljava/lang/String;
+	public final fun component22-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
+	public final fun component23 ()Ljava/lang/String;
+	public final fun component24 ()Ljava/lang/Boolean;
+	public final fun component25 ()Ljava/lang/Boolean;
+	public final fun component26 ()Ljava/lang/Boolean;
+	public final fun component27 ()Ljava/lang/Boolean;
+	public final fun component28 ()Ljava/lang/String;
+	public final fun component29 ()Ljava/lang/String;
+	public final fun component3 ()J
+	public final fun component30 ()Lme/alllex/tbot/api/model/Message;
+	public final fun component31 ()Lme/alllex/tbot/api/model/ChatPermissions;
+	public final fun component32 ()Ljava/lang/Long;
+	public final fun component33 ()Ljava/lang/Long;
+	public final fun component34 ()Ljava/lang/Long;
+	public final fun component35 ()Ljava/lang/Boolean;
+	public final fun component36 ()Ljava/lang/Boolean;
+	public final fun component37 ()Ljava/lang/Boolean;
+	public final fun component38 ()Ljava/lang/Boolean;
+	public final fun component39 ()Ljava/lang/String;
+	public final fun component4 ()J
+	public final fun component40 ()Ljava/lang/Boolean;
+	public final fun component41 ()Ljava/lang/String;
+	public final fun component42-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
+	public final fun component43 ()Lme/alllex/tbot/api/model/ChatLocation;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Ljava/lang/Boolean;
+	public final fun copy-6HfI0LA (JLjava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Lme/alllex/tbot/api/model/Birthdate;Lme/alllex/tbot/api/model/BusinessIntro;Lme/alllex/tbot/api/model/BusinessLocation;Lme/alllex/tbot/api/model/BusinessOpeningHours;Lme/alllex/tbot/api/model/Chat;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;)Lme/alllex/tbot/api/model/ChatFullInfo;
+	public static synthetic fun copy-6HfI0LA$default (Lme/alllex/tbot/api/model/ChatFullInfo;JLjava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ChatPhoto;Ljava/util/List;Lme/alllex/tbot/api/model/Birthdate;Lme/alllex/tbot/api/model/BusinessIntro;Lme/alllex/tbot/api/model/BusinessLocation;Lme/alllex/tbot/api/model/BusinessOpeningHours;Lme/alllex/tbot/api/model/Chat;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ChatPermissions;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatLocation;IILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatFullInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccentColorId ()J
+	public final fun getActiveUsernames ()Ljava/util/List;
+	public final fun getAvailableReactions ()Ljava/util/List;
+	public final fun getBackgroundCustomEmojiId-b1Wa8Lk ()Ljava/lang/String;
+	public final fun getBio ()Ljava/lang/String;
+	public final fun getBirthdate ()Lme/alllex/tbot/api/model/Birthdate;
+	public final fun getBusinessIntro ()Lme/alllex/tbot/api/model/BusinessIntro;
+	public final fun getBusinessLocation ()Lme/alllex/tbot/api/model/BusinessLocation;
+	public final fun getBusinessOpeningHours ()Lme/alllex/tbot/api/model/BusinessOpeningHours;
+	public final fun getCanSetStickerSet ()Ljava/lang/Boolean;
+	public final fun getCustomEmojiStickerSetName ()Ljava/lang/String;
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getEmojiStatusCustomEmojiId-b1Wa8Lk ()Ljava/lang/String;
+	public final fun getEmojiStatusExpirationDate-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
+	public final fun getFirstName ()Ljava/lang/String;
+	public final fun getHasAggressiveAntiSpamEnabled ()Ljava/lang/Boolean;
+	public final fun getHasHiddenMembers ()Ljava/lang/Boolean;
+	public final fun getHasPrivateForwards ()Ljava/lang/Boolean;
+	public final fun getHasProtectedContent ()Ljava/lang/Boolean;
+	public final fun getHasRestrictedVoiceAndVideoMessages ()Ljava/lang/Boolean;
+	public final fun getHasVisibleHistory ()Ljava/lang/Boolean;
+	public final fun getId ()J
+	public final fun getInviteLink ()Ljava/lang/String;
+	public final fun getJoinByRequest ()Ljava/lang/Boolean;
+	public final fun getJoinToSendMessages ()Ljava/lang/Boolean;
+	public final fun getLastName ()Ljava/lang/String;
+	public final fun getLinkedChatId-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
+	public final fun getLocation ()Lme/alllex/tbot/api/model/ChatLocation;
+	public final fun getMaxReactionCount ()J
+	public final fun getMessageAutoDeleteTime ()Ljava/lang/Long;
+	public final fun getPermissions ()Lme/alllex/tbot/api/model/ChatPermissions;
+	public final fun getPersonalChat ()Lme/alllex/tbot/api/model/Chat;
+	public final fun getPhoto ()Lme/alllex/tbot/api/model/ChatPhoto;
+	public final fun getPinnedMessage ()Lme/alllex/tbot/api/model/Message;
+	public final fun getProfileAccentColorId ()Ljava/lang/Long;
+	public final fun getProfileBackgroundCustomEmojiId-b1Wa8Lk ()Ljava/lang/String;
+	public final fun getSlowModeDelay ()Ljava/lang/Long;
+	public final fun getStickerSetName ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public final fun getUnrestrictBoostCount ()Ljava/lang/Long;
+	public final fun getUsername ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isForum ()Ljava/lang/Boolean;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/ChatFullInfo$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/ChatFullInfo$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/ChatFullInfo;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/ChatFullInfo;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/ChatFullInfo$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
@@ -2031,8 +2327,8 @@ public final class me/alllex/tbot/api/model/ChatMemberUpdate$Companion {
 
 public final class me/alllex/tbot/api/model/ChatMemberUpdated {
 	public static final field Companion Lme/alllex/tbot/api/model/ChatMemberUpdated$Companion;
-	public synthetic fun <init> (Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;JLme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatInviteLink;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;JLme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatInviteLink;Ljava/lang/Boolean;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;JLme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatInviteLink;Ljava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;JLme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatInviteLink;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lme/alllex/tbot/api/model/Chat;
 	public final fun component2 ()Lme/alllex/tbot/api/model/User;
 	public final fun component3-GuijAhI ()J
@@ -2040,8 +2336,9 @@ public final class me/alllex/tbot/api/model/ChatMemberUpdated {
 	public final fun component5 ()Lme/alllex/tbot/api/model/ChatMember;
 	public final fun component6 ()Lme/alllex/tbot/api/model/ChatInviteLink;
 	public final fun component7 ()Ljava/lang/Boolean;
-	public final fun copy-9Y7u2uI (Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;JLme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatInviteLink;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/ChatMemberUpdated;
-	public static synthetic fun copy-9Y7u2uI$default (Lme/alllex/tbot/api/model/ChatMemberUpdated;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;JLme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatInviteLink;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatMemberUpdated;
+	public final fun component8 ()Ljava/lang/Boolean;
+	public final fun copy-2kP8m7U (Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;JLme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatInviteLink;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/ChatMemberUpdated;
+	public static synthetic fun copy-2kP8m7U$default (Lme/alllex/tbot/api/model/ChatMemberUpdated;Lme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/User;JLme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatMember;Lme/alllex/tbot/api/model/ChatInviteLink;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatMemberUpdated;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getChat ()Lme/alllex/tbot/api/model/Chat;
 	public final fun getDate-GuijAhI ()J
@@ -2050,6 +2347,7 @@ public final class me/alllex/tbot/api/model/ChatMemberUpdated {
 	public final fun getNewChatMember ()Lme/alllex/tbot/api/model/ChatMember;
 	public final fun getOldChatMember ()Lme/alllex/tbot/api/model/ChatMember;
 	public final fun getViaChatFolderInviteLink ()Ljava/lang/Boolean;
+	public final fun getViaJoinRequest ()Ljava/lang/Boolean;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -3173,25 +3471,27 @@ public final class me/alllex/tbot/api/model/EditMessageCaptionRequest$Companion 
 
 public final class me/alllex/tbot/api/model/EditMessageLiveLocationRequest {
 	public static final field Companion Lme/alllex/tbot/api/model/EditMessageLiveLocationRequest$Companion;
-	public synthetic fun <init> (DDLme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (DDLme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (DDLme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (DDLme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()D
+	public final fun component10 ()Lme/alllex/tbot/api/model/InlineKeyboardMarkup;
 	public final fun component2 ()D
 	public final fun component3-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
 	public final fun component4-XcDfd4U ()Lme/alllex/tbot/api/model/MessageId;
 	public final fun component5-C2ZHHQs ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/Double;
-	public final fun component7 ()Ljava/lang/Long;
+	public final fun component6 ()Ljava/lang/Long;
+	public final fun component7 ()Ljava/lang/Double;
 	public final fun component8 ()Ljava/lang/Long;
-	public final fun component9 ()Lme/alllex/tbot/api/model/InlineKeyboardMarkup;
-	public final fun copy-9GcAy50 (DDLme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;)Lme/alllex/tbot/api/model/EditMessageLiveLocationRequest;
-	public static synthetic fun copy-9GcAy50$default (Lme/alllex/tbot/api/model/EditMessageLiveLocationRequest;DDLme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;ILjava/lang/Object;)Lme/alllex/tbot/api/model/EditMessageLiveLocationRequest;
+	public final fun component9 ()Ljava/lang/Long;
+	public final fun copy-OKzvW8c (DDLme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;)Lme/alllex/tbot/api/model/EditMessageLiveLocationRequest;
+	public static synthetic fun copy-OKzvW8c$default (Lme/alllex/tbot/api/model/EditMessageLiveLocationRequest;DDLme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;ILjava/lang/Object;)Lme/alllex/tbot/api/model/EditMessageLiveLocationRequest;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getChatId-0Gpa5D8 ()Lme/alllex/tbot/api/model/ChatId;
 	public final fun getHeading ()Ljava/lang/Long;
 	public final fun getHorizontalAccuracy ()Ljava/lang/Double;
 	public final fun getInlineMessageId-C2ZHHQs ()Ljava/lang/String;
 	public final fun getLatitude ()D
+	public final fun getLivePeriod ()Ljava/lang/Long;
 	public final fun getLongitude ()D
 	public final fun getMessageId-XcDfd4U ()Lme/alllex/tbot/api/model/MessageId;
 	public final fun getProximityAlertRadius ()Ljava/lang/Long;
@@ -6269,6 +6569,38 @@ public final class me/alllex/tbot/api/model/InputMessageContentSerializer : kotl
 	public static final field INSTANCE Lme/alllex/tbot/api/model/InputMessageContentSerializer;
 }
 
+public final class me/alllex/tbot/api/model/InputPollOption {
+	public static final field Companion Lme/alllex/tbot/api/model/InputPollOption$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lme/alllex/tbot/api/model/InputPollOption;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/InputPollOption;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lme/alllex/tbot/api/model/InputPollOption;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public final fun getTextEntities ()Ljava/util/List;
+	public final fun getTextParseMode ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/InputPollOption$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/InputPollOption$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/InputPollOption;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/InputPollOption;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/InputPollOption$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class me/alllex/tbot/api/model/InputSticker {
 	public static final field Companion Lme/alllex/tbot/api/model/InputSticker$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/MaskPosition;Ljava/util/List;)V
@@ -6826,8 +7158,8 @@ public final class me/alllex/tbot/api/model/MenuButtonWebApp$Companion {
 
 public final class me/alllex/tbot/api/model/Message {
 	public static final field Companion Lme/alllex/tbot/api/model/Message$Companion;
-	public synthetic fun <init> (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Ljava/lang/Long;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageOrigin;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ExternalReplyInfo;Lme/alllex/tbot/api/model/TextQuote;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UsersShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ChatBoostAdded;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/GiveawayCreated;Lme/alllex/tbot/api/model/Giveaway;Lme/alllex/tbot/api/model/GiveawayWinners;Lme/alllex/tbot/api/model/GiveawayCompleted;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Ljava/lang/Long;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageOrigin;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ExternalReplyInfo;Lme/alllex/tbot/api/model/TextQuote;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UsersShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ChatBoostAdded;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/GiveawayCreated;Lme/alllex/tbot/api/model/Giveaway;Lme/alllex/tbot/api/model/GiveawayWinners;Lme/alllex/tbot/api/model/GiveawayCompleted;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Ljava/lang/Long;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageOrigin;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ExternalReplyInfo;Lme/alllex/tbot/api/model/TextQuote;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UsersShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ChatBoostAdded;Lme/alllex/tbot/api/model/ChatBackground;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/GiveawayCreated;Lme/alllex/tbot/api/model/Giveaway;Lme/alllex/tbot/api/model/GiveawayWinners;Lme/alllex/tbot/api/model/GiveawayCompleted;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Ljava/lang/Long;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageOrigin;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ExternalReplyInfo;Lme/alllex/tbot/api/model/TextQuote;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UsersShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ChatBoostAdded;Lme/alllex/tbot/api/model/ChatBackground;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/GiveawayCreated;Lme/alllex/tbot/api/model/Giveaway;Lme/alllex/tbot/api/model/GiveawayWinners;Lme/alllex/tbot/api/model/GiveawayCompleted;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-2OzcLEE ()J
 	public final fun component10 ()Lme/alllex/tbot/api/model/MessageOrigin;
 	public final fun component11 ()Ljava/lang/Boolean;
@@ -6889,27 +7221,28 @@ public final class me/alllex/tbot/api/model/Message {
 	public final fun component62 ()Lme/alllex/tbot/api/model/PassportData;
 	public final fun component63 ()Lme/alllex/tbot/api/model/ProximityAlertTriggered;
 	public final fun component64 ()Lme/alllex/tbot/api/model/ChatBoostAdded;
-	public final fun component65 ()Lme/alllex/tbot/api/model/ForumTopicCreated;
-	public final fun component66 ()Lme/alllex/tbot/api/model/ForumTopicEdited;
-	public final fun component67 ()Lme/alllex/tbot/api/model/ForumTopicClosed;
-	public final fun component68 ()Lme/alllex/tbot/api/model/ForumTopicReopened;
-	public final fun component69 ()Lme/alllex/tbot/api/model/GeneralForumTopicHidden;
+	public final fun component65 ()Lme/alllex/tbot/api/model/ChatBackground;
+	public final fun component66 ()Lme/alllex/tbot/api/model/ForumTopicCreated;
+	public final fun component67 ()Lme/alllex/tbot/api/model/ForumTopicEdited;
+	public final fun component68 ()Lme/alllex/tbot/api/model/ForumTopicClosed;
+	public final fun component69 ()Lme/alllex/tbot/api/model/ForumTopicReopened;
 	public final fun component7 ()Ljava/lang/Long;
-	public final fun component70 ()Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;
-	public final fun component71 ()Lme/alllex/tbot/api/model/GiveawayCreated;
-	public final fun component72 ()Lme/alllex/tbot/api/model/Giveaway;
-	public final fun component73 ()Lme/alllex/tbot/api/model/GiveawayWinners;
-	public final fun component74 ()Lme/alllex/tbot/api/model/GiveawayCompleted;
-	public final fun component75 ()Lme/alllex/tbot/api/model/VideoChatScheduled;
-	public final fun component76 ()Lme/alllex/tbot/api/model/VideoChatStarted;
-	public final fun component77 ()Lme/alllex/tbot/api/model/VideoChatEnded;
-	public final fun component78 ()Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;
-	public final fun component79 ()Lme/alllex/tbot/api/model/WebAppData;
+	public final fun component70 ()Lme/alllex/tbot/api/model/GeneralForumTopicHidden;
+	public final fun component71 ()Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;
+	public final fun component72 ()Lme/alllex/tbot/api/model/GiveawayCreated;
+	public final fun component73 ()Lme/alllex/tbot/api/model/Giveaway;
+	public final fun component74 ()Lme/alllex/tbot/api/model/GiveawayWinners;
+	public final fun component75 ()Lme/alllex/tbot/api/model/GiveawayCompleted;
+	public final fun component76 ()Lme/alllex/tbot/api/model/VideoChatScheduled;
+	public final fun component77 ()Lme/alllex/tbot/api/model/VideoChatStarted;
+	public final fun component78 ()Lme/alllex/tbot/api/model/VideoChatEnded;
+	public final fun component79 ()Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;
 	public final fun component8 ()Lme/alllex/tbot/api/model/User;
-	public final fun component80 ()Lme/alllex/tbot/api/model/InlineKeyboardMarkup;
+	public final fun component80 ()Lme/alllex/tbot/api/model/WebAppData;
+	public final fun component81 ()Lme/alllex/tbot/api/model/InlineKeyboardMarkup;
 	public final fun component9 ()Ljava/lang/String;
-	public final fun copy-fSMz2f0 (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Ljava/lang/Long;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageOrigin;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ExternalReplyInfo;Lme/alllex/tbot/api/model/TextQuote;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UsersShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ChatBoostAdded;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/GiveawayCreated;Lme/alllex/tbot/api/model/Giveaway;Lme/alllex/tbot/api/model/GiveawayWinners;Lme/alllex/tbot/api/model/GiveawayCompleted;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;)Lme/alllex/tbot/api/model/Message;
-	public static synthetic fun copy-fSMz2f0$default (Lme/alllex/tbot/api/model/Message;JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Ljava/lang/Long;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageOrigin;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ExternalReplyInfo;Lme/alllex/tbot/api/model/TextQuote;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UsersShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ChatBoostAdded;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/GiveawayCreated;Lme/alllex/tbot/api/model/Giveaway;Lme/alllex/tbot/api/model/GiveawayWinners;Lme/alllex/tbot/api/model/GiveawayCompleted;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;IIILjava/lang/Object;)Lme/alllex/tbot/api/model/Message;
+	public final fun copy-OEBMHSQ (JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Ljava/lang/Long;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageOrigin;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ExternalReplyInfo;Lme/alllex/tbot/api/model/TextQuote;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UsersShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ChatBoostAdded;Lme/alllex/tbot/api/model/ChatBackground;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/GiveawayCreated;Lme/alllex/tbot/api/model/Giveaway;Lme/alllex/tbot/api/model/GiveawayWinners;Lme/alllex/tbot/api/model/GiveawayCompleted;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;)Lme/alllex/tbot/api/model/Message;
+	public static synthetic fun copy-OEBMHSQ$default (Lme/alllex/tbot/api/model/Message;JJLme/alllex/tbot/api/model/Chat;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/Chat;Ljava/lang/Long;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageOrigin;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/ExternalReplyInfo;Lme/alllex/tbot/api/model/TextQuote;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/Animation;Lme/alllex/tbot/api/model/Audio;Lme/alllex/tbot/api/model/Document;Ljava/util/List;Lme/alllex/tbot/api/model/Sticker;Lme/alllex/tbot/api/model/Story;Lme/alllex/tbot/api/model/Video;Lme/alllex/tbot/api/model/VideoNote;Lme/alllex/tbot/api/model/Voice;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/Contact;Lme/alllex/tbot/api/model/Dice;Lme/alllex/tbot/api/model/Game;Lme/alllex/tbot/api/model/Poll;Lme/alllex/tbot/api/model/Venue;Lme/alllex/tbot/api/model/Location;Ljava/util/List;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/MessageAutoDeleteTimerChanged;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/ChatId;Lme/alllex/tbot/api/model/Message;Lme/alllex/tbot/api/model/Invoice;Lme/alllex/tbot/api/model/SuccessfulPayment;Lme/alllex/tbot/api/model/UsersShared;Lme/alllex/tbot/api/model/ChatShared;Ljava/lang/String;Lme/alllex/tbot/api/model/WriteAccessAllowed;Lme/alllex/tbot/api/model/PassportData;Lme/alllex/tbot/api/model/ProximityAlertTriggered;Lme/alllex/tbot/api/model/ChatBoostAdded;Lme/alllex/tbot/api/model/ChatBackground;Lme/alllex/tbot/api/model/ForumTopicCreated;Lme/alllex/tbot/api/model/ForumTopicEdited;Lme/alllex/tbot/api/model/ForumTopicClosed;Lme/alllex/tbot/api/model/ForumTopicReopened;Lme/alllex/tbot/api/model/GeneralForumTopicHidden;Lme/alllex/tbot/api/model/GeneralForumTopicUnhidden;Lme/alllex/tbot/api/model/GiveawayCreated;Lme/alllex/tbot/api/model/Giveaway;Lme/alllex/tbot/api/model/GiveawayWinners;Lme/alllex/tbot/api/model/GiveawayCompleted;Lme/alllex/tbot/api/model/VideoChatScheduled;Lme/alllex/tbot/api/model/VideoChatStarted;Lme/alllex/tbot/api/model/VideoChatEnded;Lme/alllex/tbot/api/model/VideoChatParticipantsInvited;Lme/alllex/tbot/api/model/WebAppData;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;IIILjava/lang/Object;)Lme/alllex/tbot/api/model/Message;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAnimation ()Lme/alllex/tbot/api/model/Animation;
 	public final fun getAudio ()Lme/alllex/tbot/api/model/Audio;
@@ -6920,6 +7253,7 @@ public final class me/alllex/tbot/api/model/Message {
 	public final fun getCaptionEntities ()Ljava/util/List;
 	public final fun getChannelChatCreated ()Ljava/lang/Boolean;
 	public final fun getChat ()Lme/alllex/tbot/api/model/Chat;
+	public final fun getChatBackgroundSet ()Lme/alllex/tbot/api/model/ChatBackground;
 	public final fun getChatShared ()Lme/alllex/tbot/api/model/ChatShared;
 	public final fun getConnectedWebsite ()Ljava/lang/String;
 	public final fun getContact ()Lme/alllex/tbot/api/model/Contact;
@@ -7508,8 +7842,8 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static final fun editGeneralForumTopic-BeieCNI (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun editInlineMessageCaption-tNPJ-D4 (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editInlineMessageCaption-tNPJ-D4$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun editInlineMessageLiveLocation-nsM-4mU (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDLjava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun editInlineMessageLiveLocation-nsM-4mU$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDLjava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun editInlineMessageLiveLocation-Gq3-0Sc (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDLjava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun editInlineMessageLiveLocation-Gq3-0Sc$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDLjava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editInlineMessageMedia-tbJO12A (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/InputMedia;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editInlineMessageMedia-tbJO12A$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/InputMedia;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editInlineMessageReplyMarkup-hNf7rw4 (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -7518,8 +7852,8 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static synthetic fun editInlineMessageText-zqdqPX0$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editMessageCaption-2mlvnJQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editMessageCaption-2mlvnJQ$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun editMessageLiveLocation-bPT5Mn0 (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDJJLjava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun editMessageLiveLocation-bPT5Mn0$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDJJLjava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun editMessageLiveLocation-udnIvkQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDJJLjava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun editMessageLiveLocation-udnIvkQ$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDJJLjava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editMessageMedia-D9OBLUA (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/InputMedia;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editMessageMedia-D9OBLUA$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/InputMedia;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editMessageReplyMarkup-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -7598,8 +7932,8 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static synthetic fun sendMessage-BVCUU0g$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendPhoto-QmBrTfM (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun sendPhoto-QmBrTfM$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun sendPoll-0pBXJTg (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun sendPoll-0pBXJTg$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun sendPoll-BfLtoFQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun sendPoll-BfLtoFQ$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendSticker-9FMtDyc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun sendSticker-9FMtDyc$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendVenue-Ym3DRWs (Lme/alllex/tbot/api/client/TelegramBotApiClient;JDDLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -8188,13 +8522,14 @@ public final class me/alllex/tbot/api/model/PinChatMessageRequest$Companion {
 
 public final class me/alllex/tbot/api/model/Poll {
 	public static final field Companion Lme/alllex/tbot/api/model/Poll$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;JZZLjava/lang/String;ZLjava/lang/Long;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;JZZLjava/lang/String;ZLjava/lang/Long;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;JZZLjava/lang/String;ZLjava/util/List;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;JZZLjava/lang/String;ZLjava/util/List;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component11 ()Ljava/util/List;
-	public final fun component12-5ulOH2g ()Lme/alllex/tbot/api/model/Seconds;
-	public final fun component13-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
+	public final fun component10 ()Ljava/lang/Long;
+	public final fun component11 ()Ljava/lang/String;
+	public final fun component12 ()Ljava/util/List;
+	public final fun component13-5ulOH2g ()Lme/alllex/tbot/api/model/Seconds;
+	public final fun component14-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/util/List;
 	public final fun component4 ()J
@@ -8202,9 +8537,9 @@ public final class me/alllex/tbot/api/model/Poll {
 	public final fun component6 ()Z
 	public final fun component7 ()Ljava/lang/String;
 	public final fun component8 ()Z
-	public final fun component9 ()Ljava/lang/Long;
-	public final fun copy-ag38tM4 (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;JZZLjava/lang/String;ZLjava/lang/Long;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;)Lme/alllex/tbot/api/model/Poll;
-	public static synthetic fun copy-ag38tM4$default (Lme/alllex/tbot/api/model/Poll;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;JZZLjava/lang/String;ZLjava/lang/Long;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;ILjava/lang/Object;)Lme/alllex/tbot/api/model/Poll;
+	public final fun component9 ()Ljava/util/List;
+	public final fun copy-dlNIlG0 (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;JZZLjava/lang/String;ZLjava/util/List;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;)Lme/alllex/tbot/api/model/Poll;
+	public static synthetic fun copy-dlNIlG0$default (Lme/alllex/tbot/api/model/Poll;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;JZZLjava/lang/String;ZLjava/util/List;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;ILjava/lang/Object;)Lme/alllex/tbot/api/model/Poll;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAllowsMultipleAnswers ()Z
 	public final fun getCloseDate-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
@@ -8215,6 +8550,7 @@ public final class me/alllex/tbot/api/model/Poll {
 	public final fun getOpenPeriod-5ulOH2g ()Lme/alllex/tbot/api/model/Seconds;
 	public final fun getOptions ()Ljava/util/List;
 	public final fun getQuestion ()Ljava/lang/String;
+	public final fun getQuestionEntities ()Ljava/util/List;
 	public final fun getTotalVoterCount ()J
 	public final fun getType ()Ljava/lang/String;
 	public fun hashCode ()I
@@ -8304,13 +8640,16 @@ public final class me/alllex/tbot/api/model/PollAnswerUpdate$Companion {
 
 public final class me/alllex/tbot/api/model/PollOption {
 	public static final field Companion Lme/alllex/tbot/api/model/PollOption$Companion;
-	public fun <init> (Ljava/lang/String;J)V
+	public fun <init> (Ljava/lang/String;JLjava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;JLjava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()J
-	public final fun copy (Ljava/lang/String;J)Lme/alllex/tbot/api/model/PollOption;
-	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/PollOption;Ljava/lang/String;JILjava/lang/Object;)Lme/alllex/tbot/api/model/PollOption;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;JLjava/util/List;)Lme/alllex/tbot/api/model/PollOption;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/PollOption;Ljava/lang/String;JLjava/util/List;ILjava/lang/Object;)Lme/alllex/tbot/api/model/PollOption;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getText ()Ljava/lang/String;
+	public final fun getTextEntities ()Ljava/util/List;
 	public final fun getVoterCount ()J
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -9581,29 +9920,31 @@ public final class me/alllex/tbot/api/model/SendPhotoRequest$Companion {
 
 public final class me/alllex/tbot/api/model/SendPollRequest {
 	public static final field Companion Lme/alllex/tbot/api/model/SendPollRequest$Companion;
-	public synthetic fun <init> (JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-dK1lXec ()J
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/util/List;
-	public final fun component13-5ulOH2g ()Lme/alllex/tbot/api/model/Seconds;
-	public final fun component14-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
-	public final fun component15 ()Ljava/lang/Boolean;
-	public final fun component16 ()Ljava/lang/Boolean;
+	public final fun component10 ()Ljava/lang/Boolean;
+	public final fun component11 ()Ljava/lang/Long;
+	public final fun component12 ()Ljava/lang/String;
+	public final fun component13 ()Ljava/lang/String;
+	public final fun component14 ()Ljava/util/List;
+	public final fun component15-5ulOH2g ()Lme/alllex/tbot/api/model/Seconds;
+	public final fun component16-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun component17 ()Ljava/lang/Boolean;
-	public final fun component18 ()Lme/alllex/tbot/api/model/ReplyParameters;
-	public final fun component19 ()Lme/alllex/tbot/api/model/ReplyMarkup;
+	public final fun component18 ()Ljava/lang/Boolean;
+	public final fun component19 ()Ljava/lang/Boolean;
 	public final fun component2 ()Ljava/lang/String;
+	public final fun component20 ()Lme/alllex/tbot/api/model/ReplyParameters;
+	public final fun component21 ()Lme/alllex/tbot/api/model/ReplyMarkup;
 	public final fun component3 ()Ljava/util/List;
 	public final fun component4 ()Ljava/lang/String;
 	public final fun component5-dizcC0o ()Lme/alllex/tbot/api/model/MessageThreadId;
-	public final fun component6 ()Ljava/lang/Boolean;
-	public final fun component7 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/util/List;
 	public final fun component8 ()Ljava/lang/Boolean;
-	public final fun component9 ()Ljava/lang/Long;
-	public final fun copy-cWonIqI (JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;)Lme/alllex/tbot/api/model/SendPollRequest;
-	public static synthetic fun copy-cWonIqI$default (Lme/alllex/tbot/api/model/SendPollRequest;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;ILjava/lang/Object;)Lme/alllex/tbot/api/model/SendPollRequest;
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy-IOeNfto (JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;)Lme/alllex/tbot/api/model/SendPollRequest;
+	public static synthetic fun copy-IOeNfto$default (Lme/alllex/tbot/api/model/SendPollRequest;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;ILjava/lang/Object;)Lme/alllex/tbot/api/model/SendPollRequest;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAllowsMultipleAnswers ()Ljava/lang/Boolean;
 	public final fun getBusinessConnectionId ()Ljava/lang/String;
@@ -9619,6 +9960,8 @@ public final class me/alllex/tbot/api/model/SendPollRequest {
 	public final fun getOptions ()Ljava/util/List;
 	public final fun getProtectContent ()Ljava/lang/Boolean;
 	public final fun getQuestion ()Ljava/lang/String;
+	public final fun getQuestionEntities ()Ljava/util/List;
+	public final fun getQuestionParseMode ()Ljava/lang/String;
 	public final fun getReplyMarkup ()Lme/alllex/tbot/api/model/ReplyMarkup;
 	public final fun getReplyParameters ()Lme/alllex/tbot/api/model/ReplyParameters;
 	public final fun getType ()Ljava/lang/String;
@@ -11192,8 +11535,8 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static final fun tryEditGeneralForumTopic-BeieCNI (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryEditInlineMessageCaption-tNPJ-D4 (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditInlineMessageCaption-tNPJ-D4$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun tryEditInlineMessageLiveLocation-nsM-4mU (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDLjava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryEditInlineMessageLiveLocation-nsM-4mU$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDLjava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryEditInlineMessageLiveLocation-Gq3-0Sc (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDLjava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryEditInlineMessageLiveLocation-Gq3-0Sc$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDLjava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditInlineMessageMedia-tbJO12A (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/InputMedia;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditInlineMessageMedia-tbJO12A$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/InputMedia;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditInlineMessageReplyMarkup-hNf7rw4 (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -11202,8 +11545,8 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static synthetic fun tryEditInlineMessageText-zqdqPX0$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditMessageCaption-2mlvnJQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditMessageCaption-2mlvnJQ$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun tryEditMessageLiveLocation-bPT5Mn0 (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDJJLjava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryEditMessageLiveLocation-bPT5Mn0$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDJJLjava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryEditMessageLiveLocation-udnIvkQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDJJLjava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryEditMessageLiveLocation-udnIvkQ$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;DDJJLjava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditMessageMedia-D9OBLUA (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/InputMedia;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditMessageMedia-D9OBLUA$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/InputMedia;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditMessageReplyMarkup-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -11278,8 +11621,8 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static synthetic fun trySendMessage-BVCUU0g$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendPhoto-QmBrTfM (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun trySendPhoto-QmBrTfM$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun trySendPoll-0pBXJTg (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun trySendPoll-0pBXJTg$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun trySendPoll-BfLtoFQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun trySendPoll-BfLtoFQ$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendSticker-9FMtDyc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun trySendSticker-9FMtDyc$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendVenue-Ym3DRWs (Lme/alllex/tbot/api/client/TelegramBotApiClient;JDDLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -11528,8 +11871,8 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static final fun tryEditGeneralForumTopic-BeieCNI (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryEditInlineMessageCaption-tNPJ-D4 (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditInlineMessageCaption-tNPJ-D4$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun tryEditInlineMessageLiveLocation-nsM-4mU (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDLjava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryEditInlineMessageLiveLocation-nsM-4mU$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDLjava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryEditInlineMessageLiveLocation-Gq3-0Sc (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDLjava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryEditInlineMessageLiveLocation-Gq3-0Sc$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDLjava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditInlineMessageMedia-tbJO12A (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/InputMedia;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditInlineMessageMedia-tbJO12A$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/InputMedia;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditInlineMessageReplyMarkup-hNf7rw4 (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -11538,8 +11881,8 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static synthetic fun tryEditInlineMessageText-zqdqPX0$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditMessageCaption-2mlvnJQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditMessageCaption-2mlvnJQ$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun tryEditMessageLiveLocation-bPT5Mn0 (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDJJLjava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryEditMessageLiveLocation-bPT5Mn0$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDJJLjava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryEditMessageLiveLocation-udnIvkQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDJJLjava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryEditMessageLiveLocation-udnIvkQ$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDJJLjava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditMessageMedia-D9OBLUA (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/InputMedia;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditMessageMedia-D9OBLUA$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/InputMedia;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditMessageReplyMarkup-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -11618,8 +11961,8 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static synthetic fun trySendMessage-BVCUU0g$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendPhoto-QmBrTfM (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun trySendPhoto-QmBrTfM$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun trySendPoll-0pBXJTg (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun trySendPoll-0pBXJTg$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun trySendPoll-BfLtoFQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun trySendPoll-BfLtoFQ$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendSticker-9FMtDyc (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun trySendSticker-9FMtDyc$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendVenue-Ym3DRWs (Lme/alllex/tbot/api/client/TelegramBotApiContext;JDDLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12594,8 +12937,8 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static final fun editGeneralForumTopic-BeieCNI (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun editInlineMessageCaption-tNPJ-D4 (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editInlineMessageCaption-tNPJ-D4$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun editInlineMessageLiveLocation-nsM-4mU (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDLjava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun editInlineMessageLiveLocation-nsM-4mU$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDLjava/lang/String;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun editInlineMessageLiveLocation-Gq3-0Sc (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDLjava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun editInlineMessageLiveLocation-Gq3-0Sc$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDLjava/lang/String;Ljava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editInlineMessageMedia-tbJO12A (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/InputMedia;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editInlineMessageMedia-tbJO12A$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/InputMedia;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editInlineMessageReplyMarkup-hNf7rw4 (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12604,8 +12947,8 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static synthetic fun editInlineMessageText-zqdqPX0$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editMessageCaption-2mlvnJQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editMessageCaption-2mlvnJQ$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun editMessageLiveLocation-bPT5Mn0 (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDJJLjava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun editMessageLiveLocation-bPT5Mn0$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDJJLjava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun editMessageLiveLocation-udnIvkQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDJJLjava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun editMessageLiveLocation-udnIvkQ$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;DDJJLjava/lang/Long;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Long;Lme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editMessageMedia-D9OBLUA (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/InputMedia;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editMessageMedia-D9OBLUA$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/InputMedia;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editMessageReplyMarkup-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLme/alllex/tbot/api/model/InlineKeyboardMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12758,12 +13101,12 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static synthetic fun sendPhoto-QmBrTfM$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendPhoto-_SrW5ww (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Chat;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun sendPhoto-_SrW5ww$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Chat;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun sendPoll-0pBXJTg (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun sendPoll-0pBXJTg$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun sendPoll-469wkfs (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Chat;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun sendPoll-469wkfs$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Chat;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun sendPoll-4FvbwhI (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun sendPoll-4FvbwhI$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun sendPoll-3xlArQM (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Chat;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun sendPoll-3xlArQM$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Chat;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun sendPoll-BfLtoFQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun sendPoll-BfLtoFQ$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun sendPoll-ohTmX8E (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun sendPoll-ohTmX8E$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendSticker-9FMtDyc (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun sendSticker-9FMtDyc$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendVenue-5U9pimU (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Chat;DDLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

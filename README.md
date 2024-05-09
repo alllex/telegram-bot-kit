@@ -64,11 +64,12 @@ The bindings are generated directly from the source-of-truth [Bot API spec](http
 
 | Telegram Bot API | tbot-api library |
 |------------------|------------------|
+| `7.3`            | `0.5.0`          |
 | `6.9`            | `0.4.0`          |
 
 | tbot-api library | Requirement               |
 |------------------|---------------------------|
-| `0.4.0`          | Kotlin `1.9.0+`, JVM `8+` |
+| `0.4.0`+         | Kotlin `1.9.0+`, JVM `8+` |
 
 
 ## Developing

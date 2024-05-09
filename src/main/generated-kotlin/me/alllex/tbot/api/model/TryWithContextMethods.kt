@@ -98,7 +98,7 @@ suspend fun tryClose(): TelegramResponse<Boolean> =
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendMessage(
@@ -171,7 +171,7 @@ suspend fun tryForwardMessages(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun tryCopyMessage(
@@ -226,7 +226,7 @@ suspend fun tryCopyMessages(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendPhoto(
@@ -264,7 +264,7 @@ suspend fun trySendPhoto(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendAudio(
@@ -301,7 +301,7 @@ suspend fun trySendAudio(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendDocument(
@@ -340,7 +340,7 @@ suspend fun trySendDocument(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendVideo(
@@ -382,7 +382,7 @@ suspend fun trySendVideo(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendAnimation(
@@ -406,7 +406,7 @@ suspend fun trySendAnimation(
     botApiClient.trySendAnimation(SendAnimationRequest(chatId, animation, businessConnectionId, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, hasSpoiler, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
- * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param voice Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
@@ -419,7 +419,7 @@ suspend fun trySendAnimation(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendVoice(
@@ -451,7 +451,7 @@ suspend fun trySendVoice(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendVideoNote(
@@ -501,13 +501,13 @@ suspend fun trySendMediaGroup(
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
- * @param livePeriod Period in seconds for which the location will be updated (see Live Locations, should be between 60 and 86400.
+ * @param livePeriod Period in seconds during which the location will be updated (see Live Locations, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
  * @param heading For live locations, a direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param proximityAlertRadius For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendLocation(
@@ -544,7 +544,7 @@ suspend fun trySendLocation(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendVenue(
@@ -579,7 +579,7 @@ suspend fun trySendVenue(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendContact(
@@ -602,31 +602,35 @@ suspend fun trySendContact(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param question Poll question, 1-300 characters
- * @param options A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
+ * @param options A JSON-serialized list of 2-10 answer options
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+ * @param questionParseMode Mode for parsing entities in the question. See formatting options for more details. Currently, only custom emoji entities are allowed
+ * @param questionEntities A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of question_parse_mode
  * @param isAnonymous True, if the poll needs to be anonymous, defaults to True
  * @param type Poll type, “quiz” or “regular”, defaults to “regular”
  * @param allowsMultipleAnswers True, if the poll allows multiple answers, ignored for polls in quiz mode, defaults to False
  * @param correctOptionId 0-based identifier of the correct answer option, required for polls in quiz mode
  * @param explanation Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters with at most 2 line feeds after entities parsing
  * @param explanationParseMode Mode for parsing entities in the explanation. See formatting options for more details.
- * @param explanationEntities A JSON-serialized list of special entities that appear in the poll explanation, which can be specified instead of parse_mode
+ * @param explanationEntities A JSON-serialized list of special entities that appear in the poll explanation. It can be specified instead of explanation_parse_mode
  * @param openPeriod Amount of time in seconds the poll will be active after creation, 5-600. Can't be used together with close_date.
  * @param closeDate Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 600 seconds in the future. Can't be used together with open_period.
  * @param isClosed Pass True if the poll needs to be immediately closed. This can be useful for poll preview.
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendPoll(
     chatId: ChatId,
     question: String,
-    options: List<String>,
+    options: List<InputPollOption>,
     businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
+    questionParseMode: String? = null,
+    questionEntities: List<MessageEntity>? = null,
     isAnonymous: Boolean? = null,
     type: String? = null,
     allowsMultipleAnswers: Boolean? = null,
@@ -642,7 +646,7 @@ suspend fun trySendPoll(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendPoll(SendPollRequest(chatId, question, options, businessConnectionId, messageThreadId, isAnonymous, type, allowsMultipleAnswers, correctOptionId, explanation, explanationParseMode, explanationEntities, openPeriod, closeDate, isClosed, disableNotification, protectContent, replyParameters, replyMarkup))
+    botApiClient.trySendPoll(SendPollRequest(chatId, question, options, businessConnectionId, messageThreadId, questionParseMode, questionEntities, isAnonymous, type, allowsMultipleAnswers, correctOptionId, explanation, explanationParseMode, explanationEntities, openPeriod, closeDate, isClosed, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned.
@@ -654,7 +658,7 @@ suspend fun trySendPoll(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendDice(
@@ -798,7 +802,7 @@ suspend fun tryRestrictChatMember(
  * @param canChangeInfo Pass True if the administrator can change chat title, photo and other settings
  * @param canInviteUsers Pass True if the administrator can invite new users to the chat
  * @param canPostStories Pass True if the administrator can post stories to the chat
- * @param canEditStories Pass True if the administrator can edit stories posted by other users
+ * @param canEditStories Pass True if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
  * @param canDeleteStories Pass True if the administrator can delete stories posted by other users
  * @param canPostMessages Pass True if the administrator can post messages in the channel, or access channel statistics; for channels only
  * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; for channels only
@@ -1074,14 +1078,14 @@ suspend fun tryLeaveChat(
     botApiClient.tryLeaveChat(LeaveChatRequest(chatId))
 
 /**
- * Use this method to get up to date information about the chat. Returns a Chat object on success.
+ * Use this method to get up-to-date information about the chat. Returns a ChatFullInfo object on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
  */
 context(TelegramBotApiContext)
 suspend fun tryGetChat(
     chatId: ChatId,
-): TelegramResponse<Chat> =
+): TelegramResponse<ChatFullInfo> =
     botApiClient.tryGetChat(GetChatRequest(chatId))
 
 /**
@@ -1633,6 +1637,7 @@ suspend fun tryEditInlineMessageMedia(
  * @param longitude Longitude of new location
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param livePeriod New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged
  * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
  * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
@@ -1644,12 +1649,13 @@ suspend fun tryEditMessageLiveLocation(
     longitude: Double,
     chatId: ChatId,
     messageId: MessageId,
+    livePeriod: Long? = null,
     horizontalAccuracy: Double? = null,
     heading: Long? = null,
     proximityAlertRadius: Long? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.tryEditMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, chatId = chatId, messageId = messageId, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup))
+    botApiClient.tryEditMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, chatId = chatId, messageId = messageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup))
 
 /**
  * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success True is returned.
@@ -1657,6 +1663,7 @@ suspend fun tryEditMessageLiveLocation(
  * @param latitude Latitude of new location
  * @param longitude Longitude of new location
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param livePeriod New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged
  * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
  * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
@@ -1667,12 +1674,13 @@ suspend fun tryEditInlineMessageLiveLocation(
     latitude: Double,
     longitude: Double,
     inlineMessageId: InlineMessageId,
+    livePeriod: Long? = null,
     horizontalAccuracy: Double? = null,
     heading: Long? = null,
     proximityAlertRadius: Long? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
 ): TelegramResponse<Boolean> =
-    botApiClient.tryEditInlineMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, inlineMessageId = inlineMessageId, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup))
+    botApiClient.tryEditInlineMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, inlineMessageId = inlineMessageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup))
 
 /**
  * Use this method to stop updating a live location message before live_period expires. On success the edited Message is returned.
@@ -1782,7 +1790,7 @@ suspend fun tryDeleteMessages(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account.
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  */
 context(TelegramBotApiContext)
 suspend fun trySendSticker(
@@ -2208,7 +2216,7 @@ suspend fun trySetPassportDataErrors(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
- * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game. Not supported for messages sent on behalf of a business account.
+ * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
  */
 context(TelegramBotApiContext)
 suspend fun trySendGame(

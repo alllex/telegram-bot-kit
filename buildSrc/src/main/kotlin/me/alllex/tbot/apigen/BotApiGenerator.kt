@@ -180,7 +180,7 @@ val valueTypes = listOf(
 
 private val unionMarkerValueInDescriptionRe = Regex("""(?:must be|always) ["“”]?([\w_]+)["“”]?""")
 
-private val unionMarkerFieldNames = setOf("type", "status")
+private val unionMarkerFieldNames = setOf("type", "status", "source")
 
 fun BotApiElement.Field.isUnionDiscriminator(): Boolean {
     return serialName in unionMarkerFieldNames
@@ -218,18 +218,18 @@ val fluentMethods = listOf(
     FluentContextMethod("ChatId", "sendMarkdownV2", "sendMessage", mapOf("chatId" to "this", "parseMode" to "ParseMode.MARKDOWN_V2")),
     FluentContextMethod("ChatId", "sendHtml", "sendMessage", mapOf("chatId" to "this", "parseMode" to "ParseMode.HTML")),
 
-    FluentContextMethod("Message", "reply", "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId")),
+    FluentContextMethod("Message", "reply", "sendMessage", mapOf("chatId" to "chat.id", "replyParameters" to "ReplyParameters(messageId)")),
     FluentContextMethod(
         "Message", "replyMarkdown",
-        "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN")
+        "sendMessage", mapOf("chatId" to "chat.id", "replyParameters" to "ReplyParameters(messageId)", "parseMode" to "ParseMode.MARKDOWN")
     ),
     FluentContextMethod(
         "Message", "replyMarkdownV2",
-        "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId", "parseMode" to "ParseMode.MARKDOWN_V2")
+        "sendMessage", mapOf("chatId" to "chat.id", "replyParameters" to "ReplyParameters(messageId)", "parseMode" to "ParseMode.MARKDOWN_V2")
     ),
     FluentContextMethod(
         "Message", "replyHtml",
-        "sendMessage", mapOf("chatId" to "chat.id", "replyToMessageId" to "messageId", "parseMode" to "ParseMode.HTML")
+        "sendMessage", mapOf("chatId" to "chat.id", "replyParameters" to "ReplyParameters(messageId)", "parseMode" to "ParseMode.HTML")
     ),
 
     FluentContextMethod(
@@ -781,6 +781,7 @@ class BotApiGenerator {
 
         appendLine("sealed interface ${name.value}")
 
+        // TODO: add value-based discrimination
         if (discriminatorFieldName == null) {
             val avoidFields = setOf("description")
             val discriminatorFieldByType = unionTypes.associate { unionType ->

@@ -54,16 +54,28 @@ suspend fun TelegramBotApiClient.trySendMessage(requestBody: SendMessageRequest)
     telegramPost("sendMessage", requestBody)
 
 /**
- * Use this method to forward messages of any kind. Service messages can't be forwarded. On success, the sent Message is returned.
+ * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned.
  */
 suspend fun TelegramBotApiClient.tryForwardMessage(requestBody: ForwardMessageRequest): TelegramResponse<Message> =
     telegramPost("forwardMessage", requestBody)
 
 /**
- * Use this method to copy messages of any kind. Service messages and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+ * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.
  */
-suspend fun TelegramBotApiClient.tryCopyMessage(requestBody: CopyMessageRequest): TelegramResponse<MessageIdResult> =
+suspend fun TelegramBotApiClient.tryForwardMessages(requestBody: ForwardMessagesRequest): TelegramResponse<List<MessageRef>> =
+    telegramPost("forwardMessages", requestBody)
+
+/**
+ * Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+ */
+suspend fun TelegramBotApiClient.tryCopyMessage(requestBody: CopyMessageRequest): TelegramResponse<MessageRef> =
     telegramPost("copyMessage", requestBody)
+
+/**
+ * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
+ */
+suspend fun TelegramBotApiClient.tryCopyMessages(requestBody: CopyMessagesRequest): TelegramResponse<List<MessageRef>> =
+    telegramPost("copyMessages", requestBody)
 
 /**
  * Use this method to send photos. On success, the sent Message is returned.
@@ -154,6 +166,12 @@ suspend fun TelegramBotApiClient.trySendDice(requestBody: SendDiceRequest): Tele
  */
 suspend fun TelegramBotApiClient.trySendChatAction(requestBody: SendChatActionRequest): TelegramResponse<Boolean> =
     telegramPost("sendChatAction", requestBody)
+
+/**
+ * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetMessageReaction(requestBody: SetMessageReactionRequest): TelegramResponse<Boolean> =
+    telegramPost("setMessageReaction", requestBody)
 
 /**
  * Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
@@ -300,7 +318,7 @@ suspend fun TelegramBotApiClient.tryLeaveChat(requestBody: LeaveChatRequest): Te
     telegramPost("leaveChat", requestBody)
 
 /**
- * Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success.
+ * Use this method to get up to date information about the chat. Returns a Chat object on success.
  */
 suspend fun TelegramBotApiClient.tryGetChat(requestBody: GetChatRequest): TelegramResponse<Chat> =
     telegramPost("getChat", requestBody)
@@ -420,6 +438,18 @@ suspend fun TelegramBotApiClient.tryUnpinAllGeneralForumTopicMessages(requestBod
  */
 suspend fun TelegramBotApiClient.tryAnswerCallbackQuery(requestBody: AnswerCallbackQueryRequest): TelegramResponse<Boolean> =
     telegramPost("answerCallbackQuery", requestBody)
+
+/**
+ * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object.
+ */
+suspend fun TelegramBotApiClient.tryGetUserChatBoosts(requestBody: GetUserChatBoostsRequest): TelegramResponse<UserChatBoosts> =
+    telegramPost("getUserChatBoosts", requestBody)
+
+/**
+ * Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success.
+ */
+suspend fun TelegramBotApiClient.tryGetBusinessConnection(requestBody: GetBusinessConnectionRequest): TelegramResponse<BusinessConnection> =
+    telegramPost("getBusinessConnection", requestBody)
 
 /**
  * Use this method to change the list of the bot's commands. See this manual for more details about bot commands. Returns True on success.
@@ -584,6 +614,12 @@ suspend fun TelegramBotApiClient.tryDeleteMessage(requestBody: DeleteMessageRequ
     telegramPost("deleteMessage", requestBody)
 
 /**
+ * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteMessages(requestBody: DeleteMessagesRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteMessages", requestBody)
+
+/**
  * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
  */
 suspend fun TelegramBotApiClient.trySendSticker(requestBody: SendStickerRequest): TelegramResponse<Message> =
@@ -602,7 +638,7 @@ suspend fun TelegramBotApiClient.tryGetCustomEmojiStickers(requestBody: GetCusto
     telegramPost("getCustomEmojiStickers", requestBody)
 
 /**
- * Use this method to upload a file with a sticker for later use in the createNewStickerSet and addStickerToSet methods (the file can be used multiple times). Returns the uploaded File on success.
+ * Use this method to upload a file with a sticker for later use in the createNewStickerSet, addStickerToSet, or replaceStickerInSet methods (the file can be used multiple times). Returns the uploaded File on success.
  */
 suspend fun TelegramBotApiClient.tryUploadStickerFile(requestBody: UploadStickerFileRequest): TelegramResponse<File> =
     telegramPost("uploadStickerFile", requestBody)
@@ -614,7 +650,7 @@ suspend fun TelegramBotApiClient.tryCreateNewStickerSet(requestBody: CreateNewSt
     telegramPost("createNewStickerSet", requestBody)
 
 /**
- * Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200 stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.
+ * Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryAddStickerToSet(requestBody: AddStickerToSetRequest): TelegramResponse<Boolean> =
     telegramPost("addStickerToSet", requestBody)
@@ -630,6 +666,12 @@ suspend fun TelegramBotApiClient.trySetStickerPositionInSet(requestBody: SetStic
  */
 suspend fun TelegramBotApiClient.tryDeleteStickerFromSet(requestBody: DeleteStickerFromSetRequest): TelegramResponse<Boolean> =
     telegramPost("deleteStickerFromSet", requestBody)
+
+/**
+ * Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryReplaceStickerInSet(requestBody: ReplaceStickerInSetRequest): TelegramResponse<Boolean> =
+    telegramPost("replaceStickerInSet", requestBody)
 
 /**
  * Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.

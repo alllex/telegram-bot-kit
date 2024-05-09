@@ -11,8 +11,20 @@ import me.alllex.parsus.token.regexToken
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
-private val typeSubstitutions = mapOf(
-    "MessageId" to "MessageIdResult"
+
+/**
+ * Just use a different name for a type, because it clashes with something else
+ */
+private val typeRename = mapOf(
+    "MessageId" to "MessageRef",
+)
+
+/**
+ * Replace the original types with another type and do not generate a data class for the original type
+ */
+private val typeSubstitution = mapOf(
+    "InaccessibleMessage" to "Message",
+    "MaybeInaccessibleMessage" to "Message",
 )
 
 private val fieldTypeSubstitutionsByFieldName = mapOf(
@@ -21,7 +33,7 @@ private val fieldTypeSubstitutionsByFieldName = mapOf(
 )
 
 fun resolveElementTypeName(name: String): String {
-    return typeSubstitutions[name] ?: name
+    return typeSubstitution[name] ?: typeRename[name] ?: name
 }
 
 fun resolveFieldTypeName(serialFieldName: String, serialFieldType: String): String {
@@ -63,7 +75,8 @@ data class BotApiElement(
     val name: BotApiElementName,
     val description: String,
     val fields: List<Field>? = null,
-    val unionTypes: List<BotApiElementName>? = null
+    val unionTypes: List<BotApiElementName>? = null,
+    val originalName: BotApiElementName = name,
 ) {
     data class Field(
         val serialName: String,
@@ -94,6 +107,8 @@ val availableTypesIgnoredSections: Set<String> = setOf(
     "Inline mode objects",
     "Determining list of commands",
     "Formatting options",
+    "Accent colors",
+    "Profile accent colors",
     "Inline mode methods",
 )
 
@@ -114,8 +129,9 @@ val responseTypeRegexes = listOf(
     Regex("Returns (\\w+) on success"),
     Regex("[Rr]eturns an? (.+?) object"),
     Regex("in form of a (\\w+) object"),
+    Regex("[Oo]n success, an (.+?) of the sent messages is returned"),
     Regex("[Oo]n success, (\\w+) is returned"),
-    Regex("the sent (\\w+) is returned"),
+    Regex("[Oo]n success, the sent (\\w+) is returned"),
     Regex("[Oo]n success, an? (.+) objects?"),
     Regex("On success, an (.+) that were"),
     Regex("On success, the stopped (\\w+) with the final results is returned"),
@@ -160,7 +176,8 @@ class BotApiDefinitionParser {
 
         val contentEls = devPageContent.children()
 
-        val h3Sections = contentEls.selectSections(startsSection = Element::isH3, stopsSequence = { it.isH1() || it.isH2() })
+        val h3Sections =
+            contentEls.selectSections(startsSection = Element::isH3, stopsSequence = { it.isH1() || it.isH2() })
 
         val groupSections = h3Sections.filter { it.first().ownText() in topLevelSections }
         println("Found ${groupSections.size} top-level sections")
@@ -176,8 +193,12 @@ class BotApiDefinitionParser {
         println("Found ${methodDefSections.size} method definition sections")
 
         val typeDefinitions = typeDefSections.map(::parseElementDefinition)
-        val types = typeDefinitions.map(this::parseElement) +
-            listOf(implicitReplyMarkupElement)
+
+        @Suppress("RemoveExplicitTypeArguments")
+        val types = buildList<BotApiElement> {
+            this += typeDefinitions.map(::parseElement).filter { it.originalName.value !in typeSubstitution }
+            this += implicitReplyMarkupElement
+        }
 
         val methodDefinitions = methodDefSections.map(::parseMethodDefinition)
         val methods = methodDefinitions.map(this::parseMethod)
@@ -233,7 +254,7 @@ class BotApiDefinitionParser {
             ?.sortedBy { it.isOptional }
         val unionTypes = elementDef.unionTypesListElement?.let { parseUnionTypes(it) }
         val finalFields = if (unionTypes == null && fields == null) emptyList() else fields
-        return BotApiElement(name, description, finalFields, unionTypes)
+        return BotApiElement(name, description, finalFields, unionTypes, BotApiElementName(initialName))
     }
 
     private fun parseMethod(methodDef: ApiMethodDefinition): BotApiMethod {
@@ -251,7 +272,10 @@ class BotApiDefinitionParser {
         val typeFieldInfo = try {
             serialTypeToKotlinTypeString(returnTypeText, isOptional = false)
         } catch (e: Exception) {
-            throw RuntimeException("Failed to parse return type from '$returnTypeText' in description:\n---\n$methodDescriptionText\n---\n", e)
+            throw RuntimeException(
+                "Failed to parse return type from '$returnTypeText' in description:\n---\n$methodDescriptionText\n---\n",
+                e
+            )
         }
         return typeFieldInfo.kotlinType
     }
@@ -293,13 +317,21 @@ class BotApiDefinitionParser {
             val nameEl = row.child(0)
             val typeEl = row.child(1)
             val descriptionEl = row.child(2)
-            val isOptional = descriptionEl.text().startsWith("Optional")
+            val description = descriptionEl.text().trim() // TODO: replace <img ... alt="😐"> with actual emoji text
+            val isOptional = description.startsWith("Optional")
             val serialFieldName = nameEl.text().trim()
             val typeText = typeEl.text().trim()
             val typeFieldInfo = serialTypeToKotlinTypeString(typeText, isOptional, serialFieldName)
-            val description = descriptionEl.text().trim()
 
-            fields.add(BotApiElement.Field(serialFieldName, description, typeFieldInfo.kotlinType, isOptional, typeFieldInfo.defaultValue))
+            fields.add(
+                BotApiElement.Field(
+                    serialFieldName,
+                    description,
+                    typeFieldInfo.kotlinType,
+                    isOptional,
+                    typeFieldInfo.defaultValue
+                )
+            )
         }
 
         return fields
@@ -334,7 +366,15 @@ class BotApiDefinitionParser {
             val typeFieldInfo = serialTypeToKotlinTypeString(typeText, isOptional, serialFieldName)
             val description = descriptionEl.text().trim()
 
-            fields.add(BotApiElement.Field(serialFieldName, description, typeFieldInfo.kotlinType, isOptional, typeFieldInfo.defaultValue))
+            fields.add(
+                BotApiElement.Field(
+                    serialFieldName,
+                    description,
+                    typeFieldInfo.kotlinType,
+                    isOptional,
+                    typeFieldInfo.defaultValue
+                )
+            )
         }
 
         return fields
@@ -342,7 +382,11 @@ class BotApiDefinitionParser {
 
     private data class ResolvedTypeInfo(val kotlinType: KotlinType, val defaultValue: String?)
 
-    private fun serialTypeToKotlinTypeString(serialType: String, isOptional: Boolean, serialFieldName: String? = null): ResolvedTypeInfo {
+    private fun serialTypeToKotlinTypeString(
+        serialType: String,
+        isOptional: Boolean,
+        serialFieldName: String? = null
+    ): ResolvedTypeInfo {
         val result = FieldTypeGrammar.parse(serialType)
 
         val parsedType = result.getOrElse {
@@ -371,7 +415,7 @@ object FieldTypeGrammar : Grammar<String>(ignoreCase = true) {
     val message by regexToken("Messages") map { "Message" } // typo in the original HTML spec
     val replayMarkup by regexToken("InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply") map { "ReplyMarkup" } // this is a custom sealed type
     val inputMedia by regexToken("InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo") map { "InputMedia" }
-    val apiType by regexToken("\\w+") map { typeSubstitutions[it.text] ?: it.text }
+    val apiType by regexToken("\\w+") map { resolveElementTypeName(it.text) }
 
     val simpleType by int or double or boolean or string or message or replayMarkup or inputMedia or apiType
     val listType by parser {
@@ -385,7 +429,10 @@ object FieldTypeGrammar : Grammar<String>(ignoreCase = true) {
     override val root by fieldType
 }
 
-private fun <T> List<T>.selectSections(startsSection: (T) -> Boolean, stopsSequence: (T) -> Boolean = { false }): List<List<T>> {
+private fun <T> List<T>.selectSections(
+    startsSection: (T) -> Boolean,
+    stopsSequence: (T) -> Boolean = { false }
+): List<List<T>> {
     val result = mutableListOf<MutableList<T>>()
     var subList: MutableList<T>? = null
 

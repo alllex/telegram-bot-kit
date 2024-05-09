@@ -1,14 +1,14 @@
 plugins {
-    `gradle-enterprise`
+    id("com.gradle.develocity") version "3.17.2"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
 }
 
 rootProject.name = "tbot-api"
 
-gradleEnterprise {
+develocity {
     buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
-        publishAlwaysIf(System.getenv("CI") == "true")
+        termsOfUseUrl = "https://gradle.com/terms-of-service"
+        termsOfUseAgree = "yes"
+        publishing.onlyIf { System.getenv("CI") == "true" }
     }
 }

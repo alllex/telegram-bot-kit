@@ -10,7 +10,7 @@ import me.alllex.tbot.api.client.*
  * @param offset Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will be forgotten.
  * @param limit Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100.
  * @param timeout Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
- * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
+ * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
  */
 context(TelegramBotApiContext)
 suspend fun tryGetUpdates(
@@ -30,7 +30,7 @@ suspend fun tryGetUpdates(
  * @param certificate Upload your public key certificate so that the root certificate in use can be checked. See our self-signed guide for details.
  * @param ipAddress The fixed IP address which will be used to send webhook requests instead of the IP address resolved through DNS
  * @param maxConnections The maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100. Defaults to 40. Use lower values to limit the load on your bot's server, and higher values to increase your bot's throughput.
- * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.
+ * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.
  * @param dropPendingUpdates Pass True to drop all pending updates
  * @param secretToken A secret token to be sent in a header “X-Telegram-Bot-Api-Secret-Token” in every webhook request, 1-256 characters. Only characters A-Z, a-z, 0-9, _ and - are allowed. The header is useful to ensure that the request comes from a webhook set by you.
  */
@@ -90,34 +90,34 @@ suspend fun tryClose(): TelegramResponse<Boolean> =
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param text Text of the message to be sent, 1-4096 characters after entities parsing
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
  * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
- * @param disableWebPagePreview Disables link previews for links in this message
+ * @param linkPreviewOptions Link preview generation options for the message
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendMessage(
     chatId: ChatId,
     text: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     parseMode: ParseMode? = null,
     entities: List<MessageEntity>? = null,
-    disableWebPagePreview: Boolean? = null,
+    linkPreviewOptions: LinkPreviewOptions? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendMessage(SendMessageRequest(chatId, text, messageThreadId, parseMode, entities, disableWebPagePreview, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendMessage(SendMessageRequest(chatId, text, businessConnectionId, messageThreadId, parseMode, entities, linkPreviewOptions, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
- * Use this method to forward messages of any kind. Service messages can't be forwarded. On success, the sent Message is returned.
+ * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param fromChatId Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
@@ -138,7 +138,28 @@ suspend fun tryForwardMessage(
     botApiClient.tryForwardMessage(ForwardMessageRequest(chatId, fromChatId, messageId, messageThreadId, disableNotification, protectContent))
 
 /**
- * Use this method to copy messages of any kind. Service messages and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+ * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param fromChatId Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername)
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id to forward. The identifiers must be specified in a strictly increasing order.
+ * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+ * @param disableNotification Sends the messages silently. Users will receive a notification with no sound.
+ * @param protectContent Protects the contents of the forwarded messages from forwarding and saving
+ */
+context(TelegramBotApiContext)
+suspend fun tryForwardMessages(
+    chatId: ChatId,
+    fromChatId: ChatId,
+    messageIds: List<Long>,
+    messageThreadId: MessageThreadId? = null,
+    disableNotification: Boolean? = null,
+    protectContent: Boolean? = null,
+): TelegramResponse<List<MessageRef>> =
+    botApiClient.tryForwardMessages(ForwardMessagesRequest(chatId, fromChatId, messageIds, messageThreadId, disableNotification, protectContent))
+
+/**
+ * Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param fromChatId Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
@@ -149,8 +170,7 @@ suspend fun tryForwardMessage(
  * @param captionEntities A JSON-serialized list of special entities that appear in the new caption, which can be specified instead of parse_mode
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
+ * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
  */
 context(TelegramBotApiContext)
@@ -164,17 +184,40 @@ suspend fun tryCopyMessage(
     captionEntities: List<MessageEntity>? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
-): TelegramResponse<MessageIdResult> =
-    botApiClient.tryCopyMessage(CopyMessageRequest(chatId, fromChatId, messageId, messageThreadId, caption, parseMode, captionEntities, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+): TelegramResponse<MessageRef> =
+    botApiClient.tryCopyMessage(CopyMessageRequest(chatId, fromChatId, messageId, messageThreadId, caption, parseMode, captionEntities, disableNotification, protectContent, replyParameters, replyMarkup))
+
+/**
+ * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param fromChatId Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername)
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id to copy. The identifiers must be specified in a strictly increasing order.
+ * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+ * @param disableNotification Sends the messages silently. Users will receive a notification with no sound.
+ * @param protectContent Protects the contents of the sent messages from forwarding and saving
+ * @param removeCaption Pass True to copy the messages without their captions
+ */
+context(TelegramBotApiContext)
+suspend fun tryCopyMessages(
+    chatId: ChatId,
+    fromChatId: ChatId,
+    messageIds: List<Long>,
+    messageThreadId: MessageThreadId? = null,
+    disableNotification: Boolean? = null,
+    protectContent: Boolean? = null,
+    removeCaption: Boolean? = null,
+): TelegramResponse<List<MessageRef>> =
+    botApiClient.tryCopyMessages(CopyMessagesRequest(chatId, fromChatId, messageIds, messageThreadId, disableNotification, protectContent, removeCaption))
 
 /**
  * Use this method to send photos. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param photo Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param caption Photo caption (may also be used when resending photos by file_id), 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the photo caption. See formatting options for more details.
@@ -182,14 +225,14 @@ suspend fun tryCopyMessage(
  * @param hasSpoiler Pass True if the photo needs to be covered with a spoiler animation
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendPhoto(
     chatId: ChatId,
     photo: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     caption: String? = null,
     parseMode: ParseMode? = null,
@@ -197,11 +240,10 @@ suspend fun trySendPhoto(
     hasSpoiler: Boolean? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendPhoto(SendPhotoRequest(chatId, photo, messageThreadId, caption, parseMode, captionEntities, hasSpoiler, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendPhoto(SendPhotoRequest(chatId, photo, businessConnectionId, messageThreadId, caption, parseMode, captionEntities, hasSpoiler, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -210,6 +252,7 @@ suspend fun trySendPhoto(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param audio Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param caption Audio caption, 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the audio caption. See formatting options for more details.
@@ -220,14 +263,14 @@ suspend fun trySendPhoto(
  * @param thumbnail Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendAudio(
     chatId: ChatId,
     audio: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     caption: String? = null,
     parseMode: ParseMode? = null,
@@ -238,17 +281,17 @@ suspend fun trySendAudio(
     thumbnail: String? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendAudio(SendAudioRequest(chatId, audio, messageThreadId, caption, parseMode, captionEntities, duration, performer, title, thumbnail, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendAudio(SendAudioRequest(chatId, audio, businessConnectionId, messageThreadId, caption, parseMode, captionEntities, duration, performer, title, thumbnail, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param document File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param thumbnail Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
  * @param caption Document caption (may also be used when resending documents by file_id), 0-1024 characters after entities parsing
@@ -257,14 +300,14 @@ suspend fun trySendAudio(
  * @param disableContentTypeDetection Disables automatic server-side content type detection for files uploaded using multipart/form-data
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendDocument(
     chatId: ChatId,
     document: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     thumbnail: String? = null,
     caption: String? = null,
@@ -273,17 +316,17 @@ suspend fun trySendDocument(
     disableContentTypeDetection: Boolean? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendDocument(SendDocumentRequest(chatId, document, messageThreadId, thumbnail, caption, parseMode, captionEntities, disableContentTypeDetection, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendDocument(SendDocumentRequest(chatId, document, businessConnectionId, messageThreadId, thumbnail, caption, parseMode, captionEntities, disableContentTypeDetection, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param video Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param duration Duration of sent video in seconds
  * @param width Video width
@@ -296,14 +339,14 @@ suspend fun trySendDocument(
  * @param supportsStreaming Pass True if the uploaded video is suitable for streaming
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendVideo(
     chatId: ChatId,
     video: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     duration: Seconds? = null,
     width: Long? = null,
@@ -316,17 +359,17 @@ suspend fun trySendVideo(
     supportsStreaming: Boolean? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendVideo(SendVideoRequest(chatId, video, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, hasSpoiler, supportsStreaming, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendVideo(SendVideoRequest(chatId, video, businessConnectionId, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, hasSpoiler, supportsStreaming, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param animation Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param duration Duration of sent animation in seconds
  * @param width Animation width
@@ -338,14 +381,14 @@ suspend fun trySendVideo(
  * @param hasSpoiler Pass True if the animation needs to be covered with a spoiler animation
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendAnimation(
     chatId: ChatId,
     animation: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     duration: Seconds? = null,
     width: Long? = null,
@@ -357,17 +400,17 @@ suspend fun trySendAnimation(
     hasSpoiler: Boolean? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendAnimation(SendAnimationRequest(chatId, animation, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, hasSpoiler, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendAnimation(SendAnimationRequest(chatId, animation, businessConnectionId, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, hasSpoiler, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param voice Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param caption Voice message caption, 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the voice message caption. See formatting options for more details.
@@ -375,14 +418,14 @@ suspend fun trySendAnimation(
  * @param duration Duration of the voice message in seconds
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendVoice(
     chatId: ChatId,
     voice: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     caption: String? = null,
     parseMode: ParseMode? = null,
@@ -390,65 +433,64 @@ suspend fun trySendVoice(
     duration: Seconds? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendVoice(SendVoiceRequest(chatId, voice, messageThreadId, caption, parseMode, captionEntities, duration, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendVoice(SendVoiceRequest(chatId, voice, businessConnectionId, messageThreadId, caption, parseMode, captionEntities, duration, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param videoNote Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files ». Sending video notes by a URL is currently unsupported
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param duration Duration of sent video in seconds
  * @param length Video width and height, i.e. diameter of the video message
  * @param thumbnail Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendVideoNote(
     chatId: ChatId,
     videoNote: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     duration: Seconds? = null,
     length: Long? = null,
     thumbnail: String? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendVideoNote(SendVideoNoteRequest(chatId, videoNote, messageThreadId, duration, length, thumbnail, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendVideoNote(SendVideoNoteRequest(chatId, videoNote, businessConnectionId, messageThreadId, duration, length, thumbnail, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param media A JSON-serialized array describing messages to be sent, must include 2-10 items
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends messages silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent messages from forwarding and saving
- * @param replyToMessageId If the messages are a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
+ * @param replyParameters Description of the message to reply to
  */
 context(TelegramBotApiContext)
 suspend fun trySendMediaGroup(
     chatId: ChatId,
     media: List<InputMedia>,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
 ): TelegramResponse<List<Message>> =
-    botApiClient.trySendMediaGroup(SendMediaGroupRequest(chatId, media, messageThreadId, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply))
+    botApiClient.trySendMediaGroup(SendMediaGroupRequest(chatId, media, businessConnectionId, messageThreadId, disableNotification, protectContent, replyParameters))
 
 /**
  * Use this method to send point on the map. On success, the sent Message is returned.
@@ -456,6 +498,7 @@ suspend fun trySendMediaGroup(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param latitude Latitude of the location
  * @param longitude Longitude of the location
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
  * @param livePeriod Period in seconds for which the location will be updated (see Live Locations, should be between 60 and 86400.
@@ -463,15 +506,15 @@ suspend fun trySendMediaGroup(
  * @param proximityAlertRadius For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendLocation(
     chatId: ChatId,
     latitude: Double,
     longitude: Double,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     horizontalAccuracy: Double? = null,
     livePeriod: Long? = null,
@@ -479,11 +522,10 @@ suspend fun trySendLocation(
     proximityAlertRadius: Long? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendLocation(SendLocationRequest(chatId, latitude, longitude, messageThreadId, horizontalAccuracy, livePeriod, heading, proximityAlertRadius, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendLocation(SendLocationRequest(chatId, latitude, longitude, businessConnectionId, messageThreadId, horizontalAccuracy, livePeriod, heading, proximityAlertRadius, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send information about a venue. On success, the sent Message is returned.
@@ -493,6 +535,7 @@ suspend fun trySendLocation(
  * @param longitude Longitude of the venue
  * @param title Name of the venue
  * @param address Address of the venue
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param foursquareId Foursquare identifier of the venue
  * @param foursquareType Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
@@ -500,9 +543,8 @@ suspend fun trySendLocation(
  * @param googlePlaceType Google Places type of the venue. (See supported types.)
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendVenue(
@@ -511,6 +553,7 @@ suspend fun trySendVenue(
     longitude: Double,
     title: String,
     address: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     foursquareId: String? = null,
     foursquareType: String? = null,
@@ -518,11 +561,10 @@ suspend fun trySendVenue(
     googlePlaceType: String? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendVenue(SendVenueRequest(chatId, latitude, longitude, title, address, messageThreadId, foursquareId, foursquareType, googlePlaceId, googlePlaceType, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendVenue(SendVenueRequest(chatId, latitude, longitude, title, address, businessConnectionId, messageThreadId, foursquareId, foursquareType, googlePlaceId, googlePlaceType, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send phone contacts. On success, the sent Message is returned.
@@ -530,30 +572,30 @@ suspend fun trySendVenue(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param phoneNumber Contact's phone number
  * @param firstName Contact's first name
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param lastName Contact's last name
  * @param vcard Additional data about the contact in the form of a vCard, 0-2048 bytes
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendContact(
     chatId: ChatId,
     phoneNumber: String,
     firstName: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     lastName: String? = null,
     vcard: String? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendContact(SendContactRequest(chatId, phoneNumber, firstName, messageThreadId, lastName, vcard, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendContact(SendContactRequest(chatId, phoneNumber, firstName, businessConnectionId, messageThreadId, lastName, vcard, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send a native poll. On success, the sent Message is returned.
@@ -561,6 +603,7 @@ suspend fun trySendContact(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param question Poll question, 1-300 characters
  * @param options A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param isAnonymous True, if the poll needs to be anonymous, defaults to True
  * @param type Poll type, “quiz” or “regular”, defaults to “regular”
@@ -574,15 +617,15 @@ suspend fun trySendContact(
  * @param isClosed Pass True if the poll needs to be immediately closed. This can be useful for poll preview.
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendPoll(
     chatId: ChatId,
     question: String,
     options: List<String>,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     isAnonymous: Boolean? = null,
     type: String? = null,
@@ -596,36 +639,35 @@ suspend fun trySendPoll(
     isClosed: Boolean? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendPoll(SendPollRequest(chatId, question, options, messageThreadId, isAnonymous, type, allowsMultipleAnswers, correctOptionId, explanation, explanationParseMode, explanationEntities, openPeriod, closeDate, isClosed, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendPoll(SendPollRequest(chatId, question, options, businessConnectionId, messageThreadId, isAnonymous, type, allowsMultipleAnswers, correctOptionId, explanation, explanationParseMode, explanationEntities, openPeriod, closeDate, isClosed, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param emoji Emoji on which the dice throw animation is based. Currently, must be one of “”, “”, “”, “”, “”, or “”. Dice can have values 1-6 for “”, “” and “”, values 1-5 for “” and “”, and values 1-64 for “”. Defaults to “”
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 context(TelegramBotApiContext)
 suspend fun trySendDice(
     chatId: ChatId,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     emoji: String? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendDice(SendDiceRequest(chatId, messageThreadId, emoji, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendDice(SendDiceRequest(chatId, businessConnectionId, messageThreadId, emoji, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
@@ -636,15 +678,34 @@ suspend fun trySendDice(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param action Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes.
- * @param messageThreadId Unique identifier for the target message thread; supergroups only
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the action will be sent
+ * @param messageThreadId Unique identifier for the target message thread; for supergroups only
  */
 context(TelegramBotApiContext)
 suspend fun trySendChatAction(
     chatId: ChatId,
     action: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
 ): TelegramResponse<Boolean> =
-    botApiClient.trySendChatAction(SendChatActionRequest(chatId, action, messageThreadId))
+    botApiClient.trySendChatAction(SendChatActionRequest(chatId, action, businessConnectionId, messageThreadId))
+
+/**
+ * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.
+ * @param reaction A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.
+ * @param isBig Pass True to set the reaction with a big animation
+ */
+context(TelegramBotApiContext)
+suspend fun trySetMessageReaction(
+    chatId: ChatId,
+    messageId: MessageId,
+    reaction: List<ReactionType>? = null,
+    isBig: Boolean? = null,
+): TelegramResponse<Boolean> =
+    botApiClient.trySetMessageReaction(SetMessageReactionRequest(chatId, messageId, reaction, isBig))
 
 /**
  * Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
@@ -729,20 +790,20 @@ suspend fun tryRestrictChatMember(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  * @param isAnonymous Pass True if the administrator's presence in the chat is hidden
- * @param canManageChat Pass True if the administrator can access the chat event log, chat statistics, boost list in channels, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
- * @param canPostMessages Pass True if the administrator can post messages in the channel; channels only
- * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; channels only
+ * @param canManageChat Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
  * @param canDeleteMessages Pass True if the administrator can delete messages of other users
- * @param canPostStories Pass True if the administrator can post stories in the channel; channels only
- * @param canEditStories Pass True if the administrator can edit stories posted by other users; channels only
- * @param canDeleteStories Pass True if the administrator can delete stories posted by other users; channels only
  * @param canManageVideoChats Pass True if the administrator can manage video chats
- * @param canRestrictMembers Pass True if the administrator can restrict, ban or unban chat members
+ * @param canRestrictMembers Pass True if the administrator can restrict, ban or unban chat members, or access supergroup statistics
  * @param canPromoteMembers Pass True if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by him)
  * @param canChangeInfo Pass True if the administrator can change chat title, photo and other settings
  * @param canInviteUsers Pass True if the administrator can invite new users to the chat
- * @param canPinMessages Pass True if the administrator can pin messages, supergroups only
- * @param canManageTopics Pass True if the user is allowed to create, rename, close, and reopen forum topics, supergroups only
+ * @param canPostStories Pass True if the administrator can post stories to the chat
+ * @param canEditStories Pass True if the administrator can edit stories posted by other users
+ * @param canDeleteStories Pass True if the administrator can delete stories posted by other users
+ * @param canPostMessages Pass True if the administrator can post messages in the channel, or access channel statistics; for channels only
+ * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; for channels only
+ * @param canPinMessages Pass True if the administrator can pin messages; for supergroups only
+ * @param canManageTopics Pass True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
  */
 context(TelegramBotApiContext)
 suspend fun tryPromoteChatMember(
@@ -750,21 +811,21 @@ suspend fun tryPromoteChatMember(
     userId: UserId,
     isAnonymous: Boolean? = null,
     canManageChat: Boolean? = null,
-    canPostMessages: Boolean? = null,
-    canEditMessages: Boolean? = null,
     canDeleteMessages: Boolean? = null,
-    canPostStories: Boolean? = null,
-    canEditStories: Boolean? = null,
-    canDeleteStories: Boolean? = null,
     canManageVideoChats: Boolean? = null,
     canRestrictMembers: Boolean? = null,
     canPromoteMembers: Boolean? = null,
     canChangeInfo: Boolean? = null,
     canInviteUsers: Boolean? = null,
+    canPostStories: Boolean? = null,
+    canEditStories: Boolean? = null,
+    canDeleteStories: Boolean? = null,
+    canPostMessages: Boolean? = null,
+    canEditMessages: Boolean? = null,
     canPinMessages: Boolean? = null,
     canManageTopics: Boolean? = null,
 ): TelegramResponse<Boolean> =
-    botApiClient.tryPromoteChatMember(PromoteChatMemberRequest(chatId, userId, isAnonymous, canManageChat, canPostMessages, canEditMessages, canDeleteMessages, canPostStories, canEditStories, canDeleteStories, canManageVideoChats, canRestrictMembers, canPromoteMembers, canChangeInfo, canInviteUsers, canPinMessages, canManageTopics))
+    botApiClient.tryPromoteChatMember(PromoteChatMemberRequest(chatId, userId, isAnonymous, canManageChat, canDeleteMessages, canManageVideoChats, canRestrictMembers, canPromoteMembers, canChangeInfo, canInviteUsers, canPostStories, canEditStories, canDeleteStories, canPostMessages, canEditMessages, canPinMessages, canManageTopics))
 
 /**
  * Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success.
@@ -1013,7 +1074,7 @@ suspend fun tryLeaveChat(
     botApiClient.tryLeaveChat(LeaveChatRequest(chatId))
 
 /**
- * Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success.
+ * Use this method to get up to date information about the chat. Returns a Chat object on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
  */
@@ -1265,6 +1326,30 @@ suspend fun tryAnswerCallbackQuery(
     botApiClient.tryAnswerCallbackQuery(AnswerCallbackQueryRequest(callbackQueryId, text, showAlert, url, cacheTime))
 
 /**
+ * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object.
+ *
+ * @param chatId Unique identifier for the chat or username of the channel (in the format @channelusername)
+ * @param userId Unique identifier of the target user
+ */
+context(TelegramBotApiContext)
+suspend fun tryGetUserChatBoosts(
+    chatId: ChatId,
+    userId: UserId,
+): TelegramResponse<UserChatBoosts> =
+    botApiClient.tryGetUserChatBoosts(GetUserChatBoostsRequest(chatId, userId))
+
+/**
+ * Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ */
+context(TelegramBotApiContext)
+suspend fun tryGetBusinessConnection(
+    businessConnectionId: String,
+): TelegramResponse<BusinessConnection> =
+    botApiClient.tryGetBusinessConnection(GetBusinessConnectionRequest(businessConnectionId))
+
+/**
  * Use this method to change the list of the bot's commands. See this manual for more details about bot commands. Returns True on success.
  *
  * @param commands A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified.
@@ -1433,7 +1518,7 @@ suspend fun tryGetMyDefaultAdministratorRights(
  * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
  * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
  * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
- * @param disableWebPagePreview Disables link previews for links in this message
+ * @param linkPreviewOptions Link preview generation options for the message
  * @param replyMarkup A JSON-serialized object for an inline keyboard.
  */
 context(TelegramBotApiContext)
@@ -1443,10 +1528,10 @@ suspend fun tryEditMessageText(
     messageId: MessageId,
     parseMode: ParseMode? = null,
     entities: List<MessageEntity>? = null,
-    disableWebPagePreview: Boolean? = null,
+    linkPreviewOptions: LinkPreviewOptions? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.tryEditMessageText(EditMessageTextRequest(text = text, chatId = chatId, messageId = messageId, parseMode = parseMode, entities = entities, disableWebPagePreview = disableWebPagePreview, replyMarkup = replyMarkup))
+    botApiClient.tryEditMessageText(EditMessageTextRequest(text = text, chatId = chatId, messageId = messageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup))
 
 /**
  * Use this method to edit text and game messages. On success True is returned.
@@ -1455,7 +1540,7 @@ suspend fun tryEditMessageText(
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
  * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
  * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
- * @param disableWebPagePreview Disables link previews for links in this message
+ * @param linkPreviewOptions Link preview generation options for the message
  * @param replyMarkup A JSON-serialized object for an inline keyboard.
  */
 context(TelegramBotApiContext)
@@ -1464,10 +1549,10 @@ suspend fun tryEditInlineMessageText(
     inlineMessageId: InlineMessageId,
     parseMode: ParseMode? = null,
     entities: List<MessageEntity>? = null,
-    disableWebPagePreview: Boolean? = null,
+    linkPreviewOptions: LinkPreviewOptions? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
 ): TelegramResponse<Boolean> =
-    botApiClient.tryEditInlineMessageText(EditMessageTextRequest(text = text, inlineMessageId = inlineMessageId, parseMode = parseMode, entities = entities, disableWebPagePreview = disableWebPagePreview, replyMarkup = replyMarkup))
+    botApiClient.tryEditInlineMessageText(EditMessageTextRequest(text = text, inlineMessageId = inlineMessageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup))
 
 /**
  * Use this method to edit captions of messages. On success the edited Message is returned.
@@ -1674,31 +1759,44 @@ suspend fun tryDeleteMessage(
     botApiClient.tryDeleteMessage(DeleteMessageRequest(chatId, messageId))
 
 /**
+ * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted
+ */
+context(TelegramBotApiContext)
+suspend fun tryDeleteMessages(
+    chatId: ChatId,
+    messageIds: List<Long>,
+): TelegramResponse<Boolean> =
+    botApiClient.tryDeleteMessages(DeleteMessagesRequest(chatId, messageIds))
+
+/**
  * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param sticker Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP or .TGS sticker using multipart/form-data. More information on Sending Files ». Video stickers can only be sent by a file_id. Animated stickers can't be sent via an HTTP URL.
+ * @param sticker Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. More information on Sending Files ». Video and animated stickers can't be sent via an HTTP URL.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param emoji Emoji associated with the sticker; only for just uploaded stickers
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account.
  */
 context(TelegramBotApiContext)
 suspend fun trySendSticker(
     chatId: ChatId,
     sticker: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     emoji: String? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendSticker(SendStickerRequest(chatId, sticker, messageThreadId, emoji, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendSticker(SendStickerRequest(chatId, sticker, businessConnectionId, messageThreadId, emoji, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to get a sticker set. On success, a StickerSet object is returned.
@@ -1714,7 +1812,7 @@ suspend fun tryGetStickerSet(
 /**
  * Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects.
  *
- * @param customEmojiIds List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
+ * @param customEmojiIds A JSON-serialized list of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
  */
 context(TelegramBotApiContext)
 suspend fun tryGetCustomEmojiStickers(
@@ -1723,7 +1821,7 @@ suspend fun tryGetCustomEmojiStickers(
     botApiClient.tryGetCustomEmojiStickers(GetCustomEmojiStickersRequest(customEmojiIds))
 
 /**
- * Use this method to upload a file with a sticker for later use in the createNewStickerSet and addStickerToSet methods (the file can be used multiple times). Returns the uploaded File on success.
+ * Use this method to upload a file with a sticker for later use in the createNewStickerSet, addStickerToSet, or replaceStickerInSet methods (the file can be used multiple times). Returns the uploaded File on success.
  *
  * @param userId User identifier of sticker file owner
  * @param sticker A file with the sticker in .WEBP, .PNG, .TGS, or .WEBM format. See https://core.telegram.org/stickers for technical requirements. More information on Sending Files »
@@ -1744,7 +1842,6 @@ suspend fun tryUploadStickerFile(
  * @param name Short name of sticker set, to be used in t.me/addstickers/ URLs (e.g., animals). Can contain only English letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and must end in "_by_<bot_username>". <bot_username> is case insensitive. 1-64 characters.
  * @param title Sticker set title, 1-64 characters
  * @param stickers A JSON-serialized list of 1-50 initial stickers to be added to the sticker set
- * @param stickerFormat Format of stickers in the set, must be one of “static”, “animated”, “video”
  * @param stickerType Type of stickers in the set, pass “regular”, “mask”, or “custom_emoji”. By default, a regular sticker set is created.
  * @param needsRepainting Pass True if stickers in the sticker set must be repainted to the color of text when used in messages, the accent color if used as emoji status, white on chat photos, or another appropriate color based on context; for custom emoji sticker sets only
  */
@@ -1754,14 +1851,13 @@ suspend fun tryCreateNewStickerSet(
     name: String,
     title: String,
     stickers: List<InputSticker>,
-    stickerFormat: String,
     stickerType: String? = null,
     needsRepainting: Boolean? = null,
 ): TelegramResponse<Boolean> =
-    botApiClient.tryCreateNewStickerSet(CreateNewStickerSetRequest(userId, name, title, stickers, stickerFormat, stickerType, needsRepainting))
+    botApiClient.tryCreateNewStickerSet(CreateNewStickerSetRequest(userId, name, title, stickers, stickerType, needsRepainting))
 
 /**
- * Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200 stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.
+ * Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns True on success.
  *
  * @param userId User identifier of sticker set owner
  * @param name Sticker set name
@@ -1798,6 +1894,23 @@ suspend fun tryDeleteStickerFromSet(
     sticker: String,
 ): TelegramResponse<Boolean> =
     botApiClient.tryDeleteStickerFromSet(DeleteStickerFromSetRequest(sticker))
+
+/**
+ * Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success.
+ *
+ * @param userId User identifier of the sticker set owner
+ * @param name Sticker set name
+ * @param oldSticker File identifier of the replaced sticker
+ * @param sticker A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set remains unchanged.
+ */
+context(TelegramBotApiContext)
+suspend fun tryReplaceStickerInSet(
+    userId: UserId,
+    name: String,
+    oldSticker: String,
+    sticker: InputSticker,
+): TelegramResponse<Boolean> =
+    botApiClient.tryReplaceStickerInSet(ReplaceStickerInSetRequest(userId, name, oldSticker, sticker))
 
 /**
  * Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
@@ -1856,15 +1969,17 @@ suspend fun trySetStickerSetTitle(
  *
  * @param name Sticker set name
  * @param userId User identifier of the sticker set owner
+ * @param format Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video
  * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
  */
 context(TelegramBotApiContext)
 suspend fun trySetStickerSetThumbnail(
     name: String,
     userId: UserId,
+    format: String,
     thumbnail: String? = null,
 ): TelegramResponse<Boolean> =
-    botApiClient.trySetStickerSetThumbnail(SetStickerSetThumbnailRequest(name, userId, thumbnail))
+    botApiClient.trySetStickerSetThumbnail(SetStickerSetThumbnailRequest(name, userId, format, thumbnail))
 
 /**
  * Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success.
@@ -1952,8 +2067,7 @@ suspend fun tryAnswerWebAppQuery(
  * @param isFlexible Pass True if the final price depends on the shipping method
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
+ * @param replyParameters Description of the message to reply to
  * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button.
  */
 context(TelegramBotApiContext)
@@ -1983,11 +2097,10 @@ suspend fun trySendInvoice(
     isFlexible: Boolean? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendInvoice(SendInvoiceRequest(chatId, title, description, payload, providerToken, currency, prices, messageThreadId, maxTipAmount, suggestedTipAmounts, startParameter, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendInvoice(SendInvoiceRequest(chatId, title, description, payload, providerToken, currency, prices, messageThreadId, maxTipAmount, suggestedTipAmounts, startParameter, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to create a link for an invoice. Returns the created invoice link as String on success.
@@ -2090,25 +2203,25 @@ suspend fun trySetPassportDataErrors(
  *
  * @param chatId Unique identifier for the target chat
  * @param gameShortName Short name of the game, serves as the unique identifier for the game. Set up your games via @BotFather.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game. Not supported for messages sent on behalf of a business account.
  */
 context(TelegramBotApiContext)
 suspend fun trySendGame(
     chatId: ChatId,
     gameShortName: String,
+    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
-    replyToMessageId: MessageId? = null,
-    allowSendingWithoutReply: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
 ): TelegramResponse<Message> =
-    botApiClient.trySendGame(SendGameRequest(chatId, gameShortName, messageThreadId, disableNotification, protectContent, replyToMessageId, allowSendingWithoutReply, replyMarkup))
+    botApiClient.trySendGame(SendGameRequest(chatId, gameShortName, businessConnectionId, messageThreadId, disableNotification, protectContent, replyParameters, replyMarkup))
 
 /**
  * Use this method to set the score of the specified user in a game message. On success the edited Message is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.

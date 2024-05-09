@@ -17,6 +17,12 @@ enum class UpdateType {
     @SerialName("edited_message") EDITED_MESSAGE,
     @SerialName("channel_post") CHANNEL_POST,
     @SerialName("edited_channel_post") EDITED_CHANNEL_POST,
+    @SerialName("business_connection") BUSINESS_CONNECTION,
+    @SerialName("business_message") BUSINESS_MESSAGE,
+    @SerialName("edited_business_message") EDITED_BUSINESS_MESSAGE,
+    @SerialName("deleted_business_messages") DELETED_BUSINESS_MESSAGES,
+    @SerialName("message_reaction") MESSAGE_REACTION,
+    @SerialName("message_reaction_count") MESSAGE_REACTION_COUNT,
     @SerialName("inline_query") INLINE_QUERY,
     @SerialName("chosen_inline_result") CHOSEN_INLINE_RESULT,
     @SerialName("callback_query") CALLBACK_QUERY,
@@ -27,6 +33,8 @@ enum class UpdateType {
     @SerialName("my_chat_member") MY_CHAT_MEMBER,
     @SerialName("chat_member") CHAT_MEMBER,
     @SerialName("chat_join_request") CHAT_JOIN_REQUEST,
+    @SerialName("chat_boost") CHAT_BOOST,
+    @SerialName("removed_chat_boost") REMOVED_CHAT_BOOST,
 }
 
 /**
@@ -37,6 +45,12 @@ enum class UpdateType {
  * - [EditedMessageUpdate]
  * - [ChannelPostUpdate]
  * - [EditedChannelPostUpdate]
+ * - [BusinessConnectionUpdate]
+ * - [BusinessMessageUpdate]
+ * - [EditedBusinessMessageUpdate]
+ * - [DeletedBusinessMessagesUpdate]
+ * - [MessageReactionUpdate]
+ * - [MessageReactionCountUpdate]
  * - [InlineQueryUpdate]
  * - [ChosenInlineResultUpdate]
  * - [CallbackQueryUpdate]
@@ -47,6 +61,8 @@ enum class UpdateType {
  * - [MyChatMemberUpdate]
  * - [ChatMemberUpdate]
  * - [ChatJoinRequestUpdate]
+ * - [ChatBoostUpdate]
+ * - [RemovedChatBoostUpdate]
  */
 @Serializable(with = UpdateSerializer::class)
 sealed interface Update {
@@ -66,7 +82,7 @@ data class MessageUpdate(
 }
 
 /**
- * New version of a message that is known to the bot and was edited
+ * New version of a message that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
  */
 @Serializable
 data class EditedMessageUpdate(
@@ -88,7 +104,7 @@ data class ChannelPostUpdate(
 }
 
 /**
- * New version of a channel post that is known to the bot and was edited
+ * New version of a channel post that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
  */
 @Serializable
 data class EditedChannelPostUpdate(
@@ -96,6 +112,72 @@ data class EditedChannelPostUpdate(
     val editedChannelPost: Message,
 ): Update {
     override val updateType: UpdateType get() = UpdateType.EDITED_CHANNEL_POST
+}
+
+/**
+ * The bot was connected to or disconnected from a business account, or a user edited an existing connection with the bot
+ */
+@Serializable
+data class BusinessConnectionUpdate(
+    override val updateId: Long,
+    val businessConnection: BusinessConnection,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.BUSINESS_CONNECTION
+}
+
+/**
+ * New non-service message from a connected business account
+ */
+@Serializable
+data class BusinessMessageUpdate(
+    override val updateId: Long,
+    val businessMessage: Message,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.BUSINESS_MESSAGE
+}
+
+/**
+ * New version of a message from a connected business account
+ */
+@Serializable
+data class EditedBusinessMessageUpdate(
+    override val updateId: Long,
+    val editedBusinessMessage: Message,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.EDITED_BUSINESS_MESSAGE
+}
+
+/**
+ * Messages were deleted from a connected business account
+ */
+@Serializable
+data class DeletedBusinessMessagesUpdate(
+    override val updateId: Long,
+    val deletedBusinessMessages: BusinessMessagesDeleted,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.DELETED_BUSINESS_MESSAGES
+}
+
+/**
+ * A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify "message_reaction" in the list of allowed_updates to receive these updates. The update isn't received for reactions set by bots.
+ */
+@Serializable
+data class MessageReactionUpdate(
+    override val updateId: Long,
+    val messageReaction: MessageReactionUpdated,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.MESSAGE_REACTION
+}
+
+/**
+ * Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify "message_reaction_count" in the list of allowed_updates to receive these updates. The updates are grouped and can be sent with delay up to a few minutes.
+ */
+@Serializable
+data class MessageReactionCountUpdate(
+    override val updateId: Long,
+    val messageReactionCount: MessageReactionCountUpdated,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.MESSAGE_REACTION_COUNT
 }
 
 /**
@@ -154,7 +236,7 @@ data class PreCheckoutQueryUpdate(
 }
 
 /**
- * New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot
+ * New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
  */
 @Serializable
 data class PollUpdate(
@@ -187,7 +269,7 @@ data class MyChatMemberUpdate(
 }
 
 /**
- * A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify “chat_member” in the list of allowed_updates to receive these updates.
+ * A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify "chat_member" in the list of allowed_updates to receive these updates.
  */
 @Serializable
 data class ChatMemberUpdate(
@@ -208,6 +290,28 @@ data class ChatJoinRequestUpdate(
     override val updateType: UpdateType get() = UpdateType.CHAT_JOIN_REQUEST
 }
 
+/**
+ * A chat boost was added or changed. The bot must be an administrator in the chat to receive these updates.
+ */
+@Serializable
+data class ChatBoostUpdate(
+    override val updateId: Long,
+    val chatBoost: ChatBoostUpdated,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.CHAT_BOOST
+}
+
+/**
+ * A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates.
+ */
+@Serializable
+data class RemovedChatBoostUpdate(
+    override val updateId: Long,
+    val removedChatBoost: ChatBoostRemoved,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.REMOVED_CHAT_BOOST
+}
+
 object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Update> {
         val json = element.jsonObject
@@ -216,6 +320,12 @@ object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class
             "edited_message" in json -> EditedMessageUpdate.serializer()
             "channel_post" in json -> ChannelPostUpdate.serializer()
             "edited_channel_post" in json -> EditedChannelPostUpdate.serializer()
+            "business_connection" in json -> BusinessConnectionUpdate.serializer()
+            "business_message" in json -> BusinessMessageUpdate.serializer()
+            "edited_business_message" in json -> EditedBusinessMessageUpdate.serializer()
+            "deleted_business_messages" in json -> DeletedBusinessMessagesUpdate.serializer()
+            "message_reaction" in json -> MessageReactionUpdate.serializer()
+            "message_reaction_count" in json -> MessageReactionCountUpdate.serializer()
             "inline_query" in json -> InlineQueryUpdate.serializer()
             "chosen_inline_result" in json -> ChosenInlineResultUpdate.serializer()
             "callback_query" in json -> CallbackQueryUpdate.serializer()
@@ -226,6 +336,8 @@ object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class
             "my_chat_member" in json -> MyChatMemberUpdate.serializer()
             "chat_member" in json -> ChatMemberUpdate.serializer()
             "chat_join_request" in json -> ChatJoinRequestUpdate.serializer()
+            "chat_boost" in json -> ChatBoostUpdate.serializer()
+            "removed_chat_boost" in json -> RemovedChatBoostUpdate.serializer()
             else -> error("Failed to deserialize an update type: $json")
         }
     }
@@ -270,6 +382,7 @@ data class WebhookInfo(
  * @param canJoinGroups Optional. True, if the bot can be invited to groups. Returned only in getMe.
  * @param canReadAllGroupMessages Optional. True, if privacy mode is disabled for the bot. Returned only in getMe.
  * @param supportsInlineQueries Optional. True, if the bot supports inline queries. Returned only in getMe.
+ * @param canConnectToBusiness Optional. True, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in getMe.
  */
 @Serializable
 data class User(
@@ -284,8 +397,9 @@ data class User(
     val canJoinGroups: Boolean? = null,
     val canReadAllGroupMessages: Boolean? = null,
     val supportsInlineQueries: Boolean? = null,
+    val canConnectToBusiness: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("User").prop("id", id).prop("isBot", isBot).prop("firstName", firstName).prop("lastName", lastName).prop("username", username).prop("languageCode", languageCode).prop("isPremium", isPremium).prop("addedToAttachmentMenu", addedToAttachmentMenu).prop("canJoinGroups", canJoinGroups).prop("canReadAllGroupMessages", canReadAllGroupMessages).prop("supportsInlineQueries", supportsInlineQueries).toString()
+    override fun toString() = DebugStringBuilder("User").prop("id", id).prop("isBot", isBot).prop("firstName", firstName).prop("lastName", lastName).prop("username", username).prop("languageCode", languageCode).prop("isPremium", isPremium).prop("addedToAttachmentMenu", addedToAttachmentMenu).prop("canJoinGroups", canJoinGroups).prop("canReadAllGroupMessages", canReadAllGroupMessages).prop("supportsInlineQueries", supportsInlineQueries).prop("canConnectToBusiness", canConnectToBusiness).toString()
 }
 
 /**
@@ -299,8 +413,18 @@ data class User(
  * @param isForum Optional. True, if the supergroup chat is a forum (has topics enabled)
  * @param photo Optional. Chat photo. Returned only in getChat.
  * @param activeUsernames Optional. If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.
- * @param emojiStatusCustomEmojiId Optional. Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.
- * @param emojiStatusExpirationDate Optional. Expiration date of the emoji status of the other party in a private chat in Unix time, if any. Returned only in getChat.
+ * @param birthdate Optional. For private chats, the date of birth of the user. Returned only in getChat.
+ * @param businessIntro Optional. For private chats with business accounts, the intro of the business. Returned only in getChat.
+ * @param businessLocation Optional. For private chats with business accounts, the location of the business. Returned only in getChat.
+ * @param businessOpeningHours Optional. For private chats with business accounts, the opening hours of the business. Returned only in getChat.
+ * @param personalChat Optional. For private chats, the personal channel of the user. Returned only in getChat.
+ * @param availableReactions Optional. List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. Returned only in getChat.
+ * @param accentColorId Optional. Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details. Returned only in getChat. Always returned in getChat.
+ * @param backgroundCustomEmojiId Optional. Custom emoji identifier of emoji chosen by the chat for the reply header and link preview background. Returned only in getChat.
+ * @param profileAccentColorId Optional. Identifier of the accent color for the chat's profile background. See profile accent colors for more details. Returned only in getChat.
+ * @param profileBackgroundCustomEmojiId Optional. Custom emoji identifier of the emoji chosen by the chat for its profile background. Returned only in getChat.
+ * @param emojiStatusCustomEmojiId Optional. Custom emoji identifier of the emoji status of the chat or the other party in a private chat. Returned only in getChat.
+ * @param emojiStatusExpirationDate Optional. Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any. Returned only in getChat.
  * @param bio Optional. Bio of the other party in a private chat. Returned only in getChat.
  * @param hasPrivateForwards Optional. True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id> links only in chats with the user. Returned only in getChat.
  * @param hasRestrictedVoiceAndVideoMessages Optional. True, if the privacy settings of the other party restrict sending voice and video note messages in the private chat. Returned only in getChat.
@@ -310,13 +434,16 @@ data class User(
  * @param inviteLink Optional. Primary invite link, for groups, supergroups and channel chats. Returned only in getChat.
  * @param pinnedMessage Optional. The most recent pinned message (by sending date). Returned only in getChat.
  * @param permissions Optional. Default chat member permissions, for groups and supergroups. Returned only in getChat.
- * @param slowModeDelay Optional. For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user; in seconds. Returned only in getChat.
+ * @param slowModeDelay Optional. For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds. Returned only in getChat.
+ * @param unrestrictBoostCount Optional. For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions. Returned only in getChat.
  * @param messageAutoDeleteTime Optional. The time after which all messages sent to the chat will be automatically deleted; in seconds. Returned only in getChat.
  * @param hasAggressiveAntiSpamEnabled Optional. True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. Returned only in getChat.
  * @param hasHiddenMembers Optional. True, if non-administrators can only get the list of bots and administrators in the chat. Returned only in getChat.
  * @param hasProtectedContent Optional. True, if messages from the chat can't be forwarded to other chats. Returned only in getChat.
+ * @param hasVisibleHistory Optional. True, if new chat members will have access to old messages; available only to chat administrators. Returned only in getChat.
  * @param stickerSetName Optional. For supergroups, name of group sticker set. Returned only in getChat.
  * @param canSetStickerSet Optional. True, if the bot can change the group sticker set. Returned only in getChat.
+ * @param customEmojiStickerSetName Optional. For supergroups, the name of the group's custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group. Returned only in getChat.
  * @param linkedChatId Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat.
  * @param location Optional. For supergroups, the location to which the supergroup is connected. Returned only in getChat.
  */
@@ -331,6 +458,16 @@ data class Chat(
     val isForum: Boolean? = null,
     val photo: ChatPhoto? = null,
     val activeUsernames: List<String>? = null,
+    val birthdate: Birthdate? = null,
+    val businessIntro: BusinessIntro? = null,
+    val businessLocation: BusinessLocation? = null,
+    val businessOpeningHours: BusinessOpeningHours? = null,
+    val personalChat: Chat? = null,
+    val availableReactions: List<ReactionType>? = null,
+    val accentColorId: Long? = null,
+    val backgroundCustomEmojiId: CustomEmojiId? = null,
+    val profileAccentColorId: Long? = null,
+    val profileBackgroundCustomEmojiId: CustomEmojiId? = null,
     val emojiStatusCustomEmojiId: CustomEmojiId? = null,
     val emojiStatusExpirationDate: UnixTimestamp? = null,
     val bio: String? = null,
@@ -343,42 +480,48 @@ data class Chat(
     val pinnedMessage: Message? = null,
     val permissions: ChatPermissions? = null,
     val slowModeDelay: Long? = null,
+    val unrestrictBoostCount: Long? = null,
     val messageAutoDeleteTime: Long? = null,
     val hasAggressiveAntiSpamEnabled: Boolean? = null,
     val hasHiddenMembers: Boolean? = null,
     val hasProtectedContent: Boolean? = null,
+    val hasVisibleHistory: Boolean? = null,
     val stickerSetName: String? = null,
     val canSetStickerSet: Boolean? = null,
+    val customEmojiStickerSetName: String? = null,
     val linkedChatId: ChatId? = null,
     val location: ChatLocation? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Chat").prop("id", id).prop("type", type).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("linkedChatId", linkedChatId).prop("location", location).toString()
+    override fun toString() = DebugStringBuilder("Chat").prop("id", id).prop("type", type).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("accentColorId", accentColorId).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).toString()
 }
 
 /**
  * This object represents a message.
  * @param messageId Unique message identifier inside this chat
- * @param date Date the message was sent in Unix time
- * @param chat Conversation the message belongs to
+ * @param date Date the message was sent in Unix time. It is always a positive number, representing a valid date.
+ * @param chat Chat the message belongs to
  * @param messageThreadId Optional. Unique identifier of a message thread to which the message belongs; for supergroups only
  * @param from Optional. Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
  * @param senderChat Optional. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field from contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
- * @param forwardFrom Optional. For forwarded messages, sender of the original message
- * @param forwardFromChat Optional. For messages forwarded from channels or from anonymous administrators, information about the original sender chat
- * @param forwardFromMessageId Optional. For messages forwarded from channels, identifier of the original message in the channel
- * @param forwardSignature Optional. For forwarded messages that were originally sent in channels or by an anonymous chat administrator, signature of the message sender if present
- * @param forwardSenderName Optional. Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded messages
- * @param forwardDate Optional. For forwarded messages, date the original message was sent in Unix time
+ * @param senderBoostCount Optional. If the sender of the message boosted the chat, the number of boosts added by the user
+ * @param senderBusinessBot Optional. The bot that actually sent the message on behalf of the business account. Available only for outgoing messages sent on behalf of the connected business account.
+ * @param businessConnectionId Optional. Unique identifier of the business connection from which the message was received. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
+ * @param forwardOrigin Optional. Information about the original message for forwarded messages
  * @param isTopicMessage Optional. True, if the message is sent to a forum topic
  * @param isAutomaticForward Optional. True, if the message is a channel post that was automatically forwarded to the connected discussion group
- * @param replyToMessage Optional. For replies, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
+ * @param replyToMessage Optional. For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
+ * @param externalReply Optional. Information about the message that is being replied to, which may come from another chat or forum topic
+ * @param quote Optional. For replies that quote part of the original message, the quoted part of the message
+ * @param replyToStory Optional. For replies to a story, the original story
  * @param viaBot Optional. Bot through which the message was sent
  * @param editDate Optional. Date the message was last edited in Unix time
  * @param hasProtectedContent Optional. True, if the message can't be forwarded
+ * @param isFromOffline Optional. True, if the message was sent by an implicit action, for example, as an away or a greeting business message, or as a scheduled message
  * @param mediaGroupId Optional. The unique identifier of a media message group this message belongs to
  * @param authorSignature Optional. Signature of the post author for messages in channels, or the custom title of an anonymous group administrator
  * @param text Optional. For text messages, the actual UTF-8 text of the message
  * @param entities Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
+ * @param linkPreviewOptions Optional. Options used for link preview generation for the message, if it is a text message and link preview options were changed
  * @param animation Optional. Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set
  * @param audio Optional. Message is an audio file, information about the file
  * @param document Optional. Message is a general file, information about the file
@@ -408,21 +551,26 @@ data class Chat(
  * @param messageAutoDeleteTimerChanged Optional. Service message: auto-delete timer settings changed in the chat
  * @param migrateToChatId Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
  * @param migrateFromChatId Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
- * @param pinnedMessage Optional. Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it is itself a reply.
+ * @param pinnedMessage Optional. Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
  * @param invoice Optional. Message is an invoice for a payment, information about the invoice. More about payments »
  * @param successfulPayment Optional. Message is a service message about a successful payment, information about the payment. More about payments »
- * @param userShared Optional. Service message: a user was shared with the bot
+ * @param usersShared Optional. Service message: users were shared with the bot
  * @param chatShared Optional. Service message: a chat was shared with the bot
  * @param connectedWebsite Optional. The domain name of the website on which the user has logged in. More about Telegram Login »
  * @param writeAccessAllowed Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess
  * @param passportData Optional. Telegram Passport data
  * @param proximityAlertTriggered Optional. Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
+ * @param boostAdded Optional. Service message: user boosted the chat
  * @param forumTopicCreated Optional. Service message: forum topic created
  * @param forumTopicEdited Optional. Service message: forum topic edited
  * @param forumTopicClosed Optional. Service message: forum topic closed
  * @param forumTopicReopened Optional. Service message: forum topic reopened
  * @param generalForumTopicHidden Optional. Service message: the 'General' forum topic hidden
  * @param generalForumTopicUnhidden Optional. Service message: the 'General' forum topic unhidden
+ * @param giveawayCreated Optional. Service message: a scheduled giveaway was created
+ * @param giveaway Optional. The message is a scheduled giveaway message
+ * @param giveawayWinners Optional. A giveaway with public winners was completed
+ * @param giveawayCompleted Optional. Service message: a giveaway without public winners was completed
  * @param videoChatScheduled Optional. Service message: video chat scheduled
  * @param videoChatStarted Optional. Service message: video chat started
  * @param videoChatEnded Optional. Service message: video chat ended
@@ -438,22 +586,25 @@ data class Message(
     val messageThreadId: MessageThreadId? = null,
     val from: User? = null,
     val senderChat: Chat? = null,
-    val forwardFrom: User? = null,
-    val forwardFromChat: Chat? = null,
-    val forwardFromMessageId: MessageId? = null,
-    val forwardSignature: String? = null,
-    val forwardSenderName: String? = null,
-    val forwardDate: UnixTimestamp? = null,
+    val senderBoostCount: Long? = null,
+    val senderBusinessBot: User? = null,
+    val businessConnectionId: String? = null,
+    val forwardOrigin: MessageOrigin? = null,
     val isTopicMessage: Boolean? = null,
     val isAutomaticForward: Boolean? = null,
     val replyToMessage: Message? = null,
+    val externalReply: ExternalReplyInfo? = null,
+    val quote: TextQuote? = null,
+    val replyToStory: Story? = null,
     val viaBot: User? = null,
     val editDate: UnixTimestamp? = null,
     val hasProtectedContent: Boolean? = null,
+    val isFromOffline: Boolean? = null,
     val mediaGroupId: String? = null,
     val authorSignature: String? = null,
     val text: String? = null,
     val entities: List<MessageEntity>? = null,
+    val linkPreviewOptions: LinkPreviewOptions? = null,
     val animation: Animation? = null,
     val audio: Audio? = null,
     val document: Document? = null,
@@ -486,18 +637,23 @@ data class Message(
     val pinnedMessage: Message? = null,
     val invoice: Invoice? = null,
     val successfulPayment: SuccessfulPayment? = null,
-    val userShared: UserShared? = null,
+    val usersShared: UsersShared? = null,
     val chatShared: ChatShared? = null,
     val connectedWebsite: String? = null,
     val writeAccessAllowed: WriteAccessAllowed? = null,
     val passportData: PassportData? = null,
     val proximityAlertTriggered: ProximityAlertTriggered? = null,
+    val boostAdded: ChatBoostAdded? = null,
     val forumTopicCreated: ForumTopicCreated? = null,
     val forumTopicEdited: ForumTopicEdited? = null,
     val forumTopicClosed: ForumTopicClosed? = null,
     val forumTopicReopened: ForumTopicReopened? = null,
     val generalForumTopicHidden: GeneralForumTopicHidden? = null,
     val generalForumTopicUnhidden: GeneralForumTopicUnhidden? = null,
+    val giveawayCreated: GiveawayCreated? = null,
+    val giveaway: Giveaway? = null,
+    val giveawayWinners: GiveawayWinners? = null,
+    val giveawayCompleted: GiveawayCompleted? = null,
     val videoChatScheduled: VideoChatScheduled? = null,
     val videoChatStarted: VideoChatStarted? = null,
     val videoChatEnded: VideoChatEnded? = null,
@@ -505,7 +661,7 @@ data class Message(
     val webAppData: WebAppData? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("forwardFrom", forwardFrom).prop("forwardFromChat", forwardFromChat).prop("forwardFromMessageId", forwardFromMessageId).prop("forwardSignature", forwardSignature).prop("forwardSenderName", forwardSenderName).prop("forwardDate", forwardDate).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("userShared", userShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -513,15 +669,15 @@ data class Message(
  * @param messageId Unique message identifier
  */
 @Serializable
-data class MessageIdResult(
+data class MessageRef(
     val messageId: MessageId,
 ) {
-    override fun toString() = DebugStringBuilder("MessageIdResult").prop("messageId", messageId).toString()
+    override fun toString() = DebugStringBuilder("MessageRef").prop("messageId", messageId).toString()
 }
 
 /**
  * This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
- * @param type Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
+ * @param type Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
  * @param offset Offset in UTF-16 code units to the start of the entity
  * @param length Length of the entity in UTF-16 code units
  * @param url Optional. For “text_link” only, URL that will be opened after user taps on the text
@@ -540,6 +696,174 @@ data class MessageEntity(
     val customEmojiId: CustomEmojiId? = null,
 ) {
     override fun toString() = DebugStringBuilder("MessageEntity").prop("type", type).prop("offset", offset).prop("length", length).prop("url", url).prop("user", user).prop("language", language).prop("customEmojiId", customEmojiId).toString()
+}
+
+/**
+ * This object contains information about the quoted part of a message that is replied to by the given message.
+ * @param text Text of the quoted part of a message that is replied to by the given message
+ * @param position Approximate quote position in the original message in UTF-16 code units as specified by the sender
+ * @param entities Optional. Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes.
+ * @param isManual Optional. True, if the quote was chosen manually by the message sender. Otherwise, the quote was added automatically by the server.
+ */
+@Serializable
+data class TextQuote(
+    val text: String,
+    val position: Long,
+    val entities: List<MessageEntity>? = null,
+    val isManual: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("TextQuote").prop("text", text).prop("position", position).prop("entities", entities).prop("isManual", isManual).toString()
+}
+
+/**
+ * This object contains information about a message that is being replied to, which may come from another chat or forum topic.
+ * @param origin Origin of the message replied to by the given message
+ * @param chat Optional. Chat the original message belongs to. Available only if the chat is a supergroup or a channel.
+ * @param messageId Optional. Unique message identifier inside the original chat. Available only if the original chat is a supergroup or a channel.
+ * @param linkPreviewOptions Optional. Options used for link preview generation for the original message, if it is a text message
+ * @param animation Optional. Message is an animation, information about the animation
+ * @param audio Optional. Message is an audio file, information about the file
+ * @param document Optional. Message is a general file, information about the file
+ * @param photo Optional. Message is a photo, available sizes of the photo
+ * @param sticker Optional. Message is a sticker, information about the sticker
+ * @param story Optional. Message is a forwarded story
+ * @param video Optional. Message is a video, information about the video
+ * @param videoNote Optional. Message is a video note, information about the video message
+ * @param voice Optional. Message is a voice message, information about the file
+ * @param hasMediaSpoiler Optional. True, if the message media is covered by a spoiler animation
+ * @param contact Optional. Message is a shared contact, information about the contact
+ * @param dice Optional. Message is a dice with random value
+ * @param game Optional. Message is a game, information about the game. More about games »
+ * @param giveaway Optional. Message is a scheduled giveaway, information about the giveaway
+ * @param giveawayWinners Optional. A giveaway with public winners was completed
+ * @param invoice Optional. Message is an invoice for a payment, information about the invoice. More about payments »
+ * @param location Optional. Message is a shared location, information about the location
+ * @param poll Optional. Message is a native poll, information about the poll
+ * @param venue Optional. Message is a venue, information about the venue
+ */
+@Serializable
+data class ExternalReplyInfo(
+    val origin: MessageOrigin,
+    val chat: Chat? = null,
+    val messageId: MessageId? = null,
+    val linkPreviewOptions: LinkPreviewOptions? = null,
+    val animation: Animation? = null,
+    val audio: Audio? = null,
+    val document: Document? = null,
+    val photo: List<PhotoSize>? = null,
+    val sticker: Sticker? = null,
+    val story: Story? = null,
+    val video: Video? = null,
+    val videoNote: VideoNote? = null,
+    val voice: Voice? = null,
+    val hasMediaSpoiler: Boolean? = null,
+    val contact: Contact? = null,
+    val dice: Dice? = null,
+    val game: Game? = null,
+    val giveaway: Giveaway? = null,
+    val giveawayWinners: GiveawayWinners? = null,
+    val invoice: Invoice? = null,
+    val location: Location? = null,
+    val poll: Poll? = null,
+    val venue: Venue? = null,
+) {
+    override fun toString() = DebugStringBuilder("ExternalReplyInfo").prop("origin", origin).prop("chat", chat).prop("messageId", messageId).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("invoice", invoice).prop("location", location).prop("poll", poll).prop("venue", venue).toString()
+}
+
+/**
+ * Describes reply parameters for the message that is being sent.
+ * @param messageId Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified
+ * @param chatId Optional. If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account.
+ * @param allowSendingWithoutReply Optional. Pass True if the message should be sent even if the specified message to be replied to is not found. Always False for replies in another chat or forum topic. Always True for messages sent on behalf of a business account.
+ * @param quote Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message.
+ * @param quoteParseMode Optional. Mode for parsing entities in the quote. See formatting options for more details.
+ * @param quoteEntities Optional. A JSON-serialized list of special entities that appear in the quote. It can be specified instead of quote_parse_mode.
+ * @param quotePosition Optional. Position of the quote in the original message in UTF-16 code units
+ */
+@Serializable
+data class ReplyParameters(
+    val messageId: MessageId,
+    val chatId: ChatId? = null,
+    val allowSendingWithoutReply: Boolean? = null,
+    val quote: String? = null,
+    val quoteParseMode: String? = null,
+    val quoteEntities: List<MessageEntity>? = null,
+    val quotePosition: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("ReplyParameters").prop("messageId", messageId).prop("chatId", chatId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("quote", quote).prop("quoteParseMode", quoteParseMode).prop("quoteEntities", quoteEntities).prop("quotePosition", quotePosition).toString()
+}
+
+/**
+ * This object describes the origin of a message. It can be one of
+ * - [MessageOriginUser]
+ * - [MessageOriginHiddenUser]
+ * - [MessageOriginChat]
+ * - [MessageOriginChannel]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface MessageOrigin
+
+/**
+ * The message was originally sent by a known user.
+ * @param date Date the message was sent originally in Unix time
+ * @param senderUser User that sent the message originally
+ */
+@Serializable
+@SerialName("user")
+data class MessageOriginUser(
+    val date: UnixTimestamp,
+    val senderUser: User,
+) : MessageOrigin {
+    override fun toString() = DebugStringBuilder("MessageOriginUser").prop("date", date).prop("senderUser", senderUser).toString()
+}
+
+/**
+ * The message was originally sent by an unknown user.
+ * @param date Date the message was sent originally in Unix time
+ * @param senderUserName Name of the user that sent the message originally
+ */
+@Serializable
+@SerialName("hidden_user")
+data class MessageOriginHiddenUser(
+    val date: UnixTimestamp,
+    val senderUserName: String,
+) : MessageOrigin {
+    override fun toString() = DebugStringBuilder("MessageOriginHiddenUser").prop("date", date).prop("senderUserName", senderUserName).toString()
+}
+
+/**
+ * The message was originally sent on behalf of a chat to a group chat.
+ * @param date Date the message was sent originally in Unix time
+ * @param senderChat Chat that sent the message originally
+ * @param authorSignature Optional. For messages originally sent by an anonymous chat administrator, original message author signature
+ */
+@Serializable
+@SerialName("chat")
+data class MessageOriginChat(
+    val date: UnixTimestamp,
+    val senderChat: Chat,
+    val authorSignature: String? = null,
+) : MessageOrigin {
+    override fun toString() = DebugStringBuilder("MessageOriginChat").prop("date", date).prop("senderChat", senderChat).prop("authorSignature", authorSignature).toString()
+}
+
+/**
+ * The message was originally sent to a channel chat.
+ * @param date Date the message was sent originally in Unix time
+ * @param chat Channel chat to which the message was originally sent
+ * @param messageId Unique message identifier inside the chat
+ * @param authorSignature Optional. Signature of the original post author
+ */
+@Serializable
+@SerialName("channel")
+data class MessageOriginChannel(
+    val date: UnixTimestamp,
+    val chat: Chat,
+    val messageId: MessageId,
+    val authorSignature: String? = null,
+) : MessageOrigin {
+    override fun toString() = DebugStringBuilder("MessageOriginChannel").prop("date", date).prop("chat", chat).prop("messageId", messageId).prop("authorSignature", authorSignature).toString()
 }
 
 /**
@@ -637,10 +961,17 @@ data class Document(
 }
 
 /**
- * This object represents a message about a forwarded story in the chat. Currently holds no information.
+ * This object represents a story.
+ * @param chat Chat that posted the story
+ * @param id Unique identifier for the story in the chat
  */
 @Serializable
-data object Story
+data class Story(
+    val chat: Chat,
+    val id: Long,
+) {
+    override fun toString() = DebugStringBuilder("Story").prop("chat", chat).prop("id", id).toString()
+}
 
 /**
  * This object represents a video file.
@@ -808,8 +1139,8 @@ data class Poll(
 
 /**
  * This object represents a point on the map.
- * @param longitude Longitude as defined by sender
  * @param latitude Latitude as defined by sender
+ * @param longitude Longitude as defined by sender
  * @param horizontalAccuracy Optional. The radius of uncertainty for the location, measured in meters; 0-1500
  * @param livePeriod Optional. Time relative to the message sending date, during which the location can be updated; in seconds. For active live locations only.
  * @param heading Optional. The direction in which user is moving, in degrees; 1-360. For active live locations only.
@@ -817,14 +1148,14 @@ data class Poll(
  */
 @Serializable
 data class Location(
-    val longitude: Double,
     val latitude: Double,
+    val longitude: Double,
     val horizontalAccuracy: Double? = null,
     val livePeriod: Long? = null,
     val heading: Long? = null,
     val proximityAlertRadius: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Location").prop("longitude", longitude).prop("latitude", latitude).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).toString()
+    override fun toString() = DebugStringBuilder("Location").prop("latitude", latitude).prop("longitude", longitude).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).toString()
 }
 
 /**
@@ -890,6 +1221,17 @@ data class MessageAutoDeleteTimerChanged(
 }
 
 /**
+ * This object represents a service message about a user boosting a chat.
+ * @param boostCount Number of boosts added by the user
+ */
+@Serializable
+data class ChatBoostAdded(
+    val boostCount: Long,
+) {
+    override fun toString() = DebugStringBuilder("ChatBoostAdded").prop("boostCount", boostCount).toString()
+}
+
+/**
  * This object represents a service message about a new forum topic created in the chat.
  * @param name Name of the topic
  * @param iconColor Color of the topic icon in RGB format
@@ -942,29 +1284,54 @@ data object GeneralForumTopicHidden
 data object GeneralForumTopicUnhidden
 
 /**
- * This object contains information about the user whose identifier was shared with the bot using a KeyboardButtonRequestUser button.
- * @param requestId Identifier of the request
- * @param userId Identifier of the shared user. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means.
+ * This object contains information about a user that was shared with the bot using a KeyboardButtonRequestUser button.
+ * @param userId Identifier of the shared user. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means.
+ * @param firstName Optional. First name of the user, if the name was requested by the bot
+ * @param lastName Optional. Last name of the user, if the name was requested by the bot
+ * @param username Optional. Username of the user, if the username was requested by the bot
+ * @param photo Optional. Available sizes of the chat photo, if the photo was requested by the bot
  */
 @Serializable
-data class UserShared(
-    val requestId: Long,
+data class SharedUser(
     val userId: UserId,
+    val firstName: String? = null,
+    val lastName: String? = null,
+    val username: String? = null,
+    val photo: List<PhotoSize>? = null,
 ) {
-    override fun toString() = DebugStringBuilder("UserShared").prop("requestId", requestId).prop("userId", userId).toString()
+    override fun toString() = DebugStringBuilder("SharedUser").prop("userId", userId).prop("firstName", firstName).prop("lastName", lastName).prop("username", username).prop("photo", photo).toString()
 }
 
 /**
- * This object contains information about the chat whose identifier was shared with the bot using a KeyboardButtonRequestChat button.
+ * This object contains information about the users whose identifiers were shared with the bot using a KeyboardButtonRequestUsers button.
+ * @param requestId Identifier of the request
+ * @param users Information about users shared with the bot.
+ */
+@Serializable
+data class UsersShared(
+    val requestId: Long,
+    val users: List<SharedUser>,
+) {
+    override fun toString() = DebugStringBuilder("UsersShared").prop("requestId", requestId).prop("users", users).toString()
+}
+
+/**
+ * This object contains information about a chat that was shared with the bot using a KeyboardButtonRequestChat button.
  * @param requestId Identifier of the request
  * @param chatId Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.
+ * @param title Optional. Title of the chat, if the title was requested by the bot.
+ * @param username Optional. Username of the chat, if the username was requested by the bot and available.
+ * @param photo Optional. Available sizes of the chat photo, if the photo was requested by the bot
  */
 @Serializable
 data class ChatShared(
     val requestId: Long,
     val chatId: ChatId,
+    val title: String? = null,
+    val username: String? = null,
+    val photo: List<PhotoSize>? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatShared").prop("requestId", requestId).prop("chatId", chatId).toString()
+    override fun toString() = DebugStringBuilder("ChatShared").prop("requestId", requestId).prop("chatId", chatId).prop("title", title).prop("username", username).prop("photo", photo).toString()
 }
 
 /**
@@ -1022,6 +1389,102 @@ data class VideoChatParticipantsInvited(
 }
 
 /**
+ * This object represents a service message about the creation of a scheduled giveaway. Currently holds no information.
+ */
+@Serializable
+data object GiveawayCreated
+
+/**
+ * This object represents a message about a scheduled giveaway.
+ * @param chats The list of chats which the user must join to participate in the giveaway
+ * @param winnersSelectionDate Point in time (Unix timestamp) when winners of the giveaway will be selected
+ * @param winnerCount The number of users which are supposed to be selected as winners of the giveaway
+ * @param onlyNewMembers Optional. True, if only users who join the chats after the giveaway started should be eligible to win
+ * @param hasPublicWinners Optional. True, if the list of giveaway winners will be visible to everyone
+ * @param prizeDescription Optional. Description of additional giveaway prize
+ * @param countryCodes Optional. A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which eligible users for the giveaway must come. If empty, then all users can participate in the giveaway. Users with a phone number that was bought on Fragment can always participate in giveaways.
+ * @param premiumSubscriptionMonthCount Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for
+ */
+@Serializable
+data class Giveaway(
+    val chats: List<Chat>,
+    val winnersSelectionDate: Long,
+    val winnerCount: Long,
+    val onlyNewMembers: Boolean? = null,
+    val hasPublicWinners: Boolean? = null,
+    val prizeDescription: String? = null,
+    val countryCodes: List<String>? = null,
+    val premiumSubscriptionMonthCount: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("Giveaway").prop("chats", chats).prop("winnersSelectionDate", winnersSelectionDate).prop("winnerCount", winnerCount).prop("onlyNewMembers", onlyNewMembers).prop("hasPublicWinners", hasPublicWinners).prop("prizeDescription", prizeDescription).prop("countryCodes", countryCodes).prop("premiumSubscriptionMonthCount", premiumSubscriptionMonthCount).toString()
+}
+
+/**
+ * This object represents a message about the completion of a giveaway with public winners.
+ * @param chat The chat that created the giveaway
+ * @param giveawayMessageId Identifier of the message with the giveaway in the chat
+ * @param winnersSelectionDate Point in time (Unix timestamp) when winners of the giveaway were selected
+ * @param winnerCount Total number of winners in the giveaway
+ * @param winners List of up to 100 winners of the giveaway
+ * @param additionalChatCount Optional. The number of other chats the user had to join in order to be eligible for the giveaway
+ * @param premiumSubscriptionMonthCount Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for
+ * @param unclaimedPrizeCount Optional. Number of undistributed prizes
+ * @param onlyNewMembers Optional. True, if only users who had joined the chats after the giveaway started were eligible to win
+ * @param wasRefunded Optional. True, if the giveaway was canceled because the payment for it was refunded
+ * @param prizeDescription Optional. Description of additional giveaway prize
+ */
+@Serializable
+data class GiveawayWinners(
+    val chat: Chat,
+    val giveawayMessageId: MessageId,
+    val winnersSelectionDate: Long,
+    val winnerCount: Long,
+    val winners: List<User>,
+    val additionalChatCount: Long? = null,
+    val premiumSubscriptionMonthCount: Long? = null,
+    val unclaimedPrizeCount: Long? = null,
+    val onlyNewMembers: Boolean? = null,
+    val wasRefunded: Boolean? = null,
+    val prizeDescription: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("GiveawayWinners").prop("chat", chat).prop("giveawayMessageId", giveawayMessageId).prop("winnersSelectionDate", winnersSelectionDate).prop("winnerCount", winnerCount).prop("winners", winners).prop("additionalChatCount", additionalChatCount).prop("premiumSubscriptionMonthCount", premiumSubscriptionMonthCount).prop("unclaimedPrizeCount", unclaimedPrizeCount).prop("onlyNewMembers", onlyNewMembers).prop("wasRefunded", wasRefunded).prop("prizeDescription", prizeDescription).toString()
+}
+
+/**
+ * This object represents a service message about the completion of a giveaway without public winners.
+ * @param winnerCount Number of winners in the giveaway
+ * @param unclaimedPrizeCount Optional. Number of undistributed prizes
+ * @param giveawayMessage Optional. Message with the giveaway that was completed, if it wasn't deleted
+ */
+@Serializable
+data class GiveawayCompleted(
+    val winnerCount: Long,
+    val unclaimedPrizeCount: Long? = null,
+    val giveawayMessage: Message? = null,
+) {
+    override fun toString() = DebugStringBuilder("GiveawayCompleted").prop("winnerCount", winnerCount).prop("unclaimedPrizeCount", unclaimedPrizeCount).prop("giveawayMessage", giveawayMessage).toString()
+}
+
+/**
+ * Describes the options used for link preview generation.
+ * @param isDisabled Optional. True, if the link preview is disabled
+ * @param url Optional. URL to use for the link preview. If empty, then the first URL found in the message text will be used
+ * @param preferSmallMedia Optional. True, if the media in the link preview is supposed to be shrunk; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
+ * @param preferLargeMedia Optional. True, if the media in the link preview is supposed to be enlarged; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
+ * @param showAboveText Optional. True, if the link preview must be shown above the message text; otherwise, the link preview will be shown below the message text
+ */
+@Serializable
+data class LinkPreviewOptions(
+    val isDisabled: Boolean? = null,
+    val url: String? = null,
+    val preferSmallMedia: Boolean? = null,
+    val preferLargeMedia: Boolean? = null,
+    val showAboveText: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("LinkPreviewOptions").prop("isDisabled", isDisabled).prop("url", url).prop("preferSmallMedia", preferSmallMedia).prop("preferLargeMedia", preferLargeMedia).prop("showAboveText", showAboveText).toString()
+}
+
+/**
  * This object represent a user's profile pictures.
  * @param totalCount Total number of profile pictures the target user has
  * @param photos Requested profile pictures (in up to 4 sizes each)
@@ -1071,7 +1534,7 @@ data class WebAppInfo(
  * @param resizeKeyboard Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
  * @param oneTimeKeyboard Optional. Requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat - the user can press a special button in the input field to see the custom keyboard again. Defaults to false.
  * @param inputFieldPlaceholder Optional. The placeholder to be shown in the input field when the keyboard is active; 1-64 characters
- * @param selective Optional. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message. Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
+ * @param selective Optional. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message. Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
  */
 @Serializable
 data class ReplyKeyboardMarkup(
@@ -1086,9 +1549,9 @@ data class ReplyKeyboardMarkup(
 }
 
 /**
- * This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_user, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
+ * This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
  * @param text Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed
- * @param requestUser Optional. If specified, pressing the button will open a list of suitable users. Tapping on any user will send their identifier to the bot in a “user_shared” service message. Available in private chats only.
+ * @param requestUsers Optional. If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a “users_shared” service message. Available in private chats only.
  * @param requestChat Optional. If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a “chat_shared” service message. Available in private chats only.
  * @param requestContact Optional. If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only.
  * @param requestLocation Optional. If True, the user's current location will be sent when the button is pressed. Available in private chats only.
@@ -1098,33 +1561,41 @@ data class ReplyKeyboardMarkup(
 @Serializable
 data class KeyboardButton(
     val text: String,
-    val requestUser: KeyboardButtonRequestUser? = null,
+    val requestUsers: KeyboardButtonRequestUsers? = null,
     val requestChat: KeyboardButtonRequestChat? = null,
     val requestContact: Boolean? = null,
     val requestLocation: Boolean? = null,
     val requestPoll: KeyboardButtonPollType? = null,
     val webApp: WebAppInfo? = null,
 ) {
-    override fun toString() = DebugStringBuilder("KeyboardButton").prop("text", text).prop("requestUser", requestUser).prop("requestChat", requestChat).prop("requestContact", requestContact).prop("requestLocation", requestLocation).prop("requestPoll", requestPoll).prop("webApp", webApp).toString()
+    override fun toString() = DebugStringBuilder("KeyboardButton").prop("text", text).prop("requestUsers", requestUsers).prop("requestChat", requestChat).prop("requestContact", requestContact).prop("requestLocation", requestLocation).prop("requestPoll", requestPoll).prop("webApp", webApp).toString()
 }
 
 /**
- * This object defines the criteria used to request a suitable user. The identifier of the selected user will be shared with the bot when the corresponding button is pressed. More about requesting users »
- * @param requestId Signed 32-bit identifier of the request, which will be received back in the UserShared object. Must be unique within the message
- * @param userIsBot Optional. Pass True to request a bot, pass False to request a regular user. If not specified, no additional restrictions are applied.
- * @param userIsPremium Optional. Pass True to request a premium user, pass False to request a non-premium user. If not specified, no additional restrictions are applied.
+ * This object defines the criteria used to request suitable users. Information about the selected users will be shared with the bot when the corresponding button is pressed. More about requesting users »
+ * @param requestId Signed 32-bit identifier of the request that will be received back in the UsersShared object. Must be unique within the message
+ * @param userIsBot Optional. Pass True to request bots, pass False to request regular users. If not specified, no additional restrictions are applied.
+ * @param userIsPremium Optional. Pass True to request premium users, pass False to request non-premium users. If not specified, no additional restrictions are applied.
+ * @param maxQuantity Optional. The maximum number of users to be selected; 1-10. Defaults to 1.
+ * @param requestName Optional. Pass True to request the users' first and last name
+ * @param requestUsername Optional. Pass True to request the users' username
+ * @param requestPhoto Optional. Pass True to request the users' photo
  */
 @Serializable
-data class KeyboardButtonRequestUser(
+data class KeyboardButtonRequestUsers(
     val requestId: Long,
     val userIsBot: Boolean? = null,
     val userIsPremium: Boolean? = null,
+    val maxQuantity: Long? = null,
+    val requestName: Boolean? = null,
+    val requestUsername: Boolean? = null,
+    val requestPhoto: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("KeyboardButtonRequestUser").prop("requestId", requestId).prop("userIsBot", userIsBot).prop("userIsPremium", userIsPremium).toString()
+    override fun toString() = DebugStringBuilder("KeyboardButtonRequestUsers").prop("requestId", requestId).prop("userIsBot", userIsBot).prop("userIsPremium", userIsPremium).prop("maxQuantity", maxQuantity).prop("requestName", requestName).prop("requestUsername", requestUsername).prop("requestPhoto", requestPhoto).toString()
 }
 
 /**
- * This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed. More about requesting chats »
+ * This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted requested rights in the сhat if appropriate More about requesting chats »
  * @param requestId Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message
  * @param chatIsChannel Pass True to request a channel chat, pass False to request a group or a supergroup chat.
  * @param chatIsForum Optional. Pass True to request a forum supergroup, pass False to request a non-forum chat. If not specified, no additional restrictions are applied.
@@ -1133,6 +1604,9 @@ data class KeyboardButtonRequestUser(
  * @param userAdministratorRights Optional. A JSON-serialized object listing the required administrator rights of the user in the chat. The rights must be a superset of bot_administrator_rights. If not specified, no additional restrictions are applied.
  * @param botAdministratorRights Optional. A JSON-serialized object listing the required administrator rights of the bot in the chat. The rights must be a subset of user_administrator_rights. If not specified, no additional restrictions are applied.
  * @param botIsMember Optional. Pass True to request a chat with the bot as a member. Otherwise, no additional restrictions are applied.
+ * @param requestTitle Optional. Pass True to request the chat's title
+ * @param requestUsername Optional. Pass True to request the chat's username
+ * @param requestPhoto Optional. Pass True to request the chat's photo
  */
 @Serializable
 data class KeyboardButtonRequestChat(
@@ -1144,8 +1618,11 @@ data class KeyboardButtonRequestChat(
     val userAdministratorRights: ChatAdministratorRights? = null,
     val botAdministratorRights: ChatAdministratorRights? = null,
     val botIsMember: Boolean? = null,
+    val requestTitle: Boolean? = null,
+    val requestUsername: Boolean? = null,
+    val requestPhoto: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("KeyboardButtonRequestChat").prop("requestId", requestId).prop("chatIsChannel", chatIsChannel).prop("chatIsForum", chatIsForum).prop("chatHasUsername", chatHasUsername).prop("chatIsCreated", chatIsCreated).prop("userAdministratorRights", userAdministratorRights).prop("botAdministratorRights", botAdministratorRights).prop("botIsMember", botIsMember).toString()
+    override fun toString() = DebugStringBuilder("KeyboardButtonRequestChat").prop("requestId", requestId).prop("chatIsChannel", chatIsChannel).prop("chatIsForum", chatIsForum).prop("chatHasUsername", chatHasUsername).prop("chatIsCreated", chatIsCreated).prop("userAdministratorRights", userAdministratorRights).prop("botAdministratorRights", botAdministratorRights).prop("botIsMember", botIsMember).prop("requestTitle", requestTitle).prop("requestUsername", requestUsername).prop("requestPhoto", requestPhoto).toString()
 }
 
 /**
@@ -1162,7 +1639,7 @@ data class KeyboardButtonPollType(
 /**
  * Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup).
  * @param removeKeyboard Requests clients to remove the custom keyboard (user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup)
- * @param selective Optional. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message. Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
+ * @param selective Optional. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message. Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
  */
 @Serializable
 data class ReplyKeyboardRemove(
@@ -1186,7 +1663,7 @@ data class InlineKeyboardMarkup(
 /**
  * This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
  * @param text Label text on the button
- * @param url Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their ID without using a username, if this is allowed by their privacy settings.
+ * @param url Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
  * @param callbackData Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
  * @param webApp Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot.
  * @param loginUrl Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
@@ -1257,7 +1734,7 @@ data class SwitchInlineQueryChosenChat(
  * @param id Unique identifier for this query
  * @param from Sender
  * @param chatInstance Global identifier, uniquely corresponding to the chat to which the message with the callback button was sent. Useful for high scores in games.
- * @param message Optional. Message with the callback button that originated the query. Note that message content and message date will not be available if the message is too old
+ * @param message Optional. Message sent by the bot with the callback button that originated the query
  * @param inlineMessageId Optional. Identifier of the message sent via the bot in inline mode, that originated the query.
  * @param data Optional. Data associated with the callback button. Be aware that the message originated the query can contain no callback buttons with this data.
  * @param gameShortName Optional. Short name of a Game to be returned, serves as the unique identifier for the game
@@ -1279,7 +1756,7 @@ data class CallbackQuery(
  * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode.
  * @param forceReply Shows reply interface to the user, as if they manually selected the bot's message and tapped 'Reply'
  * @param inputFieldPlaceholder Optional. The placeholder to be shown in the input field when the reply is active; 1-64 characters
- * @param selective Optional. Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+ * @param selective Optional. Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.
  */
 @Serializable
 data class ForceReply(
@@ -1337,20 +1814,20 @@ data class ChatInviteLink(
 /**
  * Represents the rights of an administrator in a chat.
  * @param isAnonymous True, if the user's presence in the chat is hidden
- * @param canManageChat True, if the administrator can access the chat event log, chat statistics, boost list in channels, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+ * @param canManageChat True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
  * @param canDeleteMessages True, if the administrator can delete messages of other users
  * @param canManageVideoChats True, if the administrator can manage video chats
- * @param canRestrictMembers True, if the administrator can restrict, ban or unban chat members
+ * @param canRestrictMembers True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics
  * @param canPromoteMembers True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
  * @param canChangeInfo True, if the user is allowed to change the chat title, photo and other settings
  * @param canInviteUsers True, if the user is allowed to invite new users to the chat
- * @param canPostMessages Optional. True, if the administrator can post messages in the channel; channels only
- * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; channels only
- * @param canPinMessages Optional. True, if the user is allowed to pin messages; groups and supergroups only
- * @param canPostStories Optional. True, if the administrator can post stories in the channel; channels only
- * @param canEditStories Optional. True, if the administrator can edit stories posted by other users; channels only
- * @param canDeleteStories Optional. True, if the administrator can delete stories posted by other users; channels only
- * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
+ * @param canPostStories True, if the administrator can post stories to the chat
+ * @param canEditStories True, if the administrator can edit stories posted by other users
+ * @param canDeleteStories True, if the administrator can delete stories posted by other users
+ * @param canPostMessages Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only
+ * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
+ * @param canPinMessages Optional. True, if the user is allowed to pin messages; for groups and supergroups only
+ * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
  */
 @Serializable
 data class ChatAdministratorRights(
@@ -1362,15 +1839,38 @@ data class ChatAdministratorRights(
     val canPromoteMembers: Boolean,
     val canChangeInfo: Boolean,
     val canInviteUsers: Boolean,
+    val canPostStories: Boolean,
+    val canEditStories: Boolean,
+    val canDeleteStories: Boolean,
     val canPostMessages: Boolean? = null,
     val canEditMessages: Boolean? = null,
     val canPinMessages: Boolean? = null,
-    val canPostStories: Boolean? = null,
-    val canEditStories: Boolean? = null,
-    val canDeleteStories: Boolean? = null,
     val canManageTopics: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatAdministratorRights").prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canManageTopics", canManageTopics).toString()
+    override fun toString() = DebugStringBuilder("ChatAdministratorRights").prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).toString()
+}
+
+/**
+ * This object represents changes in the status of a chat member.
+ * @param chat Chat the user belongs to
+ * @param from Performer of the action, which resulted in the change
+ * @param date Date the change was done in Unix time
+ * @param oldChatMember Previous information about the chat member
+ * @param newChatMember New information about the chat member
+ * @param inviteLink Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
+ * @param viaChatFolderInviteLink Optional. True, if the user joined the chat via a chat folder invite link
+ */
+@Serializable
+data class ChatMemberUpdated(
+    val chat: Chat,
+    val from: User,
+    val date: UnixTimestamp,
+    val oldChatMember: ChatMember,
+    val newChatMember: ChatMember,
+    val inviteLink: ChatInviteLink? = null,
+    val viaChatFolderInviteLink: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("ChatMemberUpdated").prop("chat", chat).prop("from", from).prop("date", date).prop("oldChatMember", oldChatMember).prop("newChatMember", newChatMember).prop("inviteLink", inviteLink).prop("viaChatFolderInviteLink", viaChatFolderInviteLink).toString()
 }
 
 /**
@@ -1407,20 +1907,20 @@ data class ChatMemberOwner(
  * @param user Information about the user
  * @param canBeEdited True, if the bot is allowed to edit administrator privileges of that user
  * @param isAnonymous True, if the user's presence in the chat is hidden
- * @param canManageChat True, if the administrator can access the chat event log, chat statistics, boost list in channels, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+ * @param canManageChat True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
  * @param canDeleteMessages True, if the administrator can delete messages of other users
  * @param canManageVideoChats True, if the administrator can manage video chats
- * @param canRestrictMembers True, if the administrator can restrict, ban or unban chat members
+ * @param canRestrictMembers True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics
  * @param canPromoteMembers True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
  * @param canChangeInfo True, if the user is allowed to change the chat title, photo and other settings
  * @param canInviteUsers True, if the user is allowed to invite new users to the chat
- * @param canPostMessages Optional. True, if the administrator can post messages in the channel; channels only
- * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; channels only
- * @param canPinMessages Optional. True, if the user is allowed to pin messages; groups and supergroups only
- * @param canPostStories Optional. True, if the administrator can post stories in the channel; channels only
- * @param canEditStories Optional. True, if the administrator can edit stories posted by other users; channels only
- * @param canDeleteStories Optional. True, if the administrator can delete stories posted by other users; channels only
- * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
+ * @param canPostStories True, if the administrator can post stories to the chat
+ * @param canEditStories True, if the administrator can edit stories posted by other users
+ * @param canDeleteStories True, if the administrator can delete stories posted by other users
+ * @param canPostMessages Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only
+ * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
+ * @param canPinMessages Optional. True, if the user is allowed to pin messages; for groups and supergroups only
+ * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
  * @param customTitle Optional. Custom title for this user
  */
 @Serializable
@@ -1436,16 +1936,16 @@ data class ChatMemberAdministrator(
     val canPromoteMembers: Boolean,
     val canChangeInfo: Boolean,
     val canInviteUsers: Boolean,
+    val canPostStories: Boolean,
+    val canEditStories: Boolean,
+    val canDeleteStories: Boolean,
     val canPostMessages: Boolean? = null,
     val canEditMessages: Boolean? = null,
     val canPinMessages: Boolean? = null,
-    val canPostStories: Boolean? = null,
-    val canEditStories: Boolean? = null,
-    val canDeleteStories: Boolean? = null,
     val canManageTopics: Boolean? = null,
     val customTitle: String? = null,
 ) : ChatMember {
-    override fun toString() = DebugStringBuilder("ChatMemberAdministrator").prop("user", user).prop("canBeEdited", canBeEdited).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canManageTopics", canManageTopics).prop("customTitle", customTitle).toString()
+    override fun toString() = DebugStringBuilder("ChatMemberAdministrator").prop("user", user).prop("canBeEdited", canBeEdited).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("customTitle", customTitle).toString()
 }
 
 /**
@@ -1464,7 +1964,7 @@ data class ChatMemberMember(
  * Represents a chat member that is under certain restrictions in the chat. Supergroups only.
  * @param user Information about the user
  * @param isMember True, if the user is a member of the chat at the moment of the request
- * @param canSendMessages True, if the user is allowed to send text messages, contacts, invoices, locations and venues
+ * @param canSendMessages True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
  * @param canSendAudios True, if the user is allowed to send audios
  * @param canSendDocuments True, if the user is allowed to send documents
  * @param canSendPhotos True, if the user is allowed to send photos
@@ -1531,33 +2031,10 @@ data class ChatMemberBanned(
 }
 
 /**
- * This object represents changes in the status of a chat member.
- * @param chat Chat the user belongs to
- * @param from Performer of the action, which resulted in the change
- * @param date Date the change was done in Unix time
- * @param oldChatMember Previous information about the chat member
- * @param newChatMember New information about the chat member
- * @param inviteLink Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
- * @param viaChatFolderInviteLink Optional. True, if the user joined the chat via a chat folder invite link
- */
-@Serializable
-data class ChatMemberUpdated(
-    val chat: Chat,
-    val from: User,
-    val date: UnixTimestamp,
-    val oldChatMember: ChatMember,
-    val newChatMember: ChatMember,
-    val inviteLink: ChatInviteLink? = null,
-    val viaChatFolderInviteLink: Boolean? = null,
-) {
-    override fun toString() = DebugStringBuilder("ChatMemberUpdated").prop("chat", chat).prop("from", from).prop("date", date).prop("oldChatMember", oldChatMember).prop("newChatMember", newChatMember).prop("inviteLink", inviteLink).prop("viaChatFolderInviteLink", viaChatFolderInviteLink).toString()
-}
-
-/**
  * Represents a join request sent to a chat.
  * @param chat Chat to which the request was sent
  * @param from User that sent the join request
- * @param userChatId Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 24 hours to send messages until the join request is processed, assuming no other administrator contacted the user.
+ * @param userChatId Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.
  * @param date Date the request was sent in Unix time
  * @param bio Optional. Bio of the user.
  * @param inviteLink Optional. Chat invite link that was used by the user to send the join request
@@ -1576,7 +2053,7 @@ data class ChatJoinRequest(
 
 /**
  * Describes actions that a non-administrator user is allowed to take in a chat.
- * @param canSendMessages Optional. True, if the user is allowed to send text messages, contacts, invoices, locations and venues
+ * @param canSendMessages Optional. True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
  * @param canSendAudios Optional. True, if the user is allowed to send audios
  * @param canSendDocuments Optional. True, if the user is allowed to send documents
  * @param canSendPhotos Optional. True, if the user is allowed to send photos
@@ -1612,6 +2089,75 @@ data class ChatPermissions(
 }
 
 /**
+ *
+ * @param day Day of the user's birth; 1-31
+ * @param month Month of the user's birth; 1-12
+ * @param year Optional. Year of the user's birth
+ */
+@Serializable
+data class Birthdate(
+    val day: Long,
+    val month: Long,
+    val year: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("Birthdate").prop("day", day).prop("month", month).prop("year", year).toString()
+}
+
+/**
+ *
+ * @param title Optional. Title text of the business intro
+ * @param message Optional. Message text of the business intro
+ * @param sticker Optional. Sticker of the business intro
+ */
+@Serializable
+data class BusinessIntro(
+    val title: String? = null,
+    val message: String? = null,
+    val sticker: Sticker? = null,
+) {
+    override fun toString() = DebugStringBuilder("BusinessIntro").prop("title", title).prop("message", message).prop("sticker", sticker).toString()
+}
+
+/**
+ *
+ * @param address Address of the business
+ * @param location Optional. Location of the business
+ */
+@Serializable
+data class BusinessLocation(
+    val address: String,
+    val location: Location? = null,
+) {
+    override fun toString() = DebugStringBuilder("BusinessLocation").prop("address", address).prop("location", location).toString()
+}
+
+/**
+ *
+ * @param openingMinute The minute's sequence number in a week, starting on Monday, marking the start of the time interval during which the business is open; 0 - 7 * 24 * 60
+ * @param closingMinute The minute's sequence number in a week, starting on Monday, marking the end of the time interval during which the business is open; 0 - 8 * 24 * 60
+ */
+@Serializable
+data class BusinessOpeningHoursInterval(
+    val openingMinute: Long,
+    val closingMinute: Long,
+) {
+    override fun toString() = DebugStringBuilder("BusinessOpeningHoursInterval").prop("openingMinute", openingMinute).prop("closingMinute", closingMinute).toString()
+}
+
+/**
+ *
+ * @param timeZoneName Unique name of the time zone for which the opening hours are defined
+ * @param openingHours List of time intervals describing business opening hours
+ */
+@Serializable
+data class BusinessOpeningHours(
+    val timeZoneName: String,
+    val openingHours: List<BusinessOpeningHoursInterval>,
+) {
+    override fun toString() = DebugStringBuilder("BusinessOpeningHours").prop("timeZoneName", timeZoneName).prop("openingHours", openingHours).toString()
+}
+
+/**
  * Represents a location to which a chat is connected.
  * @param location The location to which the supergroup is connected. Can't be a live location.
  * @param address Location address; 1-64 characters, as defined by the chat owner
@@ -1622,6 +2168,92 @@ data class ChatLocation(
     val address: String,
 ) {
     override fun toString() = DebugStringBuilder("ChatLocation").prop("location", location).prop("address", address).toString()
+}
+
+/**
+ * This object describes the type of a reaction. Currently, it can be one of
+ * - [ReactionTypeEmoji]
+ * - [ReactionTypeCustomEmoji]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface ReactionType
+
+/**
+ * The reaction is based on an emoji.
+ * @param emoji Reaction emoji. Currently, it can be one of "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+ */
+@Serializable
+@SerialName("emoji")
+data class ReactionTypeEmoji(
+    val emoji: String,
+) : ReactionType {
+    override fun toString() = DebugStringBuilder("ReactionTypeEmoji").prop("emoji", emoji).toString()
+}
+
+/**
+ * The reaction is based on a custom emoji.
+ * @param customEmojiId Custom emoji identifier
+ */
+@Serializable
+@SerialName("custom_emoji")
+data class ReactionTypeCustomEmoji(
+    val customEmojiId: CustomEmojiId,
+) : ReactionType {
+    override fun toString() = DebugStringBuilder("ReactionTypeCustomEmoji").prop("customEmojiId", customEmojiId).toString()
+}
+
+/**
+ * Represents a reaction added to a message along with the number of times it was added.
+ * @param type Type of the reaction
+ * @param totalCount Number of times the reaction was added
+ */
+@Serializable
+data class ReactionCount(
+    val type: ReactionType,
+    val totalCount: Long,
+) {
+    override fun toString() = DebugStringBuilder("ReactionCount").prop("type", type).prop("totalCount", totalCount).toString()
+}
+
+/**
+ * This object represents a change of a reaction on a message performed by a user.
+ * @param chat The chat containing the message the user reacted to
+ * @param messageId Unique identifier of the message inside the chat
+ * @param date Date of the change in Unix time
+ * @param oldReaction Previous list of reaction types that were set by the user
+ * @param newReaction New list of reaction types that have been set by the user
+ * @param user Optional. The user that changed the reaction, if the user isn't anonymous
+ * @param actorChat Optional. The chat on behalf of which the reaction was changed, if the user is anonymous
+ */
+@Serializable
+data class MessageReactionUpdated(
+    val chat: Chat,
+    val messageId: MessageId,
+    val date: UnixTimestamp,
+    val oldReaction: List<ReactionType>,
+    val newReaction: List<ReactionType>,
+    val user: User? = null,
+    val actorChat: Chat? = null,
+) {
+    override fun toString() = DebugStringBuilder("MessageReactionUpdated").prop("chat", chat).prop("messageId", messageId).prop("date", date).prop("oldReaction", oldReaction).prop("newReaction", newReaction).prop("user", user).prop("actorChat", actorChat).toString()
+}
+
+/**
+ * This object represents reaction changes on a message with anonymous reactions.
+ * @param chat The chat containing the message
+ * @param messageId Unique message identifier inside the chat
+ * @param date Date of the change in Unix time
+ * @param reactions List of reactions that are present on the message
+ */
+@Serializable
+data class MessageReactionCountUpdated(
+    val chat: Chat,
+    val messageId: MessageId,
+    val date: UnixTimestamp,
+    val reactions: List<ReactionCount>,
+) {
+    override fun toString() = DebugStringBuilder("MessageReactionCountUpdated").prop("chat", chat).prop("messageId", messageId).prop("date", date).prop("reactions", reactions).toString()
 }
 
 /**
@@ -1804,6 +2436,150 @@ data class MenuButtonWebApp(
 @Serializable
 @SerialName("default")
 data object MenuButtonDefault : MenuButton
+
+/**
+ * This object describes the source of a chat boost. It can be one of
+ * - [ChatBoostSourcePremium]
+ * - [ChatBoostSourceGiftCode]
+ * - [ChatBoostSourceGiveaway]
+ */
+@Serializable
+@JsonClassDiscriminator("source")
+sealed interface ChatBoostSource
+
+/**
+ * The boost was obtained by subscribing to Telegram Premium or by gifting a Telegram Premium subscription to another user.
+ * @param user User that boosted the chat
+ */
+@Serializable
+@SerialName("premium")
+data class ChatBoostSourcePremium(
+    val user: User,
+) : ChatBoostSource {
+    override fun toString() = DebugStringBuilder("ChatBoostSourcePremium").prop("user", user).toString()
+}
+
+/**
+ * The boost was obtained by the creation of Telegram Premium gift codes to boost a chat. Each such code boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+ * @param user User for which the gift code was created
+ */
+@Serializable
+@SerialName("gift_code")
+data class ChatBoostSourceGiftCode(
+    val user: User,
+) : ChatBoostSource {
+    override fun toString() = DebugStringBuilder("ChatBoostSourceGiftCode").prop("user", user).toString()
+}
+
+/**
+ * The boost was obtained by the creation of a Telegram Premium giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+ * @param giveawayMessageId Identifier of a message in the chat with the giveaway; the message could have been deleted already. May be 0 if the message isn't sent yet.
+ * @param user Optional. User that won the prize in the giveaway if any
+ * @param isUnclaimed Optional. True, if the giveaway was completed, but there was no user to win the prize
+ */
+@Serializable
+@SerialName("giveaway")
+data class ChatBoostSourceGiveaway(
+    val giveawayMessageId: MessageId,
+    val user: User? = null,
+    val isUnclaimed: Boolean? = null,
+) : ChatBoostSource {
+    override fun toString() = DebugStringBuilder("ChatBoostSourceGiveaway").prop("giveawayMessageId", giveawayMessageId).prop("user", user).prop("isUnclaimed", isUnclaimed).toString()
+}
+
+/**
+ * This object contains information about a chat boost.
+ * @param boostId Unique identifier of the boost
+ * @param addDate Point in time (Unix timestamp) when the chat was boosted
+ * @param expirationDate Point in time (Unix timestamp) when the boost will automatically expire, unless the booster's Telegram Premium subscription is prolonged
+ * @param source Source of the added boost
+ */
+@Serializable
+data class ChatBoost(
+    val boostId: String,
+    val addDate: Long,
+    val expirationDate: Long,
+    val source: ChatBoostSource,
+) {
+    override fun toString() = DebugStringBuilder("ChatBoost").prop("boostId", boostId).prop("addDate", addDate).prop("expirationDate", expirationDate).prop("source", source).toString()
+}
+
+/**
+ * This object represents a boost added to a chat or changed.
+ * @param chat Chat which was boosted
+ * @param boost Information about the chat boost
+ */
+@Serializable
+data class ChatBoostUpdated(
+    val chat: Chat,
+    val boost: ChatBoost,
+) {
+    override fun toString() = DebugStringBuilder("ChatBoostUpdated").prop("chat", chat).prop("boost", boost).toString()
+}
+
+/**
+ * This object represents a boost removed from a chat.
+ * @param chat Chat which was boosted
+ * @param boostId Unique identifier of the boost
+ * @param removeDate Point in time (Unix timestamp) when the boost was removed
+ * @param source Source of the removed boost
+ */
+@Serializable
+data class ChatBoostRemoved(
+    val chat: Chat,
+    val boostId: String,
+    val removeDate: Long,
+    val source: ChatBoostSource,
+) {
+    override fun toString() = DebugStringBuilder("ChatBoostRemoved").prop("chat", chat).prop("boostId", boostId).prop("removeDate", removeDate).prop("source", source).toString()
+}
+
+/**
+ * This object represents a list of boosts added to a chat by a user.
+ * @param boosts The list of boosts added to the chat by the user
+ */
+@Serializable
+data class UserChatBoosts(
+    val boosts: List<ChatBoost>,
+) {
+    override fun toString() = DebugStringBuilder("UserChatBoosts").prop("boosts", boosts).toString()
+}
+
+/**
+ * Describes the connection of the bot with a business account.
+ * @param id Unique identifier of the business connection
+ * @param user Business account user that created the business connection
+ * @param userChatId Identifier of a private chat with the user who created the business connection. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+ * @param date Date the connection was established in Unix time
+ * @param canReply True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours
+ * @param isEnabled True, if the connection is active
+ */
+@Serializable
+data class BusinessConnection(
+    val id: String,
+    val user: User,
+    val userChatId: ChatId,
+    val date: UnixTimestamp,
+    val canReply: Boolean,
+    val isEnabled: Boolean,
+) {
+    override fun toString() = DebugStringBuilder("BusinessConnection").prop("id", id).prop("user", user).prop("userChatId", userChatId).prop("date", date).prop("canReply", canReply).prop("isEnabled", isEnabled).toString()
+}
+
+/**
+ * This object is received when messages are deleted from a connected business account.
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param chat Information about a chat in the business account. The bot may not have access to the chat or the corresponding user.
+ * @param messageIds A JSON-serialized list of identifiers of deleted messages in the chat of the business account
+ */
+@Serializable
+data class BusinessMessagesDeleted(
+    val businessConnectionId: String,
+    val chat: Chat,
+    val messageIds: List<Long>,
+) {
+    override fun toString() = DebugStringBuilder("BusinessMessagesDeleted").prop("businessConnectionId", businessConnectionId).prop("chat", chat).prop("messageIds", messageIds).toString()
+}
 
 /**
  * Describes why a request was unsuccessful.
@@ -2000,8 +2776,6 @@ data class Sticker(
  * @param name Sticker set name
  * @param title Sticker set title
  * @param stickerType Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
- * @param isAnimated True, if the sticker set contains animated stickers
- * @param isVideo True, if the sticker set contains video stickers
  * @param stickers List of all set stickers
  * @param thumbnail Optional. Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format
  */
@@ -2010,12 +2784,10 @@ data class StickerSet(
     val name: String,
     val title: String,
     val stickerType: String,
-    val isAnimated: Boolean,
-    val isVideo: Boolean,
     val stickers: List<Sticker>,
     val thumbnail: PhotoSize? = null,
 ) {
-    override fun toString() = DebugStringBuilder("StickerSet").prop("name", name).prop("title", title).prop("stickerType", stickerType).prop("isAnimated", isAnimated).prop("isVideo", isVideo).prop("stickers", stickers).prop("thumbnail", thumbnail).toString()
+    override fun toString() = DebugStringBuilder("StickerSet").prop("name", name).prop("title", title).prop("stickerType", stickerType).prop("stickers", stickers).prop("thumbnail", thumbnail).toString()
 }
 
 /**
@@ -2038,6 +2810,7 @@ data class MaskPosition(
 /**
  * This object describes a sticker to be added to a sticker set.
  * @param sticker The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »
+ * @param format Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a WEBM video
  * @param emojiList List of 1-20 emoji associated with the sticker
  * @param maskPosition Optional. Position where the mask should be placed on faces. For “mask” stickers only.
  * @param keywords Optional. List of 0-20 search keywords for the sticker with total length of up to 64 characters. For “regular” and “custom_emoji” stickers only.
@@ -2045,11 +2818,12 @@ data class MaskPosition(
 @Serializable
 data class InputSticker(
     val sticker: String,
+    val format: String,
     val emojiList: List<String>,
     val maskPosition: MaskPosition? = null,
     val keywords: List<String>? = null,
 ) {
-    override fun toString() = DebugStringBuilder("InputSticker").prop("sticker", sticker).prop("emojiList", emojiList).prop("maskPosition", maskPosition).prop("keywords", keywords).toString()
+    override fun toString() = DebugStringBuilder("InputSticker").prop("sticker", sticker).prop("format", format).prop("emojiList", emojiList).prop("maskPosition", maskPosition).prop("keywords", keywords).toString()
 }
 
 /**
@@ -2739,16 +3513,16 @@ object InputMessageContentSerializer : JsonContentPolymorphicSerializer<InputMes
  * @param messageText Text of the message to be sent, 1-4096 characters
  * @param parseMode Optional. Mode for parsing entities in the message text. See formatting options for more details.
  * @param entities Optional. List of special entities that appear in message text, which can be specified instead of parse_mode
- * @param disableWebPagePreview Optional. Disables link previews for links in the sent message
+ * @param linkPreviewOptions Optional. Link preview generation options for the message
  */
 @Serializable
 data class InputTextMessageContent(
     val messageText: String,
     val parseMode: ParseMode? = null,
     val entities: List<MessageEntity>? = null,
-    val disableWebPagePreview: Boolean? = null,
+    val linkPreviewOptions: LinkPreviewOptions? = null,
 ) : InputMessageContent {
-    override fun toString() = DebugStringBuilder("InputTextMessageContent").prop("messageText", messageText).prop("parseMode", parseMode).prop("entities", entities).prop("disableWebPagePreview", disableWebPagePreview).toString()
+    override fun toString() = DebugStringBuilder("InputTextMessageContent").prop("messageText", messageText).prop("parseMode", parseMode).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).toString()
 }
 
 /**
@@ -3075,14 +3849,14 @@ data class PassportFile(
  * Describes documents or other Telegram Passport elements shared with the bot by the user.
  * @param type Element type. One of “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport”, “address”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”, “phone_number”, “email”.
  * @param hash Base64-encoded element hash for using in PassportElementErrorUnspecified
- * @param data Optional. Base64-encoded encrypted Telegram Passport element data provided by the user, available for “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport” and “address” types. Can be decrypted and verified using the accompanying EncryptedCredentials.
- * @param phoneNumber Optional. User's verified phone number, available only for “phone_number” type
- * @param email Optional. User's verified email address, available only for “email” type
- * @param files Optional. Array of encrypted files with documents provided by the user, available for “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
- * @param frontSide Optional. Encrypted file with the front side of the document, provided by the user. Available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
- * @param reverseSide Optional. Encrypted file with the reverse side of the document, provided by the user. Available for “driver_license” and “identity_card”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
- * @param selfie Optional. Encrypted file with the selfie of the user holding a document, provided by the user; available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
- * @param translation Optional. Array of encrypted files with translated versions of documents provided by the user. Available if requested for “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
+ * @param data Optional. Base64-encoded encrypted Telegram Passport element data provided by the user; available only for “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport” and “address” types. Can be decrypted and verified using the accompanying EncryptedCredentials.
+ * @param phoneNumber Optional. User's verified phone number; available only for “phone_number” type
+ * @param email Optional. User's verified email address; available only for “email” type
+ * @param files Optional. Array of encrypted files with documents provided by the user; available only for “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
+ * @param frontSide Optional. Encrypted file with the front side of the document, provided by the user; available only for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+ * @param reverseSide Optional. Encrypted file with the reverse side of the document, provided by the user; available only for “driver_license” and “identity_card”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+ * @param selfie Optional. Encrypted file with the selfie of the user holding a document, provided by the user; available if requested for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+ * @param translation Optional. Array of encrypted files with translated versions of documents provided by the user; available if requested for “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
  */
 @Serializable
 data class EncryptedPassportElement(
@@ -3128,7 +3902,7 @@ data class EncryptedCredentials(
  * - [PassportElementErrorUnspecified]
  */
 @Serializable
-@JsonClassDiscriminator("type")
+@JsonClassDiscriminator("source")
 sealed interface PassportElementError
 
 /**

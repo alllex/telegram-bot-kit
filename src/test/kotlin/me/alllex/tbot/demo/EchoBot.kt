@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
                 countDownLatch.countDown()
             } else {
                 println("Echoing the message back to the chat...")
-                message.copyMessage(message.chat.id, replyToMessageId = message.messageId, replyMarkup = inlineKeyboard {
+                message.copyMessage(message.chat.id, replyParameters = ReplyParameters(message.messageId), replyMarkup = inlineKeyboard {
                     button("Button", "wow")
                 })
             }

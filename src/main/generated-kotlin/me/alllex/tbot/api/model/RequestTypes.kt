@@ -10,7 +10,7 @@ import kotlinx.serialization.encodeToString
  * @param offset Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will be forgotten.
  * @param limit Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100.
  * @param timeout Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
- * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
+ * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
  */
 @Serializable
 data class GetUpdatesRequest(
@@ -29,7 +29,7 @@ data class GetUpdatesRequest(
  * @param certificate Upload your public key certificate so that the root certificate in use can be checked. See our self-signed guide for details.
  * @param ipAddress The fixed IP address which will be used to send webhook requests instead of the IP address resolved through DNS
  * @param maxConnections The maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100. Defaults to 40. Use lower values to limit the load on your bot's server, and higher values to increase your bot's throughput.
- * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify [“message”, “edited_channel_post”, “callback_query”] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.
+ * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.
  * @param dropPendingUpdates Pass True to drop all pending updates
  * @param secretToken A secret token to be sent in a header “X-Telegram-Bot-Api-Secret-Token” in every webhook request, 1-256 characters. Only characters A-Z, a-z, 0-9, _ and - are allowed. The header is useful to ensure that the request comes from a webhook set by you.
  */
@@ -63,31 +63,31 @@ data class DeleteWebhookRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param text Text of the message to be sent, 1-4096 characters after entities parsing
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
  * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
- * @param disableWebPagePreview Disables link previews for links in this message
+ * @param linkPreviewOptions Link preview generation options for the message
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendMessageRequest(
     val chatId: ChatId,
     val text: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val parseMode: ParseMode? = null,
     val entities: List<MessageEntity>? = null,
-    val disableWebPagePreview: Boolean? = null,
+    val linkPreviewOptions: LinkPreviewOptions? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendMessageRequest").prop("chatId", chatId).prop("text", text).prop("messageThreadId", messageThreadId).prop("parseMode", parseMode).prop("entities", entities).prop("disableWebPagePreview", disableWebPagePreview).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendMessageRequest").prop("chatId", chatId).prop("text", text).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("parseMode", parseMode).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -113,6 +113,28 @@ data class ForwardMessageRequest(
 }
 
 /**
+ * Request body for [forwardMessages].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param fromChatId Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername)
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id to forward. The identifiers must be specified in a strictly increasing order.
+ * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+ * @param disableNotification Sends the messages silently. Users will receive a notification with no sound.
+ * @param protectContent Protects the contents of the forwarded messages from forwarding and saving
+ */
+@Serializable
+data class ForwardMessagesRequest(
+    val chatId: ChatId,
+    val fromChatId: ChatId,
+    val messageIds: List<Long>,
+    val messageThreadId: MessageThreadId? = null,
+    val disableNotification: Boolean? = null,
+    val protectContent: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("ForwardMessagesRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageIds", messageIds).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).toString()
+}
+
+/**
  * Request body for [copyMessage].
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -124,8 +146,7 @@ data class ForwardMessageRequest(
  * @param captionEntities A JSON-serialized list of special entities that appear in the new caption, which can be specified instead of parse_mode
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
+ * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
  */
 @Serializable
@@ -139,11 +160,34 @@ data class CopyMessageRequest(
     val captionEntities: List<MessageEntity>? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("CopyMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("CopyMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
+}
+
+/**
+ * Request body for [copyMessages].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param fromChatId Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername)
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id to copy. The identifiers must be specified in a strictly increasing order.
+ * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+ * @param disableNotification Sends the messages silently. Users will receive a notification with no sound.
+ * @param protectContent Protects the contents of the sent messages from forwarding and saving
+ * @param removeCaption Pass True to copy the messages without their captions
+ */
+@Serializable
+data class CopyMessagesRequest(
+    val chatId: ChatId,
+    val fromChatId: ChatId,
+    val messageIds: List<Long>,
+    val messageThreadId: MessageThreadId? = null,
+    val disableNotification: Boolean? = null,
+    val protectContent: Boolean? = null,
+    val removeCaption: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("CopyMessagesRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageIds", messageIds).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("removeCaption", removeCaption).toString()
 }
 
 /**
@@ -151,6 +195,7 @@ data class CopyMessageRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param photo Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param caption Photo caption (may also be used when resending photos by file_id), 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the photo caption. See formatting options for more details.
@@ -158,14 +203,14 @@ data class CopyMessageRequest(
  * @param hasSpoiler Pass True if the photo needs to be covered with a spoiler animation
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendPhotoRequest(
     val chatId: ChatId,
     val photo: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val caption: String? = null,
     val parseMode: ParseMode? = null,
@@ -173,11 +218,10 @@ data class SendPhotoRequest(
     val hasSpoiler: Boolean? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendPhotoRequest").prop("chatId", chatId).prop("photo", photo).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendPhotoRequest").prop("chatId", chatId).prop("photo", photo).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -185,6 +229,7 @@ data class SendPhotoRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param audio Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param caption Audio caption, 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the audio caption. See formatting options for more details.
@@ -195,14 +240,14 @@ data class SendPhotoRequest(
  * @param thumbnail Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendAudioRequest(
     val chatId: ChatId,
     val audio: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val caption: String? = null,
     val parseMode: ParseMode? = null,
@@ -213,11 +258,10 @@ data class SendAudioRequest(
     val thumbnail: String? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendAudioRequest").prop("chatId", chatId).prop("audio", audio).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("performer", performer).prop("title", title).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendAudioRequest").prop("chatId", chatId).prop("audio", audio).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("performer", performer).prop("title", title).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -225,6 +269,7 @@ data class SendAudioRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param document File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param thumbnail Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
  * @param caption Document caption (may also be used when resending documents by file_id), 0-1024 characters after entities parsing
@@ -233,14 +278,14 @@ data class SendAudioRequest(
  * @param disableContentTypeDetection Disables automatic server-side content type detection for files uploaded using multipart/form-data
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendDocumentRequest(
     val chatId: ChatId,
     val document: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val thumbnail: String? = null,
     val caption: String? = null,
@@ -249,11 +294,10 @@ data class SendDocumentRequest(
     val disableContentTypeDetection: Boolean? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendDocumentRequest").prop("chatId", chatId).prop("document", document).prop("messageThreadId", messageThreadId).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableContentTypeDetection", disableContentTypeDetection).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendDocumentRequest").prop("chatId", chatId).prop("document", document).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableContentTypeDetection", disableContentTypeDetection).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -261,6 +305,7 @@ data class SendDocumentRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param video Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param duration Duration of sent video in seconds
  * @param width Video width
@@ -273,14 +318,14 @@ data class SendDocumentRequest(
  * @param supportsStreaming Pass True if the uploaded video is suitable for streaming
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendVideoRequest(
     val chatId: ChatId,
     val video: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val duration: Seconds? = null,
     val width: Long? = null,
@@ -293,11 +338,10 @@ data class SendVideoRequest(
     val supportsStreaming: Boolean? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVideoRequest").prop("chatId", chatId).prop("video", video).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("hasSpoiler", hasSpoiler).prop("supportsStreaming", supportsStreaming).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendVideoRequest").prop("chatId", chatId).prop("video", video).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("hasSpoiler", hasSpoiler).prop("supportsStreaming", supportsStreaming).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -305,6 +349,7 @@ data class SendVideoRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param animation Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param duration Duration of sent animation in seconds
  * @param width Animation width
@@ -316,14 +361,14 @@ data class SendVideoRequest(
  * @param hasSpoiler Pass True if the animation needs to be covered with a spoiler animation
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendAnimationRequest(
     val chatId: ChatId,
     val animation: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val duration: Seconds? = null,
     val width: Long? = null,
@@ -335,11 +380,10 @@ data class SendAnimationRequest(
     val hasSpoiler: Boolean? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendAnimationRequest").prop("chatId", chatId).prop("animation", animation).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendAnimationRequest").prop("chatId", chatId).prop("animation", animation).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -347,6 +391,7 @@ data class SendAnimationRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param voice Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param caption Voice message caption, 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the voice message caption. See formatting options for more details.
@@ -354,14 +399,14 @@ data class SendAnimationRequest(
  * @param duration Duration of the voice message in seconds
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendVoiceRequest(
     val chatId: ChatId,
     val voice: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val caption: String? = null,
     val parseMode: ParseMode? = null,
@@ -369,11 +414,10 @@ data class SendVoiceRequest(
     val duration: Seconds? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVoiceRequest").prop("chatId", chatId).prop("voice", voice).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendVoiceRequest").prop("chatId", chatId).prop("voice", voice).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -381,31 +425,31 @@ data class SendVoiceRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param videoNote Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files ». Sending video notes by a URL is currently unsupported
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param duration Duration of sent video in seconds
  * @param length Video width and height, i.e. diameter of the video message
  * @param thumbnail Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendVideoNoteRequest(
     val chatId: ChatId,
     val videoNote: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val duration: Seconds? = null,
     val length: Long? = null,
     val thumbnail: String? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVideoNoteRequest").prop("chatId", chatId).prop("videoNote", videoNote).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("length", length).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendVideoNoteRequest").prop("chatId", chatId).prop("videoNote", videoNote).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("length", length).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -413,23 +457,23 @@ data class SendVideoNoteRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param media A JSON-serialized array describing messages to be sent, must include 2-10 items
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends messages silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent messages from forwarding and saving
- * @param replyToMessageId If the messages are a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
+ * @param replyParameters Description of the message to reply to
  */
 @Serializable
 data class SendMediaGroupRequest(
     val chatId: ChatId,
     val media: List<InputMedia>,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendMediaGroupRequest").prop("chatId", chatId).prop("media", media).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).toString()
+    override fun toString() = DebugStringBuilder("SendMediaGroupRequest").prop("chatId", chatId).prop("media", media).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).toString()
 }
 
 /**
@@ -438,6 +482,7 @@ data class SendMediaGroupRequest(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param latitude Latitude of the location
  * @param longitude Longitude of the location
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
  * @param livePeriod Period in seconds for which the location will be updated (see Live Locations, should be between 60 and 86400.
@@ -445,15 +490,15 @@ data class SendMediaGroupRequest(
  * @param proximityAlertRadius For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendLocationRequest(
     val chatId: ChatId,
     val latitude: Double,
     val longitude: Double,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val horizontalAccuracy: Double? = null,
     val livePeriod: Long? = null,
@@ -461,11 +506,10 @@ data class SendLocationRequest(
     val proximityAlertRadius: Long? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendLocationRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("messageThreadId", messageThreadId).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendLocationRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -476,6 +520,7 @@ data class SendLocationRequest(
  * @param longitude Longitude of the venue
  * @param title Name of the venue
  * @param address Address of the venue
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param foursquareId Foursquare identifier of the venue
  * @param foursquareType Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
@@ -483,9 +528,8 @@ data class SendLocationRequest(
  * @param googlePlaceType Google Places type of the venue. (See supported types.)
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendVenueRequest(
@@ -494,6 +538,7 @@ data class SendVenueRequest(
     val longitude: Double,
     val title: String,
     val address: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val foursquareId: String? = null,
     val foursquareType: String? = null,
@@ -501,11 +546,10 @@ data class SendVenueRequest(
     val googlePlaceType: String? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVenueRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("address", address).prop("messageThreadId", messageThreadId).prop("foursquareId", foursquareId).prop("foursquareType", foursquareType).prop("googlePlaceId", googlePlaceId).prop("googlePlaceType", googlePlaceType).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendVenueRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("address", address).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("foursquareId", foursquareId).prop("foursquareType", foursquareType).prop("googlePlaceId", googlePlaceId).prop("googlePlaceType", googlePlaceType).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -514,30 +558,30 @@ data class SendVenueRequest(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param phoneNumber Contact's phone number
  * @param firstName Contact's first name
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param lastName Contact's last name
  * @param vcard Additional data about the contact in the form of a vCard, 0-2048 bytes
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendContactRequest(
     val chatId: ChatId,
     val phoneNumber: String,
     val firstName: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val lastName: String? = null,
     val vcard: String? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendContactRequest").prop("chatId", chatId).prop("phoneNumber", phoneNumber).prop("firstName", firstName).prop("messageThreadId", messageThreadId).prop("lastName", lastName).prop("vcard", vcard).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendContactRequest").prop("chatId", chatId).prop("phoneNumber", phoneNumber).prop("firstName", firstName).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("lastName", lastName).prop("vcard", vcard).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -546,6 +590,7 @@ data class SendContactRequest(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param question Poll question, 1-300 characters
  * @param options A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param isAnonymous True, if the poll needs to be anonymous, defaults to True
  * @param type Poll type, “quiz” or “regular”, defaults to “regular”
@@ -559,15 +604,15 @@ data class SendContactRequest(
  * @param isClosed Pass True if the poll needs to be immediately closed. This can be useful for poll preview.
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendPollRequest(
     val chatId: ChatId,
     val question: String,
     val options: List<String>,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val isAnonymous: Boolean? = null,
     val type: String? = null,
@@ -581,37 +626,36 @@ data class SendPollRequest(
     val isClosed: Boolean? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendPollRequest").prop("chatId", chatId).prop("question", question).prop("options", options).prop("messageThreadId", messageThreadId).prop("isAnonymous", isAnonymous).prop("type", type).prop("allowsMultipleAnswers", allowsMultipleAnswers).prop("correctOptionId", correctOptionId).prop("explanation", explanation).prop("explanationParseMode", explanationParseMode).prop("explanationEntities", explanationEntities).prop("openPeriod", openPeriod).prop("closeDate", closeDate).prop("isClosed", isClosed).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendPollRequest").prop("chatId", chatId).prop("question", question).prop("options", options).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("isAnonymous", isAnonymous).prop("type", type).prop("allowsMultipleAnswers", allowsMultipleAnswers).prop("correctOptionId", correctOptionId).prop("explanation", explanation).prop("explanationParseMode", explanationParseMode).prop("explanationEntities", explanationEntities).prop("openPeriod", openPeriod).prop("closeDate", closeDate).prop("isClosed", isClosed).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
  * Request body for [sendDice].
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param emoji Emoji on which the dice throw animation is based. Currently, must be one of “”, “”, “”, “”, “”, or “”. Dice can have values 1-6 for “”, “” and “”, values 1-5 for “” and “”, and values 1-64 for “”. Defaults to “”
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
  */
 @Serializable
 data class SendDiceRequest(
     val chatId: ChatId,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val emoji: String? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendDiceRequest").prop("chatId", chatId).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendDiceRequest").prop("chatId", chatId).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -619,15 +663,35 @@ data class SendDiceRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param action Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes.
- * @param messageThreadId Unique identifier for the target message thread; supergroups only
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the action will be sent
+ * @param messageThreadId Unique identifier for the target message thread; for supergroups only
  */
 @Serializable
 data class SendChatActionRequest(
     val chatId: ChatId,
     val action: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendChatActionRequest").prop("chatId", chatId).prop("action", action).prop("messageThreadId", messageThreadId).toString()
+    override fun toString() = DebugStringBuilder("SendChatActionRequest").prop("chatId", chatId).prop("action", action).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).toString()
+}
+
+/**
+ * Request body for [setMessageReaction].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.
+ * @param reaction A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.
+ * @param isBig Pass True to set the reaction with a big animation
+ */
+@Serializable
+data class SetMessageReactionRequest(
+    val chatId: ChatId,
+    val messageId: MessageId,
+    val reaction: List<ReactionType>? = null,
+    val isBig: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("SetMessageReactionRequest").prop("chatId", chatId).prop("messageId", messageId).prop("reaction", reaction).prop("isBig", isBig).toString()
 }
 
 /**
@@ -718,20 +782,20 @@ data class RestrictChatMemberRequest(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  * @param isAnonymous Pass True if the administrator's presence in the chat is hidden
- * @param canManageChat Pass True if the administrator can access the chat event log, chat statistics, boost list in channels, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
- * @param canPostMessages Pass True if the administrator can post messages in the channel; channels only
- * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; channels only
+ * @param canManageChat Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
  * @param canDeleteMessages Pass True if the administrator can delete messages of other users
- * @param canPostStories Pass True if the administrator can post stories in the channel; channels only
- * @param canEditStories Pass True if the administrator can edit stories posted by other users; channels only
- * @param canDeleteStories Pass True if the administrator can delete stories posted by other users; channels only
  * @param canManageVideoChats Pass True if the administrator can manage video chats
- * @param canRestrictMembers Pass True if the administrator can restrict, ban or unban chat members
+ * @param canRestrictMembers Pass True if the administrator can restrict, ban or unban chat members, or access supergroup statistics
  * @param canPromoteMembers Pass True if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by him)
  * @param canChangeInfo Pass True if the administrator can change chat title, photo and other settings
  * @param canInviteUsers Pass True if the administrator can invite new users to the chat
- * @param canPinMessages Pass True if the administrator can pin messages, supergroups only
- * @param canManageTopics Pass True if the user is allowed to create, rename, close, and reopen forum topics, supergroups only
+ * @param canPostStories Pass True if the administrator can post stories to the chat
+ * @param canEditStories Pass True if the administrator can edit stories posted by other users
+ * @param canDeleteStories Pass True if the administrator can delete stories posted by other users
+ * @param canPostMessages Pass True if the administrator can post messages in the channel, or access channel statistics; for channels only
+ * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; for channels only
+ * @param canPinMessages Pass True if the administrator can pin messages; for supergroups only
+ * @param canManageTopics Pass True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
  */
 @Serializable
 data class PromoteChatMemberRequest(
@@ -739,21 +803,21 @@ data class PromoteChatMemberRequest(
     val userId: UserId,
     val isAnonymous: Boolean? = null,
     val canManageChat: Boolean? = null,
-    val canPostMessages: Boolean? = null,
-    val canEditMessages: Boolean? = null,
     val canDeleteMessages: Boolean? = null,
-    val canPostStories: Boolean? = null,
-    val canEditStories: Boolean? = null,
-    val canDeleteStories: Boolean? = null,
     val canManageVideoChats: Boolean? = null,
     val canRestrictMembers: Boolean? = null,
     val canPromoteMembers: Boolean? = null,
     val canChangeInfo: Boolean? = null,
     val canInviteUsers: Boolean? = null,
+    val canPostStories: Boolean? = null,
+    val canEditStories: Boolean? = null,
+    val canDeleteStories: Boolean? = null,
+    val canPostMessages: Boolean? = null,
+    val canEditMessages: Boolean? = null,
     val canPinMessages: Boolean? = null,
     val canManageTopics: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("PromoteChatMemberRequest").prop("chatId", chatId).prop("userId", userId).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canDeleteMessages", canDeleteMessages).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).toString()
+    override fun toString() = DebugStringBuilder("PromoteChatMemberRequest").prop("chatId", chatId).prop("userId", userId).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).toString()
 }
 
 /**
@@ -1283,6 +1347,32 @@ data class AnswerCallbackQueryRequest(
 }
 
 /**
+ * Request body for [getUserChatBoosts].
+ *
+ * @param chatId Unique identifier for the chat or username of the channel (in the format @channelusername)
+ * @param userId Unique identifier of the target user
+ */
+@Serializable
+data class GetUserChatBoostsRequest(
+    val chatId: ChatId,
+    val userId: UserId,
+) {
+    override fun toString() = DebugStringBuilder("GetUserChatBoostsRequest").prop("chatId", chatId).prop("userId", userId).toString()
+}
+
+/**
+ * Request body for [getBusinessConnection].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ */
+@Serializable
+data class GetBusinessConnectionRequest(
+    val businessConnectionId: String,
+) {
+    override fun toString() = DebugStringBuilder("GetBusinessConnectionRequest").prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
  * Request body for [setMyCommands].
  *
  * @param commands A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified.
@@ -1465,7 +1555,7 @@ data class GetMyDefaultAdministratorRightsRequest(
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
  * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
  * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
- * @param disableWebPagePreview Disables link previews for links in this message
+ * @param linkPreviewOptions Link preview generation options for the message
  * @param replyMarkup A JSON-serialized object for an inline keyboard.
  */
 @Serializable
@@ -1476,10 +1566,10 @@ data class EditMessageTextRequest(
     val inlineMessageId: InlineMessageId? = null,
     val parseMode: ParseMode? = null,
     val entities: List<MessageEntity>? = null,
-    val disableWebPagePreview: Boolean? = null,
+    val linkPreviewOptions: LinkPreviewOptions? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("EditMessageTextRequest").prop("text", text).prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("parseMode", parseMode).prop("entities", entities).prop("disableWebPagePreview", disableWebPagePreview).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("EditMessageTextRequest").prop("text", text).prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("parseMode", parseMode).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -1621,31 +1711,45 @@ data class DeleteMessageRequest(
 }
 
 /**
+ * Request body for [deleteMessages].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted
+ */
+@Serializable
+data class DeleteMessagesRequest(
+    val chatId: ChatId,
+    val messageIds: List<Long>,
+) {
+    override fun toString() = DebugStringBuilder("DeleteMessagesRequest").prop("chatId", chatId).prop("messageIds", messageIds).toString()
+}
+
+/**
  * Request body for [sendSticker].
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param sticker Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP or .TGS sticker using multipart/form-data. More information on Sending Files ». Video stickers can only be sent by a file_id. Animated stickers can't be sent via an HTTP URL.
+ * @param sticker Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. More information on Sending Files ». Video and animated stickers can't be sent via an HTTP URL.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param emoji Emoji associated with the sticker; only for just uploaded stickers
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account.
  */
 @Serializable
 data class SendStickerRequest(
     val chatId: ChatId,
     val sticker: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val emoji: String? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendStickerRequest").prop("chatId", chatId).prop("sticker", sticker).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendStickerRequest").prop("chatId", chatId).prop("sticker", sticker).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -1663,7 +1767,7 @@ data class GetStickerSetRequest(
 /**
  * Request body for [getCustomEmojiStickers].
  *
- * @param customEmojiIds List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
+ * @param customEmojiIds A JSON-serialized list of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
  */
 @Serializable
 data class GetCustomEmojiStickersRequest(
@@ -1695,7 +1799,6 @@ data class UploadStickerFileRequest(
  * @param name Short name of sticker set, to be used in t.me/addstickers/ URLs (e.g., animals). Can contain only English letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and must end in "_by_<bot_username>". <bot_username> is case insensitive. 1-64 characters.
  * @param title Sticker set title, 1-64 characters
  * @param stickers A JSON-serialized list of 1-50 initial stickers to be added to the sticker set
- * @param stickerFormat Format of stickers in the set, must be one of “static”, “animated”, “video”
  * @param stickerType Type of stickers in the set, pass “regular”, “mask”, or “custom_emoji”. By default, a regular sticker set is created.
  * @param needsRepainting Pass True if stickers in the sticker set must be repainted to the color of text when used in messages, the accent color if used as emoji status, white on chat photos, or another appropriate color based on context; for custom emoji sticker sets only
  */
@@ -1705,11 +1808,10 @@ data class CreateNewStickerSetRequest(
     val name: String,
     val title: String,
     val stickers: List<InputSticker>,
-    val stickerFormat: String,
     val stickerType: String? = null,
     val needsRepainting: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("CreateNewStickerSetRequest").prop("userId", userId).prop("name", name).prop("title", title).prop("stickers", stickers).prop("stickerFormat", stickerFormat).prop("stickerType", stickerType).prop("needsRepainting", needsRepainting).toString()
+    override fun toString() = DebugStringBuilder("CreateNewStickerSetRequest").prop("userId", userId).prop("name", name).prop("title", title).prop("stickers", stickers).prop("stickerType", stickerType).prop("needsRepainting", needsRepainting).toString()
 }
 
 /**
@@ -1752,6 +1854,24 @@ data class DeleteStickerFromSetRequest(
     val sticker: String,
 ) {
     override fun toString() = DebugStringBuilder("DeleteStickerFromSetRequest").prop("sticker", sticker).toString()
+}
+
+/**
+ * Request body for [replaceStickerInSet].
+ *
+ * @param userId User identifier of the sticker set owner
+ * @param name Sticker set name
+ * @param oldSticker File identifier of the replaced sticker
+ * @param sticker A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set remains unchanged.
+ */
+@Serializable
+data class ReplaceStickerInSetRequest(
+    val userId: UserId,
+    val name: String,
+    val oldSticker: String,
+    val sticker: InputSticker,
+) {
+    override fun toString() = DebugStringBuilder("ReplaceStickerInSetRequest").prop("userId", userId).prop("name", name).prop("oldSticker", oldSticker).prop("sticker", sticker).toString()
 }
 
 /**
@@ -1815,15 +1935,17 @@ data class SetStickerSetTitleRequest(
  *
  * @param name Sticker set name
  * @param userId User identifier of the sticker set owner
+ * @param format Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video
  * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
  */
 @Serializable
 data class SetStickerSetThumbnailRequest(
     val name: String,
     val userId: UserId,
+    val format: String,
     val thumbnail: String? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SetStickerSetThumbnailRequest").prop("name", name).prop("userId", userId).prop("thumbnail", thumbnail).toString()
+    override fun toString() = DebugStringBuilder("SetStickerSetThumbnailRequest").prop("name", name).prop("userId", userId).prop("format", format).prop("thumbnail", thumbnail).toString()
 }
 
 /**
@@ -1916,8 +2038,7 @@ data class AnswerWebAppQueryRequest(
  * @param isFlexible Pass True if the final price depends on the shipping method
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
+ * @param replyParameters Description of the message to reply to
  * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button.
  */
 @Serializable
@@ -1947,11 +2068,10 @@ data class SendInvoiceRequest(
     val isFlexible: Boolean? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendInvoiceRequest").prop("chatId", chatId).prop("title", title).prop("description", description).prop("payload", payload).prop("providerToken", providerToken).prop("currency", currency).prop("prices", prices).prop("messageThreadId", messageThreadId).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("startParameter", startParameter).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendInvoiceRequest").prop("chatId", chatId).prop("title", title).prop("description", description).prop("payload", payload).prop("providerToken", providerToken).prop("currency", currency).prop("prices", prices).prop("messageThreadId", messageThreadId).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("startParameter", startParameter).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -2057,25 +2177,25 @@ data class SetPassportDataErrorsRequest(
  *
  * @param chatId Unique identifier for the target chat
  * @param gameShortName Short name of the game, serves as the unique identifier for the game. Set up your games via @BotFather.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
- * @param replyToMessageId If the message is a reply, ID of the original message
- * @param allowSendingWithoutReply Pass True if the message should be sent even if the specified replied-to message is not found
- * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game. Not supported for messages sent on behalf of a business account.
  */
 @Serializable
 data class SendGameRequest(
     val chatId: ChatId,
     val gameShortName: String,
+    val businessConnectionId: String? = null,
     val messageThreadId: MessageThreadId? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
-    val replyToMessageId: MessageId? = null,
-    val allowSendingWithoutReply: Boolean? = null,
+    val replyParameters: ReplyParameters? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendGameRequest").prop("chatId", chatId).prop("gameShortName", gameShortName).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyToMessageId", replyToMessageId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendGameRequest").prop("chatId", chatId).prop("gameShortName", gameShortName).prop("businessConnectionId", businessConnectionId).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**

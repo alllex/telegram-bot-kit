@@ -1,19 +1,32 @@
 package me.alllex.tbot.api.client
 
+import me.alllex.tbot.api.model.BusinessConnection
+import me.alllex.tbot.api.model.BusinessConnectionUpdate
+import me.alllex.tbot.api.model.BusinessMessageUpdate
+import me.alllex.tbot.api.model.BusinessMessagesDeleted
 import me.alllex.tbot.api.model.CallbackQuery
 import me.alllex.tbot.api.model.CallbackQueryUpdate
 import me.alllex.tbot.api.model.ChannelPostUpdate
+import me.alllex.tbot.api.model.ChatBoostRemoved
+import me.alllex.tbot.api.model.ChatBoostUpdate
+import me.alllex.tbot.api.model.ChatBoostUpdated
 import me.alllex.tbot.api.model.ChatJoinRequest
 import me.alllex.tbot.api.model.ChatJoinRequestUpdate
 import me.alllex.tbot.api.model.ChatMemberUpdate
 import me.alllex.tbot.api.model.ChatMemberUpdated
 import me.alllex.tbot.api.model.ChosenInlineResult
 import me.alllex.tbot.api.model.ChosenInlineResultUpdate
+import me.alllex.tbot.api.model.DeletedBusinessMessagesUpdate
+import me.alllex.tbot.api.model.EditedBusinessMessageUpdate
 import me.alllex.tbot.api.model.EditedChannelPostUpdate
 import me.alllex.tbot.api.model.EditedMessageUpdate
 import me.alllex.tbot.api.model.InlineQuery
 import me.alllex.tbot.api.model.InlineQueryUpdate
 import me.alllex.tbot.api.model.Message
+import me.alllex.tbot.api.model.MessageReactionCountUpdate
+import me.alllex.tbot.api.model.MessageReactionCountUpdated
+import me.alllex.tbot.api.model.MessageReactionUpdate
+import me.alllex.tbot.api.model.MessageReactionUpdated
 import me.alllex.tbot.api.model.MessageUpdate
 import me.alllex.tbot.api.model.MyChatMemberUpdate
 import me.alllex.tbot.api.model.Poll
@@ -22,6 +35,7 @@ import me.alllex.tbot.api.model.PollAnswerUpdate
 import me.alllex.tbot.api.model.PollUpdate
 import me.alllex.tbot.api.model.PreCheckoutQuery
 import me.alllex.tbot.api.model.PreCheckoutQueryUpdate
+import me.alllex.tbot.api.model.RemovedChatBoostUpdate
 import me.alllex.tbot.api.model.ShippingQuery
 import me.alllex.tbot.api.model.ShippingQueryUpdate
 import me.alllex.tbot.api.model.Update
@@ -86,6 +100,38 @@ interface TelegramBotUpdateListener {
     }
 
     context(TelegramBotApiContext)
+    suspend fun onBusinessConnection(businessConnection: BusinessConnection) {
+    }
+
+    context(TelegramBotApiContext)
+    suspend fun onBusinessMessage(businessMessage: Message) {
+    }
+
+    context(TelegramBotApiContext)
+    suspend fun onDeletedBusinessMessages(deletedBusinessMessages: BusinessMessagesDeleted) {
+    }
+
+    context(TelegramBotApiContext)
+    suspend fun onEditedBusinessMessage(editedBusinessMessage: Message) {
+    }
+
+    context(TelegramBotApiContext)
+    suspend fun onMessageReactionCount(messageReactionCount: MessageReactionCountUpdated) {
+    }
+
+    context(TelegramBotApiContext)
+    suspend fun onMessageReaction(messageReaction: MessageReactionUpdated) {
+    }
+
+    context(TelegramBotApiContext)
+    suspend fun onChatBoost(chatBoost: ChatBoostUpdated) {
+    }
+
+    context(TelegramBotApiContext)
+    suspend fun onRemovedChatBoost(removedChatBoost: ChatBoostRemoved) {
+    }
+
+    context(TelegramBotApiContext)
     suspend fun onUpdate(update: Update) {
         when (update) {
             is MessageUpdate -> onMessage(update.message)
@@ -102,6 +148,14 @@ interface TelegramBotUpdateListener {
             is MyChatMemberUpdate -> onMyChatMember(update.myChatMember)
             is ChatMemberUpdate -> onChatMember(update.chatMember)
             is ChatJoinRequestUpdate -> onChatJoinRequest(update.chatJoinRequest)
+            is BusinessConnectionUpdate -> onBusinessConnection(update.businessConnection)
+            is BusinessMessageUpdate -> onBusinessMessage(update.businessMessage)
+            is DeletedBusinessMessagesUpdate -> onDeletedBusinessMessages(update.deletedBusinessMessages)
+            is EditedBusinessMessageUpdate -> onEditedBusinessMessage(update.editedBusinessMessage)
+            is MessageReactionCountUpdate -> onMessageReactionCount(update.messageReactionCount)
+            is MessageReactionUpdate -> onMessageReaction(update.messageReaction)
+            is ChatBoostUpdate -> onChatBoost(update.chatBoost)
+            is RemovedChatBoostUpdate -> onRemovedChatBoost(update.removedChatBoost)
         }
     }
 }

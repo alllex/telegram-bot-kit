@@ -39,7 +39,7 @@ poller.start(TelegramBotUpdateListener(
 
 ```kotlin
 dependencies {
-    implementation("me.alllex.telegram.botkit:tbot-api-jvm:0.4.0")
+    implementation("me.alllex.telegram.botkit:tbot-api-jvm:0.5.0")
 }
 ```
 
@@ -52,7 +52,7 @@ dependencies {
 <dependency>
   <groupId>me.alllex.telegram.botkit</groupId>
   <artifactId>tbot-api-jvm</artifactId>
-  <version>0.4.0</version>
+  <version>0.5.0</version>
 </dependency>
 ```
 

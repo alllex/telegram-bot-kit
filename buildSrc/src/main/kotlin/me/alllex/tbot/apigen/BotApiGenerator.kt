@@ -309,7 +309,7 @@ class BotApiGenerator {
         html: String,
         outputDirectory: File,
         packageName: String = "",
-        wrapperPackageName: String = "",
+        clientPackageName: String = "",
     ) {
         val parser = BotApiDefinitionParser()
         val botApi = parser.run(html)
@@ -327,18 +327,18 @@ class BotApiGenerator {
         val typesFileText = generateTypesFile(allTypes, unionTypeParentByChild, packageName)
         val requestTypesFileText = generateRequestTypesFile(allMethods, packageName)
 
-        val methodsSourceCodes = generateMethodsSourceCode(allMethods, packageName, wrapperPackageName)
+        val methodsSourceCodes = generateMethodsSourceCode(allMethods, packageName, clientPackageName)
 
-        val outputPackageDir = outputDirectory.resolve(packageName.replace(".", "/"))
-        outputPackageDir.mkdirs()
+        val modelDir = outputDirectory.resolve(packageName.replace(".", "/"))
+        modelDir.mkdirs()
 
-        outputPackageDir.resolve("Types.kt").writeText(typesFileText)
-        outputPackageDir.resolve("RequestTypes.kt").writeText(requestTypesFileText)
-        outputPackageDir.resolve("TryRequestMethods.kt").writeText(methodsSourceCodes.tryRequestMethodSourceCode)
-        outputPackageDir.resolve("TryMethods.kt").writeText(methodsSourceCodes.tryMethodSourceCode)
-        outputPackageDir.resolve("TryWithContextMethods.kt").writeText(methodsSourceCodes.tryWithContextMethodSourceCode)
-        outputPackageDir.resolve("Methods.kt").writeText(methodsSourceCodes.methodSourceCode)
-        outputPackageDir.resolve("WithContextMethods.kt").writeText(methodsSourceCodes.withContextMethodSourceCode)
+        modelDir.resolve("Types.kt").writeText(typesFileText)
+        modelDir.resolve("RequestTypes.kt").writeText(requestTypesFileText)
+        modelDir.resolve("TryRequestMethods.kt").writeText(methodsSourceCodes.tryRequestMethodSourceCode)
+        modelDir.resolve("TryMethods.kt").writeText(methodsSourceCodes.tryMethodSourceCode)
+        modelDir.resolve("TryWithContextMethods.kt").writeText(methodsSourceCodes.tryWithContextMethodSourceCode)
+        modelDir.resolve("Methods.kt").writeText(methodsSourceCodes.methodSourceCode)
+        modelDir.resolve("WithContextMethods.kt").writeText(methodsSourceCodes.withContextMethodSourceCode)
     }
 
     private fun collectUnionTypes(elements: List<BotApiElement>): Map<BotApiElementName, List<BotApiElementName>> {
@@ -916,13 +916,13 @@ class BotApiGenerator {
             telegramApiHtmlSpec: String,
             outputDirectory: File,
             packageName: String,
-            wrapperPackageName: String,
+            clientPackageName: String,
         ) {
             BotApiGenerator().run(
                 telegramApiHtmlSpec,
                 outputDirectory,
                 packageName,
-                wrapperPackageName,
+                clientPackageName,
             )
         }
 
@@ -937,7 +937,7 @@ class BotApiGenerator {
                 telegramApiHtmlSpec = File(specFile).readText(),
                 outputDirectory = File(outputDirectory),
                 packageName = "me.alllex.tbot.api.model",
-                wrapperPackageName = "me.alllex.tbot.api.client",
+                clientPackageName = "me.alllex.tbot.api.client",
             )
         }
     }

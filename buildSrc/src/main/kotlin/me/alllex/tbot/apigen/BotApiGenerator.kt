@@ -303,6 +303,37 @@ val fluentMethods = listOf(
     FluentContextMethod("InlineQueryId", "answer", "answerInlineQuery", mapOf("inlineQueryId" to "this")),
 )
 
+data class UpdateListenerEntry(
+    val typeWithoutUpdate: String,
+    val field: String = typeWithoutUpdate.toUntitleCase(),
+    val fieldType: String = typeWithoutUpdate,
+)
+
+val updateListenerEntries = listOf(
+    UpdateListenerEntry("Message"),
+    UpdateListenerEntry("EditedMessage", fieldType = "Message"),
+    UpdateListenerEntry("ChannelPost", fieldType =  "Message"),
+    UpdateListenerEntry("EditedChannelPost", fieldType = "Message"),
+    UpdateListenerEntry("InlineQuery"),
+    UpdateListenerEntry("ChosenInlineResult"),
+    UpdateListenerEntry("CallbackQuery"),
+    UpdateListenerEntry("ShippingQuery"),
+    UpdateListenerEntry("PreCheckoutQuery"),
+    UpdateListenerEntry("Poll"),
+    UpdateListenerEntry("PollAnswer"),
+    UpdateListenerEntry("MyChatMember", fieldType = "ChatMemberUpdated"),
+    UpdateListenerEntry("ChatMember", fieldType = "ChatMemberUpdated"),
+    UpdateListenerEntry("ChatJoinRequest"),
+    UpdateListenerEntry("BusinessConnection"),
+    UpdateListenerEntry("BusinessMessage", fieldType = "Message"),
+    UpdateListenerEntry("DeletedBusinessMessages", fieldType = "BusinessMessagesDeleted"),
+    UpdateListenerEntry("EditedBusinessMessage", fieldType = "Message"),
+    UpdateListenerEntry("MessageReactionCount", fieldType = "MessageReactionCountUpdated"),
+    UpdateListenerEntry("MessageReaction", fieldType = "MessageReactionUpdated"),
+    UpdateListenerEntry("ChatBoost", fieldType = "ChatBoostUpdated"),
+    UpdateListenerEntry("RemovedChatBoost", fieldType = "ChatBoostRemoved"),
+)
+
 class BotApiGenerator {
 
     fun run(
@@ -326,6 +357,7 @@ class BotApiGenerator {
 
         val typesFileText = generateTypesFile(allTypes, unionTypeParentByChild, packageName)
         val requestTypesFileText = generateRequestTypesFile(allMethods, packageName)
+        val listenerFileText = generateListenerFile(packageName, clientPackageName)
 
         val methodsSourceCodes = generateMethodsSourceCode(allMethods, packageName, clientPackageName)
 
@@ -339,6 +371,61 @@ class BotApiGenerator {
         modelDir.resolve("TryWithContextMethods.kt").writeText(methodsSourceCodes.tryWithContextMethodSourceCode)
         modelDir.resolve("Methods.kt").writeText(methodsSourceCodes.methodSourceCode)
         modelDir.resolve("WithContextMethods.kt").writeText(methodsSourceCodes.withContextMethodSourceCode)
+
+        val clientDir = outputDirectory.resolve(clientPackageName.replace(".", "/"))
+            .apply { mkdirs() }
+
+        clientDir.resolve("TelegramBotUpdateListener.kt").writeText(listenerFileText)
+    }
+
+    private fun generateListenerFile(modelPackageName: String, clientPackageName: String): String {
+        val listenerTypeName = "TelegramBotUpdateListener"
+        return buildString {
+            appendLine("package $clientPackageName")
+            appendLine()
+
+            appendLine("import $modelPackageName.*")
+            appendLine()
+            appendLine()
+
+            appendLine("interface $listenerTypeName {")
+
+            for (entry in updateListenerEntries) {
+                appendLine()
+                appendLine("    context(TelegramBotApiContext)")
+                appendLine("    suspend fun on${entry.typeWithoutUpdate}(${entry.field}: ${entry.fieldType}) {}")
+            }
+
+            appendLine()
+            appendLine("    context(TelegramBotApiContext)")
+            appendLine("    suspend fun onUpdate(update: Update) {")
+            appendLine("        when (update) {")
+            for (entry in updateListenerEntries) {
+
+                appendLine("            is ${entry.typeWithoutUpdate}Update -> on${entry.typeWithoutUpdate}(update.${entry.field})")
+            }
+            appendLine("        }")
+            appendLine("    }")
+
+            appendLine("}")
+
+            appendLine()
+            appendLine("fun $listenerTypeName(")
+            for (entry in updateListenerEntries) {
+                appendLine("    on${entry.typeWithoutUpdate}: TelegramBotUpdateHandler<${entry.fieldType}>? = null,")
+            }
+            appendLine("    @Suppress(\"UNUSED_PARAMETER\") noTrailingLambda: Unit = Unit,")
+            appendLine("): $listenerTypeName {")
+            appendLine("    return object : $listenerTypeName {")
+            for (entry in updateListenerEntries) {
+                appendLine()
+                appendLine("        context(TelegramBotApiContext)")
+                appendLine("        override suspend fun on${entry.typeWithoutUpdate}(${entry.field}: ${entry.fieldType}) =")
+                appendLine("            on${entry.typeWithoutUpdate}?.handle(${entry.field}) ?: Unit")
+            }
+            appendLine("    }")
+            appendLine("}")
+        }
     }
 
     private fun collectUnionTypes(elements: List<BotApiElement>): Map<BotApiElementName, List<BotApiElementName>> {

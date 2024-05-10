@@ -26,6 +26,9 @@ fun String.snakeToPascalCase() = snakeToCamelCase().toTitleCase()
 fun String.toTitleCase() =
     replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
+fun String.toUntitleCase() =
+    replaceFirstChar { it.lowercase(Locale.getDefault()) }
+
 /**
  * Runs [block] and appends a new line at the end
  */

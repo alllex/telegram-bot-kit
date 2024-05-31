@@ -547,6 +547,7 @@ data class ChatFullInfo(
  * @param text Optional. For text messages, the actual UTF-8 text of the message
  * @param entities Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
  * @param linkPreviewOptions Optional. Options used for link preview generation for the message, if it is a text message and link preview options were changed
+ * @param effectId Optional. Unique identifier of the message effect added to the message
  * @param animation Optional. Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set
  * @param audio Optional. Message is an audio file, information about the file
  * @param document Optional. Message is a general file, information about the file
@@ -558,6 +559,7 @@ data class ChatFullInfo(
  * @param voice Optional. Message is a voice message, information about the file
  * @param caption Optional. Caption for the animation, audio, document, photo, video or voice
  * @param captionEntities Optional. For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
+ * @param showCaptionAboveMedia Optional. True, if the caption must be shown above the message media
  * @param hasMediaSpoiler Optional. True, if the message media is covered by a spoiler animation
  * @param contact Optional. Message is a shared contact, information about the contact
  * @param dice Optional. Message is a dice with random value
@@ -631,6 +633,7 @@ data class Message(
     val text: String? = null,
     val entities: List<MessageEntity>? = null,
     val linkPreviewOptions: LinkPreviewOptions? = null,
+    val effectId: MessageEffectId? = null,
     val animation: Animation? = null,
     val audio: Audio? = null,
     val document: Document? = null,
@@ -642,6 +645,7 @@ data class Message(
     val voice: Voice? = null,
     val caption: String? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val hasMediaSpoiler: Boolean? = null,
     val contact: Contact? = null,
     val dice: Dice? = null,
@@ -688,7 +692,7 @@ data class Message(
     val webAppData: WebAppData? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -704,7 +708,7 @@ data class MessageRef(
 
 /**
  * This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
- * @param type Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
+ * @param type Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
  * @param offset Offset in UTF-16 code units to the start of the entity
  * @param length Length of the entity in UTF-16 code units
  * @param url Optional. For “text_link” only, URL that will be opened after user taps on the text
@@ -1731,7 +1735,7 @@ data class ReplyKeyboardMarkup(
 }
 
 /**
- * This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
+ * This object represents one button of the reply keyboard. At most one of the optional fields must be used to specify type of the button. For simple text buttons, String can be used instead of this object to specify the button text.
  * @param text Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed
  * @param requestUsers Optional. If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a “users_shared” service message. Available in private chats only.
  * @param requestChat Optional. If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a “chat_shared” service message. Available in private chats only.
@@ -1843,7 +1847,7 @@ data class InlineKeyboardMarkup(
 }
 
 /**
- * This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
+ * This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify type of the button.
  * @param text Label text on the button
  * @param url Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
  * @param callbackData Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes. Not supported for messages sent on behalf of a Telegram Business account.
@@ -1853,7 +1857,7 @@ data class InlineKeyboardMarkup(
  * @param switchInlineQueryCurrentChat Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business account.
  * @param switchInlineQueryChosenChat Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
  * @param callbackGame Optional. Description of the game that will be launched when the user presses the button. NOTE: This type of button must always be the first button in the first row.
- * @param pay Optional. Specify True, to send a Pay button. NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
+ * @param pay Optional. Specify True, to send a Pay button. Substrings “” and “XTR” in the buttons's text will be replaced with a Telegram Star icon. NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
  */
 @Serializable
 data class InlineKeyboardButton(
@@ -2796,6 +2800,7 @@ sealed interface InputMedia
  * @param caption Optional. Caption of the photo to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param hasSpoiler Optional. Pass True if the photo needs to be covered with a spoiler animation
  */
 @Serializable
@@ -2805,9 +2810,10 @@ data class InputMediaPhoto(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val hasSpoiler: Boolean? = null,
 ) : InputMedia {
-    override fun toString() = DebugStringBuilder("InputMediaPhoto").prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("hasSpoiler", hasSpoiler).toString()
+    override fun toString() = DebugStringBuilder("InputMediaPhoto").prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).toString()
 }
 
 /**
@@ -2817,6 +2823,7 @@ data class InputMediaPhoto(
  * @param caption Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the video caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param width Optional. Video width
  * @param height Optional. Video height
  * @param duration Optional. Video duration in seconds
@@ -2831,13 +2838,14 @@ data class InputMediaVideo(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val width: Long? = null,
     val height: Long? = null,
     val duration: Seconds? = null,
     val supportsStreaming: Boolean? = null,
     val hasSpoiler: Boolean? = null,
 ) : InputMedia {
-    override fun toString() = DebugStringBuilder("InputMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).prop("hasSpoiler", hasSpoiler).toString()
+    override fun toString() = DebugStringBuilder("InputMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).prop("hasSpoiler", hasSpoiler).toString()
 }
 
 /**
@@ -2847,6 +2855,7 @@ data class InputMediaVideo(
  * @param caption Optional. Caption of the animation to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the animation caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param width Optional. Animation width
  * @param height Optional. Animation height
  * @param duration Optional. Animation duration in seconds
@@ -2860,12 +2869,13 @@ data class InputMediaAnimation(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val width: Long? = null,
     val height: Long? = null,
     val duration: Seconds? = null,
     val hasSpoiler: Boolean? = null,
 ) : InputMedia {
-    override fun toString() = DebugStringBuilder("InputMediaAnimation").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("width", width).prop("height", height).prop("duration", duration).prop("hasSpoiler", hasSpoiler).toString()
+    override fun toString() = DebugStringBuilder("InputMediaAnimation").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("width", width).prop("height", height).prop("duration", duration).prop("hasSpoiler", hasSpoiler).toString()
 }
 
 /**
@@ -3115,6 +3125,7 @@ data class InlineQueryResultArticle(
  * @param caption Optional. Caption of the photo to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the photo
  */
@@ -3131,10 +3142,11 @@ data class InlineQueryResultPhoto(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult {
-    override fun toString() = DebugStringBuilder("InlineQueryResultPhoto").prop("id", id).prop("photoUrl", photoUrl).prop("thumbnailUrl", thumbnailUrl).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("title", title).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
+    override fun toString() = DebugStringBuilder("InlineQueryResultPhoto").prop("id", id).prop("photoUrl", photoUrl).prop("thumbnailUrl", thumbnailUrl).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("title", title).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
 /**
@@ -3150,6 +3162,7 @@ data class InlineQueryResultPhoto(
  * @param caption Optional. Caption of the GIF file to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the GIF animation
  */
@@ -3167,10 +3180,11 @@ data class InlineQueryResultGif(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult {
-    override fun toString() = DebugStringBuilder("InlineQueryResultGif").prop("id", id).prop("gifUrl", gifUrl).prop("thumbnailUrl", thumbnailUrl).prop("gifWidth", gifWidth).prop("gifHeight", gifHeight).prop("gifDuration", gifDuration).prop("thumbnailMimeType", thumbnailMimeType).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
+    override fun toString() = DebugStringBuilder("InlineQueryResultGif").prop("id", id).prop("gifUrl", gifUrl).prop("thumbnailUrl", thumbnailUrl).prop("gifWidth", gifWidth).prop("gifHeight", gifHeight).prop("gifDuration", gifDuration).prop("thumbnailMimeType", thumbnailMimeType).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
 /**
@@ -3186,6 +3200,7 @@ data class InlineQueryResultGif(
  * @param caption Optional. Caption of the MPEG-4 file to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the video animation
  */
@@ -3203,10 +3218,11 @@ data class InlineQueryResultMpeg4Gif(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult {
-    override fun toString() = DebugStringBuilder("InlineQueryResultMpeg4Gif").prop("id", id).prop("mpeg4Url", mpeg4Url).prop("thumbnailUrl", thumbnailUrl).prop("mpeg4Width", mpeg4Width).prop("mpeg4Height", mpeg4Height).prop("mpeg4Duration", mpeg4Duration).prop("thumbnailMimeType", thumbnailMimeType).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
+    override fun toString() = DebugStringBuilder("InlineQueryResultMpeg4Gif").prop("id", id).prop("mpeg4Url", mpeg4Url).prop("thumbnailUrl", thumbnailUrl).prop("mpeg4Width", mpeg4Width).prop("mpeg4Height", mpeg4Height).prop("mpeg4Duration", mpeg4Duration).prop("thumbnailMimeType", thumbnailMimeType).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
 /**
@@ -3221,6 +3237,7 @@ data class InlineQueryResultMpeg4Gif(
  * @param caption Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the video caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param videoWidth Optional. Video width
  * @param videoHeight Optional. Video height
  * @param videoDuration Optional. Video duration in seconds
@@ -3239,6 +3256,7 @@ data class InlineQueryResultVideo(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val videoWidth: Long? = null,
     val videoHeight: Long? = null,
     val videoDuration: Long? = null,
@@ -3246,7 +3264,7 @@ data class InlineQueryResultVideo(
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult {
-    override fun toString() = DebugStringBuilder("InlineQueryResultVideo").prop("id", id).prop("videoUrl", videoUrl).prop("mimeType", mimeType).prop("thumbnailUrl", thumbnailUrl).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("videoWidth", videoWidth).prop("videoHeight", videoHeight).prop("videoDuration", videoDuration).prop("description", description).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
+    override fun toString() = DebugStringBuilder("InlineQueryResultVideo").prop("id", id).prop("videoUrl", videoUrl).prop("mimeType", mimeType).prop("thumbnailUrl", thumbnailUrl).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("videoWidth", videoWidth).prop("videoHeight", videoHeight).prop("videoDuration", videoDuration).prop("description", description).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
 /**
@@ -3472,6 +3490,7 @@ data class InlineQueryResultGame(
  * @param caption Optional. Caption of the photo to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the photo
  */
@@ -3485,10 +3504,11 @@ data class InlineQueryResultCachedPhoto(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult {
-    override fun toString() = DebugStringBuilder("InlineQueryResultCachedPhoto").prop("id", id).prop("photoFileId", photoFileId).prop("title", title).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
+    override fun toString() = DebugStringBuilder("InlineQueryResultCachedPhoto").prop("id", id).prop("photoFileId", photoFileId).prop("title", title).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
 /**
@@ -3499,6 +3519,7 @@ data class InlineQueryResultCachedPhoto(
  * @param caption Optional. Caption of the GIF file to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the GIF animation
  */
@@ -3511,10 +3532,11 @@ data class InlineQueryResultCachedGif(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult {
-    override fun toString() = DebugStringBuilder("InlineQueryResultCachedGif").prop("id", id).prop("gifFileId", gifFileId).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
+    override fun toString() = DebugStringBuilder("InlineQueryResultCachedGif").prop("id", id).prop("gifFileId", gifFileId).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
 /**
@@ -3525,6 +3547,7 @@ data class InlineQueryResultCachedGif(
  * @param caption Optional. Caption of the MPEG-4 file to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the video animation
  */
@@ -3537,10 +3560,11 @@ data class InlineQueryResultCachedMpeg4Gif(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult {
-    override fun toString() = DebugStringBuilder("InlineQueryResultCachedMpeg4Gif").prop("id", id).prop("mpeg4FileId", mpeg4FileId).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
+    override fun toString() = DebugStringBuilder("InlineQueryResultCachedMpeg4Gif").prop("id", id).prop("mpeg4FileId", mpeg4FileId).prop("title", title).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
 /**
@@ -3598,6 +3622,7 @@ data class InlineQueryResultCachedDocument(
  * @param caption Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the video caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the video
  */
@@ -3611,10 +3636,11 @@ data class InlineQueryResultCachedVideo(
     val caption: String? = null,
     val parseMode: ParseMode? = null,
     val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val inputMessageContent: InputMessageContent? = null,
 ) : InlineQueryResult {
-    override fun toString() = DebugStringBuilder("InlineQueryResultCachedVideo").prop("id", id).prop("videoFileId", videoFileId).prop("title", title).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
+    override fun toString() = DebugStringBuilder("InlineQueryResultCachedVideo").prop("id", id).prop("videoFileId", videoFileId).prop("title", title).prop("description", description).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("replyMarkup", replyMarkup).prop("inputMessageContent", inputMessageContent).toString()
 }
 
 /**
@@ -3777,32 +3803,32 @@ data class InputContactMessageContent(
  * @param title Product name, 1-32 characters
  * @param description Product description, 1-255 characters
  * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
- * @param providerToken Payment provider token, obtained via @BotFather
- * @param currency Three-letter ISO 4217 currency code, see more on currencies
- * @param prices Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
- * @param maxTipAmount Optional. The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
+ * @param currency Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars.
+ * @param prices Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.
+ * @param providerToken Optional. Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.
+ * @param maxTipAmount Optional. The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.
  * @param suggestedTipAmounts Optional. A JSON-serialized array of suggested amounts of tip in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.
  * @param providerData Optional. A JSON-serialized object for data about the invoice, which will be shared with the payment provider. A detailed description of the required fields should be provided by the payment provider.
  * @param photoUrl Optional. URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service.
  * @param photoSize Optional. Photo size in bytes
  * @param photoWidth Optional. Photo width
  * @param photoHeight Optional. Photo height
- * @param needName Optional. Pass True if you require the user's full name to complete the order
- * @param needPhoneNumber Optional. Pass True if you require the user's phone number to complete the order
- * @param needEmail Optional. Pass True if you require the user's email address to complete the order
- * @param needShippingAddress Optional. Pass True if you require the user's shipping address to complete the order
- * @param sendPhoneNumberToProvider Optional. Pass True if the user's phone number should be sent to provider
- * @param sendEmailToProvider Optional. Pass True if the user's email address should be sent to provider
- * @param isFlexible Optional. Pass True if the final price depends on the shipping method
+ * @param needName Optional. Pass True if you require the user's full name to complete the order. Ignored for payments in Telegram Stars.
+ * @param needPhoneNumber Optional. Pass True if you require the user's phone number to complete the order. Ignored for payments in Telegram Stars.
+ * @param needEmail Optional. Pass True if you require the user's email address to complete the order. Ignored for payments in Telegram Stars.
+ * @param needShippingAddress Optional. Pass True if you require the user's shipping address to complete the order. Ignored for payments in Telegram Stars.
+ * @param sendPhoneNumberToProvider Optional. Pass True if the user's phone number should be sent to the provider. Ignored for payments in Telegram Stars.
+ * @param sendEmailToProvider Optional. Pass True if the user's email address should be sent to the provider. Ignored for payments in Telegram Stars.
+ * @param isFlexible Optional. Pass True if the final price depends on the shipping method. Ignored for payments in Telegram Stars.
  */
 @Serializable
 data class InputInvoiceMessageContent(
     val title: String,
     val description: String,
     val payload: String,
-    val providerToken: String,
     val currency: String,
     val prices: List<LabeledPrice>,
+    val providerToken: String? = null,
     val maxTipAmount: Long? = null,
     val suggestedTipAmounts: List<Long>? = null,
     val providerData: String? = null,
@@ -3818,7 +3844,7 @@ data class InputInvoiceMessageContent(
     val sendEmailToProvider: Boolean? = null,
     val isFlexible: Boolean? = null,
 ) : InputMessageContent {
-    override fun toString() = DebugStringBuilder("InputInvoiceMessageContent").prop("title", title).prop("description", description).prop("payload", payload).prop("providerToken", providerToken).prop("currency", currency).prop("prices", prices).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).toString()
+    override fun toString() = DebugStringBuilder("InputInvoiceMessageContent").prop("title", title).prop("description", description).prop("payload", payload).prop("currency", currency).prop("prices", prices).prop("providerToken", providerToken).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).toString()
 }
 
 /**
@@ -3869,7 +3895,7 @@ data class LabeledPrice(
  * @param title Product name
  * @param description Product description
  * @param startParameter Unique bot deep-linking parameter that can be used to generate this invoice
- * @param currency Three-letter ISO 4217 currency code
+ * @param currency Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars
  * @param totalAmount Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
  */
 @Serializable
@@ -3938,7 +3964,7 @@ data class ShippingOption(
 
 /**
  * This object contains basic information about a successful payment.
- * @param currency Three-letter ISO 4217 currency code
+ * @param currency Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars
  * @param totalAmount Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
  * @param invoicePayload Bot specified invoice payload
  * @param telegramPaymentChargeId Telegram payment identifier
@@ -3951,7 +3977,7 @@ data class SuccessfulPayment(
     val currency: String,
     val totalAmount: Long,
     val invoicePayload: String,
-    val telegramPaymentChargeId: String,
+    val telegramPaymentChargeId: TelegramPaymentChargeId,
     val providerPaymentChargeId: String,
     val shippingOptionId: String? = null,
     val orderInfo: OrderInfo? = null,
@@ -3980,7 +4006,7 @@ data class ShippingQuery(
  * This object contains information about an incoming pre-checkout query.
  * @param id Unique query identifier
  * @param from User who sent the query
- * @param currency Three-letter ISO 4217 currency code
+ * @param currency Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars
  * @param totalAmount Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
  * @param invoicePayload Bot specified invoice payload
  * @param shippingOptionId Optional. Identifier of the shipping option chosen by the user
@@ -4355,6 +4381,15 @@ value class MessageThreadId(val value: Long) {
 }
 
 /**
+ * Unique identifier of the message effect to be added to the message; for private chats only
+ */
+@Serializable
+@JvmInline
+value class MessageEffectId(val value: String) {
+    override fun toString(): String = "MessageEffectId(${quoteWhenWhitespace(value)})"
+}
+
+/**
  * Opaque [CallbackQuery] identifier.
  */
 @Serializable
@@ -4444,5 +4479,14 @@ value class Seconds(val value: Long) {
 @JvmInline
 value class UnixTimestamp(val value: Long) {
     override fun toString(): String = "UnixTimestamp(${quoteWhenWhitespace(value)})"
+}
+
+/**
+ * Telegram payment identifier
+ */
+@Serializable
+@JvmInline
+value class TelegramPaymentChargeId(val value: String) {
+    override fun toString(): String = "TelegramPaymentChargeId(${quoteWhenWhitespace(value)})"
 }
 

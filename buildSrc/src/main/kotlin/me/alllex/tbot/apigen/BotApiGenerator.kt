@@ -125,6 +125,9 @@ val valueTypes = listOf(
     ValueType("MessageThreadId", "Long", "Opaque message thread identifier.") { _, field ->
         field.serialName.endsWith("message_thread_id")
     },
+    ValueType("MessageEffectId", "String", "Unique identifier of the message effect to be added to the message; for private chats only") { _, field ->
+        field.serialName.endsWith("effect_id")
+    },
     ValueType("CallbackQueryId", "String", "Opaque [CallbackQuery] identifier.") { type, field ->
         (type.value == "CallbackQuery" && field.serialName == "id") || field.serialName.endsWith("callback_query_id")
     },
@@ -175,6 +178,9 @@ val valueTypes = listOf(
             "until_date",
             "file_date",
         )
+    },
+    ValueType("TelegramPaymentChargeId", "String", "Telegram payment identifier") { _, field ->
+        field.serialName.endsWith("telegram_payment_charge_id")
     },
 )
 

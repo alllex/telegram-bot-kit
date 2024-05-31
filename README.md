@@ -39,7 +39,7 @@ poller.start(TelegramBotUpdateListener(
 
 ```kotlin
 dependencies {
-    implementation("me.alllex.telegram.botkit:tbot-api-jvm:0.5.0")
+    implementation("me.alllex.telegram.botkit:tbot-api-jvm:0.6.0")
 }
 ```
 
@@ -52,7 +52,7 @@ dependencies {
 <dependency>
   <groupId>me.alllex.telegram.botkit</groupId>
   <artifactId>tbot-api-jvm</artifactId>
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 </dependency>
 ```
 
@@ -64,6 +64,7 @@ The bindings are generated directly from the source-of-truth [Bot API spec](http
 
 | Telegram Bot API | tbot-api library |
 |------------------|------------------|
+| `7.4`            | `0.6.0`          |
 | `7.3`            | `0.5.0`          |
 | `6.9`            | `0.4.0`          |
 

@@ -1,0 +1,3312 @@
+{
+    "types": [
+        {
+            "name": "Update",
+            "args": [
+                "updateId",
+                "message",
+                "editedMessage",
+                "channelPost",
+                "editedChannelPost",
+                "businessConnection",
+                "businessMessage",
+                "editedBusinessMessage",
+                "deletedBusinessMessages",
+                "messageReaction",
+                "messageReactionCount",
+                "inlineQuery",
+                "chosenInlineResult",
+                "callbackQuery",
+                "shippingQuery",
+                "preCheckoutQuery",
+                "poll",
+                "pollAnswer",
+                "myChatMember",
+                "chatMember",
+                "chatJoinRequest",
+                "chatBoost",
+                "removedChatBoost"
+            ]
+        },
+        {
+            "name": "WebhookInfo",
+            "args": [
+                "url",
+                "hasCustomCertificate",
+                "pendingUpdateCount",
+                "ipAddress",
+                "lastErrorDate",
+                "lastErrorMessage",
+                "lastSynchronizationErrorDate",
+                "maxConnections",
+                "allowedUpdates"
+            ]
+        },
+        {
+            "name": "User",
+            "args": [
+                "id",
+                "isBot",
+                "firstName",
+                "lastName",
+                "username",
+                "languageCode",
+                "isPremium",
+                "addedToAttachmentMenu",
+                "canJoinGroups",
+                "canReadAllGroupMessages",
+                "supportsInlineQueries",
+                "canConnectToBusiness"
+            ]
+        },
+        {
+            "name": "Chat",
+            "args": [
+                "id",
+                "type",
+                "title",
+                "username",
+                "firstName",
+                "lastName",
+                "isForum"
+            ]
+        },
+        {
+            "name": "ChatFullInfo",
+            "args": [
+                "id",
+                "type",
+                "accentColorId",
+                "maxReactionCount",
+                "title",
+                "username",
+                "firstName",
+                "lastName",
+                "isForum",
+                "photo",
+                "activeUsernames",
+                "birthdate",
+                "businessIntro",
+                "businessLocation",
+                "businessOpeningHours",
+                "personalChat",
+                "availableReactions",
+                "backgroundCustomEmojiId",
+                "profileAccentColorId",
+                "profileBackgroundCustomEmojiId",
+                "emojiStatusCustomEmojiId",
+                "emojiStatusExpirationDate",
+                "bio",
+                "hasPrivateForwards",
+                "hasRestrictedVoiceAndVideoMessages",
+                "joinToSendMessages",
+                "joinByRequest",
+                "description",
+                "inviteLink",
+                "pinnedMessage",
+                "permissions",
+                "slowModeDelay",
+                "unrestrictBoostCount",
+                "messageAutoDeleteTime",
+                "hasAggressiveAntiSpamEnabled",
+                "hasHiddenMembers",
+                "hasProtectedContent",
+                "hasVisibleHistory",
+                "stickerSetName",
+                "canSetStickerSet",
+                "customEmojiStickerSetName",
+                "linkedChatId",
+                "location"
+            ]
+        },
+        {
+            "name": "Message",
+            "args": [
+                "messageId",
+                "date",
+                "chat",
+                "messageThreadId",
+                "from",
+                "senderChat",
+                "senderBoostCount",
+                "senderBusinessBot",
+                "businessConnectionId",
+                "forwardOrigin",
+                "isTopicMessage",
+                "isAutomaticForward",
+                "replyToMessage",
+                "externalReply",
+                "quote",
+                "replyToStory",
+                "viaBot",
+                "editDate",
+                "hasProtectedContent",
+                "isFromOffline",
+                "mediaGroupId",
+                "authorSignature",
+                "text",
+                "entities",
+                "linkPreviewOptions",
+                "effectId",
+                "animation",
+                "audio",
+                "document",
+                "photo",
+                "sticker",
+                "story",
+                "video",
+                "videoNote",
+                "voice",
+                "caption",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "hasMediaSpoiler",
+                "contact",
+                "dice",
+                "game",
+                "poll",
+                "venue",
+                "location",
+                "newChatMembers",
+                "leftChatMember",
+                "newChatTitle",
+                "newChatPhoto",
+                "deleteChatPhoto",
+                "groupChatCreated",
+                "supergroupChatCreated",
+                "channelChatCreated",
+                "messageAutoDeleteTimerChanged",
+                "migrateToChatId",
+                "migrateFromChatId",
+                "pinnedMessage",
+                "invoice",
+                "successfulPayment",
+                "usersShared",
+                "chatShared",
+                "connectedWebsite",
+                "writeAccessAllowed",
+                "passportData",
+                "proximityAlertTriggered",
+                "boostAdded",
+                "chatBackgroundSet",
+                "forumTopicCreated",
+                "forumTopicEdited",
+                "forumTopicClosed",
+                "forumTopicReopened",
+                "generalForumTopicHidden",
+                "generalForumTopicUnhidden",
+                "giveawayCreated",
+                "giveaway",
+                "giveawayWinners",
+                "giveawayCompleted",
+                "videoChatScheduled",
+                "videoChatStarted",
+                "videoChatEnded",
+                "videoChatParticipantsInvited",
+                "webAppData",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "MessageRef",
+            "args": [
+                "messageId"
+            ]
+        },
+        {
+            "name": "MessageEntity",
+            "args": [
+                "type",
+                "offset",
+                "length",
+                "url",
+                "user",
+                "language",
+                "customEmojiId"
+            ]
+        },
+        {
+            "name": "TextQuote",
+            "args": [
+                "text",
+                "position",
+                "entities",
+                "isManual"
+            ]
+        },
+        {
+            "name": "ExternalReplyInfo",
+            "args": [
+                "origin",
+                "chat",
+                "messageId",
+                "linkPreviewOptions",
+                "animation",
+                "audio",
+                "document",
+                "photo",
+                "sticker",
+                "story",
+                "video",
+                "videoNote",
+                "voice",
+                "hasMediaSpoiler",
+                "contact",
+                "dice",
+                "game",
+                "giveaway",
+                "giveawayWinners",
+                "invoice",
+                "location",
+                "poll",
+                "venue"
+            ]
+        },
+        {
+            "name": "ReplyParameters",
+            "args": [
+                "messageId",
+                "chatId",
+                "allowSendingWithoutReply",
+                "quote",
+                "quoteParseMode",
+                "quoteEntities",
+                "quotePosition"
+            ]
+        },
+        {
+            "name": "MessageOrigin",
+            "args": [
+            ]
+        },
+        {
+            "name": "MessageOriginUser",
+            "args": [
+                "type",
+                "date",
+                "senderUser"
+            ]
+        },
+        {
+            "name": "MessageOriginHiddenUser",
+            "args": [
+                "type",
+                "date",
+                "senderUserName"
+            ]
+        },
+        {
+            "name": "MessageOriginChat",
+            "args": [
+                "type",
+                "date",
+                "senderChat",
+                "authorSignature"
+            ]
+        },
+        {
+            "name": "MessageOriginChannel",
+            "args": [
+                "type",
+                "date",
+                "chat",
+                "messageId",
+                "authorSignature"
+            ]
+        },
+        {
+            "name": "PhotoSize",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "width",
+                "height",
+                "fileSize"
+            ]
+        },
+        {
+            "name": "Animation",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "width",
+                "height",
+                "duration",
+                "thumbnail",
+                "fileName",
+                "mimeType",
+                "fileSize"
+            ]
+        },
+        {
+            "name": "Audio",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "duration",
+                "performer",
+                "title",
+                "fileName",
+                "mimeType",
+                "fileSize",
+                "thumbnail"
+            ]
+        },
+        {
+            "name": "Document",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "thumbnail",
+                "fileName",
+                "mimeType",
+                "fileSize"
+            ]
+        },
+        {
+            "name": "Story",
+            "args": [
+                "chat",
+                "id"
+            ]
+        },
+        {
+            "name": "Video",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "width",
+                "height",
+                "duration",
+                "thumbnail",
+                "fileName",
+                "mimeType",
+                "fileSize"
+            ]
+        },
+        {
+            "name": "VideoNote",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "length",
+                "duration",
+                "thumbnail",
+                "fileSize"
+            ]
+        },
+        {
+            "name": "Voice",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "duration",
+                "mimeType",
+                "fileSize"
+            ]
+        },
+        {
+            "name": "Contact",
+            "args": [
+                "phoneNumber",
+                "firstName",
+                "lastName",
+                "userId",
+                "vcard"
+            ]
+        },
+        {
+            "name": "Dice",
+            "args": [
+                "emoji",
+                "value"
+            ]
+        },
+        {
+            "name": "PollOption",
+            "args": [
+                "text",
+                "voterCount",
+                "textEntities"
+            ]
+        },
+        {
+            "name": "InputPollOption",
+            "args": [
+                "text",
+                "textParseMode",
+                "textEntities"
+            ]
+        },
+        {
+            "name": "PollAnswer",
+            "args": [
+                "pollId",
+                "optionIds",
+                "voterChat",
+                "user"
+            ]
+        },
+        {
+            "name": "Poll",
+            "args": [
+                "id",
+                "question",
+                "options",
+                "totalVoterCount",
+                "isClosed",
+                "isAnonymous",
+                "type",
+                "allowsMultipleAnswers",
+                "questionEntities",
+                "correctOptionId",
+                "explanation",
+                "explanationEntities",
+                "openPeriod",
+                "closeDate"
+            ]
+        },
+        {
+            "name": "Location",
+            "args": [
+                "latitude",
+                "longitude",
+                "horizontalAccuracy",
+                "livePeriod",
+                "heading",
+                "proximityAlertRadius"
+            ]
+        },
+        {
+            "name": "Venue",
+            "args": [
+                "location",
+                "title",
+                "address",
+                "foursquareId",
+                "foursquareType",
+                "googlePlaceId",
+                "googlePlaceType"
+            ]
+        },
+        {
+            "name": "WebAppData",
+            "args": [
+                "data",
+                "buttonText"
+            ]
+        },
+        {
+            "name": "ProximityAlertTriggered",
+            "args": [
+                "traveler",
+                "watcher",
+                "distance"
+            ]
+        },
+        {
+            "name": "MessageAutoDeleteTimerChanged",
+            "args": [
+                "messageAutoDeleteTime"
+            ]
+        },
+        {
+            "name": "ChatBoostAdded",
+            "args": [
+                "boostCount"
+            ]
+        },
+        {
+            "name": "BackgroundFill",
+            "args": [
+            ]
+        },
+        {
+            "name": "BackgroundFillSolid",
+            "args": [
+                "type",
+                "color"
+            ]
+        },
+        {
+            "name": "BackgroundFillGradient",
+            "args": [
+                "type",
+                "topColor",
+                "bottomColor",
+                "rotationAngle"
+            ]
+        },
+        {
+            "name": "BackgroundFillFreeformGradient",
+            "args": [
+                "type",
+                "colors"
+            ]
+        },
+        {
+            "name": "BackgroundType",
+            "args": [
+            ]
+        },
+        {
+            "name": "BackgroundTypeFill",
+            "args": [
+                "type",
+                "fill",
+                "darkThemeDimming"
+            ]
+        },
+        {
+            "name": "BackgroundTypeWallpaper",
+            "args": [
+                "type",
+                "document",
+                "darkThemeDimming",
+                "isBlurred",
+                "isMoving"
+            ]
+        },
+        {
+            "name": "BackgroundTypePattern",
+            "args": [
+                "type",
+                "document",
+                "fill",
+                "intensity",
+                "isInverted",
+                "isMoving"
+            ]
+        },
+        {
+            "name": "BackgroundTypeChatTheme",
+            "args": [
+                "type",
+                "themeName"
+            ]
+        },
+        {
+            "name": "ChatBackground",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "ForumTopicCreated",
+            "args": [
+                "name",
+                "iconColor",
+                "iconCustomEmojiId"
+            ]
+        },
+        {
+            "name": "ForumTopicClosed",
+            "args": [
+            ]
+        },
+        {
+            "name": "ForumTopicEdited",
+            "args": [
+                "name",
+                "iconCustomEmojiId"
+            ]
+        },
+        {
+            "name": "ForumTopicReopened",
+            "args": [
+            ]
+        },
+        {
+            "name": "GeneralForumTopicHidden",
+            "args": [
+            ]
+        },
+        {
+            "name": "GeneralForumTopicUnhidden",
+            "args": [
+            ]
+        },
+        {
+            "name": "SharedUser",
+            "args": [
+                "userId",
+                "firstName",
+                "lastName",
+                "username",
+                "photo"
+            ]
+        },
+        {
+            "name": "UsersShared",
+            "args": [
+                "requestId",
+                "users"
+            ]
+        },
+        {
+            "name": "ChatShared",
+            "args": [
+                "requestId",
+                "chatId",
+                "title",
+                "username",
+                "photo"
+            ]
+        },
+        {
+            "name": "WriteAccessAllowed",
+            "args": [
+                "fromRequest",
+                "webAppName",
+                "fromAttachmentMenu"
+            ]
+        },
+        {
+            "name": "VideoChatScheduled",
+            "args": [
+                "startDate"
+            ]
+        },
+        {
+            "name": "VideoChatStarted",
+            "args": [
+            ]
+        },
+        {
+            "name": "VideoChatEnded",
+            "args": [
+                "duration"
+            ]
+        },
+        {
+            "name": "VideoChatParticipantsInvited",
+            "args": [
+                "users"
+            ]
+        },
+        {
+            "name": "GiveawayCreated",
+            "args": [
+            ]
+        },
+        {
+            "name": "Giveaway",
+            "args": [
+                "chats",
+                "winnersSelectionDate",
+                "winnerCount",
+                "onlyNewMembers",
+                "hasPublicWinners",
+                "prizeDescription",
+                "countryCodes",
+                "premiumSubscriptionMonthCount"
+            ]
+        },
+        {
+            "name": "GiveawayWinners",
+            "args": [
+                "chat",
+                "giveawayMessageId",
+                "winnersSelectionDate",
+                "winnerCount",
+                "winners",
+                "additionalChatCount",
+                "premiumSubscriptionMonthCount",
+                "unclaimedPrizeCount",
+                "onlyNewMembers",
+                "wasRefunded",
+                "prizeDescription"
+            ]
+        },
+        {
+            "name": "GiveawayCompleted",
+            "args": [
+                "winnerCount",
+                "unclaimedPrizeCount",
+                "giveawayMessage"
+            ]
+        },
+        {
+            "name": "LinkPreviewOptions",
+            "args": [
+                "isDisabled",
+                "url",
+                "preferSmallMedia",
+                "preferLargeMedia",
+                "showAboveText"
+            ]
+        },
+        {
+            "name": "UserProfilePhotos",
+            "args": [
+                "totalCount",
+                "photos"
+            ]
+        },
+        {
+            "name": "File",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "fileSize",
+                "filePath"
+            ]
+        },
+        {
+            "name": "WebAppInfo",
+            "args": [
+                "url"
+            ]
+        },
+        {
+            "name": "ReplyKeyboardMarkup",
+            "args": [
+                "keyboard",
+                "isPersistent",
+                "resizeKeyboard",
+                "oneTimeKeyboard",
+                "inputFieldPlaceholder",
+                "selective"
+            ]
+        },
+        {
+            "name": "KeyboardButton",
+            "args": [
+                "text",
+                "requestUsers",
+                "requestChat",
+                "requestContact",
+                "requestLocation",
+                "requestPoll",
+                "webApp"
+            ]
+        },
+        {
+            "name": "KeyboardButtonRequestUsers",
+            "args": [
+                "requestId",
+                "userIsBot",
+                "userIsPremium",
+                "maxQuantity",
+                "requestName",
+                "requestUsername",
+                "requestPhoto"
+            ]
+        },
+        {
+            "name": "KeyboardButtonRequestChat",
+            "args": [
+                "requestId",
+                "chatIsChannel",
+                "chatIsForum",
+                "chatHasUsername",
+                "chatIsCreated",
+                "userAdministratorRights",
+                "botAdministratorRights",
+                "botIsMember",
+                "requestTitle",
+                "requestUsername",
+                "requestPhoto"
+            ]
+        },
+        {
+            "name": "KeyboardButtonPollType",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "ReplyKeyboardRemove",
+            "args": [
+                "removeKeyboard",
+                "selective"
+            ]
+        },
+        {
+            "name": "InlineKeyboardMarkup",
+            "args": [
+                "inlineKeyboard"
+            ]
+        },
+        {
+            "name": "InlineKeyboardButton",
+            "args": [
+                "text",
+                "url",
+                "callbackData",
+                "webApp",
+                "loginUrl",
+                "switchInlineQuery",
+                "switchInlineQueryCurrentChat",
+                "switchInlineQueryChosenChat",
+                "callbackGame",
+                "pay"
+            ]
+        },
+        {
+            "name": "LoginUrl",
+            "args": [
+                "url",
+                "forwardText",
+                "botUsername",
+                "requestWriteAccess"
+            ]
+        },
+        {
+            "name": "SwitchInlineQueryChosenChat",
+            "args": [
+                "query",
+                "allowUserChats",
+                "allowBotChats",
+                "allowGroupChats",
+                "allowChannelChats"
+            ]
+        },
+        {
+            "name": "CallbackQuery",
+            "args": [
+                "id",
+                "from",
+                "chatInstance",
+                "message",
+                "inlineMessageId",
+                "data",
+                "gameShortName"
+            ]
+        },
+        {
+            "name": "ForceReply",
+            "args": [
+                "forceReply",
+                "inputFieldPlaceholder",
+                "selective"
+            ]
+        },
+        {
+            "name": "ChatPhoto",
+            "args": [
+                "smallFileId",
+                "smallFileUniqueId",
+                "bigFileId",
+                "bigFileUniqueId"
+            ]
+        },
+        {
+            "name": "ChatInviteLink",
+            "args": [
+                "inviteLink",
+                "creator",
+                "createsJoinRequest",
+                "isPrimary",
+                "isRevoked",
+                "name",
+                "expireDate",
+                "memberLimit",
+                "pendingJoinRequestCount"
+            ]
+        },
+        {
+            "name": "ChatAdministratorRights",
+            "args": [
+                "isAnonymous",
+                "canManageChat",
+                "canDeleteMessages",
+                "canManageVideoChats",
+                "canRestrictMembers",
+                "canPromoteMembers",
+                "canChangeInfo",
+                "canInviteUsers",
+                "canPostStories",
+                "canEditStories",
+                "canDeleteStories",
+                "canPostMessages",
+                "canEditMessages",
+                "canPinMessages",
+                "canManageTopics"
+            ]
+        },
+        {
+            "name": "ChatMemberUpdated",
+            "args": [
+                "chat",
+                "from",
+                "date",
+                "oldChatMember",
+                "newChatMember",
+                "inviteLink",
+                "viaJoinRequest",
+                "viaChatFolderInviteLink"
+            ]
+        },
+        {
+            "name": "ChatMember",
+            "args": [
+            ]
+        },
+        {
+            "name": "ChatMemberOwner",
+            "args": [
+                "status",
+                "user",
+                "isAnonymous",
+                "customTitle"
+            ]
+        },
+        {
+            "name": "ChatMemberAdministrator",
+            "args": [
+                "status",
+                "user",
+                "canBeEdited",
+                "isAnonymous",
+                "canManageChat",
+                "canDeleteMessages",
+                "canManageVideoChats",
+                "canRestrictMembers",
+                "canPromoteMembers",
+                "canChangeInfo",
+                "canInviteUsers",
+                "canPostStories",
+                "canEditStories",
+                "canDeleteStories",
+                "canPostMessages",
+                "canEditMessages",
+                "canPinMessages",
+                "canManageTopics",
+                "customTitle"
+            ]
+        },
+        {
+            "name": "ChatMemberMember",
+            "args": [
+                "status",
+                "user"
+            ]
+        },
+        {
+            "name": "ChatMemberRestricted",
+            "args": [
+                "status",
+                "user",
+                "isMember",
+                "canSendMessages",
+                "canSendAudios",
+                "canSendDocuments",
+                "canSendPhotos",
+                "canSendVideos",
+                "canSendVideoNotes",
+                "canSendVoiceNotes",
+                "canSendPolls",
+                "canSendOtherMessages",
+                "canAddWebPagePreviews",
+                "canChangeInfo",
+                "canInviteUsers",
+                "canPinMessages",
+                "canManageTopics",
+                "untilDate"
+            ]
+        },
+        {
+            "name": "ChatMemberLeft",
+            "args": [
+                "status",
+                "user"
+            ]
+        },
+        {
+            "name": "ChatMemberBanned",
+            "args": [
+                "status",
+                "user",
+                "untilDate"
+            ]
+        },
+        {
+            "name": "ChatJoinRequest",
+            "args": [
+                "chat",
+                "from",
+                "userChatId",
+                "date",
+                "bio",
+                "inviteLink"
+            ]
+        },
+        {
+            "name": "ChatPermissions",
+            "args": [
+                "canSendMessages",
+                "canSendAudios",
+                "canSendDocuments",
+                "canSendPhotos",
+                "canSendVideos",
+                "canSendVideoNotes",
+                "canSendVoiceNotes",
+                "canSendPolls",
+                "canSendOtherMessages",
+                "canAddWebPagePreviews",
+                "canChangeInfo",
+                "canInviteUsers",
+                "canPinMessages",
+                "canManageTopics"
+            ]
+        },
+        {
+            "name": "Birthdate",
+            "args": [
+                "day",
+                "month",
+                "year"
+            ]
+        },
+        {
+            "name": "BusinessIntro",
+            "args": [
+                "title",
+                "message",
+                "sticker"
+            ]
+        },
+        {
+            "name": "BusinessLocation",
+            "args": [
+                "address",
+                "location"
+            ]
+        },
+        {
+            "name": "BusinessOpeningHoursInterval",
+            "args": [
+                "openingMinute",
+                "closingMinute"
+            ]
+        },
+        {
+            "name": "BusinessOpeningHours",
+            "args": [
+                "timeZoneName",
+                "openingHours"
+            ]
+        },
+        {
+            "name": "ChatLocation",
+            "args": [
+                "location",
+                "address"
+            ]
+        },
+        {
+            "name": "ReactionType",
+            "args": [
+            ]
+        },
+        {
+            "name": "ReactionTypeEmoji",
+            "args": [
+                "type",
+                "emoji"
+            ]
+        },
+        {
+            "name": "ReactionTypeCustomEmoji",
+            "args": [
+                "type",
+                "customEmojiId"
+            ]
+        },
+        {
+            "name": "ReactionCount",
+            "args": [
+                "type",
+                "totalCount"
+            ]
+        },
+        {
+            "name": "MessageReactionUpdated",
+            "args": [
+                "chat",
+                "messageId",
+                "date",
+                "oldReaction",
+                "newReaction",
+                "user",
+                "actorChat"
+            ]
+        },
+        {
+            "name": "MessageReactionCountUpdated",
+            "args": [
+                "chat",
+                "messageId",
+                "date",
+                "reactions"
+            ]
+        },
+        {
+            "name": "ForumTopic",
+            "args": [
+                "messageThreadId",
+                "name",
+                "iconColor",
+                "iconCustomEmojiId"
+            ]
+        },
+        {
+            "name": "BotCommand",
+            "args": [
+                "command",
+                "description"
+            ]
+        },
+        {
+            "name": "BotCommandScope",
+            "args": [
+            ]
+        },
+        {
+            "name": "BotCommandScopeDefault",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "BotCommandScopeAllPrivateChats",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "BotCommandScopeAllGroupChats",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "BotCommandScopeAllChatAdministrators",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "BotCommandScopeChat",
+            "args": [
+                "type",
+                "chatId"
+            ]
+        },
+        {
+            "name": "BotCommandScopeChatAdministrators",
+            "args": [
+                "type",
+                "chatId"
+            ]
+        },
+        {
+            "name": "BotCommandScopeChatMember",
+            "args": [
+                "type",
+                "chatId",
+                "userId"
+            ]
+        },
+        {
+            "name": "BotName",
+            "args": [
+                "name"
+            ]
+        },
+        {
+            "name": "BotDescription",
+            "args": [
+                "description"
+            ]
+        },
+        {
+            "name": "BotShortDescription",
+            "args": [
+                "shortDescription"
+            ]
+        },
+        {
+            "name": "MenuButton",
+            "args": [
+            ]
+        },
+        {
+            "name": "MenuButtonCommands",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "MenuButtonWebApp",
+            "args": [
+                "type",
+                "text",
+                "webApp"
+            ]
+        },
+        {
+            "name": "MenuButtonDefault",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "ChatBoostSource",
+            "args": [
+            ]
+        },
+        {
+            "name": "ChatBoostSourcePremium",
+            "args": [
+                "source",
+                "user"
+            ]
+        },
+        {
+            "name": "ChatBoostSourceGiftCode",
+            "args": [
+                "source",
+                "user"
+            ]
+        },
+        {
+            "name": "ChatBoostSourceGiveaway",
+            "args": [
+                "source",
+                "giveawayMessageId",
+                "user",
+                "isUnclaimed"
+            ]
+        },
+        {
+            "name": "ChatBoost",
+            "args": [
+                "boostId",
+                "addDate",
+                "expirationDate",
+                "source"
+            ]
+        },
+        {
+            "name": "ChatBoostUpdated",
+            "args": [
+                "chat",
+                "boost"
+            ]
+        },
+        {
+            "name": "ChatBoostRemoved",
+            "args": [
+                "chat",
+                "boostId",
+                "removeDate",
+                "source"
+            ]
+        },
+        {
+            "name": "UserChatBoosts",
+            "args": [
+                "boosts"
+            ]
+        },
+        {
+            "name": "BusinessConnection",
+            "args": [
+                "id",
+                "user",
+                "userChatId",
+                "date",
+                "canReply",
+                "isEnabled"
+            ]
+        },
+        {
+            "name": "BusinessMessagesDeleted",
+            "args": [
+                "businessConnectionId",
+                "chat",
+                "messageIds"
+            ]
+        },
+        {
+            "name": "ResponseParameters",
+            "args": [
+                "migrateToChatId",
+                "retryAfter"
+            ]
+        },
+        {
+            "name": "InputMedia",
+            "args": [
+            ]
+        },
+        {
+            "name": "InputMediaPhoto",
+            "args": [
+                "type",
+                "media",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "hasSpoiler"
+            ]
+        },
+        {
+            "name": "InputMediaVideo",
+            "args": [
+                "type",
+                "media",
+                "thumbnail",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "width",
+                "height",
+                "duration",
+                "supportsStreaming",
+                "hasSpoiler"
+            ]
+        },
+        {
+            "name": "InputMediaAnimation",
+            "args": [
+                "type",
+                "media",
+                "thumbnail",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "width",
+                "height",
+                "duration",
+                "hasSpoiler"
+            ]
+        },
+        {
+            "name": "InputMediaAudio",
+            "args": [
+                "type",
+                "media",
+                "thumbnail",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "duration",
+                "performer",
+                "title"
+            ]
+        },
+        {
+            "name": "InputMediaDocument",
+            "args": [
+                "type",
+                "media",
+                "thumbnail",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "disableContentTypeDetection"
+            ]
+        },
+        {
+            "name": "Sticker",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "type",
+                "width",
+                "height",
+                "isAnimated",
+                "isVideo",
+                "thumbnail",
+                "emoji",
+                "setName",
+                "premiumAnimation",
+                "maskPosition",
+                "customEmojiId",
+                "needsRepainting",
+                "fileSize"
+            ]
+        },
+        {
+            "name": "StickerSet",
+            "args": [
+                "name",
+                "title",
+                "stickerType",
+                "stickers",
+                "thumbnail"
+            ]
+        },
+        {
+            "name": "MaskPosition",
+            "args": [
+                "point",
+                "xShift",
+                "yShift",
+                "scale"
+            ]
+        },
+        {
+            "name": "InputSticker",
+            "args": [
+                "sticker",
+                "format",
+                "emojiList",
+                "maskPosition",
+                "keywords"
+            ]
+        },
+        {
+            "name": "InlineQuery",
+            "args": [
+                "id",
+                "from",
+                "query",
+                "offset",
+                "chatType",
+                "location"
+            ]
+        },
+        {
+            "name": "InlineQueryResultsButton",
+            "args": [
+                "text",
+                "webApp",
+                "startParameter"
+            ]
+        },
+        {
+            "name": "InlineQueryResult",
+            "args": [
+            ]
+        },
+        {
+            "name": "InlineQueryResultArticle",
+            "args": [
+                "type",
+                "id",
+                "title",
+                "inputMessageContent",
+                "replyMarkup",
+                "url",
+                "hideUrl",
+                "description",
+                "thumbnailUrl",
+                "thumbnailWidth",
+                "thumbnailHeight"
+            ]
+        },
+        {
+            "name": "InlineQueryResultPhoto",
+            "args": [
+                "type",
+                "id",
+                "photoUrl",
+                "thumbnailUrl",
+                "photoWidth",
+                "photoHeight",
+                "title",
+                "description",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultGif",
+            "args": [
+                "type",
+                "id",
+                "gifUrl",
+                "thumbnailUrl",
+                "gifWidth",
+                "gifHeight",
+                "gifDuration",
+                "thumbnailMimeType",
+                "title",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultMpeg4Gif",
+            "args": [
+                "type",
+                "id",
+                "mpeg4Url",
+                "thumbnailUrl",
+                "mpeg4Width",
+                "mpeg4Height",
+                "mpeg4Duration",
+                "thumbnailMimeType",
+                "title",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultVideo",
+            "args": [
+                "type",
+                "id",
+                "videoUrl",
+                "mimeType",
+                "thumbnailUrl",
+                "title",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "videoWidth",
+                "videoHeight",
+                "videoDuration",
+                "description",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultAudio",
+            "args": [
+                "type",
+                "id",
+                "audioUrl",
+                "title",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "performer",
+                "audioDuration",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultVoice",
+            "args": [
+                "type",
+                "id",
+                "voiceUrl",
+                "title",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "voiceDuration",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultDocument",
+            "args": [
+                "type",
+                "id",
+                "title",
+                "documentUrl",
+                "mimeType",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "description",
+                "replyMarkup",
+                "inputMessageContent",
+                "thumbnailUrl",
+                "thumbnailWidth",
+                "thumbnailHeight"
+            ]
+        },
+        {
+            "name": "InlineQueryResultLocation",
+            "args": [
+                "type",
+                "id",
+                "latitude",
+                "longitude",
+                "title",
+                "horizontalAccuracy",
+                "livePeriod",
+                "heading",
+                "proximityAlertRadius",
+                "replyMarkup",
+                "inputMessageContent",
+                "thumbnailUrl",
+                "thumbnailWidth",
+                "thumbnailHeight"
+            ]
+        },
+        {
+            "name": "InlineQueryResultVenue",
+            "args": [
+                "type",
+                "id",
+                "latitude",
+                "longitude",
+                "title",
+                "address",
+                "foursquareId",
+                "foursquareType",
+                "googlePlaceId",
+                "googlePlaceType",
+                "replyMarkup",
+                "inputMessageContent",
+                "thumbnailUrl",
+                "thumbnailWidth",
+                "thumbnailHeight"
+            ]
+        },
+        {
+            "name": "InlineQueryResultContact",
+            "args": [
+                "type",
+                "id",
+                "phoneNumber",
+                "firstName",
+                "lastName",
+                "vcard",
+                "replyMarkup",
+                "inputMessageContent",
+                "thumbnailUrl",
+                "thumbnailWidth",
+                "thumbnailHeight"
+            ]
+        },
+        {
+            "name": "InlineQueryResultGame",
+            "args": [
+                "type",
+                "id",
+                "gameShortName",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "InlineQueryResultCachedPhoto",
+            "args": [
+                "type",
+                "id",
+                "photoFileId",
+                "title",
+                "description",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultCachedGif",
+            "args": [
+                "type",
+                "id",
+                "gifFileId",
+                "title",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultCachedMpeg4Gif",
+            "args": [
+                "type",
+                "id",
+                "mpeg4FileId",
+                "title",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultCachedSticker",
+            "args": [
+                "type",
+                "id",
+                "stickerFileId",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultCachedDocument",
+            "args": [
+                "type",
+                "id",
+                "title",
+                "documentFileId",
+                "description",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultCachedVideo",
+            "args": [
+                "type",
+                "id",
+                "videoFileId",
+                "title",
+                "description",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultCachedVoice",
+            "args": [
+                "type",
+                "id",
+                "voiceFileId",
+                "title",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InlineQueryResultCachedAudio",
+            "args": [
+                "type",
+                "id",
+                "audioFileId",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "replyMarkup",
+                "inputMessageContent"
+            ]
+        },
+        {
+            "name": "InputMessageContent",
+            "args": [
+            ]
+        },
+        {
+            "name": "InputTextMessageContent",
+            "args": [
+                "messageText",
+                "parseMode",
+                "entities",
+                "linkPreviewOptions"
+            ]
+        },
+        {
+            "name": "InputLocationMessageContent",
+            "args": [
+                "latitude",
+                "longitude",
+                "horizontalAccuracy",
+                "livePeriod",
+                "heading",
+                "proximityAlertRadius"
+            ]
+        },
+        {
+            "name": "InputVenueMessageContent",
+            "args": [
+                "latitude",
+                "longitude",
+                "title",
+                "address",
+                "foursquareId",
+                "foursquareType",
+                "googlePlaceId",
+                "googlePlaceType"
+            ]
+        },
+        {
+            "name": "InputContactMessageContent",
+            "args": [
+                "phoneNumber",
+                "firstName",
+                "lastName",
+                "vcard"
+            ]
+        },
+        {
+            "name": "InputInvoiceMessageContent",
+            "args": [
+                "title",
+                "description",
+                "payload",
+                "currency",
+                "prices",
+                "providerToken",
+                "maxTipAmount",
+                "suggestedTipAmounts",
+                "providerData",
+                "photoUrl",
+                "photoSize",
+                "photoWidth",
+                "photoHeight",
+                "needName",
+                "needPhoneNumber",
+                "needEmail",
+                "needShippingAddress",
+                "sendPhoneNumberToProvider",
+                "sendEmailToProvider",
+                "isFlexible"
+            ]
+        },
+        {
+            "name": "ChosenInlineResult",
+            "args": [
+                "resultId",
+                "from",
+                "query",
+                "location",
+                "inlineMessageId"
+            ]
+        },
+        {
+            "name": "SentWebAppMessage",
+            "args": [
+                "inlineMessageId"
+            ]
+        },
+        {
+            "name": "LabeledPrice",
+            "args": [
+                "label",
+                "amount"
+            ]
+        },
+        {
+            "name": "Invoice",
+            "args": [
+                "title",
+                "description",
+                "startParameter",
+                "currency",
+                "totalAmount"
+            ]
+        },
+        {
+            "name": "ShippingAddress",
+            "args": [
+                "countryCode",
+                "state",
+                "city",
+                "streetLine1",
+                "streetLine2",
+                "postCode"
+            ]
+        },
+        {
+            "name": "OrderInfo",
+            "args": [
+                "name",
+                "phoneNumber",
+                "email",
+                "shippingAddress"
+            ]
+        },
+        {
+            "name": "ShippingOption",
+            "args": [
+                "id",
+                "title",
+                "prices"
+            ]
+        },
+        {
+            "name": "SuccessfulPayment",
+            "args": [
+                "currency",
+                "totalAmount",
+                "invoicePayload",
+                "telegramPaymentChargeId",
+                "providerPaymentChargeId",
+                "shippingOptionId",
+                "orderInfo"
+            ]
+        },
+        {
+            "name": "ShippingQuery",
+            "args": [
+                "id",
+                "from",
+                "invoicePayload",
+                "shippingAddress"
+            ]
+        },
+        {
+            "name": "PreCheckoutQuery",
+            "args": [
+                "id",
+                "from",
+                "currency",
+                "totalAmount",
+                "invoicePayload",
+                "shippingOptionId",
+                "orderInfo"
+            ]
+        },
+        {
+            "name": "PassportData",
+            "args": [
+                "data",
+                "credentials"
+            ]
+        },
+        {
+            "name": "PassportFile",
+            "args": [
+                "fileId",
+                "fileUniqueId",
+                "fileSize",
+                "fileDate"
+            ]
+        },
+        {
+            "name": "EncryptedPassportElement",
+            "args": [
+                "type",
+                "hash",
+                "data",
+                "phoneNumber",
+                "email",
+                "files",
+                "frontSide",
+                "reverseSide",
+                "selfie",
+                "translation"
+            ]
+        },
+        {
+            "name": "EncryptedCredentials",
+            "args": [
+                "data",
+                "hash",
+                "secret"
+            ]
+        },
+        {
+            "name": "PassportElementError",
+            "args": [
+            ]
+        },
+        {
+            "name": "PassportElementErrorDataField",
+            "args": [
+                "source",
+                "type",
+                "fieldName",
+                "dataHash",
+                "message"
+            ]
+        },
+        {
+            "name": "PassportElementErrorFrontSide",
+            "args": [
+                "source",
+                "type",
+                "fileHash",
+                "message"
+            ]
+        },
+        {
+            "name": "PassportElementErrorReverseSide",
+            "args": [
+                "source",
+                "type",
+                "fileHash",
+                "message"
+            ]
+        },
+        {
+            "name": "PassportElementErrorSelfie",
+            "args": [
+                "source",
+                "type",
+                "fileHash",
+                "message"
+            ]
+        },
+        {
+            "name": "PassportElementErrorFile",
+            "args": [
+                "source",
+                "type",
+                "fileHash",
+                "message"
+            ]
+        },
+        {
+            "name": "PassportElementErrorFiles",
+            "args": [
+                "source",
+                "type",
+                "fileHashes",
+                "message"
+            ]
+        },
+        {
+            "name": "PassportElementErrorTranslationFile",
+            "args": [
+                "source",
+                "type",
+                "fileHash",
+                "message"
+            ]
+        },
+        {
+            "name": "PassportElementErrorTranslationFiles",
+            "args": [
+                "source",
+                "type",
+                "fileHashes",
+                "message"
+            ]
+        },
+        {
+            "name": "PassportElementErrorUnspecified",
+            "args": [
+                "source",
+                "type",
+                "elementHash",
+                "message"
+            ]
+        },
+        {
+            "name": "Game",
+            "args": [
+                "title",
+                "description",
+                "photo",
+                "text",
+                "textEntities",
+                "animation"
+            ]
+        },
+        {
+            "name": "CallbackGame",
+            "args": [
+            ]
+        },
+        {
+            "name": "GameHighScore",
+            "args": [
+                "position",
+                "user",
+                "score"
+            ]
+        },
+        {
+            "name": "ReplyMarkup",
+            "args": [
+            ]
+        }
+    ],
+    "methods": [
+        {
+            "name": "getUpdates",
+            "args": [
+                "offset",
+                "limit",
+                "timeout",
+                "allowedUpdates"
+            ]
+        },
+        {
+            "name": "setWebhook",
+            "args": [
+                "url",
+                "certificate",
+                "ipAddress",
+                "maxConnections",
+                "allowedUpdates",
+                "dropPendingUpdates",
+                "secretToken"
+            ]
+        },
+        {
+            "name": "deleteWebhook",
+            "args": [
+                "dropPendingUpdates"
+            ]
+        },
+        {
+            "name": "getWebhookInfo",
+            "args": [
+            ]
+        },
+        {
+            "name": "getMe",
+            "args": [
+            ]
+        },
+        {
+            "name": "logOut",
+            "args": [
+            ]
+        },
+        {
+            "name": "close",
+            "args": [
+            ]
+        },
+        {
+            "name": "sendMessage",
+            "args": [
+                "chatId",
+                "text",
+                "businessConnectionId",
+                "messageThreadId",
+                "parseMode",
+                "entities",
+                "linkPreviewOptions",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "forwardMessage",
+            "args": [
+                "chatId",
+                "fromChatId",
+                "messageId",
+                "messageThreadId",
+                "disableNotification",
+                "protectContent"
+            ]
+        },
+        {
+            "name": "forwardMessages",
+            "args": [
+                "chatId",
+                "fromChatId",
+                "messageIds",
+                "messageThreadId",
+                "disableNotification",
+                "protectContent"
+            ]
+        },
+        {
+            "name": "copyMessage",
+            "args": [
+                "chatId",
+                "fromChatId",
+                "messageId",
+                "messageThreadId",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "disableNotification",
+                "protectContent",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "copyMessages",
+            "args": [
+                "chatId",
+                "fromChatId",
+                "messageIds",
+                "messageThreadId",
+                "disableNotification",
+                "protectContent",
+                "removeCaption"
+            ]
+        },
+        {
+            "name": "sendPhoto",
+            "args": [
+                "chatId",
+                "photo",
+                "businessConnectionId",
+                "messageThreadId",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "hasSpoiler",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendAudio",
+            "args": [
+                "chatId",
+                "audio",
+                "businessConnectionId",
+                "messageThreadId",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "duration",
+                "performer",
+                "title",
+                "thumbnail",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendDocument",
+            "args": [
+                "chatId",
+                "document",
+                "businessConnectionId",
+                "messageThreadId",
+                "thumbnail",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "disableContentTypeDetection",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendVideo",
+            "args": [
+                "chatId",
+                "video",
+                "businessConnectionId",
+                "messageThreadId",
+                "duration",
+                "width",
+                "height",
+                "thumbnail",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "hasSpoiler",
+                "supportsStreaming",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendAnimation",
+            "args": [
+                "chatId",
+                "animation",
+                "businessConnectionId",
+                "messageThreadId",
+                "duration",
+                "width",
+                "height",
+                "thumbnail",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "hasSpoiler",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendVoice",
+            "args": [
+                "chatId",
+                "voice",
+                "businessConnectionId",
+                "messageThreadId",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "duration",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendVideoNote",
+            "args": [
+                "chatId",
+                "videoNote",
+                "businessConnectionId",
+                "messageThreadId",
+                "duration",
+                "length",
+                "thumbnail",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendMediaGroup",
+            "args": [
+                "chatId",
+                "media",
+                "businessConnectionId",
+                "messageThreadId",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters"
+            ]
+        },
+        {
+            "name": "sendLocation",
+            "args": [
+                "chatId",
+                "latitude",
+                "longitude",
+                "businessConnectionId",
+                "messageThreadId",
+                "horizontalAccuracy",
+                "livePeriod",
+                "heading",
+                "proximityAlertRadius",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendVenue",
+            "args": [
+                "chatId",
+                "latitude",
+                "longitude",
+                "title",
+                "address",
+                "businessConnectionId",
+                "messageThreadId",
+                "foursquareId",
+                "foursquareType",
+                "googlePlaceId",
+                "googlePlaceType",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendContact",
+            "args": [
+                "chatId",
+                "phoneNumber",
+                "firstName",
+                "businessConnectionId",
+                "messageThreadId",
+                "lastName",
+                "vcard",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendPoll",
+            "args": [
+                "chatId",
+                "question",
+                "options",
+                "businessConnectionId",
+                "messageThreadId",
+                "questionParseMode",
+                "questionEntities",
+                "isAnonymous",
+                "type",
+                "allowsMultipleAnswers",
+                "correctOptionId",
+                "explanation",
+                "explanationParseMode",
+                "explanationEntities",
+                "openPeriod",
+                "closeDate",
+                "isClosed",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendDice",
+            "args": [
+                "chatId",
+                "businessConnectionId",
+                "messageThreadId",
+                "emoji",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "sendChatAction",
+            "args": [
+                "chatId",
+                "action",
+                "businessConnectionId",
+                "messageThreadId"
+            ]
+        },
+        {
+            "name": "setMessageReaction",
+            "args": [
+                "chatId",
+                "messageId",
+                "reaction",
+                "isBig"
+            ]
+        },
+        {
+            "name": "getUserProfilePhotos",
+            "args": [
+                "userId",
+                "offset",
+                "limit"
+            ]
+        },
+        {
+            "name": "getFile",
+            "args": [
+                "fileId"
+            ]
+        },
+        {
+            "name": "banChatMember",
+            "args": [
+                "chatId",
+                "userId",
+                "untilDate",
+                "revokeMessages"
+            ]
+        },
+        {
+            "name": "unbanChatMember",
+            "args": [
+                "chatId",
+                "userId",
+                "onlyIfBanned"
+            ]
+        },
+        {
+            "name": "restrictChatMember",
+            "args": [
+                "chatId",
+                "userId",
+                "permissions",
+                "useIndependentChatPermissions",
+                "untilDate"
+            ]
+        },
+        {
+            "name": "promoteChatMember",
+            "args": [
+                "chatId",
+                "userId",
+                "isAnonymous",
+                "canManageChat",
+                "canDeleteMessages",
+                "canManageVideoChats",
+                "canRestrictMembers",
+                "canPromoteMembers",
+                "canChangeInfo",
+                "canInviteUsers",
+                "canPostStories",
+                "canEditStories",
+                "canDeleteStories",
+                "canPostMessages",
+                "canEditMessages",
+                "canPinMessages",
+                "canManageTopics"
+            ]
+        },
+        {
+            "name": "setChatAdministratorCustomTitle",
+            "args": [
+                "chatId",
+                "userId",
+                "customTitle"
+            ]
+        },
+        {
+            "name": "banChatSenderChat",
+            "args": [
+                "chatId",
+                "senderChatId"
+            ]
+        },
+        {
+            "name": "unbanChatSenderChat",
+            "args": [
+                "chatId",
+                "senderChatId"
+            ]
+        },
+        {
+            "name": "setChatPermissions",
+            "args": [
+                "chatId",
+                "permissions",
+                "useIndependentChatPermissions"
+            ]
+        },
+        {
+            "name": "exportChatInviteLink",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "createChatInviteLink",
+            "args": [
+                "chatId",
+                "name",
+                "expireDate",
+                "memberLimit",
+                "createsJoinRequest"
+            ]
+        },
+        {
+            "name": "editChatInviteLink",
+            "args": [
+                "chatId",
+                "inviteLink",
+                "name",
+                "expireDate",
+                "memberLimit",
+                "createsJoinRequest"
+            ]
+        },
+        {
+            "name": "revokeChatInviteLink",
+            "args": [
+                "chatId",
+                "inviteLink"
+            ]
+        },
+        {
+            "name": "approveChatJoinRequest",
+            "args": [
+                "chatId",
+                "userId"
+            ]
+        },
+        {
+            "name": "declineChatJoinRequest",
+            "args": [
+                "chatId",
+                "userId"
+            ]
+        },
+        {
+            "name": "setChatPhoto",
+            "args": [
+                "chatId",
+                "photo"
+            ]
+        },
+        {
+            "name": "deleteChatPhoto",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "setChatTitle",
+            "args": [
+                "chatId",
+                "title"
+            ]
+        },
+        {
+            "name": "setChatDescription",
+            "args": [
+                "chatId",
+                "description"
+            ]
+        },
+        {
+            "name": "pinChatMessage",
+            "args": [
+                "chatId",
+                "messageId",
+                "disableNotification"
+            ]
+        },
+        {
+            "name": "unpinChatMessage",
+            "args": [
+                "chatId",
+                "messageId"
+            ]
+        },
+        {
+            "name": "unpinAllChatMessages",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "leaveChat",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "getChat",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "getChatAdministrators",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "getChatMemberCount",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "getChatMember",
+            "args": [
+                "chatId",
+                "userId"
+            ]
+        },
+        {
+            "name": "setChatStickerSet",
+            "args": [
+                "chatId",
+                "stickerSetName"
+            ]
+        },
+        {
+            "name": "deleteChatStickerSet",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "getForumTopicIconStickers",
+            "args": [
+            ]
+        },
+        {
+            "name": "createForumTopic",
+            "args": [
+                "chatId",
+                "name",
+                "iconColor",
+                "iconCustomEmojiId"
+            ]
+        },
+        {
+            "name": "editForumTopic",
+            "args": [
+                "chatId",
+                "messageThreadId",
+                "name",
+                "iconCustomEmojiId"
+            ]
+        },
+        {
+            "name": "closeForumTopic",
+            "args": [
+                "chatId",
+                "messageThreadId"
+            ]
+        },
+        {
+            "name": "reopenForumTopic",
+            "args": [
+                "chatId",
+                "messageThreadId"
+            ]
+        },
+        {
+            "name": "deleteForumTopic",
+            "args": [
+                "chatId",
+                "messageThreadId"
+            ]
+        },
+        {
+            "name": "unpinAllForumTopicMessages",
+            "args": [
+                "chatId",
+                "messageThreadId"
+            ]
+        },
+        {
+            "name": "editGeneralForumTopic",
+            "args": [
+                "chatId",
+                "name"
+            ]
+        },
+        {
+            "name": "closeGeneralForumTopic",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "reopenGeneralForumTopic",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "hideGeneralForumTopic",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "unhideGeneralForumTopic",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "unpinAllGeneralForumTopicMessages",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "answerCallbackQuery",
+            "args": [
+                "callbackQueryId",
+                "text",
+                "showAlert",
+                "url",
+                "cacheTime"
+            ]
+        },
+        {
+            "name": "getUserChatBoosts",
+            "args": [
+                "chatId",
+                "userId"
+            ]
+        },
+        {
+            "name": "getBusinessConnection",
+            "args": [
+                "businessConnectionId"
+            ]
+        },
+        {
+            "name": "setMyCommands",
+            "args": [
+                "commands",
+                "scope",
+                "languageCode"
+            ]
+        },
+        {
+            "name": "deleteMyCommands",
+            "args": [
+                "scope",
+                "languageCode"
+            ]
+        },
+        {
+            "name": "getMyCommands",
+            "args": [
+                "scope",
+                "languageCode"
+            ]
+        },
+        {
+            "name": "setMyName",
+            "args": [
+                "name",
+                "languageCode"
+            ]
+        },
+        {
+            "name": "getMyName",
+            "args": [
+                "languageCode"
+            ]
+        },
+        {
+            "name": "setMyDescription",
+            "args": [
+                "description",
+                "languageCode"
+            ]
+        },
+        {
+            "name": "getMyDescription",
+            "args": [
+                "languageCode"
+            ]
+        },
+        {
+            "name": "setMyShortDescription",
+            "args": [
+                "shortDescription",
+                "languageCode"
+            ]
+        },
+        {
+            "name": "getMyShortDescription",
+            "args": [
+                "languageCode"
+            ]
+        },
+        {
+            "name": "setChatMenuButton",
+            "args": [
+                "chatId",
+                "menuButton"
+            ]
+        },
+        {
+            "name": "getChatMenuButton",
+            "args": [
+                "chatId"
+            ]
+        },
+        {
+            "name": "setMyDefaultAdministratorRights",
+            "args": [
+                "rights",
+                "forChannels"
+            ]
+        },
+        {
+            "name": "getMyDefaultAdministratorRights",
+            "args": [
+                "forChannels"
+            ]
+        },
+        {
+            "name": "editMessageText",
+            "args": [
+                "text",
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "parseMode",
+                "entities",
+                "linkPreviewOptions",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "editMessageCaption",
+            "args": [
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "editMessageMedia",
+            "args": [
+                "media",
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "editMessageLiveLocation",
+            "args": [
+                "latitude",
+                "longitude",
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "livePeriod",
+                "horizontalAccuracy",
+                "heading",
+                "proximityAlertRadius",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "stopMessageLiveLocation",
+            "args": [
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "editMessageReplyMarkup",
+            "args": [
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "stopPoll",
+            "args": [
+                "chatId",
+                "messageId",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "deleteMessage",
+            "args": [
+                "chatId",
+                "messageId"
+            ]
+        },
+        {
+            "name": "deleteMessages",
+            "args": [
+                "chatId",
+                "messageIds"
+            ]
+        },
+        {
+            "name": "sendSticker",
+            "args": [
+                "chatId",
+                "sticker",
+                "businessConnectionId",
+                "messageThreadId",
+                "emoji",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "getStickerSet",
+            "args": [
+                "name"
+            ]
+        },
+        {
+            "name": "getCustomEmojiStickers",
+            "args": [
+                "customEmojiIds"
+            ]
+        },
+        {
+            "name": "uploadStickerFile",
+            "args": [
+                "userId",
+                "sticker",
+                "stickerFormat"
+            ]
+        },
+        {
+            "name": "createNewStickerSet",
+            "args": [
+                "userId",
+                "name",
+                "title",
+                "stickers",
+                "stickerType",
+                "needsRepainting"
+            ]
+        },
+        {
+            "name": "addStickerToSet",
+            "args": [
+                "userId",
+                "name",
+                "sticker"
+            ]
+        },
+        {
+            "name": "setStickerPositionInSet",
+            "args": [
+                "sticker",
+                "position"
+            ]
+        },
+        {
+            "name": "deleteStickerFromSet",
+            "args": [
+                "sticker"
+            ]
+        },
+        {
+            "name": "replaceStickerInSet",
+            "args": [
+                "userId",
+                "name",
+                "oldSticker",
+                "sticker"
+            ]
+        },
+        {
+            "name": "setStickerEmojiList",
+            "args": [
+                "sticker",
+                "emojiList"
+            ]
+        },
+        {
+            "name": "setStickerKeywords",
+            "args": [
+                "sticker",
+                "keywords"
+            ]
+        },
+        {
+            "name": "setStickerMaskPosition",
+            "args": [
+                "sticker",
+                "maskPosition"
+            ]
+        },
+        {
+            "name": "setStickerSetTitle",
+            "args": [
+                "name",
+                "title"
+            ]
+        },
+        {
+            "name": "setStickerSetThumbnail",
+            "args": [
+                "name",
+                "userId",
+                "format",
+                "thumbnail"
+            ]
+        },
+        {
+            "name": "setCustomEmojiStickerSetThumbnail",
+            "args": [
+                "name",
+                "customEmojiId"
+            ]
+        },
+        {
+            "name": "deleteStickerSet",
+            "args": [
+                "name"
+            ]
+        },
+        {
+            "name": "answerInlineQuery",
+            "args": [
+                "inlineQueryId",
+                "results",
+                "cacheTime",
+                "isPersonal",
+                "nextOffset",
+                "button"
+            ]
+        },
+        {
+            "name": "answerWebAppQuery",
+            "args": [
+                "webAppQueryId",
+                "result"
+            ]
+        },
+        {
+            "name": "sendInvoice",
+            "args": [
+                "chatId",
+                "title",
+                "description",
+                "payload",
+                "currency",
+                "prices",
+                "messageThreadId",
+                "providerToken",
+                "maxTipAmount",
+                "suggestedTipAmounts",
+                "startParameter",
+                "providerData",
+                "photoUrl",
+                "photoSize",
+                "photoWidth",
+                "photoHeight",
+                "needName",
+                "needPhoneNumber",
+                "needEmail",
+                "needShippingAddress",
+                "sendPhoneNumberToProvider",
+                "sendEmailToProvider",
+                "isFlexible",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "createInvoiceLink",
+            "args": [
+                "title",
+                "description",
+                "payload",
+                "currency",
+                "prices",
+                "providerToken",
+                "maxTipAmount",
+                "suggestedTipAmounts",
+                "providerData",
+                "photoUrl",
+                "photoSize",
+                "photoWidth",
+                "photoHeight",
+                "needName",
+                "needPhoneNumber",
+                "needEmail",
+                "needShippingAddress",
+                "sendPhoneNumberToProvider",
+                "sendEmailToProvider",
+                "isFlexible"
+            ]
+        },
+        {
+            "name": "answerShippingQuery",
+            "args": [
+                "shippingQueryId",
+                "ok",
+                "shippingOptions",
+                "errorMessage"
+            ]
+        },
+        {
+            "name": "answerPreCheckoutQuery",
+            "args": [
+                "preCheckoutQueryId",
+                "ok",
+                "errorMessage"
+            ]
+        },
+        {
+            "name": "refundStarPayment",
+            "args": [
+                "userId",
+                "telegramPaymentChargeId"
+            ]
+        },
+        {
+            "name": "setPassportDataErrors",
+            "args": [
+                "userId",
+                "errors"
+            ]
+        },
+        {
+            "name": "sendGame",
+            "args": [
+                "chatId",
+                "gameShortName",
+                "businessConnectionId",
+                "messageThreadId",
+                "disableNotification",
+                "protectContent",
+                "messageEffectId",
+                "replyParameters",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "setGameScore",
+            "args": [
+                "userId",
+                "score",
+                "force",
+                "disableEditMessage",
+                "chatId",
+                "messageId",
+                "inlineMessageId"
+            ]
+        },
+        {
+            "name": "getGameHighScores",
+            "args": [
+                "userId",
+                "chatId",
+                "messageId",
+                "inlineMessageId"
+            ]
+        }
+    ]
+}

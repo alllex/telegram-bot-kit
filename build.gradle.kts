@@ -74,16 +74,44 @@ tasks.test {
     useJUnitPlatform()
 }
 
-val generateTelegramBotApi by tasks.registering(GenerateTelegramBotApiTask::class) {
+val updateApiSpec by tasks.registering {
+    group = "telegram"
+    val specFile = layout.projectDirectory.file("api-spec/telegram-bot-api.html")
+    outputs.file(specFile)
+    outputs.upToDateWhen { false }
+    doLast {
+        val url = "https://core.telegram.org/bots/api"
+        val rawText = uri(url).toURL().readText()
+        val genTimeRe = "^<!-- page generated in .* -->$".toRegex()
+        val text = rawText.lineSequence()
+            .filterNot { genTimeRe.matches(it) }
+            .joinToString("\n")
+        specFile.asFile.writeText(text)
+    }
+}
+
+val extractBotApi by tasks.registering(BotApiExtract::class) {
     group = "telegram"
     apiSpecFile = layout.projectDirectory.file("api-spec/telegram-bot-api.html")
+    outputFile = layout.projectDirectory.file("api-spec/telegram-bot-api.json")
+}
+
+val extractBotApiArgLists by tasks.registering(BotApiArgListExtract::class) {
+    group = "telegram"
+    apiJsonFile = extractBotApi.flatMap { it.outputFile }
+    outputFile = layout.projectDirectory.file("api-spec/telegram-bot-api.args.json")
+}
+
+val generateBotApi by tasks.registering(BotApiGenerate::class) {
+    group = "telegram"
+    apiJsonFile = extractBotApi.flatMap { it.outputFile }
     packageName = "me.alllex.tbot.api.model"
     telegramClientPackage = "me.alllex.tbot.api.client"
     outputDirectory = layout.projectDirectory.dir("src/main/generated-kotlin")
 }
 
 kotlin.sourceSets.main {
-    kotlin.srcDir(generateTelegramBotApi)
+    kotlin.srcDir(generateBotApi)
 }
 
 kotlin.compilerOptions {

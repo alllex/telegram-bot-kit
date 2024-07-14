@@ -1,5 +1,6 @@
 package me.alllex.tbot.apigen
 
+import kotlinx.serialization.Serializable
 import me.alllex.parsus.parser.Grammar
 import me.alllex.parsus.parser.ParseException
 import me.alllex.parsus.parser.getOrElse
@@ -53,6 +54,7 @@ data class ApiMethodDefinition(
     val parametersTableElement: Element? = null,
 )
 
+@Serializable
 @JvmInline
 value class BotApiElementName(val value: String) {
     init {
@@ -66,11 +68,13 @@ value class BotApiElementName(val value: String) {
     }
 }
 
+@Serializable
 @JvmInline
 value class KotlinType(val value: String) {
     override fun toString(): String = value
 }
 
+@Serializable
 data class BotApiElement(
     val name: BotApiElementName,
     val description: String,
@@ -78,6 +82,7 @@ data class BotApiElement(
     val unionTypes: List<BotApiElementName>? = null,
     val originalName: BotApiElementName = name,
 ) {
+    @Serializable
     data class Field(
         val serialName: String,
         val description: String,
@@ -89,6 +94,7 @@ data class BotApiElement(
     }
 }
 
+@Serializable
 data class BotApiMethod(
     val name: BotApiElementName,
     val description: String,
@@ -96,6 +102,7 @@ data class BotApiMethod(
     val returnType: KotlinType
 )
 
+@Serializable
 data class BotApi(
     val types: List<BotApiElement>,
     val methods: List<BotApiMethod>,

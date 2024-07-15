@@ -181,6 +181,9 @@ val valueTypes = listOf(
     ValueType("TelegramPaymentChargeId", "String", "Telegram payment identifier") { _, field ->
         field.serialName.endsWith("telegram_payment_charge_id")
     },
+    ValueType("BusinessConnectionId", "String", "Business connection identifier") { type, field ->
+        (type.value == "BusinessConnection" && field.serialName == "id") || field.serialName.endsWith("business_connection_id")
+    },
 )
 
 val unionMarkerValueInDescriptionRe = Regex("""(?:must be|always) ["“”]?([\w_]+)["“”]?""")

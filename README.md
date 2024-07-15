@@ -78,10 +78,7 @@ The bindings are generated directly from the source-of-truth [Bot API spec](http
 ### Updating API to a new version of Telegram Bot API
 
 ```
-./gradlew :buildSrc:updateApiSpec --no-configuration-cache
-./gradlew generateTelegramBotApi
-./gradlew apiDump
-./gradlew check
+./gradlew rollNextApi check
 ```
 
 ## Roadmap

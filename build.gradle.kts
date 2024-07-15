@@ -93,6 +93,7 @@ val updateApiSpec by tasks.registering {
 val extractBotApi by tasks.registering(BotApiExtract::class) {
     group = "telegram"
     apiSpecFile = layout.projectDirectory.file("api-spec/telegram-bot-api.html")
+    apiArgListFile = layout.projectDirectory.file("api-spec/telegram-bot-api.args.json")
     outputFile = layout.projectDirectory.file("api-spec/telegram-bot-api.json")
 }
 

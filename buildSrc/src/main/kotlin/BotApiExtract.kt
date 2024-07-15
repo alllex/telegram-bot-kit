@@ -11,14 +11,16 @@ abstract class BotApiExtract : DefaultTask() {
     @get:[InputFile PathSensitive(PathSensitivity.RELATIVE)]
     abstract val apiSpecFile: RegularFileProperty
 
+    @get:[Optional InputFile PathSensitive(PathSensitivity.RELATIVE)]
+    abstract val apiArgListFile: RegularFileProperty
+
     @get:OutputFile
     abstract val outputFile: RegularFileProperty
 
     @TaskAction
     fun execute() {
-        val html = apiSpecFile.get().asFile.readText()
         val parser = BotApiDefinitionParser()
-        val botApi = parser.run(html)
+        val botApi = parser.run(apiSpecFile.get().asFile, apiArgListFile.orNull?.asFile)
 
         val outputJson = jsonSerialization.encodeToString(botApi)
         outputFile.get().asFile.writeText(outputJson)

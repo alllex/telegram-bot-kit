@@ -11,6 +11,7 @@ import me.alllex.parsus.parser.repeatOneOrMore
 import me.alllex.parsus.token.regexToken
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import java.io.File
 
 
 /**
@@ -176,10 +177,18 @@ private val implicitReplyMarkupElement = BotApiElement(
 
 class BotApiDefinitionParser {
 
-    fun run(html: String): BotApi {
-        val doc = Jsoup.parse(html)
+    fun run(
+        originalHtml: File,
+        argListsFile: File?,
+    ): BotApi {
+
+        val doc = Jsoup.parse(originalHtml.readText())
         val devPageContent = doc.select("#dev_page_content").firstOrNull()
             ?: error("Could not find #dev_page_content")
+
+        val argLists = argListsFile?.takeIf { it.exists() }?.let {
+            jsonSerialization.decodeFromString<BotApiArgLists>(it.readText())
+        }
 
         val contentEls = devPageContent.children()
 
@@ -207,11 +216,31 @@ class BotApiDefinitionParser {
             this += implicitReplyMarkupElement
         }
 
+        val typesWithSortedFields = if (argLists == null) types else types.toSortedFields(argLists)
+
         val methodDefinitions = methodDefSections.map(::parseMethodDefinition)
         val methods = methodDefinitions.map(this::parseMethod)
 
-        return BotApi(types, methods)
+        val methodsWithSortedParams = if (argLists == null) methods else methods.toSortedMethodParameters(argLists)
+
+        return BotApi(typesWithSortedFields, methodsWithSortedParams)
     }
+
+    private fun List<BotApiElement>.toSortedFields(argLists: BotApiArgLists) =
+        map { t ->
+            val prevFields = argLists.types.find { it.name == t.name.value }?.args
+            val newFields = t.fields
+            if (newFields == null || prevFields == null) t else t.copy(fields = newFields.toSortedFields(prevFields))
+        }
+
+    private fun List<BotApiMethod>.toSortedMethodParameters(argLists: BotApiArgLists): List<BotApiMethod> =
+        map { m ->
+            val prevParams = argLists.methods.find { it.name == m.name.value }?.args
+            if (prevParams == null) m else m.copy(parameters = m.parameters.toSortedFields(prevParams))
+        }
+
+    private fun List<BotApiElement.Field>.toSortedFields(knownNames: List<String>) =
+        sortedBy { p -> knownNames.indexOf(p.name).let { if (it == -1) knownNames.size else it } }
 
     private fun parseElementDefinition(elementSection: List<Element>): ApiEntityDefinition {
         // [h4, (description elements), (<table> or union types)?, (description elements)?]

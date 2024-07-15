@@ -8,10 +8,6 @@
                 "editedMessage",
                 "channelPost",
                 "editedChannelPost",
-                "businessConnection",
-                "businessMessage",
-                "editedBusinessMessage",
-                "deletedBusinessMessages",
                 "messageReaction",
                 "messageReactionCount",
                 "inlineQuery",
@@ -25,7 +21,11 @@
                 "chatMember",
                 "chatJoinRequest",
                 "chatBoost",
-                "removedChatBoost"
+                "removedChatBoost",
+                "businessConnection",
+                "businessMessage",
+                "editedBusinessMessage",
+                "deletedBusinessMessages"
             ]
         },
         {
@@ -116,7 +116,8 @@
                 "canSetStickerSet",
                 "customEmojiStickerSetName",
                 "linkedChatId",
-                "location"
+                "location",
+                "canSendPaidMedia"
             ]
         },
         {
@@ -204,7 +205,9 @@
                 "videoChatEnded",
                 "videoChatParticipantsInvited",
                 "webAppData",
-                "replyMarkup"
+                "replyMarkup",
+                "paidMedia",
+                "refundedPayment"
             ]
         },
         {
@@ -259,7 +262,8 @@
                 "invoice",
                 "location",
                 "poll",
-                "venue"
+                "venue",
+                "paidMedia"
             ]
         },
         {
@@ -403,6 +407,41 @@
                 "duration",
                 "mimeType",
                 "fileSize"
+            ]
+        },
+        {
+            "name": "PaidMediaInfo",
+            "args": [
+                "starCount",
+                "paidMedia"
+            ]
+        },
+        {
+            "name": "PaidMedia",
+            "args": [
+            ]
+        },
+        {
+            "name": "PaidMediaPreview",
+            "args": [
+                "type",
+                "width",
+                "height",
+                "duration"
+            ]
+        },
+        {
+            "name": "PaidMediaPhoto",
+            "args": [
+                "type",
+                "photo"
+            ]
+        },
+        {
+            "name": "PaidMediaVideo",
+            "args": [
+                "type",
+                "video"
             ]
         },
         {
@@ -1414,6 +1453,30 @@
             ]
         },
         {
+            "name": "InputPaidMedia",
+            "args": [
+            ]
+        },
+        {
+            "name": "InputPaidMediaPhoto",
+            "args": [
+                "type",
+                "media"
+            ]
+        },
+        {
+            "name": "InputPaidMediaVideo",
+            "args": [
+                "type",
+                "media",
+                "thumbnail",
+                "width",
+                "height",
+                "duration",
+                "supportsStreaming"
+            ]
+        },
+        {
             "name": "Sticker",
             "args": [
                 "fileId",
@@ -1956,6 +2019,16 @@
             ]
         },
         {
+            "name": "RefundedPayment",
+            "args": [
+                "currency",
+                "totalAmount",
+                "invoicePayload",
+                "telegramPaymentChargeId",
+                "providerPaymentChargeId"
+            ]
+        },
+        {
             "name": "ShippingQuery",
             "args": [
                 "id",
@@ -1974,6 +2047,79 @@
                 "invoicePayload",
                 "shippingOptionId",
                 "orderInfo"
+            ]
+        },
+        {
+            "name": "RevenueWithdrawalState",
+            "args": [
+            ]
+        },
+        {
+            "name": "RevenueWithdrawalStatePending",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "RevenueWithdrawalStateSucceeded",
+            "args": [
+                "type",
+                "date",
+                "url"
+            ]
+        },
+        {
+            "name": "RevenueWithdrawalStateFailed",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "TransactionPartner",
+            "args": [
+            ]
+        },
+        {
+            "name": "TransactionPartnerUser",
+            "args": [
+                "type",
+                "user",
+                "invoicePayload"
+            ]
+        },
+        {
+            "name": "TransactionPartnerFragment",
+            "args": [
+                "type",
+                "withdrawalState"
+            ]
+        },
+        {
+            "name": "TransactionPartnerTelegramAds",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "TransactionPartnerOther",
+            "args": [
+                "type"
+            ]
+        },
+        {
+            "name": "StarTransaction",
+            "args": [
+                "id",
+                "amount",
+                "date",
+                "source",
+                "receiver"
+            ]
+        },
+        {
+            "name": "StarTransactions",
+            "args": [
+                "transactions"
             ]
         },
         {
@@ -2185,7 +2331,6 @@
             "args": [
                 "chatId",
                 "text",
-                "businessConnectionId",
                 "messageThreadId",
                 "parseMode",
                 "entities",
@@ -2194,7 +2339,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2253,7 +2399,6 @@
             "args": [
                 "chatId",
                 "photo",
-                "businessConnectionId",
                 "messageThreadId",
                 "caption",
                 "parseMode",
@@ -2264,7 +2409,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2272,7 +2418,6 @@
             "args": [
                 "chatId",
                 "audio",
-                "businessConnectionId",
                 "messageThreadId",
                 "caption",
                 "parseMode",
@@ -2285,7 +2430,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2293,7 +2439,6 @@
             "args": [
                 "chatId",
                 "document",
-                "businessConnectionId",
                 "messageThreadId",
                 "thumbnail",
                 "caption",
@@ -2304,7 +2449,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2312,7 +2458,6 @@
             "args": [
                 "chatId",
                 "video",
-                "businessConnectionId",
                 "messageThreadId",
                 "duration",
                 "width",
@@ -2328,7 +2473,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2336,7 +2482,6 @@
             "args": [
                 "chatId",
                 "animation",
-                "businessConnectionId",
                 "messageThreadId",
                 "duration",
                 "width",
@@ -2351,7 +2496,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2359,7 +2505,6 @@
             "args": [
                 "chatId",
                 "voice",
-                "businessConnectionId",
                 "messageThreadId",
                 "caption",
                 "parseMode",
@@ -2369,7 +2514,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2377,7 +2523,6 @@
             "args": [
                 "chatId",
                 "videoNote",
-                "businessConnectionId",
                 "messageThreadId",
                 "duration",
                 "length",
@@ -2385,6 +2530,23 @@
                 "disableNotification",
                 "protectContent",
                 "messageEffectId",
+                "replyParameters",
+                "replyMarkup",
+                "businessConnectionId"
+            ]
+        },
+        {
+            "name": "sendPaidMedia",
+            "args": [
+                "chatId",
+                "starCount",
+                "media",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "disableNotification",
+                "protectContent",
                 "replyParameters",
                 "replyMarkup"
             ]
@@ -2394,12 +2556,12 @@
             "args": [
                 "chatId",
                 "media",
-                "businessConnectionId",
                 "messageThreadId",
                 "disableNotification",
                 "protectContent",
                 "messageEffectId",
-                "replyParameters"
+                "replyParameters",
+                "businessConnectionId"
             ]
         },
         {
@@ -2408,7 +2570,6 @@
                 "chatId",
                 "latitude",
                 "longitude",
-                "businessConnectionId",
                 "messageThreadId",
                 "horizontalAccuracy",
                 "livePeriod",
@@ -2418,7 +2579,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2429,7 +2591,6 @@
                 "longitude",
                 "title",
                 "address",
-                "businessConnectionId",
                 "messageThreadId",
                 "foursquareId",
                 "foursquareType",
@@ -2439,7 +2600,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2448,7 +2610,6 @@
                 "chatId",
                 "phoneNumber",
                 "firstName",
-                "businessConnectionId",
                 "messageThreadId",
                 "lastName",
                 "vcard",
@@ -2456,7 +2617,8 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2465,7 +2627,6 @@
                 "chatId",
                 "question",
                 "options",
-                "businessConnectionId",
                 "messageThreadId",
                 "questionParseMode",
                 "questionEntities",
@@ -2483,21 +2644,22 @@
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
             "name": "sendDice",
             "args": [
                 "chatId",
-                "businessConnectionId",
                 "messageThreadId",
                 "emoji",
                 "disableNotification",
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2505,8 +2667,8 @@
             "args": [
                 "chatId",
                 "action",
-                "businessConnectionId",
-                "messageThreadId"
+                "messageThreadId",
+                "businessConnectionId"
             ]
         },
         {
@@ -2959,7 +3121,8 @@
                 "parseMode",
                 "entities",
                 "linkPreviewOptions",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2972,7 +3135,8 @@
                 "parseMode",
                 "captionEntities",
                 "showCaptionAboveMedia",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2982,7 +3146,8 @@
                 "chatId",
                 "messageId",
                 "inlineMessageId",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2997,7 +3162,8 @@
                 "horizontalAccuracy",
                 "heading",
                 "proximityAlertRadius",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -3006,7 +3172,8 @@
                 "chatId",
                 "messageId",
                 "inlineMessageId",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -3015,7 +3182,8 @@
                 "chatId",
                 "messageId",
                 "inlineMessageId",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -3023,7 +3191,8 @@
             "args": [
                 "chatId",
                 "messageId",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -3045,14 +3214,14 @@
             "args": [
                 "chatId",
                 "sticker",
-                "businessConnectionId",
                 "messageThreadId",
                 "emoji",
                 "disableNotification",
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -3260,6 +3429,13 @@
             ]
         },
         {
+            "name": "getStarTransactions",
+            "args": [
+                "offset",
+                "limit"
+            ]
+        },
+        {
             "name": "refundStarPayment",
             "args": [
                 "userId",
@@ -3278,13 +3454,13 @@
             "args": [
                 "chatId",
                 "gameShortName",
-                "businessConnectionId",
                 "messageThreadId",
                 "disableNotification",
                 "protectContent",
                 "messageEffectId",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {

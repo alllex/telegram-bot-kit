@@ -66,13 +66,13 @@ suspend fun TelegramBotApiClient.tryForwardMessages(requestBody: ForwardMessages
     telegramPost("forwardMessages", requestBody)
 
 /**
- * Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+ * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
  */
 suspend fun TelegramBotApiClient.tryCopyMessage(requestBody: CopyMessageRequest): TelegramResponse<MessageRef> =
     telegramPost("copyMessage", requestBody)
 
 /**
- * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
+ * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
  */
 suspend fun TelegramBotApiClient.tryCopyMessages(requestBody: CopyMessagesRequest): TelegramResponse<List<MessageRef>> =
     telegramPost("copyMessages", requestBody)
@@ -120,6 +120,12 @@ suspend fun TelegramBotApiClient.trySendVoice(requestBody: SendVoiceRequest): Te
  */
 suspend fun TelegramBotApiClient.trySendVideoNote(requestBody: SendVideoNoteRequest): TelegramResponse<Message> =
     telegramPost("sendVideoNote", requestBody)
+
+/**
+ * Use this method to send paid media to channel chats. On success, the sent Message is returned.
+ */
+suspend fun TelegramBotApiClient.trySendPaidMedia(requestBody: SendPaidMediaRequest): TelegramResponse<Message> =
+    telegramPost("sendPaidMedia", requestBody)
 
 /**
  * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
@@ -530,37 +536,37 @@ suspend fun TelegramBotApiClient.tryGetMyDefaultAdministratorRights(requestBody:
     telegramPost("getMyDefaultAdministratorRights", requestBody)
 
 /**
- * Use this method to edit text and game messages. On success the edited Message is returned.
+ * Use this method to edit text and game messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Message> =
     telegramPost("editMessageText", requestBody)
 
 /**
- * Use this method to edit text and game messages. On success True is returned.
+ * Use this method to edit text and game messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditInlineMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Boolean> =
     telegramPost("editMessageText", requestBody)
 
 /**
- * Use this method to edit captions of messages. On success the edited Message is returned.
+ * Use this method to edit captions of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Message> =
     telegramPost("editMessageCaption", requestBody)
 
 /**
- * Use this method to edit captions of messages. On success True is returned.
+ * Use this method to edit captions of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditInlineMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Boolean> =
     telegramPost("editMessageCaption", requestBody)
 
 /**
- * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned.
+ * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Message> =
     telegramPost("editMessageMedia", requestBody)
 
 /**
- * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned.
+ * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditInlineMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Boolean> =
     telegramPost("editMessageMedia", requestBody)
@@ -590,13 +596,13 @@ suspend fun TelegramBotApiClient.tryStopInlineMessageLiveLocation(requestBody: S
     telegramPost("stopMessageLiveLocation", requestBody)
 
 /**
- * Use this method to edit only the reply markup of messages. On success the edited Message is returned.
+ * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Message> =
     telegramPost("editMessageReplyMarkup", requestBody)
 
 /**
- * Use this method to edit only the reply markup of messages. On success True is returned.
+ * Use this method to edit only the reply markup of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditInlineMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Boolean> =
     telegramPost("editMessageReplyMarkup", requestBody)
@@ -750,6 +756,12 @@ suspend fun TelegramBotApiClient.tryAnswerShippingQuery(requestBody: AnswerShipp
  */
 suspend fun TelegramBotApiClient.tryAnswerPreCheckoutQuery(requestBody: AnswerPreCheckoutQueryRequest): TelegramResponse<Boolean> =
     telegramPost("answerPreCheckoutQuery", requestBody)
+
+/**
+ * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
+ */
+suspend fun TelegramBotApiClient.tryGetStarTransactions(requestBody: GetStarTransactionsRequest): TelegramResponse<StarTransactions> =
+    telegramPost("getStarTransactions", requestBody)
 
 /**
  * Refunds a successful payment in Telegram Stars. Returns True on success.

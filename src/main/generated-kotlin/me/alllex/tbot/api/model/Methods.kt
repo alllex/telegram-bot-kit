@@ -90,7 +90,6 @@ suspend fun TelegramBotApiClient.close(): Boolean =
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param text Text of the message to be sent, 1-4096 characters after entities parsing
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
  * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
@@ -100,12 +99,12 @@ suspend fun TelegramBotApiClient.close(): Boolean =
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendMessage(
     chatId: ChatId,
     text: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     parseMode: ParseMode? = null,
     entities: List<MessageEntity>? = null,
@@ -115,8 +114,9 @@ suspend fun TelegramBotApiClient.sendMessage(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendMessage(SendMessageRequest(chatId, text, businessConnectionId, messageThreadId, parseMode, entities, linkPreviewOptions, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendMessage(SendMessageRequest(chatId, text, messageThreadId, parseMode, entities, linkPreviewOptions, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned.
@@ -161,7 +161,7 @@ suspend fun TelegramBotApiClient.forwardMessages(
     tryForwardMessages(ForwardMessagesRequest(chatId, fromChatId, messageIds, messageThreadId, disableNotification, protectContent)).getResultOrThrow()
 
 /**
- * Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+ * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param fromChatId Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
@@ -194,7 +194,7 @@ suspend fun TelegramBotApiClient.copyMessage(
     tryCopyMessage(CopyMessageRequest(chatId, fromChatId, messageId, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup)).getResultOrThrow()
 
 /**
- * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
+ * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param fromChatId Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername)
@@ -221,7 +221,6 @@ suspend fun TelegramBotApiClient.copyMessages(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param photo Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. More information on Sending Files »
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param caption Photo caption (may also be used when resending photos by file_id), 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the photo caption. See formatting options for more details.
@@ -233,12 +232,12 @@ suspend fun TelegramBotApiClient.copyMessages(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendPhoto(
     chatId: ChatId,
     photo: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     caption: String? = null,
     parseMode: ParseMode? = null,
@@ -250,8 +249,9 @@ suspend fun TelegramBotApiClient.sendPhoto(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendPhoto(SendPhotoRequest(chatId, photo, businessConnectionId, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendPhoto(SendPhotoRequest(chatId, photo, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -260,7 +260,6 @@ suspend fun TelegramBotApiClient.sendPhoto(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param audio Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param caption Audio caption, 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the audio caption. See formatting options for more details.
@@ -274,12 +273,12 @@ suspend fun TelegramBotApiClient.sendPhoto(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendAudio(
     chatId: ChatId,
     audio: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     caption: String? = null,
     parseMode: ParseMode? = null,
@@ -293,15 +292,15 @@ suspend fun TelegramBotApiClient.sendAudio(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendAudio(SendAudioRequest(chatId, audio, businessConnectionId, messageThreadId, caption, parseMode, captionEntities, duration, performer, title, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendAudio(SendAudioRequest(chatId, audio, messageThreadId, caption, parseMode, captionEntities, duration, performer, title, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param document File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param thumbnail Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
  * @param caption Document caption (may also be used when resending documents by file_id), 0-1024 characters after entities parsing
@@ -313,12 +312,12 @@ suspend fun TelegramBotApiClient.sendAudio(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendDocument(
     chatId: ChatId,
     document: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     thumbnail: String? = null,
     caption: String? = null,
@@ -330,15 +329,15 @@ suspend fun TelegramBotApiClient.sendDocument(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendDocument(SendDocumentRequest(chatId, document, businessConnectionId, messageThreadId, thumbnail, caption, parseMode, captionEntities, disableContentTypeDetection, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendDocument(SendDocumentRequest(chatId, document, messageThreadId, thumbnail, caption, parseMode, captionEntities, disableContentTypeDetection, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param video Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. More information on Sending Files »
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param duration Duration of sent video in seconds
  * @param width Video width
@@ -355,12 +354,12 @@ suspend fun TelegramBotApiClient.sendDocument(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendVideo(
     chatId: ChatId,
     video: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     duration: Seconds? = null,
     width: Long? = null,
@@ -377,15 +376,15 @@ suspend fun TelegramBotApiClient.sendVideo(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendVideo(SendVideoRequest(chatId, video, businessConnectionId, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, supportsStreaming, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendVideo(SendVideoRequest(chatId, video, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, supportsStreaming, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param animation Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. More information on Sending Files »
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param duration Duration of sent animation in seconds
  * @param width Animation width
@@ -401,12 +400,12 @@ suspend fun TelegramBotApiClient.sendVideo(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendAnimation(
     chatId: ChatId,
     animation: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     duration: Seconds? = null,
     width: Long? = null,
@@ -422,15 +421,15 @@ suspend fun TelegramBotApiClient.sendAnimation(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendAnimation(SendAnimationRequest(chatId, animation, businessConnectionId, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendAnimation(SendAnimationRequest(chatId, animation, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param voice Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files »
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param caption Voice message caption, 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the voice message caption. See formatting options for more details.
@@ -441,12 +440,12 @@ suspend fun TelegramBotApiClient.sendAnimation(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendVoice(
     chatId: ChatId,
     voice: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     caption: String? = null,
     parseMode: ParseMode? = null,
@@ -457,15 +456,15 @@ suspend fun TelegramBotApiClient.sendVoice(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendVoice(SendVoiceRequest(chatId, voice, businessConnectionId, messageThreadId, caption, parseMode, captionEntities, duration, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendVoice(SendVoiceRequest(chatId, voice, messageThreadId, caption, parseMode, captionEntities, duration, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param videoNote Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files ». Sending video notes by a URL is currently unsupported
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param duration Duration of sent video in seconds
  * @param length Video width and height, i.e. diameter of the video message
@@ -475,12 +474,12 @@ suspend fun TelegramBotApiClient.sendVoice(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendVideoNote(
     chatId: ChatId,
     videoNote: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     duration: Seconds? = null,
     length: Long? = null,
@@ -490,33 +489,65 @@ suspend fun TelegramBotApiClient.sendVideoNote(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendVideoNote(SendVideoNoteRequest(chatId, videoNote, businessConnectionId, messageThreadId, duration, length, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendVideoNote(SendVideoNoteRequest(chatId, videoNote, messageThreadId, duration, length, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+
+/**
+ * Use this method to send paid media to channel chats. On success, the sent Message is returned.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param starCount The number of Telegram Stars that must be paid to buy access to the media
+ * @param media A JSON-serialized array describing the media to be sent; up to 10 items
+ * @param caption Media caption, 0-1024 characters after entities parsing
+ * @param parseMode Mode for parsing entities in the media caption. See formatting options for more details.
+ * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Pass True, if the caption must be shown above the message media
+ * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
+ * @param protectContent Protects the contents of the sent message from forwarding and saving
+ * @param replyParameters Description of the message to reply to
+ * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.sendPaidMedia(
+    chatId: ChatId,
+    starCount: Long,
+    media: List<InputPaidMedia>,
+    caption: String? = null,
+    parseMode: ParseMode? = null,
+    captionEntities: List<MessageEntity>? = null,
+    showCaptionAboveMedia: Boolean? = null,
+    disableNotification: Boolean? = null,
+    protectContent: Boolean? = null,
+    replyParameters: ReplyParameters? = null,
+    replyMarkup: ReplyMarkup? = null,
+): Message =
+    trySendPaidMedia(SendPaidMediaRequest(chatId, starCount, media, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup)).getResultOrThrow()
 
 /**
  * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param media A JSON-serialized array describing messages to be sent, must include 2-10 items
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends messages silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent messages from forwarding and saving
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendMediaGroup(
     chatId: ChatId,
     media: List<InputMedia>,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): List<Message> =
-    trySendMediaGroup(SendMediaGroupRequest(chatId, media, businessConnectionId, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters)).getResultOrThrow()
+    trySendMediaGroup(SendMediaGroupRequest(chatId, media, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send point on the map. On success, the sent Message is returned.
@@ -524,7 +555,6 @@ suspend fun TelegramBotApiClient.sendMediaGroup(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param latitude Latitude of the location
  * @param longitude Longitude of the location
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
  * @param livePeriod Period in seconds during which the location will be updated (see Live Locations, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
@@ -535,13 +565,13 @@ suspend fun TelegramBotApiClient.sendMediaGroup(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendLocation(
     chatId: ChatId,
     latitude: Double,
     longitude: Double,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     horizontalAccuracy: Double? = null,
     livePeriod: Long? = null,
@@ -552,8 +582,9 @@ suspend fun TelegramBotApiClient.sendLocation(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendLocation(SendLocationRequest(chatId, latitude, longitude, businessConnectionId, messageThreadId, horizontalAccuracy, livePeriod, heading, proximityAlertRadius, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendLocation(SendLocationRequest(chatId, latitude, longitude, messageThreadId, horizontalAccuracy, livePeriod, heading, proximityAlertRadius, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send information about a venue. On success, the sent Message is returned.
@@ -563,7 +594,6 @@ suspend fun TelegramBotApiClient.sendLocation(
  * @param longitude Longitude of the venue
  * @param title Name of the venue
  * @param address Address of the venue
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param foursquareId Foursquare identifier of the venue
  * @param foursquareType Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
@@ -574,6 +604,7 @@ suspend fun TelegramBotApiClient.sendLocation(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendVenue(
@@ -582,7 +613,6 @@ suspend fun TelegramBotApiClient.sendVenue(
     longitude: Double,
     title: String,
     address: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     foursquareId: String? = null,
     foursquareType: String? = null,
@@ -593,8 +623,9 @@ suspend fun TelegramBotApiClient.sendVenue(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendVenue(SendVenueRequest(chatId, latitude, longitude, title, address, businessConnectionId, messageThreadId, foursquareId, foursquareType, googlePlaceId, googlePlaceType, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendVenue(SendVenueRequest(chatId, latitude, longitude, title, address, messageThreadId, foursquareId, foursquareType, googlePlaceId, googlePlaceType, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send phone contacts. On success, the sent Message is returned.
@@ -602,7 +633,6 @@ suspend fun TelegramBotApiClient.sendVenue(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param phoneNumber Contact's phone number
  * @param firstName Contact's first name
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param lastName Contact's last name
  * @param vcard Additional data about the contact in the form of a vCard, 0-2048 bytes
@@ -611,13 +641,13 @@ suspend fun TelegramBotApiClient.sendVenue(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendContact(
     chatId: ChatId,
     phoneNumber: String,
     firstName: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     lastName: String? = null,
     vcard: String? = null,
@@ -626,8 +656,9 @@ suspend fun TelegramBotApiClient.sendContact(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendContact(SendContactRequest(chatId, phoneNumber, firstName, businessConnectionId, messageThreadId, lastName, vcard, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendContact(SendContactRequest(chatId, phoneNumber, firstName, messageThreadId, lastName, vcard, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send a native poll. On success, the sent Message is returned.
@@ -635,7 +666,6 @@ suspend fun TelegramBotApiClient.sendContact(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param question Poll question, 1-300 characters
  * @param options A JSON-serialized list of 2-10 answer options
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param questionParseMode Mode for parsing entities in the question. See formatting options for more details. Currently, only custom emoji entities are allowed
  * @param questionEntities A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of question_parse_mode
@@ -654,13 +684,13 @@ suspend fun TelegramBotApiClient.sendContact(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendPoll(
     chatId: ChatId,
     question: String,
     options: List<InputPollOption>,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     questionParseMode: String? = null,
     questionEntities: List<MessageEntity>? = null,
@@ -679,14 +709,14 @@ suspend fun TelegramBotApiClient.sendPoll(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendPoll(SendPollRequest(chatId, question, options, businessConnectionId, messageThreadId, questionParseMode, questionEntities, isAnonymous, type, allowsMultipleAnswers, correctOptionId, explanation, explanationParseMode, explanationEntities, openPeriod, closeDate, isClosed, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendPoll(SendPollRequest(chatId, question, options, messageThreadId, questionParseMode, questionEntities, isAnonymous, type, allowsMultipleAnswers, correctOptionId, explanation, explanationParseMode, explanationEntities, openPeriod, closeDate, isClosed, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param emoji Emoji on which the dice throw animation is based. Currently, must be one of “”, “”, “”, “”, “”, or “”. Dice can have values 1-6 for “”, “” and “”, values 1-5 for “” and “”, and values 1-64 for “”. Defaults to “”
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
@@ -694,11 +724,11 @@ suspend fun TelegramBotApiClient.sendPoll(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendDice(
     chatId: ChatId,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     emoji: String? = null,
     disableNotification: Boolean? = null,
@@ -706,8 +736,9 @@ suspend fun TelegramBotApiClient.sendDice(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendDice(SendDiceRequest(chatId, businessConnectionId, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendDice(SendDiceRequest(chatId, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
@@ -718,17 +749,17 @@ suspend fun TelegramBotApiClient.sendDice(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param action Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the action will be sent
  * @param messageThreadId Unique identifier for the target message thread; for supergroups only
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the action will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendChatAction(
     chatId: ChatId,
     action: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Boolean =
-    trySendChatAction(SendChatActionRequest(chatId, action, businessConnectionId, messageThreadId)).getResultOrThrow()
+    trySendChatAction(SendChatActionRequest(chatId, action, messageThreadId, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.
@@ -1385,7 +1416,7 @@ suspend fun TelegramBotApiClient.getUserChatBoosts(
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.getBusinessConnection(
-    businessConnectionId: String,
+    businessConnectionId: BusinessConnectionId,
 ): BusinessConnection =
     tryGetBusinessConnection(GetBusinessConnectionRequest(businessConnectionId)).getResultOrThrow()
 
@@ -1551,7 +1582,7 @@ suspend fun TelegramBotApiClient.getMyDefaultAdministratorRights(
     tryGetMyDefaultAdministratorRights(GetMyDefaultAdministratorRightsRequest(forChannels)).getResultOrThrow()
 
 /**
- * Use this method to edit text and game messages. On success the edited Message is returned.
+ * Use this method to edit text and game messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param text New text of the message, 1-4096 characters after entities parsing
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -1560,6 +1591,7 @@ suspend fun TelegramBotApiClient.getMyDefaultAdministratorRights(
  * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
  * @param linkPreviewOptions Link preview generation options for the message
  * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editMessageText(
@@ -1570,11 +1602,12 @@ suspend fun TelegramBotApiClient.editMessageText(
     entities: List<MessageEntity>? = null,
     linkPreviewOptions: LinkPreviewOptions? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    tryEditMessageText(EditMessageTextRequest(text = text, chatId = chatId, messageId = messageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditMessageText(EditMessageTextRequest(text = text, chatId = chatId, messageId = messageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to edit text and game messages. On success True is returned.
+ * Use this method to edit text and game messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param text New text of the message, 1-4096 characters after entities parsing
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
@@ -1582,6 +1615,7 @@ suspend fun TelegramBotApiClient.editMessageText(
  * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
  * @param linkPreviewOptions Link preview generation options for the message
  * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editInlineMessageText(
@@ -1591,11 +1625,12 @@ suspend fun TelegramBotApiClient.editInlineMessageText(
     entities: List<MessageEntity>? = null,
     linkPreviewOptions: LinkPreviewOptions? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Boolean =
-    tryEditInlineMessageText(EditMessageTextRequest(text = text, inlineMessageId = inlineMessageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditInlineMessageText(EditMessageTextRequest(text = text, inlineMessageId = inlineMessageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to edit captions of messages. On success the edited Message is returned.
+ * Use this method to edit captions of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
@@ -1604,6 +1639,7 @@ suspend fun TelegramBotApiClient.editInlineMessageText(
  * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
  * @param showCaptionAboveMedia Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
  * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editMessageCaption(
@@ -1614,11 +1650,12 @@ suspend fun TelegramBotApiClient.editMessageCaption(
     captionEntities: List<MessageEntity>? = null,
     showCaptionAboveMedia: Boolean? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    tryEditMessageCaption(EditMessageCaptionRequest(chatId = chatId, messageId = messageId, caption = caption, parseMode = parseMode, captionEntities = captionEntities, showCaptionAboveMedia = showCaptionAboveMedia, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditMessageCaption(EditMessageCaptionRequest(chatId = chatId, messageId = messageId, caption = caption, parseMode = parseMode, captionEntities = captionEntities, showCaptionAboveMedia = showCaptionAboveMedia, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to edit captions of messages. On success True is returned.
+ * Use this method to edit captions of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
  * @param caption New caption of the message, 0-1024 characters after entities parsing
@@ -1626,6 +1663,7 @@ suspend fun TelegramBotApiClient.editMessageCaption(
  * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
  * @param showCaptionAboveMedia Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
  * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editInlineMessageCaption(
@@ -1635,16 +1673,18 @@ suspend fun TelegramBotApiClient.editInlineMessageCaption(
     captionEntities: List<MessageEntity>? = null,
     showCaptionAboveMedia: Boolean? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Boolean =
-    tryEditInlineMessageCaption(EditMessageCaptionRequest(inlineMessageId = inlineMessageId, caption = caption, parseMode = parseMode, captionEntities = captionEntities, showCaptionAboveMedia = showCaptionAboveMedia, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditInlineMessageCaption(EditMessageCaptionRequest(inlineMessageId = inlineMessageId, caption = caption, parseMode = parseMode, captionEntities = captionEntities, showCaptionAboveMedia = showCaptionAboveMedia, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned.
+ * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param media A JSON-serialized object for a new media content of the message
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
  * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editMessageMedia(
@@ -1652,23 +1692,26 @@ suspend fun TelegramBotApiClient.editMessageMedia(
     chatId: ChatId,
     messageId: MessageId,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    tryEditMessageMedia(EditMessageMediaRequest(media = media, chatId = chatId, messageId = messageId, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditMessageMedia(EditMessageMediaRequest(media = media, chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned.
+ * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param media A JSON-serialized object for a new media content of the message
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
  * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editInlineMessageMedia(
     media: InputMedia,
     inlineMessageId: InlineMessageId,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Boolean =
-    tryEditInlineMessageMedia(EditMessageMediaRequest(media = media, inlineMessageId = inlineMessageId, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditInlineMessageMedia(EditMessageMediaRequest(media = media, inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success the edited Message is returned.
@@ -1682,6 +1725,7 @@ suspend fun TelegramBotApiClient.editInlineMessageMedia(
  * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
  * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editMessageLiveLocation(
@@ -1694,8 +1738,9 @@ suspend fun TelegramBotApiClient.editMessageLiveLocation(
     heading: Long? = null,
     proximityAlertRadius: Long? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    tryEditMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, chatId = chatId, messageId = messageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, chatId = chatId, messageId = messageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success True is returned.
@@ -1708,6 +1753,7 @@ suspend fun TelegramBotApiClient.editMessageLiveLocation(
  * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
  * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editInlineMessageLiveLocation(
@@ -1719,8 +1765,9 @@ suspend fun TelegramBotApiClient.editInlineMessageLiveLocation(
     heading: Long? = null,
     proximityAlertRadius: Long? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Boolean =
-    tryEditInlineMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, inlineMessageId = inlineMessageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditInlineMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, inlineMessageId = inlineMessageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to stop updating a live location message before live_period expires. On success the edited Message is returned.
@@ -1728,55 +1775,63 @@ suspend fun TelegramBotApiClient.editInlineMessageLiveLocation(
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message with live location to stop
  * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.stopMessageLiveLocation(
     chatId: ChatId,
     messageId: MessageId,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    tryStopMessageLiveLocation(StopMessageLiveLocationRequest(chatId = chatId, messageId = messageId, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryStopMessageLiveLocation(StopMessageLiveLocationRequest(chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to stop updating a live location message before live_period expires. On success True is returned.
  *
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
  * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.stopInlineMessageLiveLocation(
     inlineMessageId: InlineMessageId,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Boolean =
-    tryStopInlineMessageLiveLocation(StopMessageLiveLocationRequest(inlineMessageId = inlineMessageId, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryStopInlineMessageLiveLocation(StopMessageLiveLocationRequest(inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to edit only the reply markup of messages. On success the edited Message is returned.
+ * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
  * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editMessageReplyMarkup(
     chatId: ChatId,
     messageId: MessageId,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    tryEditMessageReplyMarkup(EditMessageReplyMarkupRequest(chatId = chatId, messageId = messageId, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditMessageReplyMarkup(EditMessageReplyMarkupRequest(chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to edit only the reply markup of messages. On success True is returned.
+ * Use this method to edit only the reply markup of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
  * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.editInlineMessageReplyMarkup(
     inlineMessageId: InlineMessageId,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Boolean =
-    tryEditInlineMessageReplyMarkup(EditMessageReplyMarkupRequest(inlineMessageId = inlineMessageId, replyMarkup = replyMarkup)).getResultOrThrow()
+    tryEditInlineMessageReplyMarkup(EditMessageReplyMarkupRequest(inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.
@@ -1784,14 +1839,16 @@ suspend fun TelegramBotApiClient.editInlineMessageReplyMarkup(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of the original message with the poll
  * @param replyMarkup A JSON-serialized object for a new message inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.stopPoll(
     chatId: ChatId,
     messageId: MessageId,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Poll =
-    tryStopPoll(StopPollRequest(chatId, messageId, replyMarkup)).getResultOrThrow()
+    tryStopPoll(StopPollRequest(chatId, messageId, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to delete a message, including service messages, with the following limitations: - A message can only be deleted if it was sent less than 48 hours ago. - Service messages about a supergroup, channel, or forum topic creation can't be deleted. - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago. - Bots can delete outgoing messages in private chats, groups, and supergroups. - Bots can delete incoming messages in private chats. - Bots granted can_post_messages permissions can delete outgoing messages in channels. - If the bot is an administrator of a group, it can delete any message there. - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there. Returns True on success.
@@ -1824,7 +1881,6 @@ suspend fun TelegramBotApiClient.deleteMessages(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param sticker Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. More information on Sending Files ». Video and animated stickers can't be sent via an HTTP URL.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param emoji Emoji associated with the sticker; only for just uploaded stickers
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
@@ -1832,12 +1888,12 @@ suspend fun TelegramBotApiClient.deleteMessages(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendSticker(
     chatId: ChatId,
     sticker: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     emoji: String? = null,
     disableNotification: Boolean? = null,
@@ -1845,8 +1901,9 @@ suspend fun TelegramBotApiClient.sendSticker(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendSticker(SendStickerRequest(chatId, sticker, businessConnectionId, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendSticker(SendStickerRequest(chatId, sticker, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to get a sticker set. On success, a StickerSet object is returned.
@@ -2236,6 +2293,19 @@ suspend fun TelegramBotApiClient.answerPreCheckoutQuery(
     tryAnswerPreCheckoutQuery(AnswerPreCheckoutQueryRequest(preCheckoutQueryId, ok, errorMessage)).getResultOrThrow()
 
 /**
+ * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
+ *
+ * @param offset Number of transactions to skip in the response
+ * @param limit The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.getStarTransactions(
+    offset: Long? = null,
+    limit: Long? = null,
+): StarTransactions =
+    tryGetStarTransactions(GetStarTransactionsRequest(offset, limit)).getResultOrThrow()
+
+/**
  * Refunds a successful payment in Telegram Stars. Returns True on success.
  *
  * @param userId Identifier of the user whose payment will be refunded
@@ -2268,27 +2338,27 @@ suspend fun TelegramBotApiClient.setPassportDataErrors(
  *
  * @param chatId Unique identifier for the target chat
  * @param gameShortName Short name of the game, serves as the unique identifier for the game. Set up your games via @BotFather.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendGame(
     chatId: ChatId,
     gameShortName: String,
-    businessConnectionId: String? = null,
     messageThreadId: MessageThreadId? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendGame(SendGameRequest(chatId, gameShortName, businessConnectionId, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendGame(SendGameRequest(chatId, gameShortName, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to set the score of the specified user in a game message. On success the edited Message is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.

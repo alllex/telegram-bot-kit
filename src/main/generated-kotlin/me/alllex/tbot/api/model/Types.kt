@@ -17,10 +17,6 @@ enum class UpdateType {
     @SerialName("edited_message") EDITED_MESSAGE,
     @SerialName("channel_post") CHANNEL_POST,
     @SerialName("edited_channel_post") EDITED_CHANNEL_POST,
-    @SerialName("business_connection") BUSINESS_CONNECTION,
-    @SerialName("business_message") BUSINESS_MESSAGE,
-    @SerialName("edited_business_message") EDITED_BUSINESS_MESSAGE,
-    @SerialName("deleted_business_messages") DELETED_BUSINESS_MESSAGES,
     @SerialName("message_reaction") MESSAGE_REACTION,
     @SerialName("message_reaction_count") MESSAGE_REACTION_COUNT,
     @SerialName("inline_query") INLINE_QUERY,
@@ -35,6 +31,10 @@ enum class UpdateType {
     @SerialName("chat_join_request") CHAT_JOIN_REQUEST,
     @SerialName("chat_boost") CHAT_BOOST,
     @SerialName("removed_chat_boost") REMOVED_CHAT_BOOST,
+    @SerialName("business_connection") BUSINESS_CONNECTION,
+    @SerialName("business_message") BUSINESS_MESSAGE,
+    @SerialName("edited_business_message") EDITED_BUSINESS_MESSAGE,
+    @SerialName("deleted_business_messages") DELETED_BUSINESS_MESSAGES,
 }
 
 /**
@@ -45,10 +45,6 @@ enum class UpdateType {
  * - [EditedMessageUpdate]
  * - [ChannelPostUpdate]
  * - [EditedChannelPostUpdate]
- * - [BusinessConnectionUpdate]
- * - [BusinessMessageUpdate]
- * - [EditedBusinessMessageUpdate]
- * - [DeletedBusinessMessagesUpdate]
  * - [MessageReactionUpdate]
  * - [MessageReactionCountUpdate]
  * - [InlineQueryUpdate]
@@ -63,6 +59,10 @@ enum class UpdateType {
  * - [ChatJoinRequestUpdate]
  * - [ChatBoostUpdate]
  * - [RemovedChatBoostUpdate]
+ * - [BusinessConnectionUpdate]
+ * - [BusinessMessageUpdate]
+ * - [EditedBusinessMessageUpdate]
+ * - [DeletedBusinessMessagesUpdate]
  */
 @Serializable(with = UpdateSerializer::class)
 sealed interface Update {
@@ -112,50 +112,6 @@ data class EditedChannelPostUpdate(
     val editedChannelPost: Message,
 ): Update {
     override val updateType: UpdateType get() = UpdateType.EDITED_CHANNEL_POST
-}
-
-/**
- * The bot was connected to or disconnected from a business account, or a user edited an existing connection with the bot
- */
-@Serializable
-data class BusinessConnectionUpdate(
-    override val updateId: Long,
-    val businessConnection: BusinessConnection,
-): Update {
-    override val updateType: UpdateType get() = UpdateType.BUSINESS_CONNECTION
-}
-
-/**
- * New message from a connected business account
- */
-@Serializable
-data class BusinessMessageUpdate(
-    override val updateId: Long,
-    val businessMessage: Message,
-): Update {
-    override val updateType: UpdateType get() = UpdateType.BUSINESS_MESSAGE
-}
-
-/**
- * New version of a message from a connected business account
- */
-@Serializable
-data class EditedBusinessMessageUpdate(
-    override val updateId: Long,
-    val editedBusinessMessage: Message,
-): Update {
-    override val updateType: UpdateType get() = UpdateType.EDITED_BUSINESS_MESSAGE
-}
-
-/**
- * Messages were deleted from a connected business account
- */
-@Serializable
-data class DeletedBusinessMessagesUpdate(
-    override val updateId: Long,
-    val deletedBusinessMessages: BusinessMessagesDeleted,
-): Update {
-    override val updateType: UpdateType get() = UpdateType.DELETED_BUSINESS_MESSAGES
 }
 
 /**
@@ -312,6 +268,50 @@ data class RemovedChatBoostUpdate(
     override val updateType: UpdateType get() = UpdateType.REMOVED_CHAT_BOOST
 }
 
+/**
+ * The bot was connected to or disconnected from a business account, or a user edited an existing connection with the bot
+ */
+@Serializable
+data class BusinessConnectionUpdate(
+    override val updateId: Long,
+    val businessConnection: BusinessConnection,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.BUSINESS_CONNECTION
+}
+
+/**
+ * New message from a connected business account
+ */
+@Serializable
+data class BusinessMessageUpdate(
+    override val updateId: Long,
+    val businessMessage: Message,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.BUSINESS_MESSAGE
+}
+
+/**
+ * New version of a message from a connected business account
+ */
+@Serializable
+data class EditedBusinessMessageUpdate(
+    override val updateId: Long,
+    val editedBusinessMessage: Message,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.EDITED_BUSINESS_MESSAGE
+}
+
+/**
+ * Messages were deleted from a connected business account
+ */
+@Serializable
+data class DeletedBusinessMessagesUpdate(
+    override val updateId: Long,
+    val deletedBusinessMessages: BusinessMessagesDeleted,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.DELETED_BUSINESS_MESSAGES
+}
+
 object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Update> {
         val json = element.jsonObject
@@ -320,10 +320,6 @@ object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class
             "edited_message" in json -> EditedMessageUpdate.serializer()
             "channel_post" in json -> ChannelPostUpdate.serializer()
             "edited_channel_post" in json -> EditedChannelPostUpdate.serializer()
-            "business_connection" in json -> BusinessConnectionUpdate.serializer()
-            "business_message" in json -> BusinessMessageUpdate.serializer()
-            "edited_business_message" in json -> EditedBusinessMessageUpdate.serializer()
-            "deleted_business_messages" in json -> DeletedBusinessMessagesUpdate.serializer()
             "message_reaction" in json -> MessageReactionUpdate.serializer()
             "message_reaction_count" in json -> MessageReactionCountUpdate.serializer()
             "inline_query" in json -> InlineQueryUpdate.serializer()
@@ -338,6 +334,10 @@ object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class
             "chat_join_request" in json -> ChatJoinRequestUpdate.serializer()
             "chat_boost" in json -> ChatBoostUpdate.serializer()
             "removed_chat_boost" in json -> RemovedChatBoostUpdate.serializer()
+            "business_connection" in json -> BusinessConnectionUpdate.serializer()
+            "business_message" in json -> BusinessMessageUpdate.serializer()
+            "edited_business_message" in json -> EditedBusinessMessageUpdate.serializer()
+            "deleted_business_messages" in json -> DeletedBusinessMessagesUpdate.serializer()
             else -> error("Failed to deserialize an update type: $json")
         }
     }
@@ -470,6 +470,7 @@ data class Chat(
  * @param customEmojiStickerSetName Optional. For supergroups, the name of the group's custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group.
  * @param linkedChatId Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
  * @param location Optional. For supergroups, the location to which the supergroup is connected
+ * @param canSendPaidMedia Optional. True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.
  */
 @Serializable
 data class ChatFullInfo(
@@ -516,8 +517,9 @@ data class ChatFullInfo(
     val customEmojiStickerSetName: String? = null,
     val linkedChatId: ChatId? = null,
     val location: ChatLocation? = null,
+    val canSendPaidMedia: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatFullInfo").prop("id", id).prop("type", type).prop("accentColorId", accentColorId).prop("maxReactionCount", maxReactionCount).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).toString()
+    override fun toString() = DebugStringBuilder("ChatFullInfo").prop("id", id).prop("type", type).prop("accentColorId", accentColorId).prop("maxReactionCount", maxReactionCount).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).prop("canSendPaidMedia", canSendPaidMedia).toString()
 }
 
 /**
@@ -557,7 +559,7 @@ data class ChatFullInfo(
  * @param video Optional. Message is a video, information about the video
  * @param videoNote Optional. Message is a video note, information about the video message
  * @param voice Optional. Message is a voice message, information about the file
- * @param caption Optional. Caption for the animation, audio, document, photo, video or voice
+ * @param caption Optional. Caption for the animation, audio, document, paid media, photo, video or voice
  * @param captionEntities Optional. For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
  * @param showCaptionAboveMedia Optional. True, if the caption must be shown above the message media
  * @param hasMediaSpoiler Optional. True, if the message media is covered by a spoiler animation
@@ -605,6 +607,8 @@ data class ChatFullInfo(
  * @param videoChatParticipantsInvited Optional. Service message: new participants invited to a video chat
  * @param webAppData Optional. Service message: data sent by a Web App
  * @param replyMarkup Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
+ * @param paidMedia Optional. Message contains paid media; information about the paid media
+ * @param refundedPayment Optional. Message is a service message about a refunded payment, information about the payment. More about payments »
  */
 @Serializable
 data class Message(
@@ -616,7 +620,7 @@ data class Message(
     val senderChat: Chat? = null,
     val senderBoostCount: Long? = null,
     val senderBusinessBot: User? = null,
-    val businessConnectionId: String? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
     val forwardOrigin: MessageOrigin? = null,
     val isTopicMessage: Boolean? = null,
     val isAutomaticForward: Boolean? = null,
@@ -691,8 +695,10 @@ data class Message(
     val videoChatParticipantsInvited: VideoChatParticipantsInvited? = null,
     val webAppData: WebAppData? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
+    val paidMedia: PaidMediaInfo? = null,
+    val refundedPayment: RefundedPayment? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).prop("paidMedia", paidMedia).prop("refundedPayment", refundedPayment).toString()
 }
 
 /**
@@ -771,6 +777,7 @@ data class TextQuote(
  * @param location Optional. Message is a shared location, information about the location
  * @param poll Optional. Message is a native poll, information about the poll
  * @param venue Optional. Message is a venue, information about the venue
+ * @param paidMedia Optional. Message contains paid media; information about the paid media
  */
 @Serializable
 data class ExternalReplyInfo(
@@ -797,8 +804,9 @@ data class ExternalReplyInfo(
     val location: Location? = null,
     val poll: Poll? = null,
     val venue: Venue? = null,
+    val paidMedia: PaidMediaInfo? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ExternalReplyInfo").prop("origin", origin).prop("chat", chat).prop("messageId", messageId).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("invoice", invoice).prop("location", location).prop("poll", poll).prop("venue", venue).toString()
+    override fun toString() = DebugStringBuilder("ExternalReplyInfo").prop("origin", origin).prop("chat", chat).prop("messageId", messageId).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("invoice", invoice).prop("location", location).prop("poll", poll).prop("venue", venue).prop("paidMedia", paidMedia).toString()
 }
 
 /**
@@ -920,12 +928,12 @@ data class PhotoSize(
  * This object represents an animation file (GIF or H.264/MPEG-4 AVC video without sound).
  * @param fileId Identifier for this file, which can be used to download or reuse the file
  * @param fileUniqueId Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
- * @param width Video width as defined by sender
- * @param height Video height as defined by sender
- * @param duration Duration of the video in seconds as defined by sender
- * @param thumbnail Optional. Animation thumbnail as defined by sender
- * @param fileName Optional. Original animation filename as defined by sender
- * @param mimeType Optional. MIME type of the file as defined by sender
+ * @param width Video width as defined by the sender
+ * @param height Video height as defined by the sender
+ * @param duration Duration of the video in seconds as defined by the sender
+ * @param thumbnail Optional. Animation thumbnail as defined by the sender
+ * @param fileName Optional. Original animation filename as defined by the sender
+ * @param mimeType Optional. MIME type of the file as defined by the sender
  * @param fileSize Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
  */
 @Serializable
@@ -947,11 +955,11 @@ data class Animation(
  * This object represents an audio file to be treated as music by the Telegram clients.
  * @param fileId Identifier for this file, which can be used to download or reuse the file
  * @param fileUniqueId Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
- * @param duration Duration of the audio in seconds as defined by sender
- * @param performer Optional. Performer of the audio as defined by sender or by audio tags
- * @param title Optional. Title of the audio as defined by sender or by audio tags
- * @param fileName Optional. Original filename as defined by sender
- * @param mimeType Optional. MIME type of the file as defined by sender
+ * @param duration Duration of the audio in seconds as defined by the sender
+ * @param performer Optional. Performer of the audio as defined by the sender or by audio tags
+ * @param title Optional. Title of the audio as defined by the sender or by audio tags
+ * @param fileName Optional. Original filename as defined by the sender
+ * @param mimeType Optional. MIME type of the file as defined by the sender
  * @param fileSize Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
  * @param thumbnail Optional. Thumbnail of the album cover to which the music file belongs
  */
@@ -974,9 +982,9 @@ data class Audio(
  * This object represents a general file (as opposed to photos, voice messages and audio files).
  * @param fileId Identifier for this file, which can be used to download or reuse the file
  * @param fileUniqueId Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
- * @param thumbnail Optional. Document thumbnail as defined by sender
- * @param fileName Optional. Original filename as defined by sender
- * @param mimeType Optional. MIME type of the file as defined by sender
+ * @param thumbnail Optional. Document thumbnail as defined by the sender
+ * @param fileName Optional. Original filename as defined by the sender
+ * @param mimeType Optional. MIME type of the file as defined by the sender
  * @param fileSize Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
  */
 @Serializable
@@ -1008,12 +1016,12 @@ data class Story(
  * This object represents a video file.
  * @param fileId Identifier for this file, which can be used to download or reuse the file
  * @param fileUniqueId Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
- * @param width Video width as defined by sender
- * @param height Video height as defined by sender
- * @param duration Duration of the video in seconds as defined by sender
+ * @param width Video width as defined by the sender
+ * @param height Video height as defined by the sender
+ * @param duration Duration of the video in seconds as defined by the sender
  * @param thumbnail Optional. Video thumbnail
- * @param fileName Optional. Original filename as defined by sender
- * @param mimeType Optional. MIME type of the file as defined by sender
+ * @param fileName Optional. Original filename as defined by the sender
+ * @param mimeType Optional. MIME type of the file as defined by the sender
  * @param fileSize Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
  */
 @Serializable
@@ -1035,8 +1043,8 @@ data class Video(
  * This object represents a video message (available in Telegram apps as of v.4.0).
  * @param fileId Identifier for this file, which can be used to download or reuse the file
  * @param fileUniqueId Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
- * @param length Video width and height (diameter of the video message) as defined by sender
- * @param duration Duration of the video in seconds as defined by sender
+ * @param length Video width and height (diameter of the video message) as defined by the sender
+ * @param duration Duration of the video in seconds as defined by the sender
  * @param thumbnail Optional. Video thumbnail
  * @param fileSize Optional. File size in bytes
  */
@@ -1056,8 +1064,8 @@ data class VideoNote(
  * This object represents a voice note.
  * @param fileId Identifier for this file, which can be used to download or reuse the file
  * @param fileUniqueId Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
- * @param duration Duration of the audio in seconds as defined by sender
- * @param mimeType Optional. MIME type of the file as defined by sender
+ * @param duration Duration of the audio in seconds as defined by the sender
+ * @param mimeType Optional. MIME type of the file as defined by the sender
  * @param fileSize Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
  */
 @Serializable
@@ -1069,6 +1077,69 @@ data class Voice(
     val fileSize: Long? = null,
 ) {
     override fun toString() = DebugStringBuilder("Voice").prop("fileId", fileId).prop("fileUniqueId", fileUniqueId).prop("duration", duration).prop("mimeType", mimeType).prop("fileSize", fileSize).toString()
+}
+
+/**
+ * Describes the paid media added to a message.
+ * @param starCount The number of Telegram Stars that must be paid to buy access to the media
+ * @param paidMedia Information about the paid media
+ */
+@Serializable
+data class PaidMediaInfo(
+    val starCount: Long,
+    val paidMedia: List<PaidMedia>,
+) {
+    override fun toString() = DebugStringBuilder("PaidMediaInfo").prop("starCount", starCount).prop("paidMedia", paidMedia).toString()
+}
+
+/**
+ * This object describes paid media. Currently, it can be one of
+ * - [PaidMediaPreview]
+ * - [PaidMediaPhoto]
+ * - [PaidMediaVideo]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface PaidMedia
+
+/**
+ * The paid media isn't available before the payment.
+ * @param width Optional. Media width as defined by the sender
+ * @param height Optional. Media height as defined by the sender
+ * @param duration Optional. Duration of the media in seconds as defined by the sender
+ */
+@Serializable
+@SerialName("preview")
+data class PaidMediaPreview(
+    val width: Long? = null,
+    val height: Long? = null,
+    val duration: Seconds? = null,
+) : PaidMedia {
+    override fun toString() = DebugStringBuilder("PaidMediaPreview").prop("width", width).prop("height", height).prop("duration", duration).toString()
+}
+
+/**
+ * The paid media is a photo.
+ * @param photo The photo
+ */
+@Serializable
+@SerialName("photo")
+data class PaidMediaPhoto(
+    val photo: List<PhotoSize>,
+) : PaidMedia {
+    override fun toString() = DebugStringBuilder("PaidMediaPhoto").prop("photo", photo).toString()
+}
+
+/**
+ * The paid media is a video.
+ * @param video The video
+ */
+@Serializable
+@SerialName("video")
+data class PaidMediaVideo(
+    val video: Video,
+) : PaidMedia {
+    override fun toString() = DebugStringBuilder("PaidMediaVideo").prop("video", video).toString()
 }
 
 /**
@@ -1119,7 +1190,7 @@ data class PollOption(
 }
 
 /**
- * This object contains information about one answer option in a poll to send.
+ * This object contains information about one answer option in a poll to be sent.
  * @param text Option text, 1-100 characters
  * @param textParseMode Optional. Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed
  * @param textEntities Optional. A JSON-serialized list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode
@@ -1189,8 +1260,8 @@ data class Poll(
 
 /**
  * This object represents a point on the map.
- * @param latitude Latitude as defined by sender
- * @param longitude Longitude as defined by sender
+ * @param latitude Latitude as defined by the sender
+ * @param longitude Longitude as defined by the sender
  * @param horizontalAccuracy Optional. The radius of uncertainty for the location, measured in meters; 0-1500
  * @param livePeriod Optional. Time relative to the message sending date, during which the location can be updated; in seconds. For active live locations only.
  * @param heading Optional. The direction in which user is moving, in degrees; 1-360. For active live locations only.
@@ -1850,7 +1921,7 @@ data class InlineKeyboardMarkup(
  * This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify type of the button.
  * @param text Label text on the button
  * @param url Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
- * @param callbackData Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes. Not supported for messages sent on behalf of a Telegram Business account.
+ * @param callbackData Optional. Data to be sent in a callback query to the bot when the button is pressed, 1-64 bytes
  * @param webApp Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a Telegram Business account.
  * @param loginUrl Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
  * @param switchInlineQuery Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent on behalf of a Telegram Business account.
@@ -2607,7 +2678,7 @@ data object MenuButtonCommands : MenuButton
 /**
  * Represents a menu button, which launches a Web App.
  * @param text Text on the button
- * @param webApp Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery.
+ * @param webApp Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Alternatively, a t.me link to a Web App of the bot can be specified in the object instead of the Web App's URL, in which case the Web App will be opened as if the user pressed the link.
  */
 @Serializable
 @SerialName("web_app")
@@ -2744,7 +2815,7 @@ data class UserChatBoosts(
  */
 @Serializable
 data class BusinessConnection(
-    val id: String,
+    val id: BusinessConnectionId,
     val user: User,
     val userChatId: ChatId,
     val date: UnixTimestamp,
@@ -2762,7 +2833,7 @@ data class BusinessConnection(
  */
 @Serializable
 data class BusinessMessagesDeleted(
-    val businessConnectionId: String,
+    val businessConnectionId: BusinessConnectionId,
     val chat: Chat,
     val messageIds: List<Long>,
 ) {
@@ -2924,6 +2995,49 @@ data class InputMediaDocument(
     val disableContentTypeDetection: Boolean? = null,
 ) : InputMedia {
     override fun toString() = DebugStringBuilder("InputMediaDocument").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableContentTypeDetection", disableContentTypeDetection).toString()
+}
+
+/**
+ * This object describes the paid media to be sent. Currently, it can be one of
+ * - [InputPaidMediaPhoto]
+ * - [InputPaidMediaVideo]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface InputPaidMedia
+
+/**
+ * The paid media to send is a photo.
+ * @param media File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ */
+@Serializable
+@SerialName("photo")
+data class InputPaidMediaPhoto(
+    val media: String,
+) : InputPaidMedia {
+    override fun toString() = DebugStringBuilder("InputPaidMediaPhoto").prop("media", media).toString()
+}
+
+/**
+ * The paid media to send is a video.
+ * @param media File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param thumbnail Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+ * @param width Optional. Video width
+ * @param height Optional. Video height
+ * @param duration Optional. Video duration in seconds
+ * @param supportsStreaming Optional. Pass True if the uploaded video is suitable for streaming
+ */
+@Serializable
+@SerialName("video")
+data class InputPaidMediaVideo(
+    val media: String,
+    val thumbnail: String? = null,
+    val width: Long? = null,
+    val height: Long? = null,
+    val duration: Seconds? = null,
+    val supportsStreaming: Boolean? = null,
+) : InputPaidMedia {
+    override fun toString() = DebugStringBuilder("InputPaidMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).toString()
 }
 
 /**
@@ -3966,7 +4080,7 @@ data class ShippingOption(
  * This object contains basic information about a successful payment.
  * @param currency Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars
  * @param totalAmount Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
- * @param invoicePayload Bot specified invoice payload
+ * @param invoicePayload Bot-specified invoice payload
  * @param telegramPaymentChargeId Telegram payment identifier
  * @param providerPaymentChargeId Provider payment identifier
  * @param shippingOptionId Optional. Identifier of the shipping option chosen by the user
@@ -3986,10 +4100,29 @@ data class SuccessfulPayment(
 }
 
 /**
+ * This object contains basic information about a refunded payment.
+ * @param currency Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. Currently, always “XTR”
+ * @param totalAmount Total refunded price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+ * @param invoicePayload Bot-specified invoice payload
+ * @param telegramPaymentChargeId Telegram payment identifier
+ * @param providerPaymentChargeId Optional. Provider payment identifier
+ */
+@Serializable
+data class RefundedPayment(
+    val currency: String,
+    val totalAmount: Long,
+    val invoicePayload: String,
+    val telegramPaymentChargeId: TelegramPaymentChargeId,
+    val providerPaymentChargeId: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("RefundedPayment").prop("currency", currency).prop("totalAmount", totalAmount).prop("invoicePayload", invoicePayload).prop("telegramPaymentChargeId", telegramPaymentChargeId).prop("providerPaymentChargeId", providerPaymentChargeId).toString()
+}
+
+/**
  * This object contains information about an incoming shipping query.
  * @param id Unique query identifier
  * @param from User who sent the query
- * @param invoicePayload Bot specified invoice payload
+ * @param invoicePayload Bot-specified invoice payload
  * @param shippingAddress User specified shipping address
  */
 @Serializable
@@ -4008,7 +4141,7 @@ data class ShippingQuery(
  * @param from User who sent the query
  * @param currency Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars
  * @param totalAmount Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
- * @param invoicePayload Bot specified invoice payload
+ * @param invoicePayload Bot-specified invoice payload
  * @param shippingOptionId Optional. Identifier of the shipping option chosen by the user
  * @param orderInfo Optional. Order information provided by the user
  */
@@ -4023,6 +4156,125 @@ data class PreCheckoutQuery(
     val orderInfo: OrderInfo? = null,
 ) {
     override fun toString() = DebugStringBuilder("PreCheckoutQuery").prop("id", id).prop("from", from).prop("currency", currency).prop("totalAmount", totalAmount).prop("invoicePayload", invoicePayload).prop("shippingOptionId", shippingOptionId).prop("orderInfo", orderInfo).toString()
+}
+
+/**
+ * This object describes the state of a revenue withdrawal operation. Currently, it can be one of
+ * - [RevenueWithdrawalStatePending]
+ * - [RevenueWithdrawalStateSucceeded]
+ * - [RevenueWithdrawalStateFailed]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface RevenueWithdrawalState
+
+/**
+ * The withdrawal is in progress.
+ */
+@Serializable
+@SerialName("pending")
+data object RevenueWithdrawalStatePending : RevenueWithdrawalState
+
+/**
+ * The withdrawal succeeded.
+ * @param date Date the withdrawal was completed in Unix time
+ * @param url An HTTPS URL that can be used to see transaction details
+ */
+@Serializable
+@SerialName("succeeded")
+data class RevenueWithdrawalStateSucceeded(
+    val date: UnixTimestamp,
+    val url: String,
+) : RevenueWithdrawalState {
+    override fun toString() = DebugStringBuilder("RevenueWithdrawalStateSucceeded").prop("date", date).prop("url", url).toString()
+}
+
+/**
+ * The withdrawal failed and the transaction was refunded.
+ */
+@Serializable
+@SerialName("failed")
+data object RevenueWithdrawalStateFailed : RevenueWithdrawalState
+
+/**
+ * This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
+ * - [TransactionPartnerUser]
+ * - [TransactionPartnerFragment]
+ * - [TransactionPartnerTelegramAds]
+ * - [TransactionPartnerOther]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface TransactionPartner
+
+/**
+ * Describes a transaction with a user.
+ * @param user Information about the user
+ * @param invoicePayload Optional. Bot-specified invoice payload
+ */
+@Serializable
+@SerialName("user")
+data class TransactionPartnerUser(
+    val user: User,
+    val invoicePayload: String? = null,
+) : TransactionPartner {
+    override fun toString() = DebugStringBuilder("TransactionPartnerUser").prop("user", user).prop("invoicePayload", invoicePayload).toString()
+}
+
+/**
+ * Describes a withdrawal transaction with Fragment.
+ * @param withdrawalState Optional. State of the transaction if the transaction is outgoing
+ */
+@Serializable
+@SerialName("fragment")
+data class TransactionPartnerFragment(
+    val withdrawalState: RevenueWithdrawalState? = null,
+) : TransactionPartner {
+    override fun toString() = DebugStringBuilder("TransactionPartnerFragment").prop("withdrawalState", withdrawalState).toString()
+}
+
+/**
+ * Describes a withdrawal transaction to the Telegram Ads platform.
+ */
+@Serializable
+@SerialName("telegram_ads")
+data object TransactionPartnerTelegramAds : TransactionPartner
+
+/**
+ * Describes a transaction with an unknown source or recipient.
+ */
+@Serializable
+@SerialName("other")
+data object TransactionPartnerOther : TransactionPartner
+
+/**
+ * Describes a Telegram Star transaction.
+ * @param id Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.
+ * @param amount Number of Telegram Stars transferred by the transaction
+ * @param date Date the transaction was created in Unix time
+ * @param source Optional. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions
+ * @param receiver Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions
+ */
+@Serializable
+data class StarTransaction(
+    val id: String,
+    val amount: Long,
+    val date: UnixTimestamp,
+    val source: TransactionPartner? = null,
+    val receiver: TransactionPartner? = null,
+) {
+    override fun toString() = DebugStringBuilder("StarTransaction").prop("id", id).prop("amount", amount).prop("date", date).prop("source", source).prop("receiver", receiver).toString()
+}
+
+/**
+ * Contains a list of Telegram Star transactions.
+ * @param transactions The list of transactions
+ */
+@Serializable
+data class StarTransactions(
+    val transactions: List<StarTransaction>,
+) {
+    override fun toString() = DebugStringBuilder("StarTransactions").prop("transactions", transactions).toString()
 }
 
 /**
@@ -4488,5 +4740,14 @@ value class UnixTimestamp(val value: Long) {
 @JvmInline
 value class TelegramPaymentChargeId(val value: String) {
     override fun toString(): String = "TelegramPaymentChargeId(${quoteWhenWhitespace(value)})"
+}
+
+/**
+ * Business connection identifier
+ */
+@Serializable
+@JvmInline
+value class BusinessConnectionId(val value: String) {
+    override fun toString(): String = "BusinessConnectionId(${quoteWhenWhitespace(value)})"
 }
 

@@ -17,7 +17,7 @@ To learn how to create…">
 <link rel="alternate icon" href="/img/favicon.ico" type="image/x-icon" />
     <link href="/css/bootstrap.min.css?3" rel="stylesheet">
     
-    <link href="/css/telegram.css?237" rel="stylesheet" media="screen">
+    <link href="/css/telegram.css?239" rel="stylesheet" media="screen">
     <style>
     </style>
   </head>
@@ -53,6 +53,38 @@ To learn how to create…">
 <blockquote>
 <p>Subscribe to <a href="https://t.me/botnews">@BotNews</a> to be the first to know about the latest updates and join the discussion in <a href="https://t.me/bottalk">@BotTalk</a></p>
 </blockquote>
+<h4><a class="anchor" name="july-7-2024" href="#july-7-2024"><i class="anchor-icon"></i></a>July 7, 2024</h4>
+<p><strong>Bot API 7.7</strong></p>
+<ul>
+<li>Added the class <a href="#refundedpayment">RefundedPayment</a>, containing information about a refunded payment.</li>
+<li>Added the field <em>refunded_payment</em> to the class <a href="#message">Message</a>, describing a service message about a refunded payment.</li>
+<li>Added the field <em>isVerticalSwipesEnabled</em> and the methods <em>enableVerticalSwipes</em>, <em>disableVerticalSwipes</em> to the class <a href="/bots/webapps#initializing-mini-apps">WebApp</a>.</li>
+<li>Added the <a href="/bots/webapps#events-available-for-mini-apps">event</a> <em>scanQrPopupClosed</em> for Mini Apps.</li>
+</ul>
+<h4><a class="anchor" name="july-1-2024" href="#july-1-2024"><i class="anchor-icon"></i></a>July 1, 2024</h4>
+<p><strong>Bot API 7.6</strong></p>
+<ul>
+<li>Added the classes <a href="#paidmedia">PaidMedia</a>, <a href="#paidmediainfo">PaidMediaInfo</a>, <a href="#paidmediapreview">PaidMediaPreview</a>, <a href="#paidmediaphoto">PaidMediaPhoto</a> and <a href="#paidmediavideo">PaidMediaVideo</a>, containing information about paid media.</li>
+<li>Added the method <a href="#sendpaidmedia">sendPaidMedia</a> and the classes <a href="#inputpaidmedia">InputPaidMedia</a>, <a href="#inputpaidmediaphoto">InputPaidMediaPhoto</a> and <a href="#inputpaidmediavideo">InputPaidMediaVideo</a>, to support sending paid media.</li>
+<li>Documented that the methods <a href="#copymessage">copyMessage</a> and <a href="#copymessages">copyMessages</a> cannot be used to copy paid media.</li>
+<li>Added the field <em>can_send_paid_media</em> to the class <a href="#chatfullinfo">ChatFullInfo</a>.</li>
+<li>Added the field <em>paid_media</em> to the classes <a href="#message">Message</a> and <a href="#externalreplyinfo">ExternalReplyInfo</a>.</li>
+<li>Added the class <a href="#transactionpartnertelegramads">TransactionPartnerTelegramAds</a>, containing information about Telegram Star transactions involving the Telegram Ads Platform.</li>
+<li>Added the field <em>invoice_payload</em> to the class <a href="#transactionpartneruser">TransactionPartnerUser</a>, containing the bot-specified invoice payload.</li>
+<li>Changed the default opening mode for <a href="/bots/webapps#direct-link-mini-apps">Direct Link Mini Apps</a>.</li>
+<li>Added support for launching Web Apps via <code>t.me</code> link in the class <a href="#menubuttonwebapp">MenuButtonWebApp</a>.</li>
+<li>Added the field <em>section_separator_color</em> to the class <a href="/bots/webapps#themeparams">ThemeParams</a>.</li>
+</ul>
+<h4><a class="anchor" name="june-18-2024" href="#june-18-2024"><i class="anchor-icon"></i></a>June 18, 2024</h4>
+<p><strong>Bot API 7.5</strong></p>
+<ul>
+<li>Added the classes <a href="#startransactions">StarTransactions</a>, <a href="#startransaction">StarTransaction</a>, <a href="#transactionpartner">TransactionPartner</a> and <a href="#revenuewithdrawalstate">RevenueWithdrawalState</a>, containing information about Telegram Star transactions involving the bot.</li>
+<li>Added the method <a href="#getstartransactions">getStarTransactions</a> that can be used to get the list of all Telegram Star transactions for the bot.</li>
+<li>Added support for <em>callback</em> buttons in <a href="#inlinekeyboardmarkup">InlineKeyboardMarkup</a> for messages sent on behalf of a business account.</li>
+<li>Added support for callback queries originating from a message sent on behalf of a business account.</li>
+<li>Added the parameter <em>business_connection_id</em> to the methods <a href="#editmessagetext">editMessageText</a>, <a href="#editmessagemedia">editMessageMedia</a>, <a href="#editmessagecaption">editMessageCaption</a>, <a href="#editmessagelivelocation">editMessageLiveLocation</a>, <a href="#stopmessagelivelocation">stopMessageLiveLocation</a> and <a href="#editmessagereplymarkup">editMessageReplyMarkup</a>, allowing the bot to edit business messages.</li>
+<li>Added the parameter <em>business_connection_id</em> to the method <a href="#stoppoll">stopPoll</a>, allowing the bot to stop polls it sent on behalf of a business account.</li>
+</ul>
 <h4><a class="anchor" name="may-28-2024" href="#may-28-2024"><i class="anchor-icon"></i></a>May 28, 2024</h4>
 <p><strong>Bot API 7.4</strong></p>
 <ul>
@@ -83,138 +115,6 @@ To learn how to create…">
 <li>Split out the class <a href="#chatfullinfo">ChatFullInfo</a> from the class <a href="#chat">Chat</a> and changed the return type of the method <a href="#getchat">getChat</a> to <a href="#chatfullinfo">ChatFullInfo</a>.</li>
 <li>Added the field <em>max_reaction_count</em> to the class <a href="#chatfullinfo">ChatFullInfo</a>.</li>
 <li>Documented that .MP3 and .M4A files can be used as voice messages.</li>
-</ul>
-<h4><a class="anchor" name="march-31-2024" href="#march-31-2024"><i class="anchor-icon"></i></a>March 31, 2024</h4>
-<p><strong>Bot API 7.2</strong></p>
-<p><strong>Integration with Business Accounts</strong></p>
-<ul>
-<li>Added the class <a href="#businessconnection">BusinessConnection</a> and updates about the connection or disconnection of the bot to a business account, represented by the field <em>business_connection</em> in the class <a href="#update">Update</a>.</li>
-<li>Added updates about new messages in a business account connected to the bot, represented by the field <em>business_message</em> in the class <a href="#update">Update</a>.</li>
-<li>Added updates about message edits in a business account connected to the bot, represented by the field <em>edited_business_message</em> in the class <a href="#update">Update</a>.</li>
-<li>Added updates about message deletion in a business account connected to the bot, represented by the class <a href="#businessmessagesdeleted">BusinessMessagesDeleted</a> and the field <em>deleted_business_messages</em> in the class <a href="#update">Update</a>.</li>
-<li>Added the method <a href="#getbusinessconnection">getBusinessConnection</a>.</li>
-</ul>
-<p><strong>Working on Behalf of Business Accounts</strong></p>
-<ul>
-<li>Added the parameter <em>business_connection_id</em> to the methods <a href="#sendmessage">sendMessage</a>, <a href="#sendphoto">sendPhoto</a>, <a href="#sendvideo">sendVideo</a>, <a href="#sendanimation">sendAnimation</a>, <a href="#sendaudio">sendAudio</a>, <a href="#senddocument">sendDocument</a>, <a href="#sendsticker">sendSticker</a>, <a href="#sendvideonote">sendVideoNote</a>, <a href="#sendvoice">sendVoice</a>, <a href="#sendlocation">sendLocation</a>, <a href="#sendvenue">sendVenue</a>, <a href="#sendcontact">sendContact</a>, <a href="#sendpoll">sendPoll</a>, <a href="#senddice">sendDice</a>, <a href="#sendgame">sendGame</a>, and <a href="#sendmediagroup">sendMediaGroup</a>.</li>
-<li>Added the parameter <em>business_connection_id</em> to the method <a href="#sendchataction">sendChatAction</a>.</li>
-<li>Added the field <em>business_connection_id</em> to the class <a href="#message">Message</a>.</li>
-<li>Added the field <em>sender_business_bot</em> to the class <a href="#message">Message</a>.</li>
-</ul>
-<p><strong>Information about Business Accounts</strong></p>
-<ul>
-<li>Added the class <a href="#businessintro">BusinessIntro</a> and the field <em>business_intro</em> to the class <a href="#chat">Chat</a>.</li>
-<li>Added the class <a href="#businesslocation">BusinessLocation</a> and the field <em>business_location</em> to the class <a href="#chat">Chat</a>.</li>
-<li>Added the classes <a href="#businessopeninghours">BusinessOpeningHours</a> and <a href="#businessopeninghoursinterval">BusinessOpeningHoursInterval</a> and the field <em>business_opening_hours</em> to the class <a href="#chat">Chat</a>.</li>
-</ul>
-<p><strong>Mixed-Format Sticker Packs</strong></p>
-<ul>
-<li>Removed the fields <em>is_animated</em> and <em>is_video</em> from the class <a href="#stickerset">StickerSet</a>.</li>
-<li>Added the field <em>format</em> to the class <a href="#inputsticker">InputSticker</a>.</li>
-<li>Removed the parameter <em>sticker_format</em> from the method <a href="#createnewstickerset">createNewStickerSet</a>.</li>
-<li>Added the parameter <em>format</em> to the method <a href="#setstickersetthumbnail">setStickerSetThumbnail</a>.</li>
-<li>Increased the maximum number of stickers in any regular and mask sticker set to 120.</li>
-<li>Allowed to upload WEBM stickers using <a href="#sendsticker">sendSticker</a>.</li>
-</ul>
-<p><strong>Request Chat Improvements</strong></p>
-<ul>
-<li>Added the fields <em>request_name</em>, <em>request_username</em>, and <em>request_photo</em> to the class <a href="#keyboardbuttonrequestusers">KeyboardButtonRequestUsers</a>.</li>
-<li>Added the fields <em>request_title</em>, <em>request_username</em>, and <em>request_photo</em> to the class <a href="#keyboardbuttonrequestchat">KeyboardButtonRequestChat</a>.</li>
-<li>Added the class <em>SharedUser</em> and replaced the field <em>user_ids</em> in the class <a href="#usersshared">UsersShared</a> with the field <em>users</em>.</li>
-<li>Added the fields <em>title</em>, <em>username</em>, and <em>photo</em> to the class <a href="#chatshared">ChatShared</a>.</li>
-</ul>
-<p><strong>Other Changes</strong></p>
-<ul>
-<li>Added the field <em>is_from_offline</em> to the class <a href="#message">Message</a>.</li>
-<li>Added the field <em>can_connect_to_business</em> to the class <a href="#user">User</a>.</li>
-<li>Added the field <em>personal_chat</em> to the class <a href="#chat">Chat</a>.</li>
-<li>Added the method <a href="#replacestickerinset">replaceStickerInSet</a>,</li>
-<li>Added the class <a href="#birthdate">Birthdate</a> and the field <em>birthdate</em> to the class <a href="#chat">Chat</a>.</li>
-<li>Added the field <em>BiometricManager</em> to the class <a href="/bots/webapps#initializing-mini-apps">WebApp</a>.</li>
-</ul>
-<h4><a class="anchor" name="february-16-2024" href="#february-16-2024"><i class="anchor-icon"></i></a>February 16, 2024</h4>
-<p><strong>Bot API 7.1</strong></p>
-<ul>
-<li>Added support for the administrator rights <em>can_post_stories</em>, <em>can_edit_stories</em>, <em>can_delete_stories</em> in supergroups.</li>
-<li>Added the class <a href="#chatboostadded">ChatBoostAdded</a> and the field <em>boost_added</em> to the class <a href="#message">Message</a> for service messages about a user boosting a chat.</li>
-<li>Added the field <em>sender_boost_count</em> to the class <a href="#message">Message</a>.</li>
-<li>Added the field <em>reply_to_story</em> to the class <a href="#message">Message</a>.</li>
-<li>Added the fields <em>chat</em> and <em>id</em> to the class <a href="#story">Story</a>.</li>
-<li>Added the field <em>unrestrict_boost_count</em> to the class <a href="#chat">Chat</a>.</li>
-<li>Added the field <em>custom_emoji_sticker_set_name</em> to the class <a href="#chat">Chat</a>.</li>
-</ul>
-<h4><a class="anchor" name="december-29-2023" href="#december-29-2023"><i class="anchor-icon"></i></a>December 29, 2023</h4>
-<p><strong>Bot API 7.0</strong></p>
-<p><strong>Reactions</strong></p>
-<ul>
-<li>Added the classes <a href="#reactiontypeemoji">ReactionTypeEmoji</a> and <a href="#reactiontypecustomemoji">ReactionTypeCustomEmoji</a> representing different types of reaction.</li>
-<li>Added updates about a reaction change on a message with non-anonymous reactions, represented by the class <a href="#messagereactionupdated">MessageReactionUpdated</a> and the field <em>message_reaction</em> in the class <a href="#update">Update</a>. The bot must explicitly allow the update to receive it.</li>
-<li>Added updates about reaction changes on a message with anonymous reactions, represented by the class <a href="#messagereactioncountupdated">MessageReactionCountUpdated</a> and the field <em>message_reaction_count</em> in the class <a href="#update">Update</a>. The bot must explicitly allow the update to receive it.</li>
-<li>Added the method <a href="#setmessagereaction">setMessageReaction</a> that allows bots to react to messages.</li>
-<li>Added the field <em>available_reactions</em> to the class <a href="#chat">Chat</a>.</li>
-</ul>
-<p><strong>Replies 2.0</strong></p>
-<ul>
-<li>Added the ability to reply to messages in other chats or forum topics.</li>
-<li>Added the class <a href="#externalreplyinfo">ExternalReplyInfo</a> and the field <em>external_reply</em> of type <a href="#externalreplyinfo">ExternalReplyInfo</a> to the class <a href="#message">Message</a>, containing information about a message that is replied to by the current message, but can be from another chat or forum topic.</li>
-<li>Added the ability to quote a part of the replied message.</li>
-<li>Added the class <a href="#textquote">TextQuote</a> and the field <em>quote</em> of type <a href="#textquote">TextQuote</a> to the class <em>Message</em>, which contains the part of the replied message text or caption that is quoted in the current message.</li>
-<li>Added the class <a href="#replyparameters">ReplyParameters</a> and replaced parameters <em>reply_to_message_id</em> and <em>allow_sending_without_reply</em> in the methods <a href="#copymessage">copyMessage</a>, <a href="#sendmessage">sendMessage</a>, <a href="#sendphoto">sendPhoto</a>, <a href="#sendvideo">sendVideo</a>, <a href="#sendanimation">sendAnimation</a>, <a href="#sendaudio">sendAudio</a>, <a href="#senddocument">sendDocument</a>, <a href="#sendsticker">sendSticker</a>, <a href="#sendvideonote">sendVideoNote</a>, <a href="#sendvoice">sendVoice</a>, <a href="#sendlocation">sendLocation</a>, <a href="#sendvenue">sendVenue</a>, <a href="#sendcontact">sendContact</a>, <a href="#sendpoll">sendPoll</a>, <a href="#senddice">sendDice</a>, <a href="#sendinvoice">sendInvoice</a>, <a href="#sendgame">sendGame</a>, and <a href="#sendmediagroup">sendMediaGroup</a> with the field <em>reply_parameters</em> of type <a href="#replyparameters">ReplyParameters</a>.</li>
-</ul>
-<p><strong>Link Preview Customization</strong></p>
-<ul>
-<li>Allowed to explicitly specify the URL that will be used for link preview generation in outgoing text messages.</li>
-<li>Allowed to position link previews above the message text.</li>
-<li>Allowed to choose media size in link previews.</li>
-<li>Added the class <a href="#linkpreviewoptions">LinkPreviewOptions</a> and replaced the parameter <em>disable_web_page_preview</em> with <em>link_preview_options</em> in the methods <a href="#sendmessage">sendMessage</a> and <a href="#editmessagetext">editMessageText</a>.</li>
-<li>Replaced the field <em>disable_web_page_preview</em> with <em>link_preview_options</em> in the class <a href="#inputtextmessagecontent">InputTextMessageContent</a>.</li>
-<li>Added the field <em>link_preview_options</em> to the class <a href="#message">Message</a> with information about the link preview options used to send the message.</li>
-</ul>
-<p><strong>Block Quotation</strong></p>
-<ul>
-<li>Added support for “blockquote” entities in received messages.</li>
-<li>Added support for “blockquote” entity parsing in “MarkdownV2” and “HTML” parse modes.</li>
-<li>Allowed to explicitly specify “blockquote” entities in formatted texts.</li>
-</ul>
-<p><strong>Multiple Message Actions</strong></p>
-<ul>
-<li>Added the method <a href="#deletemessages">deleteMessages</a> to allow the deletion of multiple messages in a single request.</li>
-<li>Added the method <a href="#forwardmessages">forwardMessages</a> for forwarding of multiple messages in a single request.</li>
-<li>Added the method <a href="#copymessages">copyMessages</a> for copying of multiple messages in a single request.</li>
-</ul>
-<p><strong>Request for multiple users</strong></p>
-<ul>
-<li>Renamed the class <em>KeyboardButtonRequestUser</em> to <a href="#keyboardbuttonrequestusers">KeyboardButtonRequestUsers</a> and added the field <em>max_quantity</em> to it.</li>
-<li>Renamed the field <em>request_user</em> in the class <a href="#keyboardbutton">KeyboardButton</a> to <em>request_users</em>. The old name will still work for backward compatibility.</li>
-<li>Added the class <a href="#usersshared">UsersShared</a>.</li>
-<li>Replaced the field <em>user_shared</em> in the class <a href="#message">Message</a> with the field <em>users_shared</em>.</li>
-</ul>
-<p><strong>Chat Boost</strong></p>
-<ul>
-<li>Added updates about chat boost changes, represented by the classes <a href="#chatboostupdated">ChatBoostUpdated</a> and <a href="#chatboostremoved">ChatBoostRemoved</a> and the fields <em>chat_boost</em> and <em>removed_chat_boost</em> in the class <a href="#update">Update</a>. The bot must be an administrator in the chat to receive these updates.</li>
-<li>Added the classes <a href="#chatboostsourcepremium">ChatBoostSourcePremium</a>, <a href="#chatboostsourcegiftcode">ChatBoostSourceGiftCode</a> and <a href="#chatboostsourcegiveaway">ChatBoostSourceGiveaway</a>, representing different sources of a chat boost.</li>
-<li>Added the method <a href="#getuserchatboosts">getUserChatBoosts</a> for obtaining the list of all active boosts a user has contributed to a chat.</li>
-</ul>
-<p><strong>Giveaway</strong></p>
-<ul>
-<li>Added the class <a href="#giveaway">Giveaway</a> and the field <em>giveaway</em> to the class <a href="#message">Message</a> for messages about scheduled giveaways.</li>
-<li>Added the class <a href="#giveawaycreated">GiveawayCreated</a> and the field <em>giveaway_created</em> to the class <a href="#message">Message</a> for service messages about the creation of a scheduled giveaway.</li>
-<li>Added the class <a href="#giveawaywinners">GiveawayWinners</a> and the field <em>giveaway_winners</em> to the class <a href="#message">Message</a> for messages about the completion of a giveaway with public winners.</li>
-<li>Added the class <a href="#giveawaycompleted">GiveawayCompleted</a> and the field <em>giveaway_completed</em> to the class <a href="#message">Message</a> for service messages about the completion of a giveaway without public winners.</li>
-</ul>
-<p><strong>Web App Changes</strong></p>
-<ul>
-<li>Added the field <em>SettingsButton</em> to the class <a href="/bots/webapps#initializing-mini-apps">WebApp</a>.</li>
-<li>Added the fields <em>header_bg_color</em>, <em>accent_text_color</em>, <em>section_bg_color</em>, <em>section_header_text_color</em>, <em>subtitle_text_color</em>, <em>destructive_text_color</em> to the class <a href="/bots/webapps#themeparams">ThemeParams</a>.</li>
-<li>Web Apps no longer close when the method <em>WebApp.openTelegramLink</em> is called.</li>
-</ul>
-<p><strong>Other Changes</strong></p>
-<ul>
-<li>Added support for the fields <em>emoji_status_custom_emoji_id</em> and <em>emoji_status_expiration_date</em> in the class <a href="#chat">Chat</a> for non-private chats.</li>
-<li>Added the fields <em>accent_color_id</em>, <em>background_custom_emoji_id</em>, <em>profile_accent_color_id</em>, and <em>profile_background_custom_emoji_id</em> to the class <a href="#chat">Chat</a>.</li>
-<li>Added the field <em>has_visible_history</em> to the class <a href="#chat">Chat</a>.</li>
-<li>Added the class <a href="#messageorigin">MessageOrigin</a> and replaced the fields <em>forward_from</em>, <em>forward_from_chat</em>, <em>forward_from_message_id</em>, <em>forward_signature</em>, <em>forward_sender_name</em>, and <em>forward_date</em> with the field <em>forward_origin</em> of type <a href="#messageorigin">MessageOrigin</a> in the class <a href="#message">Message</a>.</li>
-<li>Improved documentation for the field <em>message</em> of the class <a href="#callbackquery">callbackQuery</a> and the field <em>pinned_message</em> of the class <a href="#message">Message</a> by adding the classes <a href="#maybeinaccessiblemessage">MaybeInaccessibleMessage</a> and <a href="#inaccessiblemessage">InaccessibleMessage</a>.</li>
 </ul>
 <p><strong><a href="/bots/api-changelog">See earlier changes »</a></strong></p>
 <h3><a class="anchor" name="authorizing-your-bot" href="#authorizing-your-bot"><i class="anchor-icon"></i></a>Authorizing your bot</h3>
@@ -860,6 +760,11 @@ To learn how to create…">
 <td><em>Optional</em>. Default chat member permissions, for groups and supergroups</td>
 </tr>
 <tr>
+<td>can_send_paid_media</td>
+<td>True</td>
+<td><em>Optional</em>. <em>True</em>, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.</td>
+</tr>
+<tr>
 <td>slow_mode_delay</td>
 <td>Integer</td>
 <td><em>Optional</em>. For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds</td>
@@ -1078,6 +983,11 @@ To learn how to create…">
 <td><em>Optional</em>. Message is a general file, information about the file</td>
 </tr>
 <tr>
+<td>paid_media</td>
+<td><a href="#paidmediainfo">PaidMediaInfo</a></td>
+<td><em>Optional</em>. Message contains paid media; information about the paid media</td>
+</tr>
+<tr>
 <td>photo</td>
 <td>Array of <a href="#photosize">PhotoSize</a></td>
 <td><em>Optional</em>. Message is a photo, available sizes of the photo</td>
@@ -1110,7 +1020,7 @@ To learn how to create…">
 <tr>
 <td>caption</td>
 <td>String</td>
-<td><em>Optional</em>. Caption for the animation, audio, document, photo, video or voice</td>
+<td><em>Optional</em>. Caption for the animation, audio, document, paid media, photo, video or voice</td>
 </tr>
 <tr>
 <td>caption_entities</td>
@@ -1226,6 +1136,11 @@ To learn how to create…">
 <td>successful_payment</td>
 <td><a href="#successfulpayment">SuccessfulPayment</a></td>
 <td><em>Optional</em>. Message is a service message about a successful payment, information about the payment. <a href="#payments">More about payments »</a></td>
+</tr>
+<tr>
+<td>refunded_payment</td>
+<td><a href="#refundedpayment">RefundedPayment</a></td>
+<td><em>Optional</em>. Message is a service message about a refunded payment, information about the payment. <a href="#payments">More about payments »</a></td>
 </tr>
 <tr>
 <td>users_shared</td>
@@ -1527,6 +1442,11 @@ To learn how to create…">
 <td>document</td>
 <td><a href="#document">Document</a></td>
 <td><em>Optional</em>. Message is a general file, information about the file</td>
+</tr>
+<tr>
+<td>paid_media</td>
+<td><a href="#paidmediainfo">PaidMediaInfo</a></td>
+<td><em>Optional</em>. Message contains paid media; information about the paid media</td>
 </tr>
 <tr>
 <td>photo</td>
@@ -1855,32 +1775,32 @@ To learn how to create…">
 <tr>
 <td>width</td>
 <td>Integer</td>
-<td>Video width as defined by sender</td>
+<td>Video width as defined by the sender</td>
 </tr>
 <tr>
 <td>height</td>
 <td>Integer</td>
-<td>Video height as defined by sender</td>
+<td>Video height as defined by the sender</td>
 </tr>
 <tr>
 <td>duration</td>
 <td>Integer</td>
-<td>Duration of the video in seconds as defined by sender</td>
+<td>Duration of the video in seconds as defined by the sender</td>
 </tr>
 <tr>
 <td>thumbnail</td>
 <td><a href="#photosize">PhotoSize</a></td>
-<td><em>Optional</em>. Animation thumbnail as defined by sender</td>
+<td><em>Optional</em>. Animation thumbnail as defined by the sender</td>
 </tr>
 <tr>
 <td>file_name</td>
 <td>String</td>
-<td><em>Optional</em>. Original animation filename as defined by sender</td>
+<td><em>Optional</em>. Original animation filename as defined by the sender</td>
 </tr>
 <tr>
 <td>mime_type</td>
 <td>String</td>
-<td><em>Optional</em>. MIME type of the file as defined by sender</td>
+<td><em>Optional</em>. MIME type of the file as defined by the sender</td>
 </tr>
 <tr>
 <td>file_size</td>
@@ -1913,27 +1833,27 @@ To learn how to create…">
 <tr>
 <td>duration</td>
 <td>Integer</td>
-<td>Duration of the audio in seconds as defined by sender</td>
+<td>Duration of the audio in seconds as defined by the sender</td>
 </tr>
 <tr>
 <td>performer</td>
 <td>String</td>
-<td><em>Optional</em>. Performer of the audio as defined by sender or by audio tags</td>
+<td><em>Optional</em>. Performer of the audio as defined by the sender or by audio tags</td>
 </tr>
 <tr>
 <td>title</td>
 <td>String</td>
-<td><em>Optional</em>. Title of the audio as defined by sender or by audio tags</td>
+<td><em>Optional</em>. Title of the audio as defined by the sender or by audio tags</td>
 </tr>
 <tr>
 <td>file_name</td>
 <td>String</td>
-<td><em>Optional</em>. Original filename as defined by sender</td>
+<td><em>Optional</em>. Original filename as defined by the sender</td>
 </tr>
 <tr>
 <td>mime_type</td>
 <td>String</td>
-<td><em>Optional</em>. MIME type of the file as defined by sender</td>
+<td><em>Optional</em>. MIME type of the file as defined by the sender</td>
 </tr>
 <tr>
 <td>file_size</td>
@@ -1971,17 +1891,17 @@ To learn how to create…">
 <tr>
 <td>thumbnail</td>
 <td><a href="#photosize">PhotoSize</a></td>
-<td><em>Optional</em>. Document thumbnail as defined by sender</td>
+<td><em>Optional</em>. Document thumbnail as defined by the sender</td>
 </tr>
 <tr>
 <td>file_name</td>
 <td>String</td>
-<td><em>Optional</em>. Original filename as defined by sender</td>
+<td><em>Optional</em>. Original filename as defined by the sender</td>
 </tr>
 <tr>
 <td>mime_type</td>
 <td>String</td>
-<td><em>Optional</em>. MIME type of the file as defined by sender</td>
+<td><em>Optional</em>. MIME type of the file as defined by the sender</td>
 </tr>
 <tr>
 <td>file_size</td>
@@ -2037,17 +1957,17 @@ To learn how to create…">
 <tr>
 <td>width</td>
 <td>Integer</td>
-<td>Video width as defined by sender</td>
+<td>Video width as defined by the sender</td>
 </tr>
 <tr>
 <td>height</td>
 <td>Integer</td>
-<td>Video height as defined by sender</td>
+<td>Video height as defined by the sender</td>
 </tr>
 <tr>
 <td>duration</td>
 <td>Integer</td>
-<td>Duration of the video in seconds as defined by sender</td>
+<td>Duration of the video in seconds as defined by the sender</td>
 </tr>
 <tr>
 <td>thumbnail</td>
@@ -2057,12 +1977,12 @@ To learn how to create…">
 <tr>
 <td>file_name</td>
 <td>String</td>
-<td><em>Optional</em>. Original filename as defined by sender</td>
+<td><em>Optional</em>. Original filename as defined by the sender</td>
 </tr>
 <tr>
 <td>mime_type</td>
 <td>String</td>
-<td><em>Optional</em>. MIME type of the file as defined by sender</td>
+<td><em>Optional</em>. MIME type of the file as defined by the sender</td>
 </tr>
 <tr>
 <td>file_size</td>
@@ -2095,12 +2015,12 @@ To learn how to create…">
 <tr>
 <td>length</td>
 <td>Integer</td>
-<td>Video width and height (diameter of the video message) as defined by sender</td>
+<td>Video width and height (diameter of the video message) as defined by the sender</td>
 </tr>
 <tr>
 <td>duration</td>
 <td>Integer</td>
-<td>Duration of the video in seconds as defined by sender</td>
+<td>Duration of the video in seconds as defined by the sender</td>
 </tr>
 <tr>
 <td>thumbnail</td>
@@ -2138,17 +2058,126 @@ To learn how to create…">
 <tr>
 <td>duration</td>
 <td>Integer</td>
-<td>Duration of the audio in seconds as defined by sender</td>
+<td>Duration of the audio in seconds as defined by the sender</td>
 </tr>
 <tr>
 <td>mime_type</td>
 <td>String</td>
-<td><em>Optional</em>. MIME type of the file as defined by sender</td>
+<td><em>Optional</em>. MIME type of the file as defined by the sender</td>
 </tr>
 <tr>
 <td>file_size</td>
 <td>Integer</td>
 <td><em>Optional</em>. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="paidmediainfo" href="#paidmediainfo"><i class="anchor-icon"></i></a>PaidMediaInfo</h4>
+<p>Describes the paid media added to a message.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>star_count</td>
+<td>Integer</td>
+<td>The number of Telegram Stars that must be paid to buy access to the media</td>
+</tr>
+<tr>
+<td>paid_media</td>
+<td>Array of <a href="#paidmedia">PaidMedia</a></td>
+<td>Information about the paid media</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="paidmedia" href="#paidmedia"><i class="anchor-icon"></i></a>PaidMedia</h4>
+<p>This object describes paid media. Currently, it can be one of</p>
+<ul>
+<li><a href="#paidmediapreview">PaidMediaPreview</a></li>
+<li><a href="#paidmediaphoto">PaidMediaPhoto</a></li>
+<li><a href="#paidmediavideo">PaidMediaVideo</a></li>
+</ul>
+<h4><a class="anchor" name="paidmediapreview" href="#paidmediapreview"><i class="anchor-icon"></i></a>PaidMediaPreview</h4>
+<p>The paid media isn&#39;t available before the payment.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the paid media, always “preview”</td>
+</tr>
+<tr>
+<td>width</td>
+<td>Integer</td>
+<td><em>Optional</em>. Media width as defined by the sender</td>
+</tr>
+<tr>
+<td>height</td>
+<td>Integer</td>
+<td><em>Optional</em>. Media height as defined by the sender</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>Integer</td>
+<td><em>Optional</em>. Duration of the media in seconds as defined by the sender</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="paidmediaphoto" href="#paidmediaphoto"><i class="anchor-icon"></i></a>PaidMediaPhoto</h4>
+<p>The paid media is a photo.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the paid media, always “photo”</td>
+</tr>
+<tr>
+<td>photo</td>
+<td>Array of <a href="#photosize">PhotoSize</a></td>
+<td>The photo</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="paidmediavideo" href="#paidmediavideo"><i class="anchor-icon"></i></a>PaidMediaVideo</h4>
+<p>The paid media is a video.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the paid media, always “video”</td>
+</tr>
+<tr>
+<td>video</td>
+<td><a href="#video">Video</a></td>
+<td>The video</td>
 </tr>
 </tbody>
 </table>
@@ -2242,7 +2271,7 @@ To learn how to create…">
 </tbody>
 </table>
 <h4><a class="anchor" name="inputpolloption" href="#inputpolloption"><i class="anchor-icon"></i></a>InputPollOption</h4>
-<p>This object contains information about one answer option in a poll to send.</p>
+<p>This object contains information about one answer option in a poll to be sent.</p>
 <table class="table">
 <thead>
 <tr>
@@ -2399,12 +2428,12 @@ To learn how to create…">
 <tr>
 <td>latitude</td>
 <td>Float</td>
-<td>Latitude as defined by sender</td>
+<td>Latitude as defined by the sender</td>
 </tr>
 <tr>
 <td>longitude</td>
 <td>Float</td>
-<td>Longitude as defined by sender</td>
+<td>Longitude as defined by the sender</td>
 </tr>
 <tr>
 <td>horizontal_accuracy</td>
@@ -3606,7 +3635,7 @@ To learn how to create…">
 <tr>
 <td>callback_data</td>
 <td>String</td>
-<td><em>Optional</em>. Data to be sent in a <a href="#callbackquery">callback query</a> to the bot when button is pressed, 1-64 bytes. Not supported for messages sent on behalf of a Telegram Business account.</td>
+<td><em>Optional</em>. Data to be sent in a <a href="#callbackquery">callback query</a> to the bot when the button is pressed, 1-64 bytes</td>
 </tr>
 <tr>
 <td>web_app</td>
@@ -5144,7 +5173,7 @@ To learn how to create…">
 <tr>
 <td>web_app</td>
 <td><a href="#webappinfo">WebAppInfo</a></td>
-<td>Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method <a href="#answerwebappquery">answerWebAppQuery</a>.</td>
+<td>Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method <a href="#answerwebappquery">answerWebAppQuery</a>. Alternatively, a <code>t.me</code> link to a Web App of the bot can be specified in the object instead of the Web App&#39;s URL, in which case the Web App will be opened as if the user pressed the link.</td>
 </tr>
 </tbody>
 </table>
@@ -5759,6 +5788,83 @@ To learn how to create…">
 </table>
 <h4><a class="anchor" name="inputfile" href="#inputfile"><i class="anchor-icon"></i></a>InputFile</h4>
 <p>This object represents the contents of a file to be uploaded. Must be posted using multipart/form-data in the usual way that files are uploaded via the browser.</p>
+<h4><a class="anchor" name="inputpaidmedia" href="#inputpaidmedia"><i class="anchor-icon"></i></a>InputPaidMedia</h4>
+<p>This object describes the paid media to be sent. Currently, it can be one of</p>
+<ul>
+<li><a href="#inputpaidmediaphoto">InputPaidMediaPhoto</a></li>
+<li><a href="#inputpaidmediavideo">InputPaidMediaVideo</a></li>
+</ul>
+<h4><a class="anchor" name="inputpaidmediaphoto" href="#inputpaidmediaphoto"><i class="anchor-icon"></i></a>InputPaidMediaPhoto</h4>
+<p>The paid media to send is a photo.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the media, must be <em>photo</em></td>
+</tr>
+<tr>
+<td>media</td>
+<td>String</td>
+<td>File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://&lt;file_attach_name&gt;” to upload a new one using multipart/form-data under &lt;file_attach_name&gt; name. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="inputpaidmediavideo" href="#inputpaidmediavideo"><i class="anchor-icon"></i></a>InputPaidMediaVideo</h4>
+<p>The paid media to send is a video.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the media, must be <em>video</em></td>
+</tr>
+<tr>
+<td>media</td>
+<td>String</td>
+<td>File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://&lt;file_attach_name&gt;” to upload a new one using multipart/form-data under &lt;file_attach_name&gt; name. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+<tr>
+<td>thumbnail</td>
+<td><a href="#inputfile">InputFile</a> or String</td>
+<td><em>Optional</em>. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail&#39;s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can&#39;t be reused and can be only uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the thumbnail was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+<tr>
+<td>width</td>
+<td>Integer</td>
+<td><em>Optional</em>. Video width</td>
+</tr>
+<tr>
+<td>height</td>
+<td>Integer</td>
+<td><em>Optional</em>. Video height</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>Integer</td>
+<td><em>Optional</em>. Video duration in seconds</td>
+</tr>
+<tr>
+<td>supports_streaming</td>
+<td>Boolean</td>
+<td><em>Optional</em>. Pass <em>True</em> if the uploaded video is suitable for streaming</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="sending-files" href="#sending-files"><i class="anchor-icon"></i></a>Sending files</h4>
 <p>There are three ways to send files (photos, stickers, audio, media, etc.):</p>
 <ol>
@@ -6124,7 +6230,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="copymessage" href="#copymessage"><i class="anchor-icon"></i></a>copyMessage</h4>
-<p>Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can&#39;t be copied. A quiz <a href="#poll">poll</a> can be copied only if the value of the field <em>correct_option_id</em> is known to the bot. The method is analogous to the method <a href="#forwardmessage">forwardMessage</a>, but the copied message doesn&#39;t have a link to the original message. Returns the <a href="#messageid">MessageId</a> of the sent message on success.</p>
+<p>Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can&#39;t be copied. A quiz <a href="#poll">poll</a> can be copied only if the value of the field <em>correct_option_id</em> is known to the bot. The method is analogous to the method <a href="#forwardmessage">forwardMessage</a>, but the copied message doesn&#39;t have a link to the original message. Returns the <a href="#messageid">MessageId</a> of the sent message on success.</p>
 <table class="table">
 <thead>
 <tr>
@@ -6210,7 +6316,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="copymessages" href="#copymessages"><i class="anchor-icon"></i></a>copyMessages</h4>
-<p>Use this method to copy messages of any kind. If some of the specified messages can&#39;t be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can&#39;t be copied. A quiz <a href="#poll">poll</a> can be copied only if the value of the field <em>correct_option_id</em> is known to the bot. The method is analogous to the method <a href="#forwardmessages">forwardMessages</a>, but the copied messages don&#39;t have a link to the original message. Album grouping is kept for copied messages. On success, an array of <a href="#messageid">MessageId</a> of the sent messages is returned.</p>
+<p>Use this method to copy messages of any kind. If some of the specified messages can&#39;t be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can&#39;t be copied. A quiz <a href="#poll">poll</a> can be copied only if the value of the field <em>correct_option_id</em> is known to the bot. The method is analogous to the method <a href="#forwardmessages">forwardMessages</a>, but the copied messages don&#39;t have a link to the original message. Album grouping is kept for copied messages. On success, an array of <a href="#messageid">MessageId</a> of the sent messages is returned.</p>
 <table class="table">
 <thead>
 <tr>
@@ -6985,6 +7091,86 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>String</td>
 <td>Optional</td>
 <td>Unique identifier of the message effect to be added to the message; for private chats only</td>
+</tr>
+<tr>
+<td>reply_parameters</td>
+<td><a href="#replyparameters">ReplyParameters</a></td>
+<td>Optional</td>
+<td>Description of the message to reply to</td>
+</tr>
+<tr>
+<td>reply_markup</td>
+<td><a href="#inlinekeyboardmarkup">InlineKeyboardMarkup</a> or <a href="#replykeyboardmarkup">ReplyKeyboardMarkup</a> or <a href="#replykeyboardremove">ReplyKeyboardRemove</a> or <a href="#forcereply">ForceReply</a></td>
+<td>Optional</td>
+<td>Additional interface options. A JSON-serialized object for an <a href="/bots/features#inline-keyboards">inline keyboard</a>, <a href="/bots/features#keyboards">custom reply keyboard</a>, instructions to remove a reply keyboard or to force a reply from the user</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="sendpaidmedia" href="#sendpaidmedia"><i class="anchor-icon"></i></a>sendPaidMedia</h4>
+<p>Use this method to send paid media to channel chats. On success, the sent <a href="#message">Message</a> is returned.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>chat_id</td>
+<td>Integer or String</td>
+<td>Yes</td>
+<td>Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>)</td>
+</tr>
+<tr>
+<td>star_count</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>The number of Telegram Stars that must be paid to buy access to the media</td>
+</tr>
+<tr>
+<td>media</td>
+<td>Array of <a href="#inputpaidmedia">InputPaidMedia</a></td>
+<td>Yes</td>
+<td>A JSON-serialized array describing the media to be sent; up to 10 items</td>
+</tr>
+<tr>
+<td>caption</td>
+<td>String</td>
+<td>Optional</td>
+<td>Media caption, 0-1024 characters after entities parsing</td>
+</tr>
+<tr>
+<td>parse_mode</td>
+<td>String</td>
+<td>Optional</td>
+<td>Mode for parsing entities in the media caption. See <a href="#formatting-options">formatting options</a> for more details.</td>
+</tr>
+<tr>
+<td>caption_entities</td>
+<td>Array of <a href="#messageentity">MessageEntity</a></td>
+<td>Optional</td>
+<td>A JSON-serialized list of special entities that appear in the caption, which can be specified instead of <em>parse_mode</em></td>
+</tr>
+<tr>
+<td>show_caption_above_media</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em>, if the caption must be shown above the message media</td>
+</tr>
+<tr>
+<td>disable_notification</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Sends the message <a href="https://telegram.org/blog/channels-2-0#silent-messages">silently</a>. Users will receive a notification with no sound.</td>
+</tr>
+<tr>
+<td>protect_content</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
 <td>reply_parameters</td>
@@ -9293,7 +9479,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <p>The following methods allow you to change an existing message in the message history instead of sending a new one with a result of an action. This is most useful for messages with <a href="/bots/features#inline-keyboards">inline keyboards</a> using callback queries, but can also help reduce clutter in conversations with regular chat bots.</p>
 <p>Please note, that it is currently only possible to edit messages without <em>reply_markup</em> or with <a href="/bots/features#inline-keyboards">inline keyboards</a>.</p>
 <h4><a class="anchor" name="editmessagetext" href="#editmessagetext"><i class="anchor-icon"></i></a>editMessageText</h4>
-<p>Use this method to edit text and <a href="#games">game</a> messages. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned.</p>
+<p>Use this method to edit text and <a href="#games">game</a> messages. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within <strong>48 hours</strong> from the time they were sent.</p>
 <table class="table">
 <thead>
 <tr>
@@ -9304,6 +9490,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message to be edited was sent</td>
+</tr>
 <tr>
 <td>chat_id</td>
 <td>Integer or String</td>
@@ -9355,7 +9547,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="editmessagecaption" href="#editmessagecaption"><i class="anchor-icon"></i></a>editMessageCaption</h4>
-<p>Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned.</p>
+<p>Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within <strong>48 hours</strong> from the time they were sent.</p>
 <table class="table">
 <thead>
 <tr>
@@ -9366,6 +9558,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message to be edited was sent</td>
+</tr>
 <tr>
 <td>chat_id</td>
 <td>Integer or String</td>
@@ -9417,7 +9615,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="editmessagemedia" href="#editmessagemedia"><i class="anchor-icon"></i></a>editMessageMedia</h4>
-<p>Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can&#39;t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned.</p>
+<p>Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can&#39;t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within <strong>48 hours</strong> from the time they were sent.</p>
 <table class="table">
 <thead>
 <tr>
@@ -9428,6 +9626,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message to be edited was sent</td>
+</tr>
 <tr>
 <td>chat_id</td>
 <td>Integer or String</td>
@@ -9472,6 +9676,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message to be edited was sent</td>
+</tr>
 <tr>
 <td>chat_id</td>
 <td>Integer or String</td>
@@ -9547,6 +9757,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </thead>
 <tbody>
 <tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message to be edited was sent</td>
+</tr>
+<tr>
 <td>chat_id</td>
 <td>Integer or String</td>
 <td>Optional</td>
@@ -9573,7 +9789,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="editmessagereplymarkup" href="#editmessagereplymarkup"><i class="anchor-icon"></i></a>editMessageReplyMarkup</h4>
-<p>Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned.</p>
+<p>Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within <strong>48 hours</strong> from the time they were sent.</p>
 <table class="table">
 <thead>
 <tr>
@@ -9584,6 +9800,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message to be edited was sent</td>
+</tr>
 <tr>
 <td>chat_id</td>
 <td>Integer or String</td>
@@ -9622,6 +9844,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message to be edited was sent</td>
+</tr>
 <tr>
 <td>chat_id</td>
 <td>Integer or String</td>
@@ -12680,6 +12908,32 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="getstartransactions" href="#getstartransactions"><i class="anchor-icon"></i></a>getStarTransactions</h4>
+<p>Returns the bot&#39;s Telegram Star transactions in chronological order. On success, returns a <a href="#startransactions">StarTransactions</a> object.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>Number of transactions to skip in the response</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100.</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="refundstarpayment" href="#refundstarpayment"><i class="anchor-icon"></i></a>refundStarPayment</h4>
 <p>Refunds a successful payment in <a href="https://t.me/BotNews/90">Telegram Stars</a>. Returns <em>True</em> on success.</p>
 <table class="table">
@@ -12895,7 +13149,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <tr>
 <td>invoice_payload</td>
 <td>String</td>
-<td>Bot specified invoice payload</td>
+<td>Bot-specified invoice payload</td>
 </tr>
 <tr>
 <td>shipping_option_id</td>
@@ -12916,6 +13170,44 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>provider_payment_charge_id</td>
 <td>String</td>
 <td>Provider payment identifier</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="refundedpayment" href="#refundedpayment"><i class="anchor-icon"></i></a>RefundedPayment</h4>
+<p>This object contains basic information about a refunded payment.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>currency</td>
+<td>String</td>
+<td>Three-letter ISO 4217 <a href="/bots/payments#supported-currencies">currency</a> code, or “XTR” for payments in <a href="https://t.me/BotNews/90">Telegram Stars</a>. Currently, always “XTR”</td>
+</tr>
+<tr>
+<td>total_amount</td>
+<td>Integer</td>
+<td>Total refunded price in the <em>smallest units</em> of the currency (integer, <strong>not</strong> float/double). For example, for a price of <code>US$ 1.45</code>, <code>total_amount = 145</code>. See the <em>exp</em> parameter in <a href="/bots/payments/currencies.json">currencies.json</a>, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).</td>
+</tr>
+<tr>
+<td>invoice_payload</td>
+<td>String</td>
+<td>Bot-specified invoice payload</td>
+</tr>
+<tr>
+<td>telegram_payment_charge_id</td>
+<td>String</td>
+<td>Telegram payment identifier</td>
+</tr>
+<tr>
+<td>provider_payment_charge_id</td>
+<td>String</td>
+<td><em>Optional</em>. Provider payment identifier</td>
 </tr>
 </tbody>
 </table>
@@ -12943,7 +13235,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <tr>
 <td>invoice_payload</td>
 <td>String</td>
-<td>Bot specified invoice payload</td>
+<td>Bot-specified invoice payload</td>
 </tr>
 <tr>
 <td>shipping_address</td>
@@ -12986,7 +13278,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <tr>
 <td>invoice_payload</td>
 <td>String</td>
-<td>Bot specified invoice payload</td>
+<td>Bot-specified invoice payload</td>
 </tr>
 <tr>
 <td>shipping_option_id</td>
@@ -12997,6 +13289,228 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>order_info</td>
 <td><a href="#orderinfo">OrderInfo</a></td>
 <td><em>Optional</em>. Order information provided by the user</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="revenuewithdrawalstate" href="#revenuewithdrawalstate"><i class="anchor-icon"></i></a>RevenueWithdrawalState</h4>
+<p>This object describes the state of a revenue withdrawal operation. Currently, it can be one of</p>
+<ul>
+<li><a href="#revenuewithdrawalstatepending">RevenueWithdrawalStatePending</a></li>
+<li><a href="#revenuewithdrawalstatesucceeded">RevenueWithdrawalStateSucceeded</a></li>
+<li><a href="#revenuewithdrawalstatefailed">RevenueWithdrawalStateFailed</a></li>
+</ul>
+<h4><a class="anchor" name="revenuewithdrawalstatepending" href="#revenuewithdrawalstatepending"><i class="anchor-icon"></i></a>RevenueWithdrawalStatePending</h4>
+<p>The withdrawal is in progress.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the state, always “pending”</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="revenuewithdrawalstatesucceeded" href="#revenuewithdrawalstatesucceeded"><i class="anchor-icon"></i></a>RevenueWithdrawalStateSucceeded</h4>
+<p>The withdrawal succeeded.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the state, always “succeeded”</td>
+</tr>
+<tr>
+<td>date</td>
+<td>Integer</td>
+<td>Date the withdrawal was completed in Unix time</td>
+</tr>
+<tr>
+<td>url</td>
+<td>String</td>
+<td>An HTTPS URL that can be used to see transaction details</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="revenuewithdrawalstatefailed" href="#revenuewithdrawalstatefailed"><i class="anchor-icon"></i></a>RevenueWithdrawalStateFailed</h4>
+<p>The withdrawal failed and the transaction was refunded.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the state, always “failed”</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="transactionpartner" href="#transactionpartner"><i class="anchor-icon"></i></a>TransactionPartner</h4>
+<p>This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of</p>
+<ul>
+<li><a href="#transactionpartneruser">TransactionPartnerUser</a></li>
+<li><a href="#transactionpartnerfragment">TransactionPartnerFragment</a></li>
+<li><a href="#transactionpartnertelegramads">TransactionPartnerTelegramAds</a></li>
+<li><a href="#transactionpartnerother">TransactionPartnerOther</a></li>
+</ul>
+<h4><a class="anchor" name="transactionpartneruser" href="#transactionpartneruser"><i class="anchor-icon"></i></a>TransactionPartnerUser</h4>
+<p>Describes a transaction with a user.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the transaction partner, always “user”</td>
+</tr>
+<tr>
+<td>user</td>
+<td><a href="#user">User</a></td>
+<td>Information about the user</td>
+</tr>
+<tr>
+<td>invoice_payload</td>
+<td>String</td>
+<td><em>Optional</em>. Bot-specified invoice payload</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="transactionpartnerfragment" href="#transactionpartnerfragment"><i class="anchor-icon"></i></a>TransactionPartnerFragment</h4>
+<p>Describes a withdrawal transaction with Fragment.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the transaction partner, always “fragment”</td>
+</tr>
+<tr>
+<td>withdrawal_state</td>
+<td><a href="#revenuewithdrawalstate">RevenueWithdrawalState</a></td>
+<td><em>Optional</em>. State of the transaction if the transaction is outgoing</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="transactionpartnertelegramads" href="#transactionpartnertelegramads"><i class="anchor-icon"></i></a>TransactionPartnerTelegramAds</h4>
+<p>Describes a withdrawal transaction to the Telegram Ads platform.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the transaction partner, always “telegram_ads”</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="transactionpartnerother" href="#transactionpartnerother"><i class="anchor-icon"></i></a>TransactionPartnerOther</h4>
+<p>Describes a transaction with an unknown source or recipient.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the transaction partner, always “other”</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="startransaction" href="#startransaction"><i class="anchor-icon"></i></a>StarTransaction</h4>
+<p>Describes a Telegram Star transaction.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with <em>SuccessfulPayment.telegram_payment_charge_id</em> for successful incoming payments from users.</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Integer</td>
+<td>Number of Telegram Stars transferred by the transaction</td>
+</tr>
+<tr>
+<td>date</td>
+<td>Integer</td>
+<td>Date the transaction was created in Unix time</td>
+</tr>
+<tr>
+<td>source</td>
+<td><a href="#transactionpartner">TransactionPartner</a></td>
+<td><em>Optional</em>. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions</td>
+</tr>
+<tr>
+<td>receiver</td>
+<td><a href="#transactionpartner">TransactionPartner</a></td>
+<td><em>Optional</em>. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="startransactions" href="#startransactions"><i class="anchor-icon"></i></a>StarTransactions</h4>
+<p>Contains a list of Telegram Star transactions.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>transactions</td>
+<td>Array of <a href="#startransaction">StarTransaction</a></td>
+<td>The list of transactions</td>
 </tr>
 </tbody>
 </table>

@@ -23,6 +23,6 @@ jobs:
           java-version-file: .github/workflows/.ci-java-version
 
       - uses: gradle/actions/setup-gradle@v4.0.0-rc.1
-        with:
-          gradle-home-cache-cleanup: true
-          arguments: check
+      
+      - name: Run the tests
+        run: ./gradlew check

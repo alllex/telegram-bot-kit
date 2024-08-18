@@ -494,9 +494,9 @@ suspend fun TelegramBotApiClient.sendVideoNote(
     trySendVideoNote(SendVideoNoteRequest(chatId, videoNote, messageThreadId, duration, length, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to send paid media to channel chats. On success, the sent Message is returned.
+ * Use this method to send paid media. On success, the sent Message is returned.
  *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance.
  * @param starCount The number of Telegram Stars that must be paid to buy access to the media
  * @param media A JSON-serialized array describing the media to be sent; up to 10 items
  * @param caption Media caption, 0-1024 characters after entities parsing
@@ -507,6 +507,7 @@ suspend fun TelegramBotApiClient.sendVideoNote(
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendPaidMedia(
@@ -521,8 +522,9 @@ suspend fun TelegramBotApiClient.sendPaidMedia(
     protectContent: Boolean? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Message =
-    trySendPaidMedia(SendPaidMediaRequest(chatId, starCount, media, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendPaidMedia(SendPaidMediaRequest(chatId, starCount, media, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
@@ -762,11 +764,11 @@ suspend fun TelegramBotApiClient.sendChatAction(
     trySendChatAction(SendChatActionRequest(chatId, action, messageThreadId, businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.
+ * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.
- * @param reaction A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.
+ * @param reaction A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots.
  * @param isBig Pass True to set the reaction with a big animation
  */
 @Throws(TelegramBotApiException::class)
@@ -1006,6 +1008,38 @@ suspend fun TelegramBotApiClient.editChatInviteLink(
     tryEditChatInviteLink(EditChatInviteLinkRequest(chatId, inviteLink, name, expireDate, memberLimit, createsJoinRequest)).getResultOrThrow()
 
 /**
+ * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
+ *
+ * @param chatId Unique identifier for the target channel chat or username of the target channel (in the format @channelusername)
+ * @param subscriptionPeriod The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days).
+ * @param subscriptionPrice The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500
+ * @param name Invite link name; 0-32 characters
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.createChatSubscriptionInviteLink(
+    chatId: ChatId,
+    subscriptionPeriod: Seconds,
+    subscriptionPrice: Long,
+    name: String? = null,
+): ChatInviteLink =
+    tryCreateChatSubscriptionInviteLink(CreateChatSubscriptionInviteLinkRequest(chatId, subscriptionPeriod, subscriptionPrice, name)).getResultOrThrow()
+
+/**
+ * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param inviteLink The invite link to edit
+ * @param name Invite link name; 0-32 characters
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.editChatSubscriptionInviteLink(
+    chatId: ChatId,
+    inviteLink: String,
+    name: String? = null,
+): ChatInviteLink =
+    tryEditChatSubscriptionInviteLink(EditChatSubscriptionInviteLinkRequest(chatId, inviteLink, name)).getResultOrThrow()
+
+/**
  * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object.
  *
  * @param chatId Unique identifier of the target chat or username of the target channel (in the format @channelusername)
@@ -1100,27 +1134,31 @@ suspend fun TelegramBotApiClient.setChatDescription(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of a message to pin
  * @param disableNotification Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be pinned
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.pinChatMessage(
     chatId: ChatId,
     messageId: MessageId,
     disableNotification: Boolean? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Boolean =
-    tryPinChatMessage(PinChatMessageRequest(chatId, messageId, disableNotification)).getResultOrThrow()
+    tryPinChatMessage(PinChatMessageRequest(chatId, messageId, disableNotification, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned.
+ * @param messageId Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be unpinned.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be unpinned
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.unpinChatMessage(
     chatId: ChatId,
     messageId: MessageId? = null,
+    businessConnectionId: BusinessConnectionId? = null,
 ): Boolean =
-    tryUnpinChatMessage(UnpinChatMessageRequest(chatId, messageId)).getResultOrThrow()
+    tryUnpinChatMessage(UnpinChatMessageRequest(chatId, messageId, businessConnectionId)).getResultOrThrow()
 
 /**
  * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
@@ -1239,7 +1277,7 @@ suspend fun TelegramBotApiClient.createForumTopic(
     tryCreateForumTopic(CreateForumTopicRequest(chatId, name, iconColor, iconCustomEmojiId)).getResultOrThrow()
 
 /**
- * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+ * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param messageThreadId Unique identifier for the target message thread of the forum topic
@@ -1308,7 +1346,7 @@ suspend fun TelegramBotApiClient.unpinAllForumTopicMessages(
     tryUnpinAllForumTopicMessages(UnpinAllForumTopicMessagesRequest(chatId, messageThreadId)).getResultOrThrow()
 
 /**
- * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success.
+ * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
  * @param name New topic name, 1-128 characters
@@ -2077,7 +2115,7 @@ suspend fun TelegramBotApiClient.setStickerSetTitle(
  * @param name Sticker set name
  * @param userId User identifier of the sticker set owner
  * @param format Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video
- * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
+ * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.setStickerSetThumbnail(

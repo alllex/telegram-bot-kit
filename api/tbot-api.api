@@ -2211,11 +2211,14 @@ public final class me/alllex/tbot/api/model/ChatMemberLeft$Companion {
 
 public final class me/alllex/tbot/api/model/ChatMemberMember : me/alllex/tbot/api/model/ChatMember {
 	public static final field Companion Lme/alllex/tbot/api/model/ChatMemberMember$Companion;
-	public fun <init> (Lme/alllex/tbot/api/model/User;)V
+	public synthetic fun <init> (Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lme/alllex/tbot/api/model/User;
-	public final fun copy (Lme/alllex/tbot/api/model/User;)Lme/alllex/tbot/api/model/ChatMemberMember;
-	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/ChatMemberMember;Lme/alllex/tbot/api/model/User;ILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatMemberMember;
+	public final fun component2-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
+	public final fun copy-nX-SKUw (Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;)Lme/alllex/tbot/api/model/ChatMemberMember;
+	public static synthetic fun copy-nX-SKUw$default (Lme/alllex/tbot/api/model/ChatMemberMember;Lme/alllex/tbot/api/model/User;Lme/alllex/tbot/api/model/UnixTimestamp;ILjava/lang/Object;)Lme/alllex/tbot/api/model/ChatMemberMember;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUntilDate-kgC_Xj8 ()Lme/alllex/tbot/api/model/UnixTimestamp;
 	public final fun getUser ()Lme/alllex/tbot/api/model/User;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -2804,6 +2807,40 @@ public final class me/alllex/tbot/api/model/CreateChatInviteLinkRequest$$seriali
 }
 
 public final class me/alllex/tbot/api/model/CreateChatInviteLinkRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest {
+	public static final field Companion Lme/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest$Companion;
+	public synthetic fun <init> (JJJLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJJLjava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-dK1lXec ()J
+	public final fun component2-RHIZTpk ()J
+	public final fun component3 ()J
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy-frtVRa8 (JJJLjava/lang/String;)Lme/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest;
+	public static synthetic fun copy-frtVRa8$default (Lme/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest;JJJLjava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChatId-dK1lXec ()J
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSubscriptionPeriod-RHIZTpk ()J
+	public final fun getSubscriptionPrice ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
@@ -3397,6 +3434,38 @@ public final class me/alllex/tbot/api/model/EditChatInviteLinkRequest$$serialize
 }
 
 public final class me/alllex/tbot/api/model/EditChatInviteLinkRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest {
+	public static final field Companion Lme/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest$Companion;
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-dK1lXec ()J
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy-swsHdGg (JLjava/lang/String;Ljava/lang/String;)Lme/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest;
+	public static synthetic fun copy-swsHdGg$default (Lme/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest;JLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChatId-dK1lXec ()J
+	public final fun getInviteLink ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class me/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lme/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lme/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
@@ -8029,6 +8098,8 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static synthetic fun copyMessages-OoMxRC8$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun createChatInviteLink-uiK7DU4 (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun createChatInviteLink-uiK7DU4$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun createChatSubscriptionInviteLink-5t3G2As (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJJLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun createChatSubscriptionInviteLink-5t3G2As$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJJLjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun createForumTopic-8sQ86mQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun createForumTopic-8sQ86mQ$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun createInvoiceLink (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -8049,6 +8120,8 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static synthetic fun deleteWebhook$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editChatInviteLink-JVDDfaA (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editChatInviteLink-JVDDfaA$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun editChatSubscriptionInviteLink-bATV1Ik (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun editChatSubscriptionInviteLink-bATV1Ik$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editForumTopic-fr45IeY (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editForumTopic-fr45IeY$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editGeneralForumTopic-BeieCNI (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -8112,8 +8185,8 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static final fun hideGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun leaveChat-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun logOut (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun pinChatMessage-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun pinChatMessage-LHA2_7E$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun pinChatMessage-t1D103Y (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun pinChatMessage-t1D103Y$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun promoteChatMember-c53S_gM (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun promoteChatMember-c53S_gM$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun refundStarPayment-rvTNGhQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -8145,8 +8218,8 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static synthetic fun sendMediaGroup-JEgueTw$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendMessage-GO-75nc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun sendMessage-GO-75nc$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun sendPaidMedia-VNpPeqA (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun sendPaidMedia-VNpPeqA$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun sendPaidMedia-nApyUdk (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun sendPaidMedia-nApyUdk$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendPhoto-3jOBY1M (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun sendPhoto-3jOBY1M$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendPoll-_yNnsms (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -8214,8 +8287,8 @@ public final class me/alllex/tbot/api/model/MethodsKt {
 	public static final fun unpinAllChatMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinAllForumTopicMessages-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinAllGeneralForumTopicMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun unpinChatMessage-6XJKVkg (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun unpinChatMessage-6XJKVkg$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun unpinChatMessage-vMDEJd0 (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun unpinChatMessage-vMDEJd0$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun uploadStickerFile-CnxUCFs (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -8830,14 +8903,16 @@ public final class me/alllex/tbot/api/model/PhotoSize$Companion {
 
 public final class me/alllex/tbot/api/model/PinChatMessageRequest {
 	public static final field Companion Lme/alllex/tbot/api/model/PinChatMessageRequest$Companion;
-	public synthetic fun <init> (JJLjava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JJLjava/lang/Boolean;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLjava/lang/Boolean;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLjava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-dK1lXec ()J
 	public final fun component2-2OzcLEE ()J
 	public final fun component3 ()Ljava/lang/Boolean;
-	public final fun copy-WDt_itU (JJLjava/lang/Boolean;)Lme/alllex/tbot/api/model/PinChatMessageRequest;
-	public static synthetic fun copy-WDt_itU$default (Lme/alllex/tbot/api/model/PinChatMessageRequest;JJLjava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/PinChatMessageRequest;
+	public final fun component4-H07UuqQ ()Ljava/lang/String;
+	public final fun copy-y73nfBw (JJLjava/lang/Boolean;Ljava/lang/String;)Lme/alllex/tbot/api/model/PinChatMessageRequest;
+	public static synthetic fun copy-y73nfBw$default (Lme/alllex/tbot/api/model/PinChatMessageRequest;JJLjava/lang/Boolean;Ljava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/PinChatMessageRequest;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBusinessConnectionId-H07UuqQ ()Ljava/lang/String;
 	public final fun getChatId-dK1lXec ()J
 	public final fun getDisableNotification ()Ljava/lang/Boolean;
 	public final fun getMessageId-2OzcLEE ()J
@@ -9290,6 +9365,14 @@ public final class me/alllex/tbot/api/model/ReactionTypeEmoji$$serializer : kotl
 
 public final class me/alllex/tbot/api/model/ReactionTypeEmoji$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class me/alllex/tbot/api/model/ReactionTypePaid : me/alllex/tbot/api/model/ReactionType {
+	public static final field INSTANCE Lme/alllex/tbot/api/model/ReactionTypePaid;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class me/alllex/tbot/api/model/RefundStarPaymentRequest {
@@ -10350,11 +10433,12 @@ public final class me/alllex/tbot/api/model/SendMessageRequest$Companion {
 
 public final class me/alllex/tbot/api/model/SendPaidMediaRequest {
 	public static final field Companion Lme/alllex/tbot/api/model/SendPaidMediaRequest$Companion;
-	public synthetic fun <init> (JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-dK1lXec ()J
 	public final fun component10 ()Lme/alllex/tbot/api/model/ReplyParameters;
 	public final fun component11 ()Lme/alllex/tbot/api/model/ReplyMarkup;
+	public final fun component12-H07UuqQ ()Ljava/lang/String;
 	public final fun component2 ()J
 	public final fun component3 ()Ljava/util/List;
 	public final fun component4 ()Ljava/lang/String;
@@ -10363,9 +10447,10 @@ public final class me/alllex/tbot/api/model/SendPaidMediaRequest {
 	public final fun component7 ()Ljava/lang/Boolean;
 	public final fun component8 ()Ljava/lang/Boolean;
 	public final fun component9 ()Ljava/lang/Boolean;
-	public final fun copy-UKEFZ4o (JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;)Lme/alllex/tbot/api/model/SendPaidMediaRequest;
-	public static synthetic fun copy-UKEFZ4o$default (Lme/alllex/tbot/api/model/SendPaidMediaRequest;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;ILjava/lang/Object;)Lme/alllex/tbot/api/model/SendPaidMediaRequest;
+	public final fun copy-CIFKdEs (JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;)Lme/alllex/tbot/api/model/SendPaidMediaRequest;
+	public static synthetic fun copy-CIFKdEs$default (Lme/alllex/tbot/api/model/SendPaidMediaRequest;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/SendPaidMediaRequest;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBusinessConnectionId-H07UuqQ ()Ljava/lang/String;
 	public final fun getCaption ()Ljava/lang/String;
 	public final fun getCaptionEntities ()Ljava/util/List;
 	public final fun getChatId-dK1lXec ()J
@@ -12185,14 +12270,16 @@ public final class me/alllex/tbot/api/model/TransactionPartnerTelegramAds : me/a
 
 public final class me/alllex/tbot/api/model/TransactionPartnerUser : me/alllex/tbot/api/model/TransactionPartner {
 	public static final field Companion Lme/alllex/tbot/api/model/TransactionPartnerUser$Companion;
-	public fun <init> (Lme/alllex/tbot/api/model/User;Ljava/lang/String;)V
-	public synthetic fun <init> (Lme/alllex/tbot/api/model/User;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lme/alllex/tbot/api/model/User;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Lme/alllex/tbot/api/model/User;Ljava/lang/String;)Lme/alllex/tbot/api/model/TransactionPartnerUser;
-	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/TransactionPartnerUser;Lme/alllex/tbot/api/model/User;Ljava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/TransactionPartnerUser;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;)Lme/alllex/tbot/api/model/TransactionPartnerUser;
+	public static synthetic fun copy$default (Lme/alllex/tbot/api/model/TransactionPartnerUser;Lme/alllex/tbot/api/model/User;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lme/alllex/tbot/api/model/TransactionPartnerUser;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getInvoicePayload ()Ljava/lang/String;
+	public final fun getPaidMedia ()Ljava/util/List;
 	public final fun getUser ()Lme/alllex/tbot/api/model/User;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -12236,6 +12323,8 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static synthetic fun tryCopyMessages-OoMxRC8$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryCreateChatInviteLink-uiK7DU4 (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryCreateChatInviteLink-uiK7DU4$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryCreateChatSubscriptionInviteLink-5t3G2As (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJJLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryCreateChatSubscriptionInviteLink-5t3G2As$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJJLjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryCreateForumTopic-8sQ86mQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryCreateForumTopic-8sQ86mQ$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryCreateInvoiceLink (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12256,6 +12345,8 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static synthetic fun tryDeleteWebhook$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditChatInviteLink-JVDDfaA (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditChatInviteLink-JVDDfaA$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryEditChatSubscriptionInviteLink-bATV1Ik (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryEditChatSubscriptionInviteLink-bATV1Ik$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditForumTopic-fr45IeY (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditForumTopic-fr45IeY$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditGeneralForumTopic-BeieCNI (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12315,8 +12406,8 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static synthetic fun tryGetUserProfilePhotos-CnxUCFs$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/Long;Ljava/lang/Long;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryHideGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryLeaveChat-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun tryPinChatMessage-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryPinChatMessage-LHA2_7E$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryPinChatMessage-t1D103Y (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryPinChatMessage-t1D103Y$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryPromoteChatMember-c53S_gM (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryPromoteChatMember-c53S_gM$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryRefundStarPayment-rvTNGhQ (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12348,8 +12439,8 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static synthetic fun trySendMediaGroup-JEgueTw$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendMessage-GO-75nc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun trySendMessage-GO-75nc$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun trySendPaidMedia-VNpPeqA (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun trySendPaidMedia-VNpPeqA$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun trySendPaidMedia-nApyUdk (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun trySendPaidMedia-nApyUdk$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendPhoto-3jOBY1M (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun trySendPhoto-3jOBY1M$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendPoll-_yNnsms (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12417,8 +12508,8 @@ public final class me/alllex/tbot/api/model/TryMethodsKt {
 	public static final fun tryUnpinAllChatMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllForumTopicMessages-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiClient;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllGeneralForumTopicMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun tryUnpinChatMessage-6XJKVkg (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryUnpinChatMessage-6XJKVkg$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryUnpinChatMessage-vMDEJd0 (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryUnpinChatMessage-vMDEJd0$default (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryUploadStickerFile-CnxUCFs (Lme/alllex/tbot/api/client/TelegramBotApiClient;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -12438,6 +12529,7 @@ public final class me/alllex/tbot/api/model/TryRequestMethodsKt {
 	public static final fun tryCopyMessage (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/CopyMessageRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryCopyMessages (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/CopyMessagesRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryCreateChatInviteLink (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/CreateChatInviteLinkRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun tryCreateChatSubscriptionInviteLink (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/CreateChatSubscriptionInviteLinkRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryCreateForumTopic (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/CreateForumTopicRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryCreateInvoiceLink (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/CreateInvoiceLinkRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryCreateNewStickerSet (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/CreateNewStickerSetRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12452,6 +12544,7 @@ public final class me/alllex/tbot/api/model/TryRequestMethodsKt {
 	public static final fun tryDeleteStickerSet (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/DeleteStickerSetRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryDeleteWebhook (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/DeleteWebhookRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryEditChatInviteLink (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/EditChatInviteLinkRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun tryEditChatSubscriptionInviteLink (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/EditChatSubscriptionInviteLinkRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryEditForumTopic (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/EditForumTopicRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryEditGeneralForumTopic (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/EditGeneralForumTopicRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryEditInlineMessageCaption (Lme/alllex/tbot/api/client/TelegramBotApiClient;Lme/alllex/tbot/api/model/EditMessageCaptionRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12580,6 +12673,8 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static synthetic fun tryCopyMessages-OoMxRC8$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryCreateChatInviteLink-uiK7DU4 (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryCreateChatInviteLink-uiK7DU4$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryCreateChatSubscriptionInviteLink-5t3G2As (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJJLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryCreateChatSubscriptionInviteLink-5t3G2As$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJJLjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryCreateForumTopic-8sQ86mQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryCreateForumTopic-8sQ86mQ$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryCreateInvoiceLink (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12600,6 +12695,8 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static synthetic fun tryDeleteWebhook$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditChatInviteLink-JVDDfaA (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditChatInviteLink-JVDDfaA$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryEditChatSubscriptionInviteLink-bATV1Ik (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryEditChatSubscriptionInviteLink-bATV1Ik$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditForumTopic-fr45IeY (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryEditForumTopic-fr45IeY$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryEditGeneralForumTopic-BeieCNI (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12663,8 +12760,8 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static final fun tryHideGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryLeaveChat-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryLogOut (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun tryPinChatMessage-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryPinChatMessage-LHA2_7E$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryPinChatMessage-t1D103Y (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryPinChatMessage-t1D103Y$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryPromoteChatMember-c53S_gM (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun tryPromoteChatMember-c53S_gM$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryRefundStarPayment-rvTNGhQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12696,8 +12793,8 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static synthetic fun trySendMediaGroup-JEgueTw$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendMessage-GO-75nc (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun trySendMessage-GO-75nc$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun trySendPaidMedia-VNpPeqA (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun trySendPaidMedia-VNpPeqA$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun trySendPaidMedia-nApyUdk (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun trySendPaidMedia-nApyUdk$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendPhoto-3jOBY1M (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun trySendPhoto-3jOBY1M$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun trySendPoll-_yNnsms (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lme/alllex/tbot/api/model/Seconds;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -12765,8 +12862,8 @@ public final class me/alllex/tbot/api/model/TryWithContextMethodsKt {
 	public static final fun tryUnpinAllChatMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllForumTopicMessages-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun tryUnpinAllGeneralForumTopicMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun tryUnpinChatMessage-6XJKVkg (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun tryUnpinChatMessage-6XJKVkg$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tryUnpinChatMessage-vMDEJd0 (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tryUnpinChatMessage-vMDEJd0$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun tryUploadStickerFile-CnxUCFs (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -12973,13 +13070,15 @@ public final class me/alllex/tbot/api/model/UnpinAllGeneralForumTopicMessagesReq
 
 public final class me/alllex/tbot/api/model/UnpinChatMessageRequest {
 	public static final field Companion Lme/alllex/tbot/api/model/UnpinChatMessageRequest$Companion;
-	public synthetic fun <init> (JLme/alllex/tbot/api/model/MessageId;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JLme/alllex/tbot/api/model/MessageId;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-dK1lXec ()J
 	public final fun component2-XcDfd4U ()Lme/alllex/tbot/api/model/MessageId;
-	public final fun copy-h_Zx1PU (JLme/alllex/tbot/api/model/MessageId;)Lme/alllex/tbot/api/model/UnpinChatMessageRequest;
-	public static synthetic fun copy-h_Zx1PU$default (Lme/alllex/tbot/api/model/UnpinChatMessageRequest;JLme/alllex/tbot/api/model/MessageId;ILjava/lang/Object;)Lme/alllex/tbot/api/model/UnpinChatMessageRequest;
+	public final fun component3-H07UuqQ ()Ljava/lang/String;
+	public final fun copy-SMf0D_0 (JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;)Lme/alllex/tbot/api/model/UnpinChatMessageRequest;
+	public static synthetic fun copy-SMf0D_0$default (Lme/alllex/tbot/api/model/UnpinChatMessageRequest;JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;ILjava/lang/Object;)Lme/alllex/tbot/api/model/UnpinChatMessageRequest;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBusinessConnectionId-H07UuqQ ()Ljava/lang/String;
 	public final fun getChatId-dK1lXec ()J
 	public final fun getMessageId-XcDfd4U ()Lme/alllex/tbot/api/model/MessageId;
 	public fun hashCode ()I
@@ -13076,12 +13175,13 @@ public final class me/alllex/tbot/api/model/UploadStickerFileRequest$Companion {
 
 public final class me/alllex/tbot/api/model/User {
 	public static final field Companion Lme/alllex/tbot/api/model/User$Companion;
-	public synthetic fun <init> (JZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (JZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-BHTGnbw ()J
 	public final fun component10 ()Ljava/lang/Boolean;
 	public final fun component11 ()Ljava/lang/Boolean;
 	public final fun component12 ()Ljava/lang/Boolean;
+	public final fun component13 ()Ljava/lang/Boolean;
 	public final fun component2 ()Z
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Ljava/lang/String;
@@ -13090,14 +13190,15 @@ public final class me/alllex/tbot/api/model/User {
 	public final fun component7 ()Ljava/lang/Boolean;
 	public final fun component8 ()Ljava/lang/Boolean;
 	public final fun component9 ()Ljava/lang/Boolean;
-	public final fun copy-EHQIGHY (JZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/User;
-	public static synthetic fun copy-EHQIGHY$default (Lme/alllex/tbot/api/model/User;JZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/User;
+	public final fun copy--cFCkDk (JZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lme/alllex/tbot/api/model/User;
+	public static synthetic fun copy--cFCkDk$default (Lme/alllex/tbot/api/model/User;JZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lme/alllex/tbot/api/model/User;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAddedToAttachmentMenu ()Ljava/lang/Boolean;
 	public final fun getCanConnectToBusiness ()Ljava/lang/Boolean;
 	public final fun getCanJoinGroups ()Ljava/lang/Boolean;
 	public final fun getCanReadAllGroupMessages ()Ljava/lang/Boolean;
 	public final fun getFirstName ()Ljava/lang/String;
+	public final fun getHasMainWebApp ()Ljava/lang/Boolean;
 	public final fun getId-BHTGnbw ()J
 	public final fun getLanguageCode ()Ljava/lang/String;
 	public final fun getLastName ()Ljava/lang/String;
@@ -13650,6 +13751,8 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static synthetic fun copyMessages-OoMxRC8$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun createChatInviteLink-uiK7DU4 (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun createChatInviteLink-uiK7DU4$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun createChatSubscriptionInviteLink-5t3G2As (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJJLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun createChatSubscriptionInviteLink-5t3G2As$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJJLjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun createForumTopic-8sQ86mQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun createForumTopic-8sQ86mQ$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/Long;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun createInvoiceLink (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -13671,6 +13774,8 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static synthetic fun deleteWebhook$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editChatInviteLink-JVDDfaA (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editChatInviteLink-JVDDfaA$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lme/alllex/tbot/api/model/UnixTimestamp;Ljava/lang/Long;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun editChatSubscriptionInviteLink-bATV1Ik (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun editChatSubscriptionInviteLink-bATV1Ik$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editForumTopic-fr45IeY (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun editForumTopic-fr45IeY$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun editGeneralForumTopic-BeieCNI (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -13748,8 +13853,8 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static final fun hideGeneralForumTopic-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun leaveChat-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun logOut (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun pinChatMessage-LHA2_7E (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun pinChatMessage-LHA2_7E$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun pinChatMessage-t1D103Y (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun pinChatMessage-t1D103Y$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun promoteChatMember-c53S_gM (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun promoteChatMember-c53S_gM$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun refundStarPayment-rvTNGhQ (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -13837,8 +13942,8 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static synthetic fun sendMessage-b7sLdJI$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendMessage-meDzHiw (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Chat;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun sendMessage-meDzHiw$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;Lme/alllex/tbot/api/model/Chat;Ljava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Lme/alllex/tbot/api/model/LinkPreviewOptions;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun sendPaidMedia-VNpPeqA (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun sendPaidMedia-VNpPeqA$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun sendPaidMedia-nApyUdk (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun sendPaidMedia-nApyUdk$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLjava/util/List;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendPhoto-3jOBY1M (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun sendPhoto-3jOBY1M$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun sendPhoto-4_m3e-c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Lme/alllex/tbot/api/model/MessageThreadId;Ljava/lang/String;Lme/alllex/tbot/api/model/ParseMode;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Lme/alllex/tbot/api/model/ReplyParameters;Lme/alllex/tbot/api/model/ReplyMarkup;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -13930,8 +14035,8 @@ public final class me/alllex/tbot/api/model/WithContextMethodsKt {
 	public static final fun unpinAllChatMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinAllForumTopicMessages-3Ll9Fnc (Lme/alllex/tbot/api/client/TelegramBotApiContext;JJLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun unpinAllGeneralForumTopicMessages-uYt3e2c (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun unpinChatMessage-6XJKVkg (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun unpinChatMessage-6XJKVkg$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun unpinChatMessage-vMDEJd0 (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun unpinChatMessage-vMDEJd0$default (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLme/alllex/tbot/api/model/MessageId;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun uploadStickerFile-CnxUCFs (Lme/alllex/tbot/api/client/TelegramBotApiContext;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

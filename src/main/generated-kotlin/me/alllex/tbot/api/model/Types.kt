@@ -383,6 +383,7 @@ data class WebhookInfo(
  * @param canReadAllGroupMessages Optional. True, if privacy mode is disabled for the bot. Returned only in getMe.
  * @param supportsInlineQueries Optional. True, if the bot supports inline queries. Returned only in getMe.
  * @param canConnectToBusiness Optional. True, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in getMe.
+ * @param hasMainWebApp Optional. True, if the bot has a main Web App. Returned only in getMe.
  */
 @Serializable
 data class User(
@@ -398,8 +399,9 @@ data class User(
     val canReadAllGroupMessages: Boolean? = null,
     val supportsInlineQueries: Boolean? = null,
     val canConnectToBusiness: Boolean? = null,
+    val hasMainWebApp: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("User").prop("id", id).prop("isBot", isBot).prop("firstName", firstName).prop("lastName", lastName).prop("username", username).prop("languageCode", languageCode).prop("isPremium", isPremium).prop("addedToAttachmentMenu", addedToAttachmentMenu).prop("canJoinGroups", canJoinGroups).prop("canReadAllGroupMessages", canReadAllGroupMessages).prop("supportsInlineQueries", supportsInlineQueries).prop("canConnectToBusiness", canConnectToBusiness).toString()
+    override fun toString() = DebugStringBuilder("User").prop("id", id).prop("isBot", isBot).prop("firstName", firstName).prop("lastName", lastName).prop("username", username).prop("languageCode", languageCode).prop("isPremium", isPremium).prop("addedToAttachmentMenu", addedToAttachmentMenu).prop("canJoinGroups", canJoinGroups).prop("canReadAllGroupMessages", canReadAllGroupMessages).prop("supportsInlineQueries", supportsInlineQueries).prop("canConnectToBusiness", canConnectToBusiness).prop("hasMainWebApp", hasMainWebApp).toString()
 }
 
 /**
@@ -528,8 +530,8 @@ data class ChatFullInfo(
  * @param date Date the message was sent in Unix time. It is always a positive number, representing a valid date.
  * @param chat Chat the message belongs to
  * @param messageThreadId Optional. Unique identifier of a message thread to which the message belongs; for supergroups only
- * @param from Optional. Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
- * @param senderChat Optional. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field from contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+ * @param from Optional. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
+ * @param senderChat Optional. Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field from contains a fake sender user in non-channel chats.
  * @param senderBoostCount Optional. If the sender of the message boosted the chat, the number of boosts added by the user
  * @param senderBusinessBot Optional. The bot that actually sent the message on behalf of the business account. Available only for outgoing messages sent on behalf of the connected business account.
  * @param businessConnectionId Optional. Unique identifier of the business connection from which the message was received. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
@@ -2210,13 +2212,15 @@ data class ChatMemberAdministrator(
 /**
  * Represents a chat member that has no additional privileges or restrictions.
  * @param user Information about the user
+ * @param untilDate Optional. Date when the user's subscription will expire; Unix time
  */
 @Serializable
 @SerialName("member")
 data class ChatMemberMember(
     val user: User,
+    val untilDate: UnixTimestamp? = null,
 ) : ChatMember {
-    override fun toString() = DebugStringBuilder("ChatMemberMember").prop("user", user).toString()
+    override fun toString() = DebugStringBuilder("ChatMemberMember").prop("user", user).prop("untilDate", untilDate).toString()
 }
 
 /**
@@ -2433,6 +2437,7 @@ data class ChatLocation(
  * This object describes the type of a reaction. Currently, it can be one of
  * - [ReactionTypeEmoji]
  * - [ReactionTypeCustomEmoji]
+ * - [ReactionTypePaid]
  */
 @Serializable
 @JsonClassDiscriminator("type")
@@ -2461,6 +2466,13 @@ data class ReactionTypeCustomEmoji(
 ) : ReactionType {
     override fun toString() = DebugStringBuilder("ReactionTypeCustomEmoji").prop("customEmojiId", customEmojiId).toString()
 }
+
+/**
+ * The reaction is paid.
+ */
+@Serializable
+@SerialName("paid")
+data object ReactionTypePaid : ReactionType
 
 /**
  * Represents a reaction added to a message along with the number of times it was added.
@@ -4211,14 +4223,16 @@ sealed interface TransactionPartner
  * Describes a transaction with a user.
  * @param user Information about the user
  * @param invoicePayload Optional. Bot-specified invoice payload
+ * @param paidMedia Optional. Information about the paid media bought by the user
  */
 @Serializable
 @SerialName("user")
 data class TransactionPartnerUser(
     val user: User,
     val invoicePayload: String? = null,
+    val paidMedia: List<PaidMedia>? = null,
 ) : TransactionPartner {
-    override fun toString() = DebugStringBuilder("TransactionPartnerUser").prop("user", user).prop("invoicePayload", invoicePayload).toString()
+    override fun toString() = DebugStringBuilder("TransactionPartnerUser").prop("user", user).prop("invoicePayload", invoicePayload).prop("paidMedia", paidMedia).toString()
 }
 
 /**

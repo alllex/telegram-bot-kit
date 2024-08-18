@@ -56,7 +56,8 @@
                 "canJoinGroups",
                 "canReadAllGroupMessages",
                 "supportsInlineQueries",
-                "canConnectToBusiness"
+                "canConnectToBusiness",
+                "hasMainWebApp"
             ]
         },
         {
@@ -1019,7 +1020,8 @@
             "name": "ChatMemberMember",
             "args": [
                 "status",
-                "user"
+                "user",
+                "untilDate"
             ]
         },
         {
@@ -1151,6 +1153,12 @@
             "args": [
                 "type",
                 "customEmojiId"
+            ]
+        },
+        {
+            "name": "ReactionTypePaid",
+            "args": [
+                "type"
             ]
         },
         {
@@ -2084,7 +2092,8 @@
             "args": [
                 "type",
                 "user",
-                "invoicePayload"
+                "invoicePayload",
+                "paidMedia"
             ]
         },
         {
@@ -2548,7 +2557,8 @@
                 "disableNotification",
                 "protectContent",
                 "replyParameters",
-                "replyMarkup"
+                "replyMarkup",
+                "businessConnectionId"
             ]
         },
         {
@@ -2801,6 +2811,23 @@
             ]
         },
         {
+            "name": "createChatSubscriptionInviteLink",
+            "args": [
+                "chatId",
+                "subscriptionPeriod",
+                "subscriptionPrice",
+                "name"
+            ]
+        },
+        {
+            "name": "editChatSubscriptionInviteLink",
+            "args": [
+                "chatId",
+                "inviteLink",
+                "name"
+            ]
+        },
+        {
             "name": "revokeChatInviteLink",
             "args": [
                 "chatId",
@@ -2853,14 +2880,16 @@
             "args": [
                 "chatId",
                 "messageId",
-                "disableNotification"
+                "disableNotification",
+                "businessConnectionId"
             ]
         },
         {
             "name": "unpinChatMessage",
             "args": [
                 "chatId",
-                "messageId"
+                "messageId",
+                "businessConnectionId"
             ]
         },
         {

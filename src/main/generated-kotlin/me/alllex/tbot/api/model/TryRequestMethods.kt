@@ -122,7 +122,7 @@ suspend fun TelegramBotApiClient.trySendVideoNote(requestBody: SendVideoNoteRequ
     telegramPost("sendVideoNote", requestBody)
 
 /**
- * Use this method to send paid media to channel chats. On success, the sent Message is returned.
+ * Use this method to send paid media. On success, the sent Message is returned.
  */
 suspend fun TelegramBotApiClient.trySendPaidMedia(requestBody: SendPaidMediaRequest): TelegramResponse<Message> =
     telegramPost("sendPaidMedia", requestBody)
@@ -174,7 +174,7 @@ suspend fun TelegramBotApiClient.trySendChatAction(requestBody: SendChatActionRe
     telegramPost("sendChatAction", requestBody)
 
 /**
- * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.
+ * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.
  */
 suspend fun TelegramBotApiClient.trySetMessageReaction(requestBody: SetMessageReactionRequest): TelegramResponse<Boolean> =
     telegramPost("setMessageReaction", requestBody)
@@ -256,6 +256,18 @@ suspend fun TelegramBotApiClient.tryCreateChatInviteLink(requestBody: CreateChat
  */
 suspend fun TelegramBotApiClient.tryEditChatInviteLink(requestBody: EditChatInviteLinkRequest): TelegramResponse<ChatInviteLink> =
     telegramPost("editChatInviteLink", requestBody)
+
+/**
+ * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
+ */
+suspend fun TelegramBotApiClient.tryCreateChatSubscriptionInviteLink(requestBody: CreateChatSubscriptionInviteLinkRequest): TelegramResponse<ChatInviteLink> =
+    telegramPost("createChatSubscriptionInviteLink", requestBody)
+
+/**
+ * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object.
+ */
+suspend fun TelegramBotApiClient.tryEditChatSubscriptionInviteLink(requestBody: EditChatSubscriptionInviteLinkRequest): TelegramResponse<ChatInviteLink> =
+    telegramPost("editChatSubscriptionInviteLink", requestBody)
 
 /**
  * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object.
@@ -372,7 +384,7 @@ suspend fun TelegramBotApiClient.tryCreateForumTopic(requestBody: CreateForumTop
     telegramPost("createForumTopic", requestBody)
 
 /**
- * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+ * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryEditForumTopic(requestBody: EditForumTopicRequest): TelegramResponse<Boolean> =
     telegramPost("editForumTopic", requestBody)
@@ -402,7 +414,7 @@ suspend fun TelegramBotApiClient.tryUnpinAllForumTopicMessages(requestBody: Unpi
     telegramPost("unpinAllForumTopicMessages", requestBody)
 
 /**
- * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success.
+ * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryEditGeneralForumTopic(requestBody: EditGeneralForumTopicRequest): TelegramResponse<Boolean> =
     telegramPost("editGeneralForumTopic", requestBody)

@@ -17,7 +17,7 @@ To learn how to create…">
 <link rel="alternate icon" href="/img/favicon.ico" type="image/x-icon" />
     <link href="/css/bootstrap.min.css?3" rel="stylesheet">
     
-    <link href="/css/telegram.css?239" rel="stylesheet" media="screen">
+    <link href="/css/telegram.css?240" rel="stylesheet" media="screen">
     <style>
     </style>
   </head>
@@ -53,6 +53,26 @@ To learn how to create…">
 <blockquote>
 <p>Subscribe to <a href="https://t.me/botnews">@BotNews</a> to be the first to know about the latest updates and join the discussion in <a href="https://t.me/bottalk">@BotTalk</a></p>
 </blockquote>
+<h4><a class="anchor" name="august-14-2024" href="#august-14-2024"><i class="anchor-icon"></i></a>August 14, 2024</h4>
+<p><strong>Bot API 7.9</strong></p>
+<ul>
+<li>Added support for <a href="https://telegram.org/blog/superchannels-star-reactions-subscriptions#super-channels">Super Channels</a>, allowing received channel messages to have users or other channels as their senders.</li>
+<li>Added the ability to send paid media to any chat.</li>
+<li>Added the parameter <em>business_connection_id</em> to the method <a href="#sendpaidmedia">sendPaidMedia</a>, allowing bots to send paid media on behalf of a business account.</li>
+<li>Added the field <em>paid_media</em> to the class <a href="#transactionpartneruser">TransactionPartnerUser</a> for transactions involving paid media.</li>
+<li>Added the method <a href="#createchatsubscriptioninvitelink">createChatSubscriptionInviteLink</a>, allowing bots to create subscription invite links.</li>
+<li>Added the method <a href="#editchatsubscriptioninvitelink">editChatSubscriptionInviteLink</a>, allowing bots to edit the <em>name</em> of subscription invite links.</li>
+<li>Added the field <em>until_date</em> to the class <a href="#chatmembermember">ChatMemberMember</a> for members with an active subscription.</li>
+<li>Added support for paid reactions and the class <a href="#reactiontypepaid">ReactionTypePaid</a>.</li>
+</ul>
+<h4><a class="anchor" name="july-31-2024" href="#july-31-2024"><i class="anchor-icon"></i></a>July 31, 2024</h4>
+<p><strong>Bot API 7.8</strong></p>
+<ul>
+<li>Added the option for bots to set a <a href="/bots/webapps#launching-the-main-mini-app">Main Mini App</a>, which can be previewed and launched directly from a button in the bot&#39;s profile or a link.</li>
+<li>Added the method <em>shareToStory</em> to the class <a href="/bots/webapps#initializing-mini-apps">WebApp</a>.</li>
+<li>Added the field <em>has_main_web_app</em> to the class <a href="#user">User</a>, which is returned in the response to <a href="#getme">getMe</a>.</li>
+<li>Added the parameter <em>business_connection_id</em> to the methods <a href="#pinchatmessage">pinChatMessage</a> and <a href="#unpinchatmessage">unpinChatMessage</a>, allowing bots to manage pinned messages on behalf of a business account.</li>
+</ul>
 <h4><a class="anchor" name="july-7-2024" href="#july-7-2024"><i class="anchor-icon"></i></a>July 7, 2024</h4>
 <p><strong>Bot API 7.7</strong></p>
 <ul>
@@ -84,37 +104,6 @@ To learn how to create…">
 <li>Added support for callback queries originating from a message sent on behalf of a business account.</li>
 <li>Added the parameter <em>business_connection_id</em> to the methods <a href="#editmessagetext">editMessageText</a>, <a href="#editmessagemedia">editMessageMedia</a>, <a href="#editmessagecaption">editMessageCaption</a>, <a href="#editmessagelivelocation">editMessageLiveLocation</a>, <a href="#stopmessagelivelocation">stopMessageLiveLocation</a> and <a href="#editmessagereplymarkup">editMessageReplyMarkup</a>, allowing the bot to edit business messages.</li>
 <li>Added the parameter <em>business_connection_id</em> to the method <a href="#stoppoll">stopPoll</a>, allowing the bot to stop polls it sent on behalf of a business account.</li>
-</ul>
-<h4><a class="anchor" name="may-28-2024" href="#may-28-2024"><i class="anchor-icon"></i></a>May 28, 2024</h4>
-<p><strong>Bot API 7.4</strong></p>
-<ul>
-<li>Added support for payments in <a href="https://t.me/BotNews/90">Telegram Stars</a> by introducing the new currency “XTR”.</li>
-<li>The parameter <em>provider_token</em> of the methods <a href="#sendinvoice">sendInvoice</a> and <a href="#createinvoicelink">createInvoiceLink</a> must be omitted for payments in <a href="https://t.me/BotNews/90">Telegram Stars</a>.</li>
-<li>The field <em>provider_token</em> in the class <a href="#inputinvoicemessagecontent">InputInvoiceMessageContent</a> must be omitted for payments in <a href="https://t.me/BotNews/90">Telegram Stars</a>.</li>
-<li>Added the method <a href="#refundstarpayment">refundStarPayment</a>.</li>
-<li>Added the field <em>effect_id</em> to the class <a href="#message">Message</a>.</li>
-<li>Added the parameter <em>message_effect_id</em> to the methods <a href="#sendmessage">sendMessage</a>, <a href="#sendphoto">sendPhoto</a>, <a href="#sendvideo">sendVideo</a>, <a href="#sendanimation">sendAnimation</a>, <a href="#sendaudio">sendAudio</a>, <a href="#senddocument">sendDocument</a>, <a href="#sendsticker">sendSticker</a>, <a href="#sendvideonote">sendVideoNote</a>, <a href="#sendvoice">sendVoice</a>, <a href="#sendlocation">sendLocation</a>, <a href="#sendvenue">sendVenue</a>, <a href="#sendcontact">sendContact</a>, <a href="#sendpoll">sendPoll</a>, <a href="#senddice">sendDice</a>, <a href="#sendinvoice">sendInvoice</a>, <a href="#sendgame">sendGame</a>, and <a href="#sendmediagroup">sendMediaGroup</a>.</li>
-<li>Added the field <em>show_caption_above_media</em> to the classes <a href="#message">Message</a>, <a href="#inputmediaanimation">InputMediaAnimation</a>, <a href="#inputmediaphoto">InputMediaPhoto</a>, <a href="#inputmediavideo">InputMediaVideo</a>, <a href="#inlinequeryresultgif">InlineQueryResultGif</a>, <a href="#inlinequeryresultmpeg4gif">InlineQueryResultMpeg4Gif</a>, <a href="#inlinequeryresultphoto">InlineQueryResultPhoto</a>, <a href="#inlinequeryresultvideo">InlineQueryResultVideo</a>, <a href="#inlinequeryresultcachedgif">InlineQueryResultCachedGif</a>, <a href="#inlinequeryresultcachedmpeg4gif">InlineQueryResultCachedMpeg4Gif</a>, <a href="#inlinequeryresultcachedphoto">InlineQueryResultCachedPhoto</a>, and <a href="#inlinequeryresultcachedvideo">InlineQueryResultCachedVideo</a>.</li>
-<li>Added the parameter <em>show_caption_above_media</em> to the methods <a href="#sendanimation">sendAnimation</a>, <a href="#sendphoto">sendPhoto</a>, <a href="#sendvideo">sendVideo</a>, <a href="#copymessage">copyMessage</a>, and <a href="#editmessagecaption">editMessageCaption</a>.</li>
-<li>Added support for “expandable_blockquote” entities in received messages.</li>
-<li>Added support for “expandable_blockquote” entity parsing in “MarkdownV2” and “HTML” parse modes.</li>
-<li>Allowed to explicitly specify “expandable_blockquote” entities in formatted texts.</li>
-</ul>
-<h4><a class="anchor" name="may-6-2024" href="#may-6-2024"><i class="anchor-icon"></i></a>May 6, 2024</h4>
-<p><strong>Bot API 7.3</strong></p>
-<ul>
-<li>Added support for <a href="#inlinekeyboardmarkup">InlineKeyboardMarkup</a> with <em>url</em>, <em>login_url</em>, and <em>callback_game</em> buttons for messages sent on behalf of a business account.</li>
-<li>Added the field <em>via_join_request</em> to the class <a href="#chatmemberupdated">ChatMemberUpdated</a>.</li>
-<li>Added support for live locations that can be edited indefinitely, allowing 0x7FFFFFFF to be used as <em>live_period</em>.</li>
-<li>Added the parameter <em>live_period</em> to the method <a href="#editmessagelivelocation">editMessageLiveLocation</a>.</li>
-<li>Added the field <em>question_entities</em> to the class <a href="#poll">Poll</a>.</li>
-<li>Added the field <em>text_entities</em> to the class <a href="#polloption">PollOption</a>.</li>
-<li>Added the parameters <em>question_parse_mode</em> and <em>question_entities</em> to the method <a href="#sendpoll">sendPoll</a>.</li>
-<li>Added the class <a href="#inputpolloption">InputPollOption</a> and changed the type of the parameter <em>options</em> in the method <a href="#sendpoll">sendPoll</a> to Array of <a href="#inputpolloption">InputPollOption</a>.</li>
-<li>Added the classes <a href="#chatbackground">ChatBackground</a>, <a href="#backgroundtype">BackgroundType</a>, <a href="#backgroundfill">BackgroundFill</a> and the field <em>chat_background_set</em> of type <a href="#chatbackground">ChatBackground</a> to the class <a href="#message">Message</a>, describing service messages about background changes.</li>
-<li>Split out the class <a href="#chatfullinfo">ChatFullInfo</a> from the class <a href="#chat">Chat</a> and changed the return type of the method <a href="#getchat">getChat</a> to <a href="#chatfullinfo">ChatFullInfo</a>.</li>
-<li>Added the field <em>max_reaction_count</em> to the class <a href="#chatfullinfo">ChatFullInfo</a>.</li>
-<li>Documented that .MP3 and .M4A files can be used as voice messages.</li>
 </ul>
 <p><strong><a href="/bots/api-changelog">See earlier changes »</a></strong></p>
 <h3><a class="anchor" name="authorizing-your-bot" href="#authorizing-your-bot"><i class="anchor-icon"></i></a>Authorizing your bot</h3>
@@ -543,6 +532,11 @@ To learn how to create…">
 <td>Boolean</td>
 <td><em>Optional</em>. <em>True</em>, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in <a href="#getme">getMe</a>.</td>
 </tr>
+<tr>
+<td>has_main_web_app</td>
+<td>Boolean</td>
+<td><em>Optional</em>. <em>True</em>, if the bot has a main Web App. Returned only in <a href="#getme">getMe</a>.</td>
+</tr>
 </tbody>
 </table>
 <h4><a class="anchor" name="chat" href="#chat"><i class="anchor-icon"></i></a>Chat</h4>
@@ -850,12 +844,12 @@ To learn how to create…">
 <tr>
 <td>from</td>
 <td><a href="#user">User</a></td>
-<td><em>Optional</em>. Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.</td>
+<td><em>Optional</em>. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats</td>
 </tr>
 <tr>
 <td>sender_chat</td>
 <td><a href="#chat">Chat</a></td>
-<td><em>Optional</em>. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field <em>from</em> contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.</td>
+<td><em>Optional</em>. Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel&#39;s discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field <em>from</em> contains a fake sender user in non-channel chats.</td>
 </tr>
 <tr>
 <td>sender_boost_count</td>
@@ -4244,6 +4238,11 @@ To learn how to create…">
 <td><a href="#user">User</a></td>
 <td>Information about the user</td>
 </tr>
+<tr>
+<td>until_date</td>
+<td>Integer</td>
+<td><em>Optional</em>. Date when the user&#39;s subscription will expire; Unix time</td>
+</tr>
 </tbody>
 </table>
 <h4><a class="anchor" name="chatmemberrestricted" href="#chatmemberrestricted"><i class="anchor-icon"></i></a>ChatMemberRestricted</h4>
@@ -4679,6 +4678,7 @@ To learn how to create…">
 <ul>
 <li><a href="#reactiontypeemoji">ReactionTypeEmoji</a></li>
 <li><a href="#reactiontypecustomemoji">ReactionTypeCustomEmoji</a></li>
+<li><a href="#reactiontypepaid">ReactionTypePaid</a></li>
 </ul>
 <h4><a class="anchor" name="reactiontypeemoji" href="#reactiontypeemoji"><i class="anchor-icon"></i></a>ReactionTypeEmoji</h4>
 <p>The reaction is based on an emoji.</p>
@@ -4723,6 +4723,24 @@ To learn how to create…">
 <td>custom_emoji_id</td>
 <td>String</td>
 <td>Custom emoji identifier</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="reactiontypepaid" href="#reactiontypepaid"><i class="anchor-icon"></i></a>ReactionTypePaid</h4>
+<p>The reaction is paid.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the reaction, always “paid”</td>
 </tr>
 </tbody>
 </table>
@@ -7107,7 +7125,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="sendpaidmedia" href="#sendpaidmedia"><i class="anchor-icon"></i></a>sendPaidMedia</h4>
-<p>Use this method to send paid media to channel chats. On success, the sent <a href="#message">Message</a> is returned.</p>
+<p>Use this method to send paid media. On success, the sent <a href="#message">Message</a> is returned.</p>
 <table class="table">
 <thead>
 <tr>
@@ -7119,10 +7137,16 @@ pre-formatted fixed-width code block written in the Python programming language
 </thead>
 <tbody>
 <tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message will be sent</td>
+</tr>
+<tr>
 <td>chat_id</td>
 <td>Integer or String</td>
 <td>Yes</td>
-<td>Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>)</td>
+<td>Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat&#39;s balance. Otherwise, they will be credited to the bot&#39;s balance.</td>
 </tr>
 <tr>
 <td>star_count</td>
@@ -7799,7 +7823,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="setmessagereaction" href="#setmessagereaction"><i class="anchor-icon"></i></a>setMessageReaction</h4>
-<p>Use this method to change the chosen reactions on a message. Service messages can&#39;t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns <em>True</em> on success.</p>
+<p>Use this method to change the chosen reactions on a message. Service messages can&#39;t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can&#39;t use paid reactions. Returns <em>True</em> on success.</p>
 <table class="table">
 <thead>
 <tr>
@@ -7826,7 +7850,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>reaction</td>
 <td>Array of <a href="#reactiontype">ReactionType</a></td>
 <td>Optional</td>
-<td>A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.</td>
+<td>A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can&#39;t be used by bots.</td>
 </tr>
 <tr>
 <td>is_big</td>
@@ -8352,6 +8376,76 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="createchatsubscriptioninvitelink" href="#createchatsubscriptioninvitelink"><i class="anchor-icon"></i></a>createChatSubscriptionInviteLink</h4>
+<p>Use this method to create a <a href="https://telegram.org/blog/superchannels-star-reactions-subscriptions#star-subscriptions">subscription invite link</a> for a channel chat. The bot must have the <em>can_invite_users</em> administrator rights. The link can be edited using the method <a href="#editchatsubscriptioninvitelink">editChatSubscriptionInviteLink</a> or revoked using the method <a href="#revokechatinvitelink">revokeChatInviteLink</a>. Returns the new invite link as a <a href="#chatinvitelink">ChatInviteLink</a> object.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>chat_id</td>
+<td>Integer or String</td>
+<td>Yes</td>
+<td>Unique identifier for the target channel chat or username of the target channel (in the format <code>@channelusername</code>)</td>
+</tr>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Optional</td>
+<td>Invite link name; 0-32 characters</td>
+</tr>
+<tr>
+<td>subscription_period</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days).</td>
+</tr>
+<tr>
+<td>subscription_price</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="editchatsubscriptioninvitelink" href="#editchatsubscriptioninvitelink"><i class="anchor-icon"></i></a>editChatSubscriptionInviteLink</h4>
+<p>Use this method to edit a subscription invite link created by the bot. The bot must have the <em>can_invite_users</em> administrator rights. Returns the edited invite link as a <a href="#chatinvitelink">ChatInviteLink</a> object.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>chat_id</td>
+<td>Integer or String</td>
+<td>Yes</td>
+<td>Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>)</td>
+</tr>
+<tr>
+<td>invite_link</td>
+<td>String</td>
+<td>Yes</td>
+<td>The invite link to edit</td>
+</tr>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Optional</td>
+<td>Invite link name; 0-32 characters</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="revokechatinvitelink" href="#revokechatinvitelink"><i class="anchor-icon"></i></a>revokeChatInviteLink</h4>
 <p>Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as <a href="#chatinvitelink">ChatInviteLink</a> object.</p>
 <table class="table">
@@ -8541,6 +8635,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </thead>
 <tbody>
 <tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message will be pinned</td>
+</tr>
+<tr>
 <td>chat_id</td>
 <td>Integer or String</td>
 <td>Yes</td>
@@ -8573,6 +8673,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </thead>
 <tbody>
 <tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the message will be unpinned</td>
+</tr>
+<tr>
 <td>chat_id</td>
 <td>Integer or String</td>
 <td>Yes</td>
@@ -8582,7 +8688,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>message_id</td>
 <td>Integer</td>
 <td>Optional</td>
-<td>Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned.</td>
+<td>Identifier of the message to unpin. Required if <em>business_connection_id</em> is specified. If not specified, the most recent pinned message (by sending date) will be unpinned.</td>
 </tr>
 </tbody>
 </table>
@@ -8799,7 +8905,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="editforumtopic" href="#editforumtopic"><i class="anchor-icon"></i></a>editForumTopic</h4>
-<p>Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have <em>can_manage_topics</em> administrator rights, unless it is the creator of the topic. Returns <em>True</em> on success.</p>
+<p>Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the <em>can_manage_topics</em> administrator rights, unless it is the creator of the topic. Returns <em>True</em> on success.</p>
 <table class="table">
 <thead>
 <tr>
@@ -8941,7 +9047,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="editgeneralforumtopic" href="#editgeneralforumtopic"><i class="anchor-icon"></i></a>editGeneralForumTopic</h4>
-<p>Use this method to edit the name of the &#39;General&#39; topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have <em>can_manage_topics</em> administrator rights. Returns <em>True</em> on success.</p>
+<p>Use this method to edit the name of the &#39;General&#39; topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the <em>can_manage_topics</em> administrator rights. Returns <em>True</em> on success.</p>
 <table class="table">
 <thead>
 <tr>
@@ -10565,7 +10671,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>thumbnail</td>
 <td><a href="#inputfile">InputFile</a> or String</td>
 <td>Optional</td>
-<td>A <strong>.WEBP</strong> or <strong>.PNG</strong> image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a <strong>.TGS</strong> animation with a thumbnail up to 32 kilobytes in size (see <a href="/stickers#animated-sticker-requirements"><a href="https://core.telegram.org/stickers#animated-sticker-requirements">https://core.telegram.org/stickers#animated-sticker-requirements</a></a> for animated sticker technical requirements), or a <strong>WEBM</strong> video with the thumbnail up to 32 kilobytes in size; see <a href="/stickers#video-sticker-requirements"><a href="https://core.telegram.org/stickers#video-sticker-requirements">https://core.telegram.org/stickers#video-sticker-requirements</a></a> for video sticker technical requirements. Pass a <em>file_id</em> as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. <a href="#sending-files">More information on Sending Files »</a>. Animated and video sticker set thumbnails can&#39;t be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.</td>
+<td>A <strong>.WEBP</strong> or <strong>.PNG</strong> image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a <strong>.TGS</strong> animation with a thumbnail up to 32 kilobytes in size (see <a href="/stickers#animation-requirements"><a href="https://core.telegram.org/stickers#animation-requirements">https://core.telegram.org/stickers#animation-requirements</a></a> for animated sticker technical requirements), or a <strong>WEBM</strong> video with the thumbnail up to 32 kilobytes in size; see <a href="/stickers#video-requirements"><a href="https://core.telegram.org/stickers#video-requirements">https://core.telegram.org/stickers#video-requirements</a></a> for video sticker technical requirements. Pass a <em>file_id</em> as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. <a href="#sending-files">More information on Sending Files »</a>. Animated and video sticker set thumbnails can&#39;t be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.</td>
 </tr>
 <tr>
 <td>format</td>
@@ -13397,6 +13503,11 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>String</td>
 <td><em>Optional</em>. Bot-specified invoice payload</td>
 </tr>
+<tr>
+<td>paid_media</td>
+<td>Array of <a href="#paidmedia">PaidMedia</a></td>
+<td><em>Optional</em>. Information about the paid media bought by the user</td>
+</tr>
 </tbody>
 </table>
 <h4><a class="anchor" name="transactionpartnerfragment" href="#transactionpartnerfragment"><i class="anchor-icon"></i></a>TransactionPartnerFragment</h4>
@@ -14012,8 +14123,8 @@ pre-formatted fixed-width code block written in the Python programming language
 <li>Once you&#39;ve created a game via <a href="https://t.me/botfather">BotFather</a>, you can send games to chats as regular messages using the <a href="#sendgame">sendGame</a> method, or use <a href="#inline-mode">inline mode</a> with <a href="#inlinequeryresultgame">InlineQueryResultGame</a>.</li>
 <li>If you send the game message without any buttons, it will automatically have a &#39;Play <em>GameName</em>&#39; button. When this button is pressed, your bot gets a <a href="#callbackquery">CallbackQuery</a> with the <em>game_short_name</em> of the requested game. You provide the correct URL for this particular user and the app opens the game in the in-app browser.</li>
 <li>You can manually add multiple buttons to your game message. Please note that the first button in the first row <strong>must always</strong> launch the game, using the field <em>callback_game</em> in <a href="#inlinekeyboardbutton">InlineKeyboardButton</a>. You can add extra buttons according to taste: e.g., for a description of the rules, or to open the game&#39;s official community.</li>
-<li>To make your game more attractive, you can upload a GIF animation that demostrates the game to the users via <a href="https://t.me/botfather">BotFather</a> (see <a href="https://t.me/gamebot?game=lumberjack">Lumberjack</a> for example).</li>
-<li>A game message will also display high scores for the current chat. Use <a href="#setgamescore">setGameScore</a> to post high scores to the chat with the game, add the <em>edit_message</em> parameter to automatically update the message with the current scoreboard.</li>
+<li>To make your game more attractive, you can upload a GIF animation that demonstrates the game to the users via <a href="https://t.me/botfather">BotFather</a> (see <a href="https://t.me/gamebot?game=lumberjack">Lumberjack</a> for example).</li>
+<li>A game message will also display high scores for the current chat. Use <a href="#setgamescore">setGameScore</a> to post high scores to the chat with the game, add the <em>disable_edit_message</em> parameter to disable automatic update of the message with the current scoreboard.</li>
 <li>Use <a href="#getgamehighscores">getGameHighScores</a> to get data for in-game high score tables.</li>
 <li>You can also add an extra <a href="/bots/games#sharing-your-game-to-telegram-chats">sharing button</a> for users to share their best score to different chats.</li>
 <li>For examples of what can be done using this new stuff, check the <a href="https://t.me/gamebot">@gamebot</a> and <a href="https://t.me/gamee">@gamee</a> bots.</li>

@@ -479,7 +479,7 @@ data class SendVideoNoteRequest(
 /**
  * Request body for [sendPaidMedia].
  *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance.
  * @param starCount The number of Telegram Stars that must be paid to buy access to the media
  * @param media A JSON-serialized array describing the media to be sent; up to 10 items
  * @param caption Media caption, 0-1024 characters after entities parsing
@@ -490,6 +490,7 @@ data class SendVideoNoteRequest(
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  */
 @Serializable
 data class SendPaidMediaRequest(
@@ -504,8 +505,9 @@ data class SendPaidMediaRequest(
     val protectContent: Boolean? = null,
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendPaidMediaRequest").prop("chatId", chatId).prop("starCount", starCount).prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendPaidMediaRequest").prop("chatId", chatId).prop("starCount", starCount).prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
 }
 
 /**
@@ -753,7 +755,7 @@ data class SendChatActionRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.
- * @param reaction A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.
+ * @param reaction A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots.
  * @param isBig Pass True to set the reaction with a big animation
  */
 @Serializable
@@ -1007,6 +1009,40 @@ data class EditChatInviteLinkRequest(
 }
 
 /**
+ * Request body for [createChatSubscriptionInviteLink].
+ *
+ * @param chatId Unique identifier for the target channel chat or username of the target channel (in the format @channelusername)
+ * @param subscriptionPeriod The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days).
+ * @param subscriptionPrice The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500
+ * @param name Invite link name; 0-32 characters
+ */
+@Serializable
+data class CreateChatSubscriptionInviteLinkRequest(
+    val chatId: ChatId,
+    val subscriptionPeriod: Seconds,
+    val subscriptionPrice: Long,
+    val name: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("CreateChatSubscriptionInviteLinkRequest").prop("chatId", chatId).prop("subscriptionPeriod", subscriptionPeriod).prop("subscriptionPrice", subscriptionPrice).prop("name", name).toString()
+}
+
+/**
+ * Request body for [editChatSubscriptionInviteLink].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param inviteLink The invite link to edit
+ * @param name Invite link name; 0-32 characters
+ */
+@Serializable
+data class EditChatSubscriptionInviteLinkRequest(
+    val chatId: ChatId,
+    val inviteLink: String,
+    val name: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("EditChatSubscriptionInviteLinkRequest").prop("chatId", chatId).prop("inviteLink", inviteLink).prop("name", name).toString()
+}
+
+/**
  * Request body for [revokeChatInviteLink].
  *
  * @param chatId Unique identifier of the target chat or username of the target channel (in the format @channelusername)
@@ -1108,28 +1144,32 @@ data class SetChatDescriptionRequest(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of a message to pin
  * @param disableNotification Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be pinned
  */
 @Serializable
 data class PinChatMessageRequest(
     val chatId: ChatId,
     val messageId: MessageId,
     val disableNotification: Boolean? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
 ) {
-    override fun toString() = DebugStringBuilder("PinChatMessageRequest").prop("chatId", chatId).prop("messageId", messageId).prop("disableNotification", disableNotification).toString()
+    override fun toString() = DebugStringBuilder("PinChatMessageRequest").prop("chatId", chatId).prop("messageId", messageId).prop("disableNotification", disableNotification).prop("businessConnectionId", businessConnectionId).toString()
 }
 
 /**
  * Request body for [unpinChatMessage].
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned.
+ * @param messageId Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be unpinned.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be unpinned
  */
 @Serializable
 data class UnpinChatMessageRequest(
     val chatId: ChatId,
     val messageId: MessageId? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
 ) {
-    override fun toString() = DebugStringBuilder("UnpinChatMessageRequest").prop("chatId", chatId).prop("messageId", messageId).toString()
+    override fun toString() = DebugStringBuilder("UnpinChatMessageRequest").prop("chatId", chatId).prop("messageId", messageId).prop("businessConnectionId", businessConnectionId).toString()
 }
 
 /**
@@ -2028,7 +2068,7 @@ data class SetStickerSetTitleRequest(
  * @param name Sticker set name
  * @param userId User identifier of the sticker set owner
  * @param format Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video
- * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
+ * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
  */
 @Serializable
 data class SetStickerSetThumbnailRequest(

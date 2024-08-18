@@ -157,7 +157,15 @@ val valueTypes = listOf(
         field.serialName.endsWith("custom_emoji_id")
     },
     ValueType("Seconds", "Long", "Duration in seconds.") { _, field ->
-        field.serialName in setOf("cache_time", "duration", "life_period", "open_period", "timeout", "retry_after")
+        field.serialName in setOf(
+            "cache_time",
+            "duration",
+            "life_period",
+            "open_period",
+            "timeout",
+            "retry_after",
+            "subscription_period"
+        )
     },
     ValueType(
         "UnixTimestamp",

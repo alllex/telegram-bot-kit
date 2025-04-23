@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  gradle:
+  release-to-maven-central:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

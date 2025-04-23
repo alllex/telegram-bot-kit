@@ -48,6 +48,9 @@ class BotApiGenerator {
     private fun generateListenerFile(modelPackageName: String, clientPackageName: String): String {
         val listenerTypeName = "TelegramBotUpdateListener"
         return buildString {
+            appendLine("@file:Suppress(\"CONTEXT_RECEIVERS_DEPRECATED\")")
+            appendLine()
+
             appendLine("package $clientPackageName")
             appendLine()
 
@@ -215,6 +218,8 @@ class BotApiGenerator {
         }
 
         val tryWithContextMethodsSourceCode = buildString {
+            appendLine("@file:Suppress(\"CONTEXT_RECEIVERS_DEPRECATED\")")
+            appendLine()
             header(packageName, wrapperPackageName)
             methodsSourceCodes.map { it.tryWithContextMethodSourceCode }.filter { it.isNotEmpty() }
                 .forEach { append(it) }
@@ -227,6 +232,8 @@ class BotApiGenerator {
         }
 
         val withContextMethodsSourceCode = buildString {
+            appendLine("@file:Suppress(\"CONTEXT_RECEIVERS_DEPRECATED\")")
+            appendLine()
             header(packageName, wrapperPackageName)
             methodsSourceCodes.map { it.withContextMethodSourceCode }.filter { it.isNotEmpty() }
                 .forEach { append(it) }

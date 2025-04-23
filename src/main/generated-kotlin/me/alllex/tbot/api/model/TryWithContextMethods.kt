@@ -1,3 +1,5 @@
+@file:Suppress("CONTEXT_RECEIVERS_DEPRECATED")
+
 package me.alllex.tbot.api.model
 
 import me.alllex.tbot.api.client.*

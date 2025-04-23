@@ -8,28 +8,30 @@ Idiomatic, fluent and type-safe Kotlin bindings for [Telegram Bot API](https://c
 
 ```kotlin
 val poller = TelegramBotApiPoller(TelegramBotApiClient(botApiToken))
-poller.start(TelegramBotUpdateListener(
-    onMessage = { message ->
-        message.reply(
-            text = "Hello, *${message.from?.firstName ?: "stranger"}*!",
-            parseMode = ParseMode.MARKDOWN,
-            replyMarkup = inlineKeyboard {
-                buttonLink("Telegram", "https://telegram.org")
-                row {
-                    button("Bot", "bot")
-                    button("API", "api")
+poller.start(
+    TelegramBotUpdateListener(
+        onMessage = { message ->
+            message.reply(
+                text = "Hello, *${message.from?.firstName ?: "stranger"}*!",
+                parseMode = ParseMode.MARKDOWN,
+                replyMarkup = inlineKeyboard {
+                    buttonLink("Telegram", "https://telegram.org")
+                    row {
+                        button("Bot", "bot")
+                        button("API", "api")
+                    }
                 }
+            )
+        },
+        onCallbackQuery = { callbackQuery ->
+            when (callbackQuery.data) {
+                "bot" -> callbackQuery.answer("🤖")
+                "api" -> callbackQuery.answer("🚀")
+                else -> callbackQuery.answer("🤷")
             }
-        )
-    },
-    onCallbackQuery = { callbackQuery ->
-        when (callbackQuery.data) {
-            "bot" -> callbackQuery.answer("🤖")
-            "api" -> callbackQuery.answer("🚀")
-            else -> callbackQuery.answer("🤷")
         }
-    }
-))
+    )
+)
 ```
 
 ## Usage
@@ -39,7 +41,7 @@ poller.start(TelegramBotUpdateListener(
 
 ```kotlin
 dependencies {
-    implementation("me.alllex.telegram.botkit:tbot-api-jvm:0.8.0")
+    implementation("me.alllex.telegram.botkit:tbot-api-jvm:0.9.0")
 }
 ```
 
@@ -49,10 +51,11 @@ dependencies {
 <summary>Using with Maven for JVM projects</summary>
 
 ```xml
+
 <dependency>
-  <groupId>me.alllex.telegram.botkit</groupId>
-  <artifactId>tbot-api-jvm</artifactId>
-  <version>0.8.0</version>
+    <groupId>me.alllex.telegram.botkit</groupId>
+    <artifactId>tbot-api-jvm</artifactId>
+    <version>0.9.0</version>
 </dependency>
 ```
 
@@ -64,16 +67,17 @@ The bindings are generated directly from the source-of-truth [Bot API spec](http
 
 | Telegram Bot API | tbot-api library |
 |------------------|------------------|
+| `9.0`            | `0.9.0`          |
 | `7.9`            | `0.8.0`          |
 | `7.7`            | `0.7.0`          |
 | `7.4`            | `0.6.1`          |
 | `7.3`            | `0.5.0`          |
 | `6.9`            | `0.4.0`          |
 
-| tbot-api library | Requirement               |
-|------------------|---------------------------|
-| `0.4.0`+         | Kotlin `1.9.0+`, JVM `8+` |
-
+| tbot-api library | Requirement              |
+|------------------|--------------------------|
+| `0.9.0`          | Kotlin `2.0.0`, JVM `11` |
+| `0.4.0`          | Kotlin `1.9.0`, JVM `8`  |
 
 ## Developing
 
@@ -93,7 +97,8 @@ The bindings are generated directly from the source-of-truth [Bot API spec](http
 
 - [ ] Cleaner package structure
 - [ ] Strict library member visibility
-- [ ] Forward compatibility: published versions of the library should not break with new API versions (union types and enums)
+- [ ] Forward compatibility: published versions of the library should not break with new API versions (union types and
+  enums)
 - [ ] Support for integration tests bots
 
 ## License

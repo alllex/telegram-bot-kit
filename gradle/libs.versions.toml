@@ -1,5 +1,5 @@
 [versions]
-jdkTarget = "8"
+jdkTarget = "11"
 jvmToolchain = "21"
 kotlinTarget = "2.0.0"
 kotlinPlugin = "2.1.20"

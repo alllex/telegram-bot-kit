@@ -164,6 +164,13 @@
                     "type": "BusinessMessagesDeleted",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "purchased_paid_media",
+                    "description": "Optional. A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat",
+                    "type": "PaidMediaPurchased",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ]
         },
@@ -699,6 +706,13 @@
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "accepted_gift_types",
+                    "description": "Information about types of gifts that are accepted by the chat or by the corresponding user for private chats",
+                    "type": "AcceptedGiftTypes",
+                    "isOptional": false,
+                    "defaultValue": null
                 }
             ]
         },
@@ -708,7 +722,7 @@
             "fields": [
                 {
                     "serialName": "message_id",
-                    "description": "Unique message identifier inside this chat",
+                    "description": "Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent",
                     "type": "Long",
                     "isOptional": false,
                     "defaultValue": null
@@ -1300,6 +1314,34 @@
                     "type": "RefundedPayment",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "paid_star_count",
+                    "description": "Optional. The number of Telegram Stars that were paid by the sender of the message to send it",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "gift",
+                    "description": "Optional. Service message: a regular gift was sent or received",
+                    "type": "GiftInfo",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "unique_gift",
+                    "description": "Optional. Service message: a unique gift was sent or received",
+                    "type": "UniqueGiftInfo",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "paid_message_price_changed",
+                    "description": "Optional. Service message: the price for paid messages has changed in the chat",
+                    "type": "PaidMessagePriceChanged",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ]
         },
@@ -1309,7 +1351,7 @@
             "fields": [
                 {
                     "serialName": "message_id",
-                    "description": "Unique message identifier",
+                    "description": "Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent",
                     "type": "Long",
                     "isOptional": false,
                     "defaultValue": null
@@ -1323,7 +1365,7 @@
             "fields": [
                 {
                     "serialName": "type",
-                    "description": "Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)",
+                    "description": "Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
@@ -2084,6 +2126,20 @@
                 {
                     "serialName": "file_size",
                     "description": "Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "cover",
+                    "description": "Optional. Available sizes of the cover of the video in the message",
+                    "type": "List<PhotoSize>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "start_timestamp",
+                    "description": "Optional. Timestamp in seconds from which the video will play in the message",
                     "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -2874,7 +2930,7 @@
         },
         {
             "name": "BackgroundTypePattern",
-            "description": "The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.",
+            "description": "The background is a .PNG or .TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.",
             "fields": [
                 {
                     "serialName": "type",
@@ -3199,9 +3255,29 @@
             ]
         },
         {
-            "name": "GiveawayCreated",
-            "description": "This object represents a service message about the creation of a scheduled giveaway. Currently holds no information.",
+            "name": "PaidMessagePriceChanged",
+            "description": "Describes a service message about a change in the price of paid messages within a chat.",
             "fields": [
+                {
+                    "serialName": "paid_message_star_count",
+                    "description": "The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "GiveawayCreated",
+            "description": "This object represents a service message about the creation of a scheduled giveaway.",
+            "fields": [
+                {
+                    "serialName": "prize_star_count",
+                    "description": "Optional. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
             ]
         },
         {
@@ -3259,7 +3335,14 @@
                 },
                 {
                     "serialName": "premium_subscription_month_count",
-                    "description": "Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for",
+                    "description": "Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "prize_star_count",
+                    "description": "Optional. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only",
                     "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -3314,7 +3397,7 @@
                 },
                 {
                     "serialName": "premium_subscription_month_count",
-                    "description": "Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for",
+                    "description": "Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only",
                     "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -3346,6 +3429,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "prize_star_count",
+                    "description": "Optional. The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ]
         },
@@ -3371,6 +3461,13 @@
                     "serialName": "giveaway_message",
                     "description": "Optional. Message with the giveaway that was completed, if it wasn't deleted",
                     "type": "Message",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "is_star_giveaway",
+                    "description": "Optional. True, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram Premium giveaway.",
+                    "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -3844,6 +3941,13 @@
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "copy_text",
+                    "description": "Optional. Description of the button that copies the specified text to the clipboard.",
+                    "type": "CopyTextButton",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ]
         },
@@ -3919,6 +4023,19 @@
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "CopyTextButton",
+            "description": "This object represents an inline keyboard button that copies specified text to the clipboard.",
+            "fields": [
+                {
+                    "serialName": "text",
+                    "description": "The text to be copied to the clipboard; 1-256 characters",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
                 }
             ]
         },
@@ -4101,6 +4218,20 @@
                 {
                     "serialName": "pending_join_request_count",
                     "description": "Optional. Number of pending join requests created using this link",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "subscription_period",
+                    "description": "Optional. The number of seconds the subscription will be active for before the next payment",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "subscription_price",
+                    "description": "Optional. The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat using the link",
                     "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -4938,6 +5069,261 @@
             ]
         },
         {
+            "name": "StoryAreaPosition",
+            "description": "Describes the position of a clickable area within a story.",
+            "fields": [
+                {
+                    "serialName": "x_percentage",
+                    "description": "The abscissa of the area's center, as a percentage of the media width",
+                    "type": "Double",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "y_percentage",
+                    "description": "The ordinate of the area's center, as a percentage of the media height",
+                    "type": "Double",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "width_percentage",
+                    "description": "The width of the area's rectangle, as a percentage of the media width",
+                    "type": "Double",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "height_percentage",
+                    "description": "The height of the area's rectangle, as a percentage of the media height",
+                    "type": "Double",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "rotation_angle",
+                    "description": "The clockwise rotation angle of the rectangle, in degrees; 0-360",
+                    "type": "Double",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "corner_radius_percentage",
+                    "description": "The radius of the rectangle corner rounding, as a percentage of the media width",
+                    "type": "Double",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "LocationAddress",
+            "description": "Describes the physical address of a location.",
+            "fields": [
+                {
+                    "serialName": "country_code",
+                    "description": "The two-letter ISO 3166-1 alpha-2 country code of the country where the location is located",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "state",
+                    "description": "Optional. State of the location",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "city",
+                    "description": "Optional. City of the location",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "street",
+                    "description": "Optional. Street address of the location",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "StoryAreaType",
+            "description": "Describes the type of a clickable area on a story. Currently, it can be one of",
+            "unionTypes": [
+                "StoryAreaTypeLocation",
+                "StoryAreaTypeSuggestedReaction",
+                "StoryAreaTypeLink",
+                "StoryAreaTypeWeather",
+                "StoryAreaTypeUniqueGift"
+            ]
+        },
+        {
+            "name": "StoryAreaTypeLocation",
+            "description": "Describes a story area pointing to a location. Currently, a story can have up to 10 location areas.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the area, always “location”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "latitude",
+                    "description": "Location latitude in degrees",
+                    "type": "Double",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "longitude",
+                    "description": "Location longitude in degrees",
+                    "type": "Double",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "address",
+                    "description": "Optional. Address of the location",
+                    "type": "LocationAddress",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "StoryAreaTypeSuggestedReaction",
+            "description": "Describes a story area pointing to a suggested reaction. Currently, a story can have up to 5 suggested reaction areas.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the area, always “suggested_reaction”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "reaction_type",
+                    "description": "Type of the reaction",
+                    "type": "ReactionType",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "is_dark",
+                    "description": "Optional. Pass True if the reaction area has a dark background",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "is_flipped",
+                    "description": "Optional. Pass True if reaction area corner is flipped",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "StoryAreaTypeLink",
+            "description": "Describes a story area pointing to an HTTP or tg:// link. Currently, a story can have up to 3 link areas.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the area, always “link”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "url",
+                    "description": "HTTP or tg:// URL to be opened when the area is clicked",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "StoryAreaTypeWeather",
+            "description": "Describes a story area containing weather information. Currently, a story can have up to 3 weather areas.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the area, always “weather”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "temperature",
+                    "description": "Temperature, in degree Celsius",
+                    "type": "Double",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "emoji",
+                    "description": "Emoji representing the weather",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "background_color",
+                    "description": "A color of the area background in the ARGB format",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "StoryAreaTypeUniqueGift",
+            "description": "Describes a story area pointing to a unique gift. Currently, a story can have at most 1 unique gift area.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the area, always “unique_gift”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "name",
+                    "description": "Unique name of the gift",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "StoryArea",
+            "description": "Describes a clickable area on a story media.",
+            "fields": [
+                {
+                    "serialName": "position",
+                    "description": "Position of the area",
+                    "type": "StoryAreaPosition",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "type",
+                    "description": "Type of the area",
+                    "type": "StoryAreaType",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
             "name": "ChatLocation",
             "description": "Represents a location to which a chat is connected.",
             "fields": [
@@ -5157,6 +5543,574 @@
                     "serialName": "icon_custom_emoji_id",
                     "description": "Optional. Unique identifier of the custom emoji shown as the topic icon",
                     "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "Gift",
+            "description": "This object represents a gift that can be sent by the bot.",
+            "fields": [
+                {
+                    "serialName": "id",
+                    "description": "Unique identifier of the gift",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "sticker",
+                    "description": "The sticker that represents the gift",
+                    "type": "Sticker",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "star_count",
+                    "description": "The number of Telegram Stars that must be paid to send the sticker",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "upgrade_star_count",
+                    "description": "Optional. The number of Telegram Stars that must be paid to upgrade the gift to a unique one",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "total_count",
+                    "description": "Optional. The total number of the gifts of this type that can be sent; for limited gifts only",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "remaining_count",
+                    "description": "Optional. The number of remaining gifts of this type that can be sent; for limited gifts only",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "Gifts",
+            "description": "This object represent a list of gifts.",
+            "fields": [
+                {
+                    "serialName": "gifts",
+                    "description": "The list of gifts",
+                    "type": "List<Gift>",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "UniqueGiftModel",
+            "description": "This object describes the model of a unique gift.",
+            "fields": [
+                {
+                    "serialName": "name",
+                    "description": "Name of the model",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "sticker",
+                    "description": "The sticker that represents the unique gift",
+                    "type": "Sticker",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "rarity_per_mille",
+                    "description": "The number of unique gifts that receive this model for every 1000 gifts upgraded",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "UniqueGiftSymbol",
+            "description": "This object describes the symbol shown on the pattern of a unique gift.",
+            "fields": [
+                {
+                    "serialName": "name",
+                    "description": "Name of the symbol",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "sticker",
+                    "description": "The sticker that represents the unique gift",
+                    "type": "Sticker",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "rarity_per_mille",
+                    "description": "The number of unique gifts that receive this model for every 1000 gifts upgraded",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "UniqueGiftBackdropColors",
+            "description": "This object describes the colors of the backdrop of a unique gift.",
+            "fields": [
+                {
+                    "serialName": "center_color",
+                    "description": "The color in the center of the backdrop in RGB format",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "edge_color",
+                    "description": "The color on the edges of the backdrop in RGB format",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "symbol_color",
+                    "description": "The color to be applied to the symbol in RGB format",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "text_color",
+                    "description": "The color for the text on the backdrop in RGB format",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "UniqueGiftBackdrop",
+            "description": "This object describes the backdrop of a unique gift.",
+            "fields": [
+                {
+                    "serialName": "name",
+                    "description": "Name of the backdrop",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "colors",
+                    "description": "Colors of the backdrop",
+                    "type": "UniqueGiftBackdropColors",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "rarity_per_mille",
+                    "description": "The number of unique gifts that receive this backdrop for every 1000 gifts upgraded",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "UniqueGift",
+            "description": "This object describes a unique gift that was upgraded from a regular gift.",
+            "fields": [
+                {
+                    "serialName": "base_name",
+                    "description": "Human-readable name of the regular gift from which this unique gift was upgraded",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "name",
+                    "description": "Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "number",
+                    "description": "Unique number of the upgraded gift among gifts upgraded from the same regular gift",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "model",
+                    "description": "Model of the gift",
+                    "type": "UniqueGiftModel",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "symbol",
+                    "description": "Symbol of the gift",
+                    "type": "UniqueGiftSymbol",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "backdrop",
+                    "description": "Backdrop of the gift",
+                    "type": "UniqueGiftBackdrop",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "GiftInfo",
+            "description": "Describes a service message about a regular gift that was sent or received.",
+            "fields": [
+                {
+                    "serialName": "gift",
+                    "description": "Information about the gift",
+                    "type": "Gift",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "owned_gift_id",
+                    "description": "Optional. Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "convert_star_count",
+                    "description": "Optional. Number of Telegram Stars that can be claimed by the receiver by converting the gift; omitted if conversion to Telegram Stars is impossible",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "prepaid_upgrade_star_count",
+                    "description": "Optional. Number of Telegram Stars that were prepaid by the sender for the ability to upgrade the gift",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_be_upgraded",
+                    "description": "Optional. True, if the gift can be upgraded to a unique gift",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "text",
+                    "description": "Optional. Text of the message that was added to the gift",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "entities",
+                    "description": "Optional. Special entities that appear in the text",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "is_private",
+                    "description": "Optional. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "UniqueGiftInfo",
+            "description": "Describes a service message about a unique gift that was sent or received.",
+            "fields": [
+                {
+                    "serialName": "gift",
+                    "description": "Information about the gift",
+                    "type": "UniqueGift",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "origin",
+                    "description": "Origin of the gift. Currently, either “upgrade” or “transfer”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "owned_gift_id",
+                    "description": "Optional. Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "transfer_star_count",
+                    "description": "Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "OwnedGift",
+            "description": "This object describes a gift received and owned by a user or a chat. Currently, it can be one of",
+            "unionTypes": [
+                "OwnedGiftRegular",
+                "OwnedGiftUnique"
+            ]
+        },
+        {
+            "name": "OwnedGiftRegular",
+            "description": "Describes a regular gift owned by a user or a chat.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the gift, always “regular”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "gift",
+                    "description": "Information about the regular gift",
+                    "type": "Gift",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "send_date",
+                    "description": "Date the gift was sent in Unix time",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "owned_gift_id",
+                    "description": "Optional. Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "sender_user",
+                    "description": "Optional. Sender of the gift if it is a known user",
+                    "type": "User",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "text",
+                    "description": "Optional. Text of the message that was added to the gift",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "entities",
+                    "description": "Optional. Special entities that appear in the text",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "is_private",
+                    "description": "Optional. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "is_saved",
+                    "description": "Optional. True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_be_upgraded",
+                    "description": "Optional. True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "was_refunded",
+                    "description": "Optional. True, if the gift was refunded and isn't available anymore",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "convert_star_count",
+                    "description": "Optional. Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "prepaid_upgrade_star_count",
+                    "description": "Optional. Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "OwnedGiftUnique",
+            "description": "Describes a unique gift received and owned by a user or a chat.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the gift, always “unique”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "gift",
+                    "description": "Information about the unique gift",
+                    "type": "UniqueGift",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "send_date",
+                    "description": "Date the gift was sent in Unix time",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "owned_gift_id",
+                    "description": "Optional. Unique identifier of the received gift for the bot; for gifts received on behalf of business accounts only",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "sender_user",
+                    "description": "Optional. Sender of the gift if it is a known user",
+                    "type": "User",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "is_saved",
+                    "description": "Optional. True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_be_transferred",
+                    "description": "Optional. True, if the gift can be transferred to another owner; for gifts received on behalf of business accounts only",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "transfer_star_count",
+                    "description": "Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "OwnedGifts",
+            "description": "Contains the list of gifts received and owned by a user or a chat.",
+            "fields": [
+                {
+                    "serialName": "total_count",
+                    "description": "The total number of gifts owned by the user or the chat",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "gifts",
+                    "description": "The list of gifts",
+                    "type": "List<OwnedGift>",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "next_offset",
+                    "description": "Optional. Offset for the next request. If empty, then there are no more results",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "AcceptedGiftTypes",
+            "description": "This object describes the types of gifts that can be gifted to a user or a chat.",
+            "fields": [
+                {
+                    "serialName": "unlimited_gifts",
+                    "description": "True, if unlimited regular gifts are accepted",
+                    "type": "Boolean",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "limited_gifts",
+                    "description": "True, if limited regular gifts are accepted",
+                    "type": "Boolean",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "unique_gifts",
+                    "description": "True, if unique gifts or gifts that can be upgraded to unique for free are accepted",
+                    "type": "Boolean",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "premium_subscription",
+                    "description": "True, if a Telegram Premium subscription is accepted",
+                    "type": "Boolean",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "StarAmount",
+            "description": "Describes an amount of Telegram Stars.",
+            "fields": [
+                {
+                    "serialName": "amount",
+                    "description": "Integer amount of Telegram Stars, rounded to 0; can be negative",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "nanostar_amount",
+                    "description": "Optional. The number of 1/1000000000 shares of Telegram Stars; from -999999999 to 999999999; can be negative if and only if amount is non-positive",
+                    "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -5466,7 +6420,7 @@
         },
         {
             "name": "ChatBoostSourceGiveaway",
-            "description": "The boost was obtained by the creation of a Telegram Premium giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.",
+            "description": "The boost was obtained by the creation of a Telegram Premium or a Telegram Star giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription for Telegram Premium giveaways and prize_star_count / 500 times for one year for Telegram Star giveaways.",
             "fields": [
                 {
                     "serialName": "source",
@@ -5484,7 +6438,7 @@
                 },
                 {
                     "serialName": "user",
-                    "description": "Optional. User that won the prize in the giveaway if any",
+                    "description": "Optional. User that won the prize in the giveaway if any; for Telegram Premium giveaways only",
                     "type": "User",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -5493,6 +6447,13 @@
                     "serialName": "is_unclaimed",
                     "description": "Optional. True, if the giveaway was completed, but there was no user to win the prize",
                     "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "prize_star_count",
+                    "description": "Optional. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only",
+                    "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -5600,6 +6561,110 @@
             ]
         },
         {
+            "name": "BusinessBotRights",
+            "description": "Represents the rights of a business bot.",
+            "fields": [
+                {
+                    "serialName": "can_reply",
+                    "description": "Optional. True, if the bot can send and edit messages in the private chats that had incoming messages in the last 24 hours",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_read_messages",
+                    "description": "Optional. True, if the bot can mark incoming private messages as read",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_delete_sent_messages",
+                    "description": "Optional. True, if the bot can delete messages sent by the bot",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_delete_all_messages",
+                    "description": "Optional. True, if the bot can delete all private messages in managed chats",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_edit_name",
+                    "description": "Optional. True, if the bot can edit the first and last name of the business account",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_edit_bio",
+                    "description": "Optional. True, if the bot can edit the bio of the business account",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_edit_profile_photo",
+                    "description": "Optional. True, if the bot can edit the profile photo of the business account",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_edit_username",
+                    "description": "Optional. True, if the bot can edit the username of the business account",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_change_gift_settings",
+                    "description": "Optional. True, if the bot can change the privacy settings pertaining to gifts for the business account",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_view_gifts_and_stars",
+                    "description": "Optional. True, if the bot can view gifts and the amount of Telegram Stars owned by the business account",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_convert_gifts_to_stars",
+                    "description": "Optional. True, if the bot can convert regular gifts owned by the business account to Telegram Stars",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_transfer_and_upgrade_gifts",
+                    "description": "Optional. True, if the bot can transfer and upgrade gifts owned by the business account",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_transfer_stars",
+                    "description": "Optional. True, if the bot can transfer Telegram Stars received by the business account to its own account, or use them to upgrade and transfer gifts",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "can_manage_stories",
+                    "description": "Optional. True, if the bot can post, edit and delete stories on behalf of the business account",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
             "name": "BusinessConnection",
             "description": "Describes the connection of the bot with a business account.",
             "fields": [
@@ -5632,18 +6697,18 @@
                     "defaultValue": null
                 },
                 {
-                    "serialName": "can_reply",
-                    "description": "True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours",
-                    "type": "Boolean",
-                    "isOptional": false,
-                    "defaultValue": null
-                },
-                {
                     "serialName": "is_enabled",
                     "description": "True, if the connection is active",
                     "type": "Boolean",
                     "isOptional": false,
                     "defaultValue": null
+                },
+                {
+                    "serialName": "rights",
+                    "description": "Optional. Rights of the business bot",
+                    "type": "BusinessBotRights",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ]
         },
@@ -5845,6 +6910,20 @@
                     "serialName": "has_spoiler",
                     "description": "Optional. Pass True if the video needs to be covered with a spoiler animation",
                     "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "cover",
+                    "description": "Optional. Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "start_timestamp",
+                    "description": "Optional. Start timestamp for the video in the message",
+                    "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -6137,6 +7216,144 @@
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "cover",
+                    "description": "Optional. Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "start_timestamp",
+                    "description": "Optional. Start timestamp for the video in the message",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "InputProfilePhoto",
+            "description": "This object describes a profile photo to set. Currently, it can be one of",
+            "unionTypes": [
+                "InputProfilePhotoStatic",
+                "InputProfilePhotoAnimated"
+            ]
+        },
+        {
+            "name": "InputProfilePhotoStatic",
+            "description": "A static profile photo in the .JPG format.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the profile photo, must be static",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "photo",
+                    "description": "The static profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "InputProfilePhotoAnimated",
+            "description": "An animated profile photo in the MPEG4 format.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the profile photo, must be animated",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "animation",
+                    "description": "The animated profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "main_frame_timestamp",
+                    "description": "Optional. Timestamp in seconds of the frame that will be used as the static profile photo. Defaults to 0.0.",
+                    "type": "Double",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "InputStoryContent",
+            "description": "This object describes the content of a story to post. Currently, it can be one of",
+            "unionTypes": [
+                "InputStoryContentPhoto",
+                "InputStoryContentVideo"
+            ]
+        },
+        {
+            "name": "InputStoryContentPhoto",
+            "description": "Describes a photo to post as a story.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the content, must be photo",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "photo",
+                    "description": "The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "InputStoryContentVideo",
+            "description": "Describes a video to post as a story.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the content, must be video",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "video",
+                    "description": "The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the video was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "duration",
+                    "description": "Optional. Precise duration of the video in seconds; 0-60",
+                    "type": "Double",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "cover_frame_timestamp",
+                    "description": "Optional. Timestamp in seconds of the frame that will be used as the static cover for the story. Defaults to 0.0.",
+                    "type": "Double",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "is_animation",
+                    "description": "Optional. Pass True if the video has no sound",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ]
         },
@@ -6332,14 +7549,14 @@
             "fields": [
                 {
                     "serialName": "sticker",
-                    "description": "The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »",
+                    "description": "The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new file using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
                 },
                 {
                     "serialName": "format",
-                    "description": "Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a WEBM video",
+                    "description": "Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a .WEBM video",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
@@ -6515,13 +7732,6 @@
                     "defaultValue": "null"
                 },
                 {
-                    "serialName": "hide_url",
-                    "description": "Optional. Pass True if you don't want the URL to be shown in the message",
-                    "type": "Boolean",
-                    "isOptional": true,
-                    "defaultValue": "null"
-                },
-                {
                     "serialName": "description",
                     "description": "Optional. Short description of the result",
                     "type": "String",
@@ -6675,7 +7885,7 @@
                 },
                 {
                     "serialName": "gif_url",
-                    "description": "A valid URL for the GIF file. File size must not exceed 1MB",
+                    "description": "A valid URL for the GIF file",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
@@ -6786,7 +7996,7 @@
                 },
                 {
                     "serialName": "mpeg4_url",
-                    "description": "A valid URL for the MPEG4 file. File size must not exceed 1MB",
+                    "description": "A valid URL for the MPEG4 file",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
@@ -8365,7 +9575,7 @@
                 },
                 {
                     "serialName": "payload",
-                    "description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.",
+                    "description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
@@ -8546,6 +9756,26 @@
             ]
         },
         {
+            "name": "PreparedInlineMessage",
+            "description": "Describes an inline message to be sent by a user of a Mini App.",
+            "fields": [
+                {
+                    "serialName": "id",
+                    "description": "Unique identifier of the prepared message",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "expiration_date",
+                    "description": "Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
             "name": "LabeledPrice",
             "description": "This object represents a portion of the price for goods or services.",
             "fields": [
@@ -8717,7 +9947,7 @@
         },
         {
             "name": "SuccessfulPayment",
-            "description": "This object contains basic information about a successful payment.",
+            "description": "This object contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram's control.",
             "fields": [
                 {
                     "serialName": "currency",
@@ -8765,6 +9995,27 @@
                     "serialName": "order_info",
                     "description": "Optional. Order information provided by the user",
                     "type": "OrderInfo",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "subscription_expiration_date",
+                    "description": "Optional. Expiration date of the subscription, in Unix time; for recurring payments only",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "is_recurring",
+                    "description": "Optional. True, if the payment is a recurring payment for a subscription",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "is_first_recurring",
+                    "description": "Optional. True, if the payment is the first payment for a subscription",
+                    "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -8901,6 +10152,26 @@
             ]
         },
         {
+            "name": "PaidMediaPurchased",
+            "description": "This object contains information about a paid media purchase.",
+            "fields": [
+                {
+                    "serialName": "from",
+                    "description": "User who purchased the media",
+                    "type": "User",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "paid_media_payload",
+                    "description": "Bot-specified paid media payload",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
             "name": "RevenueWithdrawalState",
             "description": "This object describes the state of a revenue withdrawal operation. Currently, it can be one of",
             "unionTypes": [
@@ -8963,12 +10234,56 @@
             ]
         },
         {
+            "name": "AffiliateInfo",
+            "description": "Contains information about the affiliate that received a commission via this transaction.",
+            "fields": [
+                {
+                    "serialName": "commission_per_mille",
+                    "description": "The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the bot from referred users",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "amount",
+                    "description": "Integer amount of Telegram Stars received by the affiliate from the transaction, rounded to 0; can be negative for refunds",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "affiliate_user",
+                    "description": "Optional. The bot or the user that received an affiliate commission if it was received by a bot or a user",
+                    "type": "User",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "affiliate_chat",
+                    "description": "Optional. The chat that received an affiliate commission if it was received by a chat",
+                    "type": "Chat",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "nanostar_amount",
+                    "description": "Optional. The number of 1/1000000000 shares of Telegram Stars received by the affiliate; from -999999999 to 999999999; can be negative for refunds",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
             "name": "TransactionPartner",
             "description": "This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of",
             "unionTypes": [
                 "TransactionPartnerUser",
+                "TransactionPartnerChat",
+                "TransactionPartnerAffiliateProgram",
                 "TransactionPartnerFragment",
                 "TransactionPartnerTelegramAds",
+                "TransactionPartnerTelegramApi",
                 "TransactionPartnerOther"
             ]
         },
@@ -8992,15 +10307,111 @@
                 },
                 {
                     "serialName": "invoice_payload",
-                    "description": "Optional. Bot-specified invoice payload",
+                    "description": "Optional. Bot-specified invoice payload. Can be available only for “invoice_payment” transactions.",
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
                 },
                 {
                     "serialName": "paid_media",
-                    "description": "Optional. Information about the paid media bought by the user",
+                    "description": "Optional. Information about the paid media bought by the user; for “paid_media_payment” transactions only",
                     "type": "List<PaidMedia>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "transaction_type",
+                    "description": "Type of the transaction, currently one of “invoice_payment” for payments via invoices, “paid_media_payment” for payments for paid media, “gift_purchase” for gifts sent by the bot, “premium_purchase” for Telegram Premium subscriptions gifted by the bot, “business_account_transfer” for direct transfers from managed business accounts",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "affiliate",
+                    "description": "Optional. Information about the affiliate that received a commission via this transaction. Can be available only for “invoice_payment” and “paid_media_payment” transactions.",
+                    "type": "AffiliateInfo",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "subscription_period",
+                    "description": "Optional. The duration of the paid subscription. Can be available only for “invoice_payment” transactions.",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "paid_media_payload",
+                    "description": "Optional. Bot-specified paid media payload. Can be available only for “paid_media_payment” transactions.",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "gift",
+                    "description": "Optional. The gift sent to the user by the bot; for “gift_purchase” transactions only",
+                    "type": "Gift",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "premium_subscription_duration",
+                    "description": "Optional. Number of months the gifted Telegram Premium subscription will be active for; for “premium_purchase” transactions only",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "TransactionPartnerChat",
+            "description": "Describes a transaction with a chat.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the transaction partner, always “chat”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "chat",
+                    "description": "Information about the chat",
+                    "type": "Chat",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "gift",
+                    "description": "Optional. The gift sent to the chat by the bot",
+                    "type": "Gift",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "TransactionPartnerAffiliateProgram",
+            "description": "Describes the affiliate program that issued the affiliate commission received via this transaction.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the transaction partner, always “affiliate_program”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "commission_per_mille",
+                    "description": "The number of Telegram Stars received by the bot for each 1000 Telegram Stars received by the affiliate program sponsor from referred users",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "sponsor_user",
+                    "description": "Optional. Information about the bot that sponsored the affiliate program",
+                    "type": "User",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -9040,6 +10451,26 @@
             ]
         },
         {
+            "name": "TransactionPartnerTelegramApi",
+            "description": "Describes a transaction with payment for paid broadcasting.",
+            "fields": [
+                {
+                    "serialName": "type",
+                    "description": "Type of the transaction partner, always “telegram_api”",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "request_count",
+                    "description": "The number of successful requests that exceeded regular limits and were therefore billed",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ]
+        },
+        {
             "name": "TransactionPartnerOther",
             "description": "Describes a transaction with an unknown source or recipient.",
             "fields": [
@@ -9054,18 +10485,18 @@
         },
         {
             "name": "StarTransaction",
-            "description": "Describes a Telegram Star transaction.",
+            "description": "Describes a Telegram Star transaction. Note that if the buyer initiates a chargeback with the payment provider from whom they acquired Stars (e.g., Apple, Google) following this transaction, the refunded Stars will be deducted from the bot's balance. This is outside of Telegram's control.",
             "fields": [
                 {
                     "serialName": "id",
-                    "description": "Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.",
+                    "description": "Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
                 },
                 {
                     "serialName": "amount",
-                    "description": "Number of Telegram Stars transferred by the transaction",
+                    "description": "Integer amount of Telegram Stars transferred by the transaction",
                     "type": "Long",
                     "isOptional": false,
                     "defaultValue": null
@@ -9088,6 +10519,13 @@
                     "serialName": "receiver",
                     "description": "Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions",
                     "type": "TransactionPartner",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "nanostar_amount",
+                    "description": "Optional. The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999",
+                    "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -9711,7 +11149,7 @@
                 },
                 {
                     "serialName": "allowed_updates",
-                    "description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\"message\", \"edited_channel_post\", \"callback_query\"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.",
+                    "description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\"message\", \"edited_channel_post\", \"callback_query\"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to getUpdates, so unwanted updates may be received for a short period of time.",
                     "type": "List<UpdateType>",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -9721,7 +11159,7 @@
         },
         {
             "name": "setWebhook",
-            "description": "Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.\n\nIf you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.",
+            "description": "Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable amount of attempts. Returns True on success.\n\nIf you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.",
             "parameters": [
                 {
                     "serialName": "url",
@@ -9904,6 +11342,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -9951,6 +11396,13 @@
                     "serialName": "protect_content",
                     "description": "Protects the contents of the forwarded message from forwarding and saving",
                     "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "video_start_timestamp",
+                    "description": "New start timestamp for the forwarded video in the message",
+                    "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -10091,6 +11543,20 @@
                     "serialName": "reply_markup",
                     "description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
                     "type": "ReplyMarkup",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "video_start_timestamp",
+                    "description": "New start timestamp for the copied video in the message",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -10254,6 +11720,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -10373,6 +11846,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -10476,6 +11956,13 @@
                     "serialName": "business_connection_id",
                     "description": "Unique identifier of the business connection on behalf of which the message will be sent",
                     "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -10618,6 +12105,27 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "cover",
+                    "description": "Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "start_timestamp",
+                    "description": "Start timestamp for the video in the message",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -10751,6 +12259,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -10849,6 +12364,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -10940,6 +12462,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -10957,7 +12486,7 @@
                 },
                 {
                     "serialName": "star_count",
-                    "description": "The number of Telegram Stars that must be paid to buy access to the media",
+                    "description": "The number of Telegram Stars that must be paid to buy access to the media; 1-10000",
                     "type": "Long",
                     "isOptional": false,
                     "defaultValue": null
@@ -11031,6 +12560,20 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "payload",
+                    "description": "Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -11092,6 +12635,13 @@
                     "serialName": "business_connection_id",
                     "description": "Unique identifier of the business connection on behalf of which the message will be sent",
                     "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -11197,6 +12747,13 @@
                     "serialName": "business_connection_id",
                     "description": "Unique identifier of the business connection on behalf of which the message will be sent",
                     "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -11318,6 +12875,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -11407,6 +12971,13 @@
                     "serialName": "business_connection_id",
                     "description": "Unique identifier of the business connection on behalf of which the message will be sent",
                     "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -11570,6 +13141,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -11640,6 +13218,13 @@
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -11681,7 +13266,7 @@
         },
         {
             "name": "setMessageReaction",
-            "description": "Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.",
+            "description": "Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.",
             "parameters": [
                 {
                     "serialName": "chat_id",
@@ -11741,6 +13326,34 @@
                 }
             ],
             "returnType": "UserProfilePhotos"
+        },
+        {
+            "name": "setUserEmojiStatus",
+            "description": "Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "user_id",
+                    "description": "Unique identifier of the target user",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "emoji_status_custom_emoji_id",
+                    "description": "Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "emoji_status_expiration_date",
+                    "description": "Expiration date of the emoji status, if any",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
         },
         {
             "name": "getFile",
@@ -12210,7 +13823,7 @@
                 },
                 {
                     "serialName": "subscription_price",
-                    "description": "The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500",
+                    "description": "The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-10000",
                     "type": "Long",
                     "isOptional": false,
                     "defaultValue": null
@@ -13298,7 +14911,7 @@
         },
         {
             "name": "editMessageMedia",
-            "description": "Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
+            "description": "Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
             "parameters": [
                 {
                     "serialName": "media",
@@ -13591,6 +15204,727 @@
             "returnType": "Boolean"
         },
         {
+            "name": "getAvailableGifts",
+            "description": "Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.",
+            "parameters": [
+            ],
+            "returnType": "Gifts"
+        },
+        {
+            "name": "sendGift",
+            "description": "Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receiver. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "gift_id",
+                    "description": "Identifier of the gift",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "user_id",
+                    "description": "Required if chat_id is not specified. Unique identifier of the target user who will receive the gift.",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "chat_id",
+                    "description": "Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift.",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "pay_for_upgrade",
+                    "description": "Pass True to pay for the gift upgrade from the bot's balance, thereby making the upgrade free for the receiver",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "text",
+                    "description": "Text that will be shown along with the gift; 0-128 characters",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "text_parse_mode",
+                    "description": "Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "text_entities",
+                    "description": "A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "giftPremiumSubscription",
+            "description": "Gifts a Telegram Premium subscription to the given user. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "user_id",
+                    "description": "Unique identifier of the target user who will receive a Telegram Premium subscription",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "month_count",
+                    "description": "Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "star_count",
+                    "description": "Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "text",
+                    "description": "Text that will be shown along with the service message about the subscription; 0-128 characters",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "text_parse_mode",
+                    "description": "Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "text_entities",
+                    "description": "A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "verifyUser",
+            "description": "Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "user_id",
+                    "description": "Unique identifier of the target user",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "custom_description",
+                    "description": "Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "verifyChat",
+            "description": "Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "chat_id",
+                    "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "custom_description",
+                    "description": "Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "removeUserVerification",
+            "description": "Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "user_id",
+                    "description": "Unique identifier of the target user",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "removeChatVerification",
+            "description": "Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "chat_id",
+                    "description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "readBusinessMessage",
+            "description": "Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection on behalf of which to read the message",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "chat_id",
+                    "description": "Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours.",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "message_id",
+                    "description": "Unique identifier of the message to mark as read",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "deleteBusinessMessages",
+            "description": "Delete messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection on behalf of which to delete the messages",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "message_ids",
+                    "description": "A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See deleteMessage for limitations on which messages can be deleted",
+                    "type": "List<Long>",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "setBusinessAccountName",
+            "description": "Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "first_name",
+                    "description": "The new value of the first name for the business account; 1-64 characters",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "last_name",
+                    "description": "The new value of the last name for the business account; 0-64 characters",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "setBusinessAccountUsername",
+            "description": "Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "username",
+                    "description": "The new value of the username for the business account; 0-32 characters",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "setBusinessAccountBio",
+            "description": "Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "bio",
+                    "description": "The new value of the bio for the business account; 0-140 characters",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "setBusinessAccountProfilePhoto",
+            "description": "Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "photo",
+                    "description": "The new profile photo to set",
+                    "type": "InputProfilePhoto",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "is_public",
+                    "description": "Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account's privacy settings. An account can have only one public photo.",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "removeBusinessAccountProfilePhoto",
+            "description": "Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "is_public",
+                    "description": "Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account's privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo.",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "setBusinessAccountGiftSettings",
+            "description": "Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "show_gift_button",
+                    "description": "Pass True, if a button for sending a gift to the user or by the business account must always be shown in the input field",
+                    "type": "Boolean",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "accepted_gift_types",
+                    "description": "Types of gifts accepted by the business account",
+                    "type": "AcceptedGiftTypes",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "getBusinessAccountStarBalance",
+            "description": "Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "StarAmount"
+        },
+        {
+            "name": "transferBusinessAccountStars",
+            "description": "Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "star_count",
+                    "description": "Number of Telegram Stars to transfer; 1-10000",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "getBusinessAccountGifts",
+            "description": "Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns OwnedGifts on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "exclude_unsaved",
+                    "description": "Pass True to exclude gifts that aren't saved to the account's profile page",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "exclude_saved",
+                    "description": "Pass True to exclude gifts that are saved to the account's profile page",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "exclude_unlimited",
+                    "description": "Pass True to exclude gifts that can be purchased an unlimited number of times",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "exclude_limited",
+                    "description": "Pass True to exclude gifts that can be purchased a limited number of times",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "exclude_unique",
+                    "description": "Pass True to exclude unique gifts",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "sort_by_price",
+                    "description": "Pass True to sort results by gift price instead of send date. Sorting is applied before pagination.",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "offset",
+                    "description": "Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "limit",
+                    "description": "The maximum number of gifts to be returned; 1-100. Defaults to 100",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "OwnedGifts"
+        },
+        {
+            "name": "convertGiftToStars",
+            "description": "Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "owned_gift_id",
+                    "description": "Unique identifier of the regular gift that should be converted to Telegram Stars",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "upgradeGift",
+            "description": "Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "owned_gift_id",
+                    "description": "Unique identifier of the regular gift that should be upgraded to a unique one",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "keep_original_details",
+                    "description": "Pass True to keep the original gift text, sender and receiver in the upgraded gift",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "star_count",
+                    "description": "The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0, otherwise, the can_transfer_stars business bot right is required and gift.upgrade_star_count must be passed.",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "transferGift",
+            "description": "Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "owned_gift_id",
+                    "description": "Unique identifier of the regular gift that should be transferred",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "new_owner_chat_id",
+                    "description": "Unique identifier of the chat which will own the gift. The chat must be active in the last 24 hours.",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "star_count",
+                    "description": "The amount of Telegram Stars that will be paid for the transfer from the business account balance. If positive, then the can_transfer_stars business bot right is required.",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "postStory",
+            "description": "Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "content",
+                    "description": "Content of the story",
+                    "type": "InputStoryContent",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "active_period",
+                    "description": "Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "caption",
+                    "description": "Caption of the story, 0-2048 characters after entities parsing",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "parse_mode",
+                    "description": "Mode for parsing entities in the story caption. See formatting options for more details.",
+                    "type": "ParseMode",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "caption_entities",
+                    "description": "A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "areas",
+                    "description": "A JSON-serialized list of clickable areas to be shown on the story",
+                    "type": "List<StoryArea>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "post_to_chat_page",
+                    "description": "Pass True to keep the story accessible after it expires",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "protect_content",
+                    "description": "Pass True if the content of the story must be protected from forwarding and screenshotting",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Story"
+        },
+        {
+            "name": "editStory",
+            "description": "Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "story_id",
+                    "description": "Unique identifier of the story to edit",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "content",
+                    "description": "Content of the story",
+                    "type": "InputStoryContent",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "caption",
+                    "description": "Caption of the story, 0-2048 characters after entities parsing",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "parse_mode",
+                    "description": "Mode for parsing entities in the story caption. See formatting options for more details.",
+                    "type": "ParseMode",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "caption_entities",
+                    "description": "A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "areas",
+                    "description": "A JSON-serialized list of clickable areas to be shown on the story",
+                    "type": "List<StoryArea>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Story"
+        },
+        {
+            "name": "deleteStory",
+            "description": "Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "story_id",
+                    "description": "Unique identifier of the story to delete",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
             "name": "sendSticker",
             "description": "Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.",
             "parameters": [
@@ -13661,6 +15995,13 @@
                     "serialName": "business_connection_id",
                     "description": "Unique identifier of the business connection on behalf of which the message will be sent",
                     "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -13974,14 +16315,14 @@
                 },
                 {
                     "serialName": "format",
-                    "description": "Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video",
+                    "description": "Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a .WEBM video",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
                 },
                 {
                     "serialName": "thumbnail",
-                    "description": "A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.",
+                    "description": "A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a .WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.",
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -14095,6 +16436,55 @@
             "returnType": "SentWebAppMessage"
         },
         {
+            "name": "savePreparedInlineMessage",
+            "description": "Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.",
+            "parameters": [
+                {
+                    "serialName": "user_id",
+                    "description": "Unique identifier of the target user that can use the prepared message",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "result",
+                    "description": "A JSON-serialized object describing the message to be sent",
+                    "type": "InlineQueryResult",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "allow_user_chats",
+                    "description": "Pass True if the message can be sent to private chats with users",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_bot_chats",
+                    "description": "Pass True if the message can be sent to private chats with bots",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_group_chats",
+                    "description": "Pass True if the message can be sent to group and supergroup chats",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_channel_chats",
+                    "description": "Pass True if the message can be sent to channel chats",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "PreparedInlineMessage"
+        },
+        {
             "name": "sendInvoice",
             "description": "Use this method to send invoices. On success, the sent Message is returned.",
             "parameters": [
@@ -14121,7 +16511,7 @@
                 },
                 {
                     "serialName": "payload",
-                    "description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.",
+                    "description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
@@ -14293,6 +16683,13 @@
                     "type": "InlineKeyboardMarkup",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "Message"
@@ -14317,7 +16714,7 @@
                 },
                 {
                     "serialName": "payload",
-                    "description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.",
+                    "description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
@@ -14440,6 +16837,20 @@
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
+                },
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection on behalf of which the link will be created. For payments in Telegram Stars only.",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "subscription_period",
+                    "description": "The number of seconds the subscription will be active for before the next payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed 10000 Telegram Stars.",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ],
             "returnType": "String"
@@ -14471,7 +16882,7 @@
                 },
                 {
                     "serialName": "error_message",
-                    "description": "Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. \"Sorry, delivery to your desired address is unavailable'). Telegram will display this message to the user.",
+                    "description": "Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. “Sorry, delivery to your desired address is unavailable”). Telegram will display this message to the user.",
                     "type": "String",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -14543,6 +16954,34 @@
                     "serialName": "telegram_payment_charge_id",
                     "description": "Telegram payment identifier",
                     "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                }
+            ],
+            "returnType": "Boolean"
+        },
+        {
+            "name": "editUserStarSubscription",
+            "description": "Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success.",
+            "parameters": [
+                {
+                    "serialName": "user_id",
+                    "description": "Identifier of the user whose subscription will be edited",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "telegram_payment_charge_id",
+                    "description": "Telegram payment identifier for the subscription",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "is_canceled",
+                    "description": "Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.",
+                    "type": "Boolean",
                     "isOptional": false,
                     "defaultValue": null
                 }
@@ -14634,6 +17073,13 @@
                     "serialName": "business_connection_id",
                     "description": "Unique identifier of the business connection on behalf of which the message will be sent",
                     "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "allow_paid_broadcast",
+                    "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
+                    "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
                 }

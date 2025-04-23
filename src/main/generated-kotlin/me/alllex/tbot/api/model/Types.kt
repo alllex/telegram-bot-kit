@@ -35,6 +35,7 @@ enum class UpdateType {
     @SerialName("business_message") BUSINESS_MESSAGE,
     @SerialName("edited_business_message") EDITED_BUSINESS_MESSAGE,
     @SerialName("deleted_business_messages") DELETED_BUSINESS_MESSAGES,
+    @SerialName("purchased_paid_media") PURCHASED_PAID_MEDIA,
 }
 
 /**
@@ -63,6 +64,7 @@ enum class UpdateType {
  * - [BusinessMessageUpdate]
  * - [EditedBusinessMessageUpdate]
  * - [DeletedBusinessMessagesUpdate]
+ * - [PurchasedPaidMediaUpdate]
  */
 @Serializable(with = UpdateSerializer::class)
 sealed interface Update {
@@ -312,6 +314,17 @@ data class DeletedBusinessMessagesUpdate(
     override val updateType: UpdateType get() = UpdateType.DELETED_BUSINESS_MESSAGES
 }
 
+/**
+ * A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat
+ */
+@Serializable
+data class PurchasedPaidMediaUpdate(
+    override val updateId: Long,
+    val purchasedPaidMedia: PaidMediaPurchased,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.PURCHASED_PAID_MEDIA
+}
+
 object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Update> {
         val json = element.jsonObject
@@ -338,6 +351,7 @@ object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class
             "business_message" in json -> BusinessMessageUpdate.serializer()
             "edited_business_message" in json -> EditedBusinessMessageUpdate.serializer()
             "deleted_business_messages" in json -> DeletedBusinessMessagesUpdate.serializer()
+            "purchased_paid_media" in json -> PurchasedPaidMediaUpdate.serializer()
             else -> error("Failed to deserialize an update type: $json")
         }
     }
@@ -473,6 +487,7 @@ data class Chat(
  * @param linkedChatId Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
  * @param location Optional. For supergroups, the location to which the supergroup is connected
  * @param canSendPaidMedia Optional. True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.
+ * @param acceptedGiftTypes Information about types of gifts that are accepted by the chat or by the corresponding user for private chats
  */
 @Serializable
 data class ChatFullInfo(
@@ -520,13 +535,14 @@ data class ChatFullInfo(
     val linkedChatId: ChatId? = null,
     val location: ChatLocation? = null,
     val canSendPaidMedia: Boolean? = null,
+    val acceptedGiftTypes: AcceptedGiftTypes,
 ) {
-    override fun toString() = DebugStringBuilder("ChatFullInfo").prop("id", id).prop("type", type).prop("accentColorId", accentColorId).prop("maxReactionCount", maxReactionCount).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).prop("canSendPaidMedia", canSendPaidMedia).toString()
+    override fun toString() = DebugStringBuilder("ChatFullInfo").prop("id", id).prop("type", type).prop("accentColorId", accentColorId).prop("maxReactionCount", maxReactionCount).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).prop("canSendPaidMedia", canSendPaidMedia).prop("acceptedGiftTypes", acceptedGiftTypes).toString()
 }
 
 /**
  * This object represents a message.
- * @param messageId Unique message identifier inside this chat
+ * @param messageId Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
  * @param date Date the message was sent in Unix time. It is always a positive number, representing a valid date.
  * @param chat Chat the message belongs to
  * @param messageThreadId Optional. Unique identifier of a message thread to which the message belongs; for supergroups only
@@ -611,6 +627,10 @@ data class ChatFullInfo(
  * @param replyMarkup Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
  * @param paidMedia Optional. Message contains paid media; information about the paid media
  * @param refundedPayment Optional. Message is a service message about a refunded payment, information about the payment. More about payments »
+ * @param paidStarCount Optional. The number of Telegram Stars that were paid by the sender of the message to send it
+ * @param gift Optional. Service message: a regular gift was sent or received
+ * @param uniqueGift Optional. Service message: a unique gift was sent or received
+ * @param paidMessagePriceChanged Optional. Service message: the price for paid messages has changed in the chat
  */
 @Serializable
 data class Message(
@@ -699,13 +719,17 @@ data class Message(
     val replyMarkup: InlineKeyboardMarkup? = null,
     val paidMedia: PaidMediaInfo? = null,
     val refundedPayment: RefundedPayment? = null,
+    val paidStarCount: Long? = null,
+    val gift: GiftInfo? = null,
+    val uniqueGift: UniqueGiftInfo? = null,
+    val paidMessagePriceChanged: PaidMessagePriceChanged? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).prop("paidMedia", paidMedia).prop("refundedPayment", refundedPayment).toString()
+    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).prop("paidMedia", paidMedia).prop("refundedPayment", refundedPayment).prop("paidStarCount", paidStarCount).prop("gift", gift).prop("uniqueGift", uniqueGift).prop("paidMessagePriceChanged", paidMessagePriceChanged).toString()
 }
 
 /**
  * This object represents a unique message identifier.
- * @param messageId Unique message identifier
+ * @param messageId Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
  */
 @Serializable
 data class MessageRef(
@@ -716,7 +740,7 @@ data class MessageRef(
 
 /**
  * This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
- * @param type Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
+ * @param type Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
  * @param offset Offset in UTF-16 code units to the start of the entity
  * @param length Length of the entity in UTF-16 code units
  * @param url Optional. For “text_link” only, URL that will be opened after user taps on the text
@@ -1025,6 +1049,8 @@ data class Story(
  * @param fileName Optional. Original filename as defined by the sender
  * @param mimeType Optional. MIME type of the file as defined by the sender
  * @param fileSize Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+ * @param cover Optional. Available sizes of the cover of the video in the message
+ * @param startTimestamp Optional. Timestamp in seconds from which the video will play in the message
  */
 @Serializable
 data class Video(
@@ -1037,8 +1063,10 @@ data class Video(
     val fileName: String? = null,
     val mimeType: String? = null,
     val fileSize: Long? = null,
+    val cover: List<PhotoSize>? = null,
+    val startTimestamp: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Video").prop("fileId", fileId).prop("fileUniqueId", fileUniqueId).prop("width", width).prop("height", height).prop("duration", duration).prop("thumbnail", thumbnail).prop("fileName", fileName).prop("mimeType", mimeType).prop("fileSize", fileSize).toString()
+    override fun toString() = DebugStringBuilder("Video").prop("fileId", fileId).prop("fileUniqueId", fileUniqueId).prop("width", width).prop("height", height).prop("duration", duration).prop("thumbnail", thumbnail).prop("fileName", fileName).prop("mimeType", mimeType).prop("fileSize", fileSize).prop("cover", cover).prop("startTimestamp", startTimestamp).toString()
 }
 
 /**
@@ -1448,7 +1476,7 @@ data class BackgroundTypeWallpaper(
 }
 
 /**
- * The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
+ * The background is a .PNG or .TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
  * @param document Document with the pattern
  * @param fill The background fill that is combined with the pattern
  * @param intensity Intensity of the pattern when it is shown above the filled background; 0-100
@@ -1648,10 +1676,26 @@ data class VideoChatParticipantsInvited(
 }
 
 /**
- * This object represents a service message about the creation of a scheduled giveaway. Currently holds no information.
+ * Describes a service message about a change in the price of paid messages within a chat.
+ * @param paidMessageStarCount The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message
  */
 @Serializable
-data object GiveawayCreated
+data class PaidMessagePriceChanged(
+    val paidMessageStarCount: Long,
+) {
+    override fun toString() = DebugStringBuilder("PaidMessagePriceChanged").prop("paidMessageStarCount", paidMessageStarCount).toString()
+}
+
+/**
+ * This object represents a service message about the creation of a scheduled giveaway.
+ * @param prizeStarCount Optional. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+ */
+@Serializable
+data class GiveawayCreated(
+    val prizeStarCount: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("GiveawayCreated").prop("prizeStarCount", prizeStarCount).toString()
+}
 
 /**
  * This object represents a message about a scheduled giveaway.
@@ -1662,7 +1706,8 @@ data object GiveawayCreated
  * @param hasPublicWinners Optional. True, if the list of giveaway winners will be visible to everyone
  * @param prizeDescription Optional. Description of additional giveaway prize
  * @param countryCodes Optional. A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which eligible users for the giveaway must come. If empty, then all users can participate in the giveaway. Users with a phone number that was bought on Fragment can always participate in giveaways.
- * @param premiumSubscriptionMonthCount Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for
+ * @param premiumSubscriptionMonthCount Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only
+ * @param prizeStarCount Optional. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
  */
 @Serializable
 data class Giveaway(
@@ -1674,8 +1719,9 @@ data class Giveaway(
     val prizeDescription: String? = null,
     val countryCodes: List<String>? = null,
     val premiumSubscriptionMonthCount: Long? = null,
+    val prizeStarCount: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Giveaway").prop("chats", chats).prop("winnersSelectionDate", winnersSelectionDate).prop("winnerCount", winnerCount).prop("onlyNewMembers", onlyNewMembers).prop("hasPublicWinners", hasPublicWinners).prop("prizeDescription", prizeDescription).prop("countryCodes", countryCodes).prop("premiumSubscriptionMonthCount", premiumSubscriptionMonthCount).toString()
+    override fun toString() = DebugStringBuilder("Giveaway").prop("chats", chats).prop("winnersSelectionDate", winnersSelectionDate).prop("winnerCount", winnerCount).prop("onlyNewMembers", onlyNewMembers).prop("hasPublicWinners", hasPublicWinners).prop("prizeDescription", prizeDescription).prop("countryCodes", countryCodes).prop("premiumSubscriptionMonthCount", premiumSubscriptionMonthCount).prop("prizeStarCount", prizeStarCount).toString()
 }
 
 /**
@@ -1686,11 +1732,12 @@ data class Giveaway(
  * @param winnerCount Total number of winners in the giveaway
  * @param winners List of up to 100 winners of the giveaway
  * @param additionalChatCount Optional. The number of other chats the user had to join in order to be eligible for the giveaway
- * @param premiumSubscriptionMonthCount Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for
+ * @param premiumSubscriptionMonthCount Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only
  * @param unclaimedPrizeCount Optional. Number of undistributed prizes
  * @param onlyNewMembers Optional. True, if only users who had joined the chats after the giveaway started were eligible to win
  * @param wasRefunded Optional. True, if the giveaway was canceled because the payment for it was refunded
  * @param prizeDescription Optional. Description of additional giveaway prize
+ * @param prizeStarCount Optional. The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only
  */
 @Serializable
 data class GiveawayWinners(
@@ -1705,8 +1752,9 @@ data class GiveawayWinners(
     val onlyNewMembers: Boolean? = null,
     val wasRefunded: Boolean? = null,
     val prizeDescription: String? = null,
+    val prizeStarCount: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("GiveawayWinners").prop("chat", chat).prop("giveawayMessageId", giveawayMessageId).prop("winnersSelectionDate", winnersSelectionDate).prop("winnerCount", winnerCount).prop("winners", winners).prop("additionalChatCount", additionalChatCount).prop("premiumSubscriptionMonthCount", premiumSubscriptionMonthCount).prop("unclaimedPrizeCount", unclaimedPrizeCount).prop("onlyNewMembers", onlyNewMembers).prop("wasRefunded", wasRefunded).prop("prizeDescription", prizeDescription).toString()
+    override fun toString() = DebugStringBuilder("GiveawayWinners").prop("chat", chat).prop("giveawayMessageId", giveawayMessageId).prop("winnersSelectionDate", winnersSelectionDate).prop("winnerCount", winnerCount).prop("winners", winners).prop("additionalChatCount", additionalChatCount).prop("premiumSubscriptionMonthCount", premiumSubscriptionMonthCount).prop("unclaimedPrizeCount", unclaimedPrizeCount).prop("onlyNewMembers", onlyNewMembers).prop("wasRefunded", wasRefunded).prop("prizeDescription", prizeDescription).prop("prizeStarCount", prizeStarCount).toString()
 }
 
 /**
@@ -1714,14 +1762,16 @@ data class GiveawayWinners(
  * @param winnerCount Number of winners in the giveaway
  * @param unclaimedPrizeCount Optional. Number of undistributed prizes
  * @param giveawayMessage Optional. Message with the giveaway that was completed, if it wasn't deleted
+ * @param isStarGiveaway Optional. True, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram Premium giveaway.
  */
 @Serializable
 data class GiveawayCompleted(
     val winnerCount: Long,
     val unclaimedPrizeCount: Long? = null,
     val giveawayMessage: Message? = null,
+    val isStarGiveaway: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("GiveawayCompleted").prop("winnerCount", winnerCount).prop("unclaimedPrizeCount", unclaimedPrizeCount).prop("giveawayMessage", giveawayMessage).toString()
+    override fun toString() = DebugStringBuilder("GiveawayCompleted").prop("winnerCount", winnerCount).prop("unclaimedPrizeCount", unclaimedPrizeCount).prop("giveawayMessage", giveawayMessage).prop("isStarGiveaway", isStarGiveaway).toString()
 }
 
 /**
@@ -1931,6 +1981,7 @@ data class InlineKeyboardMarkup(
  * @param switchInlineQueryChosenChat Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
  * @param callbackGame Optional. Description of the game that will be launched when the user presses the button. NOTE: This type of button must always be the first button in the first row.
  * @param pay Optional. Specify True, to send a Pay button. Substrings “” and “XTR” in the buttons's text will be replaced with a Telegram Star icon. NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
+ * @param copyText Optional. Description of the button that copies the specified text to the clipboard.
  */
 @Serializable
 data class InlineKeyboardButton(
@@ -1944,8 +1995,9 @@ data class InlineKeyboardButton(
     val switchInlineQueryChosenChat: SwitchInlineQueryChosenChat? = null,
     val callbackGame: CallbackGame? = null,
     val pay: Boolean? = null,
+    val copyText: CopyTextButton? = null,
 ) {
-    override fun toString() = DebugStringBuilder("InlineKeyboardButton").prop("text", text).prop("url", url).prop("callbackData", callbackData).prop("webApp", webApp).prop("loginUrl", loginUrl).prop("switchInlineQuery", switchInlineQuery).prop("switchInlineQueryCurrentChat", switchInlineQueryCurrentChat).prop("switchInlineQueryChosenChat", switchInlineQueryChosenChat).prop("callbackGame", callbackGame).prop("pay", pay).toString()
+    override fun toString() = DebugStringBuilder("InlineKeyboardButton").prop("text", text).prop("url", url).prop("callbackData", callbackData).prop("webApp", webApp).prop("loginUrl", loginUrl).prop("switchInlineQuery", switchInlineQuery).prop("switchInlineQueryCurrentChat", switchInlineQueryCurrentChat).prop("switchInlineQueryChosenChat", switchInlineQueryChosenChat).prop("callbackGame", callbackGame).prop("pay", pay).prop("copyText", copyText).toString()
 }
 
 /**
@@ -1986,6 +2038,17 @@ data class SwitchInlineQueryChosenChat(
     val allowChannelChats: Boolean? = null,
 ) {
     override fun toString() = DebugStringBuilder("SwitchInlineQueryChosenChat").prop("query", query).prop("allowUserChats", allowUserChats).prop("allowBotChats", allowBotChats).prop("allowGroupChats", allowGroupChats).prop("allowChannelChats", allowChannelChats).toString()
+}
+
+/**
+ * This object represents an inline keyboard button that copies specified text to the clipboard.
+ * @param text The text to be copied to the clipboard; 1-256 characters
+ */
+@Serializable
+data class CopyTextButton(
+    val text: String,
+) {
+    override fun toString() = DebugStringBuilder("CopyTextButton").prop("text", text).toString()
 }
 
 /**
@@ -2054,6 +2117,8 @@ data class ChatPhoto(
  * @param expireDate Optional. Point in time (Unix timestamp) when the link will expire or has been expired
  * @param memberLimit Optional. The maximum number of users that can be members of the chat simultaneously after joining the chat via this invite link; 1-99999
  * @param pendingJoinRequestCount Optional. Number of pending join requests created using this link
+ * @param subscriptionPeriod Optional. The number of seconds the subscription will be active for before the next payment
+ * @param subscriptionPrice Optional. The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat using the link
  */
 @Serializable
 data class ChatInviteLink(
@@ -2066,8 +2131,10 @@ data class ChatInviteLink(
     val expireDate: UnixTimestamp? = null,
     val memberLimit: Long? = null,
     val pendingJoinRequestCount: Long? = null,
+    val subscriptionPeriod: Seconds? = null,
+    val subscriptionPrice: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatInviteLink").prop("inviteLink", inviteLink).prop("creator", creator).prop("createsJoinRequest", createsJoinRequest).prop("isPrimary", isPrimary).prop("isRevoked", isRevoked).prop("name", name).prop("expireDate", expireDate).prop("memberLimit", memberLimit).prop("pendingJoinRequestCount", pendingJoinRequestCount).toString()
+    override fun toString() = DebugStringBuilder("ChatInviteLink").prop("inviteLink", inviteLink).prop("creator", creator).prop("createsJoinRequest", createsJoinRequest).prop("isPrimary", isPrimary).prop("isRevoked", isRevoked).prop("name", name).prop("expireDate", expireDate).prop("memberLimit", memberLimit).prop("pendingJoinRequestCount", pendingJoinRequestCount).prop("subscriptionPeriod", subscriptionPeriod).prop("subscriptionPrice", subscriptionPrice).toString()
 }
 
 /**
@@ -2421,6 +2488,141 @@ data class BusinessOpeningHours(
 }
 
 /**
+ * Describes the position of a clickable area within a story.
+ * @param xPercentage The abscissa of the area's center, as a percentage of the media width
+ * @param yPercentage The ordinate of the area's center, as a percentage of the media height
+ * @param widthPercentage The width of the area's rectangle, as a percentage of the media width
+ * @param heightPercentage The height of the area's rectangle, as a percentage of the media height
+ * @param rotationAngle The clockwise rotation angle of the rectangle, in degrees; 0-360
+ * @param cornerRadiusPercentage The radius of the rectangle corner rounding, as a percentage of the media width
+ */
+@Serializable
+data class StoryAreaPosition(
+    val xPercentage: Double,
+    val yPercentage: Double,
+    val widthPercentage: Double,
+    val heightPercentage: Double,
+    val rotationAngle: Double,
+    val cornerRadiusPercentage: Double,
+) {
+    override fun toString() = DebugStringBuilder("StoryAreaPosition").prop("xPercentage", xPercentage).prop("yPercentage", yPercentage).prop("widthPercentage", widthPercentage).prop("heightPercentage", heightPercentage).prop("rotationAngle", rotationAngle).prop("cornerRadiusPercentage", cornerRadiusPercentage).toString()
+}
+
+/**
+ * Describes the physical address of a location.
+ * @param countryCode The two-letter ISO 3166-1 alpha-2 country code of the country where the location is located
+ * @param state Optional. State of the location
+ * @param city Optional. City of the location
+ * @param street Optional. Street address of the location
+ */
+@Serializable
+data class LocationAddress(
+    val countryCode: String,
+    val state: String? = null,
+    val city: String? = null,
+    val street: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("LocationAddress").prop("countryCode", countryCode).prop("state", state).prop("city", city).prop("street", street).toString()
+}
+
+/**
+ * Describes the type of a clickable area on a story. Currently, it can be one of
+ * - [StoryAreaTypeLocation]
+ * - [StoryAreaTypeSuggestedReaction]
+ * - [StoryAreaTypeLink]
+ * - [StoryAreaTypeWeather]
+ * - [StoryAreaTypeUniqueGift]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface StoryAreaType
+
+/**
+ * Describes a story area pointing to a location. Currently, a story can have up to 10 location areas.
+ * @param latitude Location latitude in degrees
+ * @param longitude Location longitude in degrees
+ * @param address Optional. Address of the location
+ */
+@Serializable
+@SerialName("location")
+data class StoryAreaTypeLocation(
+    val latitude: Double,
+    val longitude: Double,
+    val address: LocationAddress? = null,
+) : StoryAreaType {
+    override fun toString() = DebugStringBuilder("StoryAreaTypeLocation").prop("latitude", latitude).prop("longitude", longitude).prop("address", address).toString()
+}
+
+/**
+ * Describes a story area pointing to a suggested reaction. Currently, a story can have up to 5 suggested reaction areas.
+ * @param reactionType Type of the reaction
+ * @param isDark Optional. Pass True if the reaction area has a dark background
+ * @param isFlipped Optional. Pass True if reaction area corner is flipped
+ */
+@Serializable
+@SerialName("suggested_reaction")
+data class StoryAreaTypeSuggestedReaction(
+    val reactionType: ReactionType,
+    val isDark: Boolean? = null,
+    val isFlipped: Boolean? = null,
+) : StoryAreaType {
+    override fun toString() = DebugStringBuilder("StoryAreaTypeSuggestedReaction").prop("reactionType", reactionType).prop("isDark", isDark).prop("isFlipped", isFlipped).toString()
+}
+
+/**
+ * Describes a story area pointing to an HTTP or tg:// link. Currently, a story can have up to 3 link areas.
+ * @param url HTTP or tg:// URL to be opened when the area is clicked
+ */
+@Serializable
+@SerialName("link")
+data class StoryAreaTypeLink(
+    val url: String,
+) : StoryAreaType {
+    override fun toString() = DebugStringBuilder("StoryAreaTypeLink").prop("url", url).toString()
+}
+
+/**
+ * Describes a story area containing weather information. Currently, a story can have up to 3 weather areas.
+ * @param temperature Temperature, in degree Celsius
+ * @param emoji Emoji representing the weather
+ * @param backgroundColor A color of the area background in the ARGB format
+ */
+@Serializable
+@SerialName("weather")
+data class StoryAreaTypeWeather(
+    val temperature: Double,
+    val emoji: String,
+    val backgroundColor: Long,
+) : StoryAreaType {
+    override fun toString() = DebugStringBuilder("StoryAreaTypeWeather").prop("temperature", temperature).prop("emoji", emoji).prop("backgroundColor", backgroundColor).toString()
+}
+
+/**
+ * Describes a story area pointing to a unique gift. Currently, a story can have at most 1 unique gift area.
+ * @param name Unique name of the gift
+ */
+@Serializable
+@SerialName("unique_gift")
+data class StoryAreaTypeUniqueGift(
+    val name: String,
+) : StoryAreaType {
+    override fun toString() = DebugStringBuilder("StoryAreaTypeUniqueGift").prop("name", name).toString()
+}
+
+/**
+ * Describes a clickable area on a story media.
+ * @param position Position of the area
+ * @param type Type of the area
+ */
+@Serializable
+data class StoryArea(
+    val position: StoryAreaPosition,
+    val type: StoryAreaType,
+) {
+    override fun toString() = DebugStringBuilder("StoryArea").prop("position", position).prop("type", type).toString()
+}
+
+/**
  * Represents a location to which a chat is connected.
  * @param location The location to which the supergroup is connected. Can't be a live location.
  * @param address Location address; 1-64 characters, as defined by the chat owner
@@ -2542,6 +2744,275 @@ data class ForumTopic(
     val iconCustomEmojiId: CustomEmojiId? = null,
 ) {
     override fun toString() = DebugStringBuilder("ForumTopic").prop("messageThreadId", messageThreadId).prop("name", name).prop("iconColor", iconColor).prop("iconCustomEmojiId", iconCustomEmojiId).toString()
+}
+
+/**
+ * This object represents a gift that can be sent by the bot.
+ * @param id Unique identifier of the gift
+ * @param sticker The sticker that represents the gift
+ * @param starCount The number of Telegram Stars that must be paid to send the sticker
+ * @param upgradeStarCount Optional. The number of Telegram Stars that must be paid to upgrade the gift to a unique one
+ * @param totalCount Optional. The total number of the gifts of this type that can be sent; for limited gifts only
+ * @param remainingCount Optional. The number of remaining gifts of this type that can be sent; for limited gifts only
+ */
+@Serializable
+data class Gift(
+    val id: String,
+    val sticker: Sticker,
+    val starCount: Long,
+    val upgradeStarCount: Long? = null,
+    val totalCount: Long? = null,
+    val remainingCount: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("Gift").prop("id", id).prop("sticker", sticker).prop("starCount", starCount).prop("upgradeStarCount", upgradeStarCount).prop("totalCount", totalCount).prop("remainingCount", remainingCount).toString()
+}
+
+/**
+ * This object represent a list of gifts.
+ * @param gifts The list of gifts
+ */
+@Serializable
+data class Gifts(
+    val gifts: List<Gift>,
+) {
+    override fun toString() = DebugStringBuilder("Gifts").prop("gifts", gifts).toString()
+}
+
+/**
+ * This object describes the model of a unique gift.
+ * @param name Name of the model
+ * @param sticker The sticker that represents the unique gift
+ * @param rarityPerMille The number of unique gifts that receive this model for every 1000 gifts upgraded
+ */
+@Serializable
+data class UniqueGiftModel(
+    val name: String,
+    val sticker: Sticker,
+    val rarityPerMille: Long,
+) {
+    override fun toString() = DebugStringBuilder("UniqueGiftModel").prop("name", name).prop("sticker", sticker).prop("rarityPerMille", rarityPerMille).toString()
+}
+
+/**
+ * This object describes the symbol shown on the pattern of a unique gift.
+ * @param name Name of the symbol
+ * @param sticker The sticker that represents the unique gift
+ * @param rarityPerMille The number of unique gifts that receive this model for every 1000 gifts upgraded
+ */
+@Serializable
+data class UniqueGiftSymbol(
+    val name: String,
+    val sticker: Sticker,
+    val rarityPerMille: Long,
+) {
+    override fun toString() = DebugStringBuilder("UniqueGiftSymbol").prop("name", name).prop("sticker", sticker).prop("rarityPerMille", rarityPerMille).toString()
+}
+
+/**
+ * This object describes the colors of the backdrop of a unique gift.
+ * @param centerColor The color in the center of the backdrop in RGB format
+ * @param edgeColor The color on the edges of the backdrop in RGB format
+ * @param symbolColor The color to be applied to the symbol in RGB format
+ * @param textColor The color for the text on the backdrop in RGB format
+ */
+@Serializable
+data class UniqueGiftBackdropColors(
+    val centerColor: Long,
+    val edgeColor: Long,
+    val symbolColor: Long,
+    val textColor: Long,
+) {
+    override fun toString() = DebugStringBuilder("UniqueGiftBackdropColors").prop("centerColor", centerColor).prop("edgeColor", edgeColor).prop("symbolColor", symbolColor).prop("textColor", textColor).toString()
+}
+
+/**
+ * This object describes the backdrop of a unique gift.
+ * @param name Name of the backdrop
+ * @param colors Colors of the backdrop
+ * @param rarityPerMille The number of unique gifts that receive this backdrop for every 1000 gifts upgraded
+ */
+@Serializable
+data class UniqueGiftBackdrop(
+    val name: String,
+    val colors: UniqueGiftBackdropColors,
+    val rarityPerMille: Long,
+) {
+    override fun toString() = DebugStringBuilder("UniqueGiftBackdrop").prop("name", name).prop("colors", colors).prop("rarityPerMille", rarityPerMille).toString()
+}
+
+/**
+ * This object describes a unique gift that was upgraded from a regular gift.
+ * @param baseName Human-readable name of the regular gift from which this unique gift was upgraded
+ * @param name Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas
+ * @param number Unique number of the upgraded gift among gifts upgraded from the same regular gift
+ * @param model Model of the gift
+ * @param symbol Symbol of the gift
+ * @param backdrop Backdrop of the gift
+ */
+@Serializable
+data class UniqueGift(
+    val baseName: String,
+    val name: String,
+    val number: Long,
+    val model: UniqueGiftModel,
+    val symbol: UniqueGiftSymbol,
+    val backdrop: UniqueGiftBackdrop,
+) {
+    override fun toString() = DebugStringBuilder("UniqueGift").prop("baseName", baseName).prop("name", name).prop("number", number).prop("model", model).prop("symbol", symbol).prop("backdrop", backdrop).toString()
+}
+
+/**
+ * Describes a service message about a regular gift that was sent or received.
+ * @param gift Information about the gift
+ * @param ownedGiftId Optional. Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts
+ * @param convertStarCount Optional. Number of Telegram Stars that can be claimed by the receiver by converting the gift; omitted if conversion to Telegram Stars is impossible
+ * @param prepaidUpgradeStarCount Optional. Number of Telegram Stars that were prepaid by the sender for the ability to upgrade the gift
+ * @param canBeUpgraded Optional. True, if the gift can be upgraded to a unique gift
+ * @param text Optional. Text of the message that was added to the gift
+ * @param entities Optional. Special entities that appear in the text
+ * @param isPrivate Optional. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
+ */
+@Serializable
+data class GiftInfo(
+    val gift: Gift,
+    val ownedGiftId: String? = null,
+    val convertStarCount: Long? = null,
+    val prepaidUpgradeStarCount: Long? = null,
+    val canBeUpgraded: Boolean? = null,
+    val text: String? = null,
+    val entities: List<MessageEntity>? = null,
+    val isPrivate: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("GiftInfo").prop("gift", gift).prop("ownedGiftId", ownedGiftId).prop("convertStarCount", convertStarCount).prop("prepaidUpgradeStarCount", prepaidUpgradeStarCount).prop("canBeUpgraded", canBeUpgraded).prop("text", text).prop("entities", entities).prop("isPrivate", isPrivate).toString()
+}
+
+/**
+ * Describes a service message about a unique gift that was sent or received.
+ * @param gift Information about the gift
+ * @param origin Origin of the gift. Currently, either “upgrade” or “transfer”
+ * @param ownedGiftId Optional. Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts
+ * @param transferStarCount Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
+ */
+@Serializable
+data class UniqueGiftInfo(
+    val gift: UniqueGift,
+    val origin: String,
+    val ownedGiftId: String? = null,
+    val transferStarCount: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("UniqueGiftInfo").prop("gift", gift).prop("origin", origin).prop("ownedGiftId", ownedGiftId).prop("transferStarCount", transferStarCount).toString()
+}
+
+/**
+ * This object describes a gift received and owned by a user or a chat. Currently, it can be one of
+ * - [OwnedGiftRegular]
+ * - [OwnedGiftUnique]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface OwnedGift
+
+/**
+ * Describes a regular gift owned by a user or a chat.
+ * @param gift Information about the regular gift
+ * @param sendDate Date the gift was sent in Unix time
+ * @param ownedGiftId Optional. Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only
+ * @param senderUser Optional. Sender of the gift if it is a known user
+ * @param text Optional. Text of the message that was added to the gift
+ * @param entities Optional. Special entities that appear in the text
+ * @param isPrivate Optional. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
+ * @param isSaved Optional. True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only
+ * @param canBeUpgraded Optional. True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only
+ * @param wasRefunded Optional. True, if the gift was refunded and isn't available anymore
+ * @param convertStarCount Optional. Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars
+ * @param prepaidUpgradeStarCount Optional. Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift
+ */
+@Serializable
+@SerialName("regular")
+data class OwnedGiftRegular(
+    val gift: Gift,
+    val sendDate: Long,
+    val ownedGiftId: String? = null,
+    val senderUser: User? = null,
+    val text: String? = null,
+    val entities: List<MessageEntity>? = null,
+    val isPrivate: Boolean? = null,
+    val isSaved: Boolean? = null,
+    val canBeUpgraded: Boolean? = null,
+    val wasRefunded: Boolean? = null,
+    val convertStarCount: Long? = null,
+    val prepaidUpgradeStarCount: Long? = null,
+) : OwnedGift {
+    override fun toString() = DebugStringBuilder("OwnedGiftRegular").prop("gift", gift).prop("sendDate", sendDate).prop("ownedGiftId", ownedGiftId).prop("senderUser", senderUser).prop("text", text).prop("entities", entities).prop("isPrivate", isPrivate).prop("isSaved", isSaved).prop("canBeUpgraded", canBeUpgraded).prop("wasRefunded", wasRefunded).prop("convertStarCount", convertStarCount).prop("prepaidUpgradeStarCount", prepaidUpgradeStarCount).toString()
+}
+
+/**
+ * Describes a unique gift received and owned by a user or a chat.
+ * @param gift Information about the unique gift
+ * @param sendDate Date the gift was sent in Unix time
+ * @param ownedGiftId Optional. Unique identifier of the received gift for the bot; for gifts received on behalf of business accounts only
+ * @param senderUser Optional. Sender of the gift if it is a known user
+ * @param isSaved Optional. True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only
+ * @param canBeTransferred Optional. True, if the gift can be transferred to another owner; for gifts received on behalf of business accounts only
+ * @param transferStarCount Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
+ */
+@Serializable
+@SerialName("unique")
+data class OwnedGiftUnique(
+    val gift: UniqueGift,
+    val sendDate: Long,
+    val ownedGiftId: String? = null,
+    val senderUser: User? = null,
+    val isSaved: Boolean? = null,
+    val canBeTransferred: Boolean? = null,
+    val transferStarCount: Long? = null,
+) : OwnedGift {
+    override fun toString() = DebugStringBuilder("OwnedGiftUnique").prop("gift", gift).prop("sendDate", sendDate).prop("ownedGiftId", ownedGiftId).prop("senderUser", senderUser).prop("isSaved", isSaved).prop("canBeTransferred", canBeTransferred).prop("transferStarCount", transferStarCount).toString()
+}
+
+/**
+ * Contains the list of gifts received and owned by a user or a chat.
+ * @param totalCount The total number of gifts owned by the user or the chat
+ * @param gifts The list of gifts
+ * @param nextOffset Optional. Offset for the next request. If empty, then there are no more results
+ */
+@Serializable
+data class OwnedGifts(
+    val totalCount: Long,
+    val gifts: List<OwnedGift>,
+    val nextOffset: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("OwnedGifts").prop("totalCount", totalCount).prop("gifts", gifts).prop("nextOffset", nextOffset).toString()
+}
+
+/**
+ * This object describes the types of gifts that can be gifted to a user or a chat.
+ * @param unlimitedGifts True, if unlimited regular gifts are accepted
+ * @param limitedGifts True, if limited regular gifts are accepted
+ * @param uniqueGifts True, if unique gifts or gifts that can be upgraded to unique for free are accepted
+ * @param premiumSubscription True, if a Telegram Premium subscription is accepted
+ */
+@Serializable
+data class AcceptedGiftTypes(
+    val unlimitedGifts: Boolean,
+    val limitedGifts: Boolean,
+    val uniqueGifts: Boolean,
+    val premiumSubscription: Boolean,
+) {
+    override fun toString() = DebugStringBuilder("AcceptedGiftTypes").prop("unlimitedGifts", unlimitedGifts).prop("limitedGifts", limitedGifts).prop("uniqueGifts", uniqueGifts).prop("premiumSubscription", premiumSubscription).toString()
+}
+
+/**
+ * Describes an amount of Telegram Stars.
+ * @param amount Integer amount of Telegram Stars, rounded to 0; can be negative
+ * @param nanostarAmount Optional. The number of 1/1000000000 shares of Telegram Stars; from -999999999 to 999999999; can be negative if and only if amount is non-positive
+ */
+@Serializable
+data class StarAmount(
+    val amount: Long,
+    val nanostarAmount: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("StarAmount").prop("amount", amount).prop("nanostarAmount", nanostarAmount).toString()
 }
 
 /**
@@ -2743,10 +3214,11 @@ data class ChatBoostSourceGiftCode(
 }
 
 /**
- * The boost was obtained by the creation of a Telegram Premium giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+ * The boost was obtained by the creation of a Telegram Premium or a Telegram Star giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription for Telegram Premium giveaways and prize_star_count / 500 times for one year for Telegram Star giveaways.
  * @param giveawayMessageId Identifier of a message in the chat with the giveaway; the message could have been deleted already. May be 0 if the message isn't sent yet.
- * @param user Optional. User that won the prize in the giveaway if any
+ * @param user Optional. User that won the prize in the giveaway if any; for Telegram Premium giveaways only
  * @param isUnclaimed Optional. True, if the giveaway was completed, but there was no user to win the prize
+ * @param prizeStarCount Optional. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
  */
 @Serializable
 @SerialName("giveaway")
@@ -2754,8 +3226,9 @@ data class ChatBoostSourceGiveaway(
     val giveawayMessageId: MessageId,
     val user: User? = null,
     val isUnclaimed: Boolean? = null,
+    val prizeStarCount: Long? = null,
 ) : ChatBoostSource {
-    override fun toString() = DebugStringBuilder("ChatBoostSourceGiveaway").prop("giveawayMessageId", giveawayMessageId).prop("user", user).prop("isUnclaimed", isUnclaimed).toString()
+    override fun toString() = DebugStringBuilder("ChatBoostSourceGiveaway").prop("giveawayMessageId", giveawayMessageId).prop("user", user).prop("isUnclaimed", isUnclaimed).prop("prizeStarCount", prizeStarCount).toString()
 }
 
 /**
@@ -2817,13 +3290,50 @@ data class UserChatBoosts(
 }
 
 /**
+ * Represents the rights of a business bot.
+ * @param canReply Optional. True, if the bot can send and edit messages in the private chats that had incoming messages in the last 24 hours
+ * @param canReadMessages Optional. True, if the bot can mark incoming private messages as read
+ * @param canDeleteSentMessages Optional. True, if the bot can delete messages sent by the bot
+ * @param canDeleteAllMessages Optional. True, if the bot can delete all private messages in managed chats
+ * @param canEditName Optional. True, if the bot can edit the first and last name of the business account
+ * @param canEditBio Optional. True, if the bot can edit the bio of the business account
+ * @param canEditProfilePhoto Optional. True, if the bot can edit the profile photo of the business account
+ * @param canEditUsername Optional. True, if the bot can edit the username of the business account
+ * @param canChangeGiftSettings Optional. True, if the bot can change the privacy settings pertaining to gifts for the business account
+ * @param canViewGiftsAndStars Optional. True, if the bot can view gifts and the amount of Telegram Stars owned by the business account
+ * @param canConvertGiftsToStars Optional. True, if the bot can convert regular gifts owned by the business account to Telegram Stars
+ * @param canTransferAndUpgradeGifts Optional. True, if the bot can transfer and upgrade gifts owned by the business account
+ * @param canTransferStars Optional. True, if the bot can transfer Telegram Stars received by the business account to its own account, or use them to upgrade and transfer gifts
+ * @param canManageStories Optional. True, if the bot can post, edit and delete stories on behalf of the business account
+ */
+@Serializable
+data class BusinessBotRights(
+    val canReply: Boolean? = null,
+    val canReadMessages: Boolean? = null,
+    val canDeleteSentMessages: Boolean? = null,
+    val canDeleteAllMessages: Boolean? = null,
+    val canEditName: Boolean? = null,
+    val canEditBio: Boolean? = null,
+    val canEditProfilePhoto: Boolean? = null,
+    val canEditUsername: Boolean? = null,
+    val canChangeGiftSettings: Boolean? = null,
+    val canViewGiftsAndStars: Boolean? = null,
+    val canConvertGiftsToStars: Boolean? = null,
+    val canTransferAndUpgradeGifts: Boolean? = null,
+    val canTransferStars: Boolean? = null,
+    val canManageStories: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("BusinessBotRights").prop("canReply", canReply).prop("canReadMessages", canReadMessages).prop("canDeleteSentMessages", canDeleteSentMessages).prop("canDeleteAllMessages", canDeleteAllMessages).prop("canEditName", canEditName).prop("canEditBio", canEditBio).prop("canEditProfilePhoto", canEditProfilePhoto).prop("canEditUsername", canEditUsername).prop("canChangeGiftSettings", canChangeGiftSettings).prop("canViewGiftsAndStars", canViewGiftsAndStars).prop("canConvertGiftsToStars", canConvertGiftsToStars).prop("canTransferAndUpgradeGifts", canTransferAndUpgradeGifts).prop("canTransferStars", canTransferStars).prop("canManageStories", canManageStories).toString()
+}
+
+/**
  * Describes the connection of the bot with a business account.
  * @param id Unique identifier of the business connection
  * @param user Business account user that created the business connection
  * @param userChatId Identifier of a private chat with the user who created the business connection. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
  * @param date Date the connection was established in Unix time
- * @param canReply True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours
  * @param isEnabled True, if the connection is active
+ * @param rights Optional. Rights of the business bot
  */
 @Serializable
 data class BusinessConnection(
@@ -2831,10 +3341,10 @@ data class BusinessConnection(
     val user: User,
     val userChatId: ChatId,
     val date: UnixTimestamp,
-    val canReply: Boolean,
     val isEnabled: Boolean,
+    val rights: BusinessBotRights? = null,
 ) {
-    override fun toString() = DebugStringBuilder("BusinessConnection").prop("id", id).prop("user", user).prop("userChatId", userChatId).prop("date", date).prop("canReply", canReply).prop("isEnabled", isEnabled).toString()
+    override fun toString() = DebugStringBuilder("BusinessConnection").prop("id", id).prop("user", user).prop("userChatId", userChatId).prop("date", date).prop("isEnabled", isEnabled).prop("rights", rights).toString()
 }
 
 /**
@@ -2912,6 +3422,8 @@ data class InputMediaPhoto(
  * @param duration Optional. Video duration in seconds
  * @param supportsStreaming Optional. Pass True if the uploaded video is suitable for streaming
  * @param hasSpoiler Optional. Pass True if the video needs to be covered with a spoiler animation
+ * @param cover Optional. Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param startTimestamp Optional. Start timestamp for the video in the message
  */
 @Serializable
 @SerialName("video")
@@ -2927,8 +3439,10 @@ data class InputMediaVideo(
     val duration: Seconds? = null,
     val supportsStreaming: Boolean? = null,
     val hasSpoiler: Boolean? = null,
+    val cover: String? = null,
+    val startTimestamp: Long? = null,
 ) : InputMedia {
-    override fun toString() = DebugStringBuilder("InputMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).prop("hasSpoiler", hasSpoiler).toString()
+    override fun toString() = DebugStringBuilder("InputMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).prop("hasSpoiler", hasSpoiler).prop("cover", cover).prop("startTimestamp", startTimestamp).toString()
 }
 
 /**
@@ -3038,6 +3552,8 @@ data class InputPaidMediaPhoto(
  * @param height Optional. Video height
  * @param duration Optional. Video duration in seconds
  * @param supportsStreaming Optional. Pass True if the uploaded video is suitable for streaming
+ * @param cover Optional. Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param startTimestamp Optional. Start timestamp for the video in the message
  */
 @Serializable
 @SerialName("video")
@@ -3048,8 +3564,84 @@ data class InputPaidMediaVideo(
     val height: Long? = null,
     val duration: Seconds? = null,
     val supportsStreaming: Boolean? = null,
+    val cover: String? = null,
+    val startTimestamp: Long? = null,
 ) : InputPaidMedia {
-    override fun toString() = DebugStringBuilder("InputPaidMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).toString()
+    override fun toString() = DebugStringBuilder("InputPaidMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).prop("cover", cover).prop("startTimestamp", startTimestamp).toString()
+}
+
+/**
+ * This object describes a profile photo to set. Currently, it can be one of
+ * - [InputProfilePhotoStatic]
+ * - [InputProfilePhotoAnimated]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface InputProfilePhoto
+
+/**
+ * A static profile photo in the .JPG format.
+ * @param photo The static profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+ */
+@Serializable
+@SerialName("static")
+data class InputProfilePhotoStatic(
+    val photo: String,
+) : InputProfilePhoto {
+    override fun toString() = DebugStringBuilder("InputProfilePhotoStatic").prop("photo", photo).toString()
+}
+
+/**
+ * An animated profile photo in the MPEG4 format.
+ * @param animation The animated profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+ * @param mainFrameTimestamp Optional. Timestamp in seconds of the frame that will be used as the static profile photo. Defaults to 0.0.
+ */
+@Serializable
+@SerialName("animated")
+data class InputProfilePhotoAnimated(
+    val animation: String,
+    val mainFrameTimestamp: Double? = null,
+) : InputProfilePhoto {
+    override fun toString() = DebugStringBuilder("InputProfilePhotoAnimated").prop("animation", animation).prop("mainFrameTimestamp", mainFrameTimestamp).toString()
+}
+
+/**
+ * This object describes the content of a story to post. Currently, it can be one of
+ * - [InputStoryContentPhoto]
+ * - [InputStoryContentVideo]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface InputStoryContent
+
+/**
+ * Describes a photo to post as a story.
+ * @param photo The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+ */
+@Serializable
+@SerialName("photo")
+data class InputStoryContentPhoto(
+    val photo: String,
+) : InputStoryContent {
+    override fun toString() = DebugStringBuilder("InputStoryContentPhoto").prop("photo", photo).toString()
+}
+
+/**
+ * Describes a video to post as a story.
+ * @param video The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the video was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+ * @param duration Optional. Precise duration of the video in seconds; 0-60
+ * @param coverFrameTimestamp Optional. Timestamp in seconds of the frame that will be used as the static cover for the story. Defaults to 0.0.
+ * @param isAnimation Optional. Pass True if the video has no sound
+ */
+@Serializable
+@SerialName("video")
+data class InputStoryContentVideo(
+    val video: String,
+    val duration: Double? = null,
+    val coverFrameTimestamp: Double? = null,
+    val isAnimation: Boolean? = null,
+) : InputStoryContent {
+    override fun toString() = DebugStringBuilder("InputStoryContentVideo").prop("video", video).prop("duration", duration).prop("coverFrameTimestamp", coverFrameTimestamp).prop("isAnimation", isAnimation).toString()
 }
 
 /**
@@ -3129,8 +3721,8 @@ data class MaskPosition(
 
 /**
  * This object describes a sticker to be added to a sticker set.
- * @param sticker The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »
- * @param format Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a WEBM video
+ * @param sticker The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new file using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »
+ * @param format Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a .WEBM video
  * @param emojiList List of 1-20 emoji associated with the sticker
  * @param maskPosition Optional. Position where the mask should be placed on faces. For “mask” stickers only.
  * @param keywords Optional. List of 0-20 search keywords for the sticker with total length of up to 64 characters. For “regular” and “custom_emoji” stickers only.
@@ -3216,7 +3808,6 @@ sealed interface InlineQueryResult
  * @param inputMessageContent Content of the message to be sent
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param url Optional. URL of the result
- * @param hideUrl Optional. Pass True if you don't want the URL to be shown in the message
  * @param description Optional. Short description of the result
  * @param thumbnailUrl Optional. Url of the thumbnail for the result
  * @param thumbnailWidth Optional. Thumbnail width
@@ -3230,13 +3821,12 @@ data class InlineQueryResultArticle(
     val inputMessageContent: InputMessageContent,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val url: String? = null,
-    val hideUrl: Boolean? = null,
     val description: String? = null,
     val thumbnailUrl: String? = null,
     val thumbnailWidth: Long? = null,
     val thumbnailHeight: Long? = null,
 ) : InlineQueryResult {
-    override fun toString() = DebugStringBuilder("InlineQueryResultArticle").prop("id", id).prop("title", title).prop("inputMessageContent", inputMessageContent).prop("replyMarkup", replyMarkup).prop("url", url).prop("hideUrl", hideUrl).prop("description", description).prop("thumbnailUrl", thumbnailUrl).prop("thumbnailWidth", thumbnailWidth).prop("thumbnailHeight", thumbnailHeight).toString()
+    override fun toString() = DebugStringBuilder("InlineQueryResultArticle").prop("id", id).prop("title", title).prop("inputMessageContent", inputMessageContent).prop("replyMarkup", replyMarkup).prop("url", url).prop("description", description).prop("thumbnailUrl", thumbnailUrl).prop("thumbnailWidth", thumbnailWidth).prop("thumbnailHeight", thumbnailHeight).toString()
 }
 
 /**
@@ -3278,7 +3868,7 @@ data class InlineQueryResultPhoto(
 /**
  * Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
  * @param id Unique identifier for this result, 1-64 bytes
- * @param gifUrl A valid URL for the GIF file. File size must not exceed 1MB
+ * @param gifUrl A valid URL for the GIF file
  * @param thumbnailUrl URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
  * @param gifWidth Optional. Width of the GIF
  * @param gifHeight Optional. Height of the GIF
@@ -3316,7 +3906,7 @@ data class InlineQueryResultGif(
 /**
  * Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
  * @param id Unique identifier for this result, 1-64 bytes
- * @param mpeg4Url A valid URL for the MPEG4 file. File size must not exceed 1MB
+ * @param mpeg4Url A valid URL for the MPEG4 file
  * @param thumbnailUrl URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
  * @param mpeg4Width Optional. Video width
  * @param mpeg4Height Optional. Video height
@@ -3928,7 +4518,7 @@ data class InputContactMessageContent(
  * Represents the content of an invoice message to be sent as the result of an inline query.
  * @param title Product name, 1-32 characters
  * @param description Product description, 1-255 characters
- * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+ * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
  * @param currency Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars.
  * @param prices Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.
  * @param providerToken Optional. Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.
@@ -4001,6 +4591,19 @@ data class SentWebAppMessage(
     val inlineMessageId: InlineMessageId? = null,
 ) {
     override fun toString() = DebugStringBuilder("SentWebAppMessage").prop("inlineMessageId", inlineMessageId).toString()
+}
+
+/**
+ * Describes an inline message to be sent by a user of a Mini App.
+ * @param id Unique identifier of the prepared message
+ * @param expirationDate Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used
+ */
+@Serializable
+data class PreparedInlineMessage(
+    val id: String,
+    val expirationDate: Long,
+) {
+    override fun toString() = DebugStringBuilder("PreparedInlineMessage").prop("id", id).prop("expirationDate", expirationDate).toString()
 }
 
 /**
@@ -4089,7 +4692,7 @@ data class ShippingOption(
 }
 
 /**
- * This object contains basic information about a successful payment.
+ * This object contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram's control.
  * @param currency Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars
  * @param totalAmount Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
  * @param invoicePayload Bot-specified invoice payload
@@ -4097,6 +4700,9 @@ data class ShippingOption(
  * @param providerPaymentChargeId Provider payment identifier
  * @param shippingOptionId Optional. Identifier of the shipping option chosen by the user
  * @param orderInfo Optional. Order information provided by the user
+ * @param subscriptionExpirationDate Optional. Expiration date of the subscription, in Unix time; for recurring payments only
+ * @param isRecurring Optional. True, if the payment is a recurring payment for a subscription
+ * @param isFirstRecurring Optional. True, if the payment is the first payment for a subscription
  */
 @Serializable
 data class SuccessfulPayment(
@@ -4107,8 +4713,11 @@ data class SuccessfulPayment(
     val providerPaymentChargeId: String,
     val shippingOptionId: String? = null,
     val orderInfo: OrderInfo? = null,
+    val subscriptionExpirationDate: Long? = null,
+    val isRecurring: Boolean? = null,
+    val isFirstRecurring: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SuccessfulPayment").prop("currency", currency).prop("totalAmount", totalAmount).prop("invoicePayload", invoicePayload).prop("telegramPaymentChargeId", telegramPaymentChargeId).prop("providerPaymentChargeId", providerPaymentChargeId).prop("shippingOptionId", shippingOptionId).prop("orderInfo", orderInfo).toString()
+    override fun toString() = DebugStringBuilder("SuccessfulPayment").prop("currency", currency).prop("totalAmount", totalAmount).prop("invoicePayload", invoicePayload).prop("telegramPaymentChargeId", telegramPaymentChargeId).prop("providerPaymentChargeId", providerPaymentChargeId).prop("shippingOptionId", shippingOptionId).prop("orderInfo", orderInfo).prop("subscriptionExpirationDate", subscriptionExpirationDate).prop("isRecurring", isRecurring).prop("isFirstRecurring", isFirstRecurring).toString()
 }
 
 /**
@@ -4171,6 +4780,19 @@ data class PreCheckoutQuery(
 }
 
 /**
+ * This object contains information about a paid media purchase.
+ * @param from User who purchased the media
+ * @param paidMediaPayload Bot-specified paid media payload
+ */
+@Serializable
+data class PaidMediaPurchased(
+    val from: User,
+    val paidMediaPayload: String,
+) {
+    override fun toString() = DebugStringBuilder("PaidMediaPurchased").prop("from", from).prop("paidMediaPayload", paidMediaPayload).toString()
+}
+
+/**
  * This object describes the state of a revenue withdrawal operation. Currently, it can be one of
  * - [RevenueWithdrawalStatePending]
  * - [RevenueWithdrawalStateSucceeded]
@@ -4209,10 +4831,32 @@ data class RevenueWithdrawalStateSucceeded(
 data object RevenueWithdrawalStateFailed : RevenueWithdrawalState
 
 /**
+ * Contains information about the affiliate that received a commission via this transaction.
+ * @param commissionPerMille The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the bot from referred users
+ * @param amount Integer amount of Telegram Stars received by the affiliate from the transaction, rounded to 0; can be negative for refunds
+ * @param affiliateUser Optional. The bot or the user that received an affiliate commission if it was received by a bot or a user
+ * @param affiliateChat Optional. The chat that received an affiliate commission if it was received by a chat
+ * @param nanostarAmount Optional. The number of 1/1000000000 shares of Telegram Stars received by the affiliate; from -999999999 to 999999999; can be negative for refunds
+ */
+@Serializable
+data class AffiliateInfo(
+    val commissionPerMille: Long,
+    val amount: Long,
+    val affiliateUser: User? = null,
+    val affiliateChat: Chat? = null,
+    val nanostarAmount: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("AffiliateInfo").prop("commissionPerMille", commissionPerMille).prop("amount", amount).prop("affiliateUser", affiliateUser).prop("affiliateChat", affiliateChat).prop("nanostarAmount", nanostarAmount).toString()
+}
+
+/**
  * This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
  * - [TransactionPartnerUser]
+ * - [TransactionPartnerChat]
+ * - [TransactionPartnerAffiliateProgram]
  * - [TransactionPartnerFragment]
  * - [TransactionPartnerTelegramAds]
+ * - [TransactionPartnerTelegramApi]
  * - [TransactionPartnerOther]
  */
 @Serializable
@@ -4222,8 +4866,14 @@ sealed interface TransactionPartner
 /**
  * Describes a transaction with a user.
  * @param user Information about the user
- * @param invoicePayload Optional. Bot-specified invoice payload
- * @param paidMedia Optional. Information about the paid media bought by the user
+ * @param invoicePayload Optional. Bot-specified invoice payload. Can be available only for “invoice_payment” transactions.
+ * @param paidMedia Optional. Information about the paid media bought by the user; for “paid_media_payment” transactions only
+ * @param transactionType Type of the transaction, currently one of “invoice_payment” for payments via invoices, “paid_media_payment” for payments for paid media, “gift_purchase” for gifts sent by the bot, “premium_purchase” for Telegram Premium subscriptions gifted by the bot, “business_account_transfer” for direct transfers from managed business accounts
+ * @param affiliate Optional. Information about the affiliate that received a commission via this transaction. Can be available only for “invoice_payment” and “paid_media_payment” transactions.
+ * @param subscriptionPeriod Optional. The duration of the paid subscription. Can be available only for “invoice_payment” transactions.
+ * @param paidMediaPayload Optional. Bot-specified paid media payload. Can be available only for “paid_media_payment” transactions.
+ * @param gift Optional. The gift sent to the user by the bot; for “gift_purchase” transactions only
+ * @param premiumSubscriptionDuration Optional. Number of months the gifted Telegram Premium subscription will be active for; for “premium_purchase” transactions only
  */
 @Serializable
 @SerialName("user")
@@ -4231,8 +4881,42 @@ data class TransactionPartnerUser(
     val user: User,
     val invoicePayload: String? = null,
     val paidMedia: List<PaidMedia>? = null,
+    val transactionType: String,
+    val affiliate: AffiliateInfo? = null,
+    val subscriptionPeriod: Seconds? = null,
+    val paidMediaPayload: String? = null,
+    val gift: Gift? = null,
+    val premiumSubscriptionDuration: Long? = null,
 ) : TransactionPartner {
-    override fun toString() = DebugStringBuilder("TransactionPartnerUser").prop("user", user).prop("invoicePayload", invoicePayload).prop("paidMedia", paidMedia).toString()
+    override fun toString() = DebugStringBuilder("TransactionPartnerUser").prop("user", user).prop("invoicePayload", invoicePayload).prop("paidMedia", paidMedia).prop("transactionType", transactionType).prop("affiliate", affiliate).prop("subscriptionPeriod", subscriptionPeriod).prop("paidMediaPayload", paidMediaPayload).prop("gift", gift).prop("premiumSubscriptionDuration", premiumSubscriptionDuration).toString()
+}
+
+/**
+ * Describes a transaction with a chat.
+ * @param chat Information about the chat
+ * @param gift Optional. The gift sent to the chat by the bot
+ */
+@Serializable
+@SerialName("chat")
+data class TransactionPartnerChat(
+    val chat: Chat,
+    val gift: Gift? = null,
+) : TransactionPartner {
+    override fun toString() = DebugStringBuilder("TransactionPartnerChat").prop("chat", chat).prop("gift", gift).toString()
+}
+
+/**
+ * Describes the affiliate program that issued the affiliate commission received via this transaction.
+ * @param commissionPerMille The number of Telegram Stars received by the bot for each 1000 Telegram Stars received by the affiliate program sponsor from referred users
+ * @param sponsorUser Optional. Information about the bot that sponsored the affiliate program
+ */
+@Serializable
+@SerialName("affiliate_program")
+data class TransactionPartnerAffiliateProgram(
+    val commissionPerMille: Long,
+    val sponsorUser: User? = null,
+) : TransactionPartner {
+    override fun toString() = DebugStringBuilder("TransactionPartnerAffiliateProgram").prop("commissionPerMille", commissionPerMille).prop("sponsorUser", sponsorUser).toString()
 }
 
 /**
@@ -4255,6 +4939,18 @@ data class TransactionPartnerFragment(
 data object TransactionPartnerTelegramAds : TransactionPartner
 
 /**
+ * Describes a transaction with payment for paid broadcasting.
+ * @param requestCount The number of successful requests that exceeded regular limits and were therefore billed
+ */
+@Serializable
+@SerialName("telegram_api")
+data class TransactionPartnerTelegramApi(
+    val requestCount: Long,
+) : TransactionPartner {
+    override fun toString() = DebugStringBuilder("TransactionPartnerTelegramApi").prop("requestCount", requestCount).toString()
+}
+
+/**
  * Describes a transaction with an unknown source or recipient.
  */
 @Serializable
@@ -4262,12 +4958,13 @@ data object TransactionPartnerTelegramAds : TransactionPartner
 data object TransactionPartnerOther : TransactionPartner
 
 /**
- * Describes a Telegram Star transaction.
- * @param id Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.
- * @param amount Number of Telegram Stars transferred by the transaction
+ * Describes a Telegram Star transaction. Note that if the buyer initiates a chargeback with the payment provider from whom they acquired Stars (e.g., Apple, Google) following this transaction, the refunded Stars will be deducted from the bot's balance. This is outside of Telegram's control.
+ * @param id Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.
+ * @param amount Integer amount of Telegram Stars transferred by the transaction
  * @param date Date the transaction was created in Unix time
  * @param source Optional. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions
  * @param receiver Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions
+ * @param nanostarAmount Optional. The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999
  */
 @Serializable
 data class StarTransaction(
@@ -4276,8 +4973,9 @@ data class StarTransaction(
     val date: UnixTimestamp,
     val source: TransactionPartner? = null,
     val receiver: TransactionPartner? = null,
+    val nanostarAmount: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("StarTransaction").prop("id", id).prop("amount", amount).prop("date", date).prop("source", source).prop("receiver", receiver).toString()
+    override fun toString() = DebugStringBuilder("StarTransaction").prop("id", id).prop("amount", amount).prop("date", date).prop("source", source).prop("receiver", receiver).prop("nanostarAmount", nanostarAmount).toString()
 }
 
 /**

@@ -10,7 +10,7 @@ import me.alllex.tbot.api.client.*
  * @param offset Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will be forgotten.
  * @param limit Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100.
  * @param timeout Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
- * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
+ * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to getUpdates, so unwanted updates may be received for a short period of time.
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.getUpdates(
@@ -22,7 +22,7 @@ suspend fun TelegramBotApiClient.getUpdates(
     tryGetUpdates(GetUpdatesRequest(offset, limit, timeout, allowedUpdates)).getResultOrThrow()
 
 /**
- * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
+ * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable amount of attempts. Returns True on success.
  *
  * If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
  *
@@ -100,6 +100,7 @@ suspend fun TelegramBotApiClient.close(): Boolean =
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendMessage(
@@ -115,8 +116,9 @@ suspend fun TelegramBotApiClient.sendMessage(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendMessage(SendMessageRequest(chatId, text, messageThreadId, parseMode, entities, linkPreviewOptions, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendMessage(SendMessageRequest(chatId, text, messageThreadId, parseMode, entities, linkPreviewOptions, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned.
@@ -127,6 +129,7 @@ suspend fun TelegramBotApiClient.sendMessage(
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the forwarded message from forwarding and saving
+ * @param videoStartTimestamp New start timestamp for the forwarded video in the message
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.forwardMessage(
@@ -136,8 +139,9 @@ suspend fun TelegramBotApiClient.forwardMessage(
     messageThreadId: MessageThreadId? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
+    videoStartTimestamp: Long? = null,
 ): Message =
-    tryForwardMessage(ForwardMessageRequest(chatId, fromChatId, messageId, messageThreadId, disableNotification, protectContent)).getResultOrThrow()
+    tryForwardMessage(ForwardMessageRequest(chatId, fromChatId, messageId, messageThreadId, disableNotification, protectContent, videoStartTimestamp)).getResultOrThrow()
 
 /**
  * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.
@@ -175,6 +179,8 @@ suspend fun TelegramBotApiClient.forwardMessages(
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param videoStartTimestamp New start timestamp for the copied video in the message
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.copyMessage(
@@ -190,8 +196,10 @@ suspend fun TelegramBotApiClient.copyMessage(
     protectContent: Boolean? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
+    videoStartTimestamp: Long? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): MessageRef =
-    tryCopyMessage(CopyMessageRequest(chatId, fromChatId, messageId, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup)).getResultOrThrow()
+    tryCopyMessage(CopyMessageRequest(chatId, fromChatId, messageId, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup, videoStartTimestamp, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
@@ -233,6 +241,7 @@ suspend fun TelegramBotApiClient.copyMessages(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendPhoto(
@@ -250,8 +259,9 @@ suspend fun TelegramBotApiClient.sendPhoto(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendPhoto(SendPhotoRequest(chatId, photo, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendPhoto(SendPhotoRequest(chatId, photo, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -274,6 +284,7 @@ suspend fun TelegramBotApiClient.sendPhoto(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendAudio(
@@ -293,8 +304,9 @@ suspend fun TelegramBotApiClient.sendAudio(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendAudio(SendAudioRequest(chatId, audio, messageThreadId, caption, parseMode, captionEntities, duration, performer, title, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendAudio(SendAudioRequest(chatId, audio, messageThreadId, caption, parseMode, captionEntities, duration, performer, title, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
@@ -313,6 +325,7 @@ suspend fun TelegramBotApiClient.sendAudio(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendDocument(
@@ -330,8 +343,9 @@ suspend fun TelegramBotApiClient.sendDocument(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendDocument(SendDocumentRequest(chatId, document, messageThreadId, thumbnail, caption, parseMode, captionEntities, disableContentTypeDetection, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendDocument(SendDocumentRequest(chatId, document, messageThreadId, thumbnail, caption, parseMode, captionEntities, disableContentTypeDetection, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
@@ -355,6 +369,9 @@ suspend fun TelegramBotApiClient.sendDocument(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param cover Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param startTimestamp Start timestamp for the video in the message
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendVideo(
@@ -377,8 +394,11 @@ suspend fun TelegramBotApiClient.sendVideo(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    cover: String? = null,
+    startTimestamp: Long? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendVideo(SendVideoRequest(chatId, video, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, supportsStreaming, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendVideo(SendVideoRequest(chatId, video, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, supportsStreaming, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, cover, startTimestamp, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
@@ -401,6 +421,7 @@ suspend fun TelegramBotApiClient.sendVideo(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendAnimation(
@@ -422,8 +443,9 @@ suspend fun TelegramBotApiClient.sendAnimation(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendAnimation(SendAnimationRequest(chatId, animation, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendAnimation(SendAnimationRequest(chatId, animation, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
@@ -441,6 +463,7 @@ suspend fun TelegramBotApiClient.sendAnimation(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendVoice(
@@ -457,8 +480,9 @@ suspend fun TelegramBotApiClient.sendVoice(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendVoice(SendVoiceRequest(chatId, voice, messageThreadId, caption, parseMode, captionEntities, duration, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendVoice(SendVoiceRequest(chatId, voice, messageThreadId, caption, parseMode, captionEntities, duration, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.
@@ -475,6 +499,7 @@ suspend fun TelegramBotApiClient.sendVoice(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendVideoNote(
@@ -490,14 +515,15 @@ suspend fun TelegramBotApiClient.sendVideoNote(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendVideoNote(SendVideoNoteRequest(chatId, videoNote, messageThreadId, duration, length, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendVideoNote(SendVideoNoteRequest(chatId, videoNote, messageThreadId, duration, length, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send paid media. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance.
- * @param starCount The number of Telegram Stars that must be paid to buy access to the media
+ * @param starCount The number of Telegram Stars that must be paid to buy access to the media; 1-10000
  * @param media A JSON-serialized array describing the media to be sent; up to 10 items
  * @param caption Media caption, 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the media caption. See formatting options for more details.
@@ -508,6 +534,8 @@ suspend fun TelegramBotApiClient.sendVideoNote(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param payload Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendPaidMedia(
@@ -523,8 +551,10 @@ suspend fun TelegramBotApiClient.sendPaidMedia(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    payload: String? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendPaidMedia(SendPaidMediaRequest(chatId, starCount, media, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendPaidMedia(SendPaidMediaRequest(chatId, starCount, media, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup, businessConnectionId, payload, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
@@ -537,6 +567,7 @@ suspend fun TelegramBotApiClient.sendPaidMedia(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendMediaGroup(
@@ -548,8 +579,9 @@ suspend fun TelegramBotApiClient.sendMediaGroup(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): List<Message> =
-    trySendMediaGroup(SendMediaGroupRequest(chatId, media, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters, businessConnectionId)).getResultOrThrow()
+    trySendMediaGroup(SendMediaGroupRequest(chatId, media, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send point on the map. On success, the sent Message is returned.
@@ -568,6 +600,7 @@ suspend fun TelegramBotApiClient.sendMediaGroup(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendLocation(
@@ -585,8 +618,9 @@ suspend fun TelegramBotApiClient.sendLocation(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendLocation(SendLocationRequest(chatId, latitude, longitude, messageThreadId, horizontalAccuracy, livePeriod, heading, proximityAlertRadius, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendLocation(SendLocationRequest(chatId, latitude, longitude, messageThreadId, horizontalAccuracy, livePeriod, heading, proximityAlertRadius, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send information about a venue. On success, the sent Message is returned.
@@ -607,6 +641,7 @@ suspend fun TelegramBotApiClient.sendLocation(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendVenue(
@@ -626,8 +661,9 @@ suspend fun TelegramBotApiClient.sendVenue(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendVenue(SendVenueRequest(chatId, latitude, longitude, title, address, messageThreadId, foursquareId, foursquareType, googlePlaceId, googlePlaceType, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendVenue(SendVenueRequest(chatId, latitude, longitude, title, address, messageThreadId, foursquareId, foursquareType, googlePlaceId, googlePlaceType, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send phone contacts. On success, the sent Message is returned.
@@ -644,6 +680,7 @@ suspend fun TelegramBotApiClient.sendVenue(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendContact(
@@ -659,8 +696,9 @@ suspend fun TelegramBotApiClient.sendContact(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendContact(SendContactRequest(chatId, phoneNumber, firstName, messageThreadId, lastName, vcard, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendContact(SendContactRequest(chatId, phoneNumber, firstName, messageThreadId, lastName, vcard, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send a native poll. On success, the sent Message is returned.
@@ -687,6 +725,7 @@ suspend fun TelegramBotApiClient.sendContact(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendPoll(
@@ -712,8 +751,9 @@ suspend fun TelegramBotApiClient.sendPoll(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendPoll(SendPollRequest(chatId, question, options, messageThreadId, questionParseMode, questionEntities, isAnonymous, type, allowsMultipleAnswers, correctOptionId, explanation, explanationParseMode, explanationEntities, openPeriod, closeDate, isClosed, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendPoll(SendPollRequest(chatId, question, options, messageThreadId, questionParseMode, questionEntities, isAnonymous, type, allowsMultipleAnswers, correctOptionId, explanation, explanationParseMode, explanationEntities, openPeriod, closeDate, isClosed, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned.
@@ -727,6 +767,7 @@ suspend fun TelegramBotApiClient.sendPoll(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendDice(
@@ -739,8 +780,9 @@ suspend fun TelegramBotApiClient.sendDice(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendDice(SendDiceRequest(chatId, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendDice(SendDiceRequest(chatId, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
@@ -764,7 +806,7 @@ suspend fun TelegramBotApiClient.sendChatAction(
     trySendChatAction(SendChatActionRequest(chatId, action, messageThreadId, businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.
+ * Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.
@@ -794,6 +836,21 @@ suspend fun TelegramBotApiClient.getUserProfilePhotos(
     limit: Long? = null,
 ): UserProfilePhotos =
     tryGetUserProfilePhotos(GetUserProfilePhotosRequest(userId, offset, limit)).getResultOrThrow()
+
+/**
+ * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success.
+ *
+ * @param userId Unique identifier of the target user
+ * @param emojiStatusCustomEmojiId Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.
+ * @param emojiStatusExpirationDate Expiration date of the emoji status, if any
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.setUserEmojiStatus(
+    userId: UserId,
+    emojiStatusCustomEmojiId: CustomEmojiId? = null,
+    emojiStatusExpirationDate: UnixTimestamp? = null,
+): Boolean =
+    trySetUserEmojiStatus(SetUserEmojiStatusRequest(userId, emojiStatusCustomEmojiId, emojiStatusExpirationDate)).getResultOrThrow()
 
 /**
  * Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
@@ -1012,7 +1069,7 @@ suspend fun TelegramBotApiClient.editChatInviteLink(
  *
  * @param chatId Unique identifier for the target channel chat or username of the target channel (in the format @channelusername)
  * @param subscriptionPeriod The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days).
- * @param subscriptionPrice The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500
+ * @param subscriptionPrice The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-10000
  * @param name Invite link name; 0-32 characters
  */
 @Throws(TelegramBotApiException::class)
@@ -1716,7 +1773,7 @@ suspend fun TelegramBotApiClient.editInlineMessageCaption(
     tryEditInlineMessageCaption(EditMessageCaptionRequest(inlineMessageId = inlineMessageId, caption = caption, parseMode = parseMode, captionEntities = captionEntities, showCaptionAboveMedia = showCaptionAboveMedia, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param media A JSON-serialized object for a new media content of the message
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -1735,7 +1792,7 @@ suspend fun TelegramBotApiClient.editMessageMedia(
     tryEditMessageMedia(EditMessageMediaRequest(media = media, chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId)).getResultOrThrow()
 
 /**
- * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param media A JSON-serialized object for a new media content of the message
  * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
@@ -1915,6 +1972,378 @@ suspend fun TelegramBotApiClient.deleteMessages(
     tryDeleteMessages(DeleteMessagesRequest(chatId, messageIds)).getResultOrThrow()
 
 /**
+ * Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.getAvailableGifts(): Gifts =
+    tryGetAvailableGifts().getResultOrThrow()
+
+/**
+ * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receiver. Returns True on success.
+ *
+ * @param giftId Identifier of the gift
+ * @param userId Required if chat_id is not specified. Unique identifier of the target user who will receive the gift.
+ * @param chatId Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift.
+ * @param payForUpgrade Pass True to pay for the gift upgrade from the bot's balance, thereby making the upgrade free for the receiver
+ * @param text Text that will be shown along with the gift; 0-128 characters
+ * @param textParseMode Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+ * @param textEntities A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.sendGift(
+    giftId: String,
+    userId: UserId? = null,
+    chatId: ChatId? = null,
+    payForUpgrade: Boolean? = null,
+    text: String? = null,
+    textParseMode: String? = null,
+    textEntities: List<MessageEntity>? = null,
+): Boolean =
+    trySendGift(SendGiftRequest(giftId, userId, chatId, payForUpgrade, text, textParseMode, textEntities)).getResultOrThrow()
+
+/**
+ * Gifts a Telegram Premium subscription to the given user. Returns True on success.
+ *
+ * @param userId Unique identifier of the target user who will receive a Telegram Premium subscription
+ * @param monthCount Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12
+ * @param starCount Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months
+ * @param text Text that will be shown along with the service message about the subscription; 0-128 characters
+ * @param textParseMode Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+ * @param textEntities A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.giftPremiumSubscription(
+    userId: UserId,
+    monthCount: Long,
+    starCount: Long,
+    text: String? = null,
+    textParseMode: String? = null,
+    textEntities: List<MessageEntity>? = null,
+): Boolean =
+    tryGiftPremiumSubscription(GiftPremiumSubscriptionRequest(userId, monthCount, starCount, text, textParseMode, textEntities)).getResultOrThrow()
+
+/**
+ * Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.
+ *
+ * @param userId Unique identifier of the target user
+ * @param customDescription Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.verifyUser(
+    userId: UserId,
+    customDescription: String? = null,
+): Boolean =
+    tryVerifyUser(VerifyUserRequest(userId, customDescription)).getResultOrThrow()
+
+/**
+ * Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param customDescription Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.verifyChat(
+    chatId: ChatId,
+    customDescription: String? = null,
+): Boolean =
+    tryVerifyChat(VerifyChatRequest(chatId, customDescription)).getResultOrThrow()
+
+/**
+ * Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.
+ *
+ * @param userId Unique identifier of the target user
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.removeUserVerification(
+    userId: UserId,
+): Boolean =
+    tryRemoveUserVerification(RemoveUserVerificationRequest(userId)).getResultOrThrow()
+
+/**
+ * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.removeChatVerification(
+    chatId: ChatId,
+): Boolean =
+    tryRemoveChatVerification(RemoveChatVerificationRequest(chatId)).getResultOrThrow()
+
+/**
+ * Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which to read the message
+ * @param chatId Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours.
+ * @param messageId Unique identifier of the message to mark as read
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.readBusinessMessage(
+    businessConnectionId: BusinessConnectionId,
+    chatId: ChatId,
+    messageId: MessageId,
+): Boolean =
+    tryReadBusinessMessage(ReadBusinessMessageRequest(businessConnectionId, chatId, messageId)).getResultOrThrow()
+
+/**
+ * Delete messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which to delete the messages
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See deleteMessage for limitations on which messages can be deleted
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.deleteBusinessMessages(
+    businessConnectionId: BusinessConnectionId,
+    messageIds: List<Long>,
+): Boolean =
+    tryDeleteBusinessMessages(DeleteBusinessMessagesRequest(businessConnectionId, messageIds)).getResultOrThrow()
+
+/**
+ * Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param firstName The new value of the first name for the business account; 1-64 characters
+ * @param lastName The new value of the last name for the business account; 0-64 characters
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.setBusinessAccountName(
+    businessConnectionId: BusinessConnectionId,
+    firstName: String,
+    lastName: String? = null,
+): Boolean =
+    trySetBusinessAccountName(SetBusinessAccountNameRequest(businessConnectionId, firstName, lastName)).getResultOrThrow()
+
+/**
+ * Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param username The new value of the username for the business account; 0-32 characters
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.setBusinessAccountUsername(
+    businessConnectionId: BusinessConnectionId,
+    username: String? = null,
+): Boolean =
+    trySetBusinessAccountUsername(SetBusinessAccountUsernameRequest(businessConnectionId, username)).getResultOrThrow()
+
+/**
+ * Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param bio The new value of the bio for the business account; 0-140 characters
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.setBusinessAccountBio(
+    businessConnectionId: BusinessConnectionId,
+    bio: String? = null,
+): Boolean =
+    trySetBusinessAccountBio(SetBusinessAccountBioRequest(businessConnectionId, bio)).getResultOrThrow()
+
+/**
+ * Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param photo The new profile photo to set
+ * @param isPublic Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account's privacy settings. An account can have only one public photo.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.setBusinessAccountProfilePhoto(
+    businessConnectionId: BusinessConnectionId,
+    photo: InputProfilePhoto,
+    isPublic: Boolean? = null,
+): Boolean =
+    trySetBusinessAccountProfilePhoto(SetBusinessAccountProfilePhotoRequest(businessConnectionId, photo, isPublic)).getResultOrThrow()
+
+/**
+ * Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param isPublic Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account's privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.removeBusinessAccountProfilePhoto(
+    businessConnectionId: BusinessConnectionId,
+    isPublic: Boolean? = null,
+): Boolean =
+    tryRemoveBusinessAccountProfilePhoto(RemoveBusinessAccountProfilePhotoRequest(businessConnectionId, isPublic)).getResultOrThrow()
+
+/**
+ * Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param showGiftButton Pass True, if a button for sending a gift to the user or by the business account must always be shown in the input field
+ * @param acceptedGiftTypes Types of gifts accepted by the business account
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.setBusinessAccountGiftSettings(
+    businessConnectionId: BusinessConnectionId,
+    showGiftButton: Boolean,
+    acceptedGiftTypes: AcceptedGiftTypes,
+): Boolean =
+    trySetBusinessAccountGiftSettings(SetBusinessAccountGiftSettingsRequest(businessConnectionId, showGiftButton, acceptedGiftTypes)).getResultOrThrow()
+
+/**
+ * Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.getBusinessAccountStarBalance(
+    businessConnectionId: BusinessConnectionId,
+): StarAmount =
+    tryGetBusinessAccountStarBalance(GetBusinessAccountStarBalanceRequest(businessConnectionId)).getResultOrThrow()
+
+/**
+ * Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param starCount Number of Telegram Stars to transfer; 1-10000
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.transferBusinessAccountStars(
+    businessConnectionId: BusinessConnectionId,
+    starCount: Long,
+): Boolean =
+    tryTransferBusinessAccountStars(TransferBusinessAccountStarsRequest(businessConnectionId, starCount)).getResultOrThrow()
+
+/**
+ * Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns OwnedGifts on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param excludeUnsaved Pass True to exclude gifts that aren't saved to the account's profile page
+ * @param excludeSaved Pass True to exclude gifts that are saved to the account's profile page
+ * @param excludeUnlimited Pass True to exclude gifts that can be purchased an unlimited number of times
+ * @param excludeLimited Pass True to exclude gifts that can be purchased a limited number of times
+ * @param excludeUnique Pass True to exclude unique gifts
+ * @param sortByPrice Pass True to sort results by gift price instead of send date. Sorting is applied before pagination.
+ * @param offset Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results
+ * @param limit The maximum number of gifts to be returned; 1-100. Defaults to 100
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.getBusinessAccountGifts(
+    businessConnectionId: BusinessConnectionId,
+    excludeUnsaved: Boolean? = null,
+    excludeSaved: Boolean? = null,
+    excludeUnlimited: Boolean? = null,
+    excludeLimited: Boolean? = null,
+    excludeUnique: Boolean? = null,
+    sortByPrice: Boolean? = null,
+    offset: String? = null,
+    limit: Long? = null,
+): OwnedGifts =
+    tryGetBusinessAccountGifts(GetBusinessAccountGiftsRequest(businessConnectionId, excludeUnsaved, excludeSaved, excludeUnlimited, excludeLimited, excludeUnique, sortByPrice, offset, limit)).getResultOrThrow()
+
+/**
+ * Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param ownedGiftId Unique identifier of the regular gift that should be converted to Telegram Stars
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.convertGiftToStars(
+    businessConnectionId: BusinessConnectionId,
+    ownedGiftId: String,
+): Boolean =
+    tryConvertGiftToStars(ConvertGiftToStarsRequest(businessConnectionId, ownedGiftId)).getResultOrThrow()
+
+/**
+ * Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param ownedGiftId Unique identifier of the regular gift that should be upgraded to a unique one
+ * @param keepOriginalDetails Pass True to keep the original gift text, sender and receiver in the upgraded gift
+ * @param starCount The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0, otherwise, the can_transfer_stars business bot right is required and gift.upgrade_star_count must be passed.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.upgradeGift(
+    businessConnectionId: BusinessConnectionId,
+    ownedGiftId: String,
+    keepOriginalDetails: Boolean? = null,
+    starCount: Long? = null,
+): Boolean =
+    tryUpgradeGift(UpgradeGiftRequest(businessConnectionId, ownedGiftId, keepOriginalDetails, starCount)).getResultOrThrow()
+
+/**
+ * Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param ownedGiftId Unique identifier of the regular gift that should be transferred
+ * @param newOwnerChatId Unique identifier of the chat which will own the gift. The chat must be active in the last 24 hours.
+ * @param starCount The amount of Telegram Stars that will be paid for the transfer from the business account balance. If positive, then the can_transfer_stars business bot right is required.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.transferGift(
+    businessConnectionId: BusinessConnectionId,
+    ownedGiftId: String,
+    newOwnerChatId: ChatId,
+    starCount: Long? = null,
+): Boolean =
+    tryTransferGift(TransferGiftRequest(businessConnectionId, ownedGiftId, newOwnerChatId, starCount)).getResultOrThrow()
+
+/**
+ * Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param content Content of the story
+ * @param activePeriod Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400
+ * @param caption Caption of the story, 0-2048 characters after entities parsing
+ * @param parseMode Mode for parsing entities in the story caption. See formatting options for more details.
+ * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param areas A JSON-serialized list of clickable areas to be shown on the story
+ * @param postToChatPage Pass True to keep the story accessible after it expires
+ * @param protectContent Pass True if the content of the story must be protected from forwarding and screenshotting
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.postStory(
+    businessConnectionId: BusinessConnectionId,
+    content: InputStoryContent,
+    activePeriod: Long,
+    caption: String? = null,
+    parseMode: ParseMode? = null,
+    captionEntities: List<MessageEntity>? = null,
+    areas: List<StoryArea>? = null,
+    postToChatPage: Boolean? = null,
+    protectContent: Boolean? = null,
+): Story =
+    tryPostStory(PostStoryRequest(businessConnectionId, content, activePeriod, caption, parseMode, captionEntities, areas, postToChatPage, protectContent)).getResultOrThrow()
+
+/**
+ * Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param storyId Unique identifier of the story to edit
+ * @param content Content of the story
+ * @param caption Caption of the story, 0-2048 characters after entities parsing
+ * @param parseMode Mode for parsing entities in the story caption. See formatting options for more details.
+ * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param areas A JSON-serialized list of clickable areas to be shown on the story
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.editStory(
+    businessConnectionId: BusinessConnectionId,
+    storyId: Long,
+    content: InputStoryContent,
+    caption: String? = null,
+    parseMode: ParseMode? = null,
+    captionEntities: List<MessageEntity>? = null,
+    areas: List<StoryArea>? = null,
+): Story =
+    tryEditStory(EditStoryRequest(businessConnectionId, storyId, content, caption, parseMode, captionEntities, areas)).getResultOrThrow()
+
+/**
+ * Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success.
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param storyId Unique identifier of the story to delete
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.deleteStory(
+    businessConnectionId: BusinessConnectionId,
+    storyId: Long,
+): Boolean =
+    tryDeleteStory(DeleteStoryRequest(businessConnectionId, storyId)).getResultOrThrow()
+
+/**
  * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -1927,6 +2356,7 @@ suspend fun TelegramBotApiClient.deleteMessages(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendSticker(
@@ -1940,8 +2370,9 @@ suspend fun TelegramBotApiClient.sendSticker(
     replyParameters: ReplyParameters? = null,
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendSticker(SendStickerRequest(chatId, sticker, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendSticker(SendStickerRequest(chatId, sticker, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to get a sticker set. On success, a StickerSet object is returned.
@@ -2114,8 +2545,8 @@ suspend fun TelegramBotApiClient.setStickerSetTitle(
  *
  * @param name Sticker set name
  * @param userId User identifier of the sticker set owner
- * @param format Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video
- * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
+ * @param format Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a .WEBM video
+ * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a .WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.setStickerSetThumbnail(
@@ -2185,12 +2616,33 @@ suspend fun TelegramBotApiClient.answerWebAppQuery(
     tryAnswerWebAppQuery(AnswerWebAppQueryRequest(webAppQueryId, result)).getResultOrThrow()
 
 /**
+ * Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.
+ *
+ * @param userId Unique identifier of the target user that can use the prepared message
+ * @param result A JSON-serialized object describing the message to be sent
+ * @param allowUserChats Pass True if the message can be sent to private chats with users
+ * @param allowBotChats Pass True if the message can be sent to private chats with bots
+ * @param allowGroupChats Pass True if the message can be sent to group and supergroup chats
+ * @param allowChannelChats Pass True if the message can be sent to channel chats
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.savePreparedInlineMessage(
+    userId: UserId,
+    result: InlineQueryResult,
+    allowUserChats: Boolean? = null,
+    allowBotChats: Boolean? = null,
+    allowGroupChats: Boolean? = null,
+    allowChannelChats: Boolean? = null,
+): PreparedInlineMessage =
+    trySavePreparedInlineMessage(SavePreparedInlineMessageRequest(userId, result, allowUserChats, allowBotChats, allowGroupChats, allowChannelChats)).getResultOrThrow()
+
+/**
  * Use this method to send invoices. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param title Product name, 1-32 characters
  * @param description Product description, 1-255 characters
- * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+ * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
  * @param currency Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars.
  * @param prices Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -2215,6 +2667,7 @@ suspend fun TelegramBotApiClient.answerWebAppQuery(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button.
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendInvoice(
@@ -2246,15 +2699,16 @@ suspend fun TelegramBotApiClient.sendInvoice(
     messageEffectId: MessageEffectId? = null,
     replyParameters: ReplyParameters? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendInvoice(SendInvoiceRequest(chatId, title, description, payload, currency, prices, messageThreadId, providerToken, maxTipAmount, suggestedTipAmounts, startParameter, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup)).getResultOrThrow()
+    trySendInvoice(SendInvoiceRequest(chatId, title, description, payload, currency, prices, messageThreadId, providerToken, maxTipAmount, suggestedTipAmounts, startParameter, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to create a link for an invoice. Returns the created invoice link as String on success.
  *
  * @param title Product name, 1-32 characters
  * @param description Product description, 1-255 characters
- * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+ * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
  * @param currency Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars.
  * @param prices Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.
  * @param providerToken Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.
@@ -2272,6 +2726,8 @@ suspend fun TelegramBotApiClient.sendInvoice(
  * @param sendPhoneNumberToProvider Pass True if the user's phone number should be sent to the provider. Ignored for payments in Telegram Stars.
  * @param sendEmailToProvider Pass True if the user's email address should be sent to the provider. Ignored for payments in Telegram Stars.
  * @param isFlexible Pass True if the final price depends on the shipping method. Ignored for payments in Telegram Stars.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the link will be created. For payments in Telegram Stars only.
+ * @param subscriptionPeriod The number of seconds the subscription will be active for before the next payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed 10000 Telegram Stars.
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.createInvoiceLink(
@@ -2295,8 +2751,10 @@ suspend fun TelegramBotApiClient.createInvoiceLink(
     sendPhoneNumberToProvider: Boolean? = null,
     sendEmailToProvider: Boolean? = null,
     isFlexible: Boolean? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+    subscriptionPeriod: Seconds? = null,
 ): String =
-    tryCreateInvoiceLink(CreateInvoiceLinkRequest(title, description, payload, currency, prices, providerToken, maxTipAmount, suggestedTipAmounts, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible)).getResultOrThrow()
+    tryCreateInvoiceLink(CreateInvoiceLinkRequest(title, description, payload, currency, prices, providerToken, maxTipAmount, suggestedTipAmounts, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, businessConnectionId, subscriptionPeriod)).getResultOrThrow()
 
 /**
  * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned.
@@ -2304,7 +2762,7 @@ suspend fun TelegramBotApiClient.createInvoiceLink(
  * @param shippingQueryId Unique identifier for the query to be answered
  * @param ok Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)
  * @param shippingOptions Required if ok is True. A JSON-serialized array of available shipping options.
- * @param errorMessage Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. "Sorry, delivery to your desired address is unavailable'). Telegram will display this message to the user.
+ * @param errorMessage Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. “Sorry, delivery to your desired address is unavailable”). Telegram will display this message to the user.
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.answerShippingQuery(
@@ -2357,6 +2815,21 @@ suspend fun TelegramBotApiClient.refundStarPayment(
     tryRefundStarPayment(RefundStarPaymentRequest(userId, telegramPaymentChargeId)).getResultOrThrow()
 
 /**
+ * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success.
+ *
+ * @param userId Identifier of the user whose subscription will be edited
+ * @param telegramPaymentChargeId Telegram payment identifier for the subscription
+ * @param isCanceled Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+ */
+@Throws(TelegramBotApiException::class)
+suspend fun TelegramBotApiClient.editUserStarSubscription(
+    userId: UserId,
+    telegramPaymentChargeId: TelegramPaymentChargeId,
+    isCanceled: Boolean,
+): Boolean =
+    tryEditUserStarSubscription(EditUserStarSubscriptionRequest(userId, telegramPaymentChargeId, isCanceled)).getResultOrThrow()
+
+/**
  * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
  *
  * Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues.
@@ -2383,6 +2856,7 @@ suspend fun TelegramBotApiClient.setPassportDataErrors(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Throws(TelegramBotApiException::class)
 suspend fun TelegramBotApiClient.sendGame(
@@ -2395,8 +2869,9 @@ suspend fun TelegramBotApiClient.sendGame(
     replyParameters: ReplyParameters? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
+    allowPaidBroadcast: Boolean? = null,
 ): Message =
-    trySendGame(SendGameRequest(chatId, gameShortName, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId)).getResultOrThrow()
+    trySendGame(SendGameRequest(chatId, gameShortName, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast)).getResultOrThrow()
 
 /**
  * Use this method to set the score of the specified user in a game message. On success the edited Message is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.

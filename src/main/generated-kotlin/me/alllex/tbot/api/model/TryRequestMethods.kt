@@ -10,7 +10,7 @@ suspend fun TelegramBotApiClient.tryGetUpdates(requestBody: GetUpdatesRequest): 
     telegramPost("getUpdates", requestBody)
 
 /**
- * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
+ * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable amount of attempts. Returns True on success.
  *
  * If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
  */
@@ -174,7 +174,7 @@ suspend fun TelegramBotApiClient.trySendChatAction(requestBody: SendChatActionRe
     telegramPost("sendChatAction", requestBody)
 
 /**
- * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.
+ * Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success.
  */
 suspend fun TelegramBotApiClient.trySetMessageReaction(requestBody: SetMessageReactionRequest): TelegramResponse<Boolean> =
     telegramPost("setMessageReaction", requestBody)
@@ -184,6 +184,12 @@ suspend fun TelegramBotApiClient.trySetMessageReaction(requestBody: SetMessageRe
  */
 suspend fun TelegramBotApiClient.tryGetUserProfilePhotos(requestBody: GetUserProfilePhotosRequest): TelegramResponse<UserProfilePhotos> =
     telegramPost("getUserProfilePhotos", requestBody)
+
+/**
+ * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetUserEmojiStatus(requestBody: SetUserEmojiStatusRequest): TelegramResponse<Boolean> =
+    telegramPost("setUserEmojiStatus", requestBody)
 
 /**
  * Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
@@ -572,13 +578,13 @@ suspend fun TelegramBotApiClient.tryEditInlineMessageCaption(requestBody: EditMe
     telegramPost("editMessageCaption", requestBody)
 
 /**
- * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Message> =
     telegramPost("editMessageMedia", requestBody)
 
 /**
- * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditInlineMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Boolean> =
     telegramPost("editMessageMedia", requestBody)
@@ -636,6 +642,150 @@ suspend fun TelegramBotApiClient.tryDeleteMessage(requestBody: DeleteMessageRequ
  */
 suspend fun TelegramBotApiClient.tryDeleteMessages(requestBody: DeleteMessagesRequest): TelegramResponse<Boolean> =
     telegramPost("deleteMessages", requestBody)
+
+/**
+ * Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.
+ */
+suspend fun TelegramBotApiClient.tryGetAvailableGifts(): TelegramResponse<Gifts> =
+    telegramGet("getAvailableGifts")
+
+/**
+ * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receiver. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySendGift(requestBody: SendGiftRequest): TelegramResponse<Boolean> =
+    telegramPost("sendGift", requestBody)
+
+/**
+ * Gifts a Telegram Premium subscription to the given user. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryGiftPremiumSubscription(requestBody: GiftPremiumSubscriptionRequest): TelegramResponse<Boolean> =
+    telegramPost("giftPremiumSubscription", requestBody)
+
+/**
+ * Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryVerifyUser(requestBody: VerifyUserRequest): TelegramResponse<Boolean> =
+    telegramPost("verifyUser", requestBody)
+
+/**
+ * Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryVerifyChat(requestBody: VerifyChatRequest): TelegramResponse<Boolean> =
+    telegramPost("verifyChat", requestBody)
+
+/**
+ * Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryRemoveUserVerification(requestBody: RemoveUserVerificationRequest): TelegramResponse<Boolean> =
+    telegramPost("removeUserVerification", requestBody)
+
+/**
+ * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryRemoveChatVerification(requestBody: RemoveChatVerificationRequest): TelegramResponse<Boolean> =
+    telegramPost("removeChatVerification", requestBody)
+
+/**
+ * Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryReadBusinessMessage(requestBody: ReadBusinessMessageRequest): TelegramResponse<Boolean> =
+    telegramPost("readBusinessMessage", requestBody)
+
+/**
+ * Delete messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteBusinessMessages(requestBody: DeleteBusinessMessagesRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteBusinessMessages", requestBody)
+
+/**
+ * Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetBusinessAccountName(requestBody: SetBusinessAccountNameRequest): TelegramResponse<Boolean> =
+    telegramPost("setBusinessAccountName", requestBody)
+
+/**
+ * Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetBusinessAccountUsername(requestBody: SetBusinessAccountUsernameRequest): TelegramResponse<Boolean> =
+    telegramPost("setBusinessAccountUsername", requestBody)
+
+/**
+ * Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetBusinessAccountBio(requestBody: SetBusinessAccountBioRequest): TelegramResponse<Boolean> =
+    telegramPost("setBusinessAccountBio", requestBody)
+
+/**
+ * Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetBusinessAccountProfilePhoto(requestBody: SetBusinessAccountProfilePhotoRequest): TelegramResponse<Boolean> =
+    telegramPost("setBusinessAccountProfilePhoto", requestBody)
+
+/**
+ * Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryRemoveBusinessAccountProfilePhoto(requestBody: RemoveBusinessAccountProfilePhotoRequest): TelegramResponse<Boolean> =
+    telegramPost("removeBusinessAccountProfilePhoto", requestBody)
+
+/**
+ * Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetBusinessAccountGiftSettings(requestBody: SetBusinessAccountGiftSettingsRequest): TelegramResponse<Boolean> =
+    telegramPost("setBusinessAccountGiftSettings", requestBody)
+
+/**
+ * Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success.
+ */
+suspend fun TelegramBotApiClient.tryGetBusinessAccountStarBalance(requestBody: GetBusinessAccountStarBalanceRequest): TelegramResponse<StarAmount> =
+    telegramPost("getBusinessAccountStarBalance", requestBody)
+
+/**
+ * Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryTransferBusinessAccountStars(requestBody: TransferBusinessAccountStarsRequest): TelegramResponse<Boolean> =
+    telegramPost("transferBusinessAccountStars", requestBody)
+
+/**
+ * Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns OwnedGifts on success.
+ */
+suspend fun TelegramBotApiClient.tryGetBusinessAccountGifts(requestBody: GetBusinessAccountGiftsRequest): TelegramResponse<OwnedGifts> =
+    telegramPost("getBusinessAccountGifts", requestBody)
+
+/**
+ * Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryConvertGiftToStars(requestBody: ConvertGiftToStarsRequest): TelegramResponse<Boolean> =
+    telegramPost("convertGiftToStars", requestBody)
+
+/**
+ * Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryUpgradeGift(requestBody: UpgradeGiftRequest): TelegramResponse<Boolean> =
+    telegramPost("upgradeGift", requestBody)
+
+/**
+ * Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryTransferGift(requestBody: TransferGiftRequest): TelegramResponse<Boolean> =
+    telegramPost("transferGift", requestBody)
+
+/**
+ * Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.
+ */
+suspend fun TelegramBotApiClient.tryPostStory(requestBody: PostStoryRequest): TelegramResponse<Story> =
+    telegramPost("postStory", requestBody)
+
+/**
+ * Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.
+ */
+suspend fun TelegramBotApiClient.tryEditStory(requestBody: EditStoryRequest): TelegramResponse<Story> =
+    telegramPost("editStory", requestBody)
+
+/**
+ * Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteStory(requestBody: DeleteStoryRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteStory", requestBody)
 
 /**
  * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
@@ -746,6 +896,12 @@ suspend fun TelegramBotApiClient.tryAnswerWebAppQuery(requestBody: AnswerWebAppQ
     telegramPost("answerWebAppQuery", requestBody)
 
 /**
+ * Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.
+ */
+suspend fun TelegramBotApiClient.trySavePreparedInlineMessage(requestBody: SavePreparedInlineMessageRequest): TelegramResponse<PreparedInlineMessage> =
+    telegramPost("savePreparedInlineMessage", requestBody)
+
+/**
  * Use this method to send invoices. On success, the sent Message is returned.
  */
 suspend fun TelegramBotApiClient.trySendInvoice(requestBody: SendInvoiceRequest): TelegramResponse<Message> =
@@ -780,6 +936,12 @@ suspend fun TelegramBotApiClient.tryGetStarTransactions(requestBody: GetStarTran
  */
 suspend fun TelegramBotApiClient.tryRefundStarPayment(requestBody: RefundStarPaymentRequest): TelegramResponse<Boolean> =
     telegramPost("refundStarPayment", requestBody)
+
+/**
+ * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryEditUserStarSubscription(requestBody: EditUserStarSubscriptionRequest): TelegramResponse<Boolean> =
+    telegramPost("editUserStarSubscription", requestBody)
 
 /**
  * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.

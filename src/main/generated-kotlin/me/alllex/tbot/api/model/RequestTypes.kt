@@ -10,7 +10,7 @@ import kotlinx.serialization.encodeToString
  * @param offset Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will be forgotten.
  * @param limit Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100.
  * @param timeout Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
- * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
+ * @param allowedUpdates A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used. Please note that this parameter doesn't affect updates created before the call to getUpdates, so unwanted updates may be received for a short period of time.
  */
 @Serializable
 data class GetUpdatesRequest(
@@ -73,6 +73,7 @@ data class DeleteWebhookRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendMessageRequest(
@@ -88,8 +89,9 @@ data class SendMessageRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendMessageRequest").prop("chatId", chatId).prop("text", text).prop("messageThreadId", messageThreadId).prop("parseMode", parseMode).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendMessageRequest").prop("chatId", chatId).prop("text", text).prop("messageThreadId", messageThreadId).prop("parseMode", parseMode).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -101,6 +103,7 @@ data class SendMessageRequest(
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the forwarded message from forwarding and saving
+ * @param videoStartTimestamp New start timestamp for the forwarded video in the message
  */
 @Serializable
 data class ForwardMessageRequest(
@@ -110,8 +113,9 @@ data class ForwardMessageRequest(
     val messageThreadId: MessageThreadId? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
+    val videoStartTimestamp: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ForwardMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).toString()
+    override fun toString() = DebugStringBuilder("ForwardMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("videoStartTimestamp", videoStartTimestamp).toString()
 }
 
 /**
@@ -151,6 +155,8 @@ data class ForwardMessagesRequest(
  * @param protectContent Protects the contents of the sent message from forwarding and saving
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
+ * @param videoStartTimestamp New start timestamp for the copied video in the message
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class CopyMessageRequest(
@@ -166,8 +172,10 @@ data class CopyMessageRequest(
     val protectContent: Boolean? = null,
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
+    val videoStartTimestamp: Long? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("CopyMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("CopyMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("videoStartTimestamp", videoStartTimestamp).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -211,6 +219,7 @@ data class CopyMessagesRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendPhotoRequest(
@@ -228,8 +237,9 @@ data class SendPhotoRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendPhotoRequest").prop("chatId", chatId).prop("photo", photo).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendPhotoRequest").prop("chatId", chatId).prop("photo", photo).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -251,6 +261,7 @@ data class SendPhotoRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendAudioRequest(
@@ -270,8 +281,9 @@ data class SendAudioRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendAudioRequest").prop("chatId", chatId).prop("audio", audio).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("performer", performer).prop("title", title).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendAudioRequest").prop("chatId", chatId).prop("audio", audio).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("performer", performer).prop("title", title).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -291,6 +303,7 @@ data class SendAudioRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendDocumentRequest(
@@ -308,8 +321,9 @@ data class SendDocumentRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendDocumentRequest").prop("chatId", chatId).prop("document", document).prop("messageThreadId", messageThreadId).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableContentTypeDetection", disableContentTypeDetection).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendDocumentRequest").prop("chatId", chatId).prop("document", document).prop("messageThreadId", messageThreadId).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableContentTypeDetection", disableContentTypeDetection).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -334,6 +348,9 @@ data class SendDocumentRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param cover Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param startTimestamp Start timestamp for the video in the message
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendVideoRequest(
@@ -356,8 +373,11 @@ data class SendVideoRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val cover: String? = null,
+    val startTimestamp: Long? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVideoRequest").prop("chatId", chatId).prop("video", video).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("supportsStreaming", supportsStreaming).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendVideoRequest").prop("chatId", chatId).prop("video", video).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("supportsStreaming", supportsStreaming).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("cover", cover).prop("startTimestamp", startTimestamp).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -381,6 +401,7 @@ data class SendVideoRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendAnimationRequest(
@@ -402,8 +423,9 @@ data class SendAnimationRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendAnimationRequest").prop("chatId", chatId).prop("animation", animation).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendAnimationRequest").prop("chatId", chatId).prop("animation", animation).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -422,6 +444,7 @@ data class SendAnimationRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendVoiceRequest(
@@ -438,8 +461,9 @@ data class SendVoiceRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVoiceRequest").prop("chatId", chatId).prop("voice", voice).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendVoiceRequest").prop("chatId", chatId).prop("voice", voice).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -457,6 +481,7 @@ data class SendVoiceRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendVideoNoteRequest(
@@ -472,15 +497,16 @@ data class SendVideoNoteRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVideoNoteRequest").prop("chatId", chatId).prop("videoNote", videoNote).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("length", length).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendVideoNoteRequest").prop("chatId", chatId).prop("videoNote", videoNote).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("length", length).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
  * Request body for [sendPaidMedia].
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance.
- * @param starCount The number of Telegram Stars that must be paid to buy access to the media
+ * @param starCount The number of Telegram Stars that must be paid to buy access to the media; 1-10000
  * @param media A JSON-serialized array describing the media to be sent; up to 10 items
  * @param caption Media caption, 0-1024 characters after entities parsing
  * @param parseMode Mode for parsing entities in the media caption. See formatting options for more details.
@@ -491,6 +517,8 @@ data class SendVideoNoteRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param payload Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendPaidMediaRequest(
@@ -506,8 +534,10 @@ data class SendPaidMediaRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val payload: String? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendPaidMediaRequest").prop("chatId", chatId).prop("starCount", starCount).prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendPaidMediaRequest").prop("chatId", chatId).prop("starCount", starCount).prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("payload", payload).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -521,6 +551,7 @@ data class SendPaidMediaRequest(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendMediaGroupRequest(
@@ -532,8 +563,9 @@ data class SendMediaGroupRequest(
     val messageEffectId: MessageEffectId? = null,
     val replyParameters: ReplyParameters? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendMediaGroupRequest").prop("chatId", chatId).prop("media", media).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendMediaGroupRequest").prop("chatId", chatId).prop("media", media).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -553,6 +585,7 @@ data class SendMediaGroupRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendLocationRequest(
@@ -570,8 +603,9 @@ data class SendLocationRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendLocationRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("messageThreadId", messageThreadId).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendLocationRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("messageThreadId", messageThreadId).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -593,6 +627,7 @@ data class SendLocationRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendVenueRequest(
@@ -612,8 +647,9 @@ data class SendVenueRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVenueRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("address", address).prop("messageThreadId", messageThreadId).prop("foursquareId", foursquareId).prop("foursquareType", foursquareType).prop("googlePlaceId", googlePlaceId).prop("googlePlaceType", googlePlaceType).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendVenueRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("address", address).prop("messageThreadId", messageThreadId).prop("foursquareId", foursquareId).prop("foursquareType", foursquareType).prop("googlePlaceId", googlePlaceId).prop("googlePlaceType", googlePlaceType).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -631,6 +667,7 @@ data class SendVenueRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendContactRequest(
@@ -646,8 +683,9 @@ data class SendContactRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendContactRequest").prop("chatId", chatId).prop("phoneNumber", phoneNumber).prop("firstName", firstName).prop("messageThreadId", messageThreadId).prop("lastName", lastName).prop("vcard", vcard).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendContactRequest").prop("chatId", chatId).prop("phoneNumber", phoneNumber).prop("firstName", firstName).prop("messageThreadId", messageThreadId).prop("lastName", lastName).prop("vcard", vcard).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -675,6 +713,7 @@ data class SendContactRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendPollRequest(
@@ -700,8 +739,9 @@ data class SendPollRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendPollRequest").prop("chatId", chatId).prop("question", question).prop("options", options).prop("messageThreadId", messageThreadId).prop("questionParseMode", questionParseMode).prop("questionEntities", questionEntities).prop("isAnonymous", isAnonymous).prop("type", type).prop("allowsMultipleAnswers", allowsMultipleAnswers).prop("correctOptionId", correctOptionId).prop("explanation", explanation).prop("explanationParseMode", explanationParseMode).prop("explanationEntities", explanationEntities).prop("openPeriod", openPeriod).prop("closeDate", closeDate).prop("isClosed", isClosed).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendPollRequest").prop("chatId", chatId).prop("question", question).prop("options", options).prop("messageThreadId", messageThreadId).prop("questionParseMode", questionParseMode).prop("questionEntities", questionEntities).prop("isAnonymous", isAnonymous).prop("type", type).prop("allowsMultipleAnswers", allowsMultipleAnswers).prop("correctOptionId", correctOptionId).prop("explanation", explanation).prop("explanationParseMode", explanationParseMode).prop("explanationEntities", explanationEntities).prop("openPeriod", openPeriod).prop("closeDate", closeDate).prop("isClosed", isClosed).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -716,6 +756,7 @@ data class SendPollRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendDiceRequest(
@@ -728,8 +769,9 @@ data class SendDiceRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendDiceRequest").prop("chatId", chatId).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendDiceRequest").prop("chatId", chatId).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -782,6 +824,22 @@ data class GetUserProfilePhotosRequest(
     val limit: Long? = null,
 ) {
     override fun toString() = DebugStringBuilder("GetUserProfilePhotosRequest").prop("userId", userId).prop("offset", offset).prop("limit", limit).toString()
+}
+
+/**
+ * Request body for [setUserEmojiStatus].
+ *
+ * @param userId Unique identifier of the target user
+ * @param emojiStatusCustomEmojiId Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.
+ * @param emojiStatusExpirationDate Expiration date of the emoji status, if any
+ */
+@Serializable
+data class SetUserEmojiStatusRequest(
+    val userId: UserId,
+    val emojiStatusCustomEmojiId: CustomEmojiId? = null,
+    val emojiStatusExpirationDate: UnixTimestamp? = null,
+) {
+    override fun toString() = DebugStringBuilder("SetUserEmojiStatusRequest").prop("userId", userId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).toString()
 }
 
 /**
@@ -1013,7 +1071,7 @@ data class EditChatInviteLinkRequest(
  *
  * @param chatId Unique identifier for the target channel chat or username of the target channel (in the format @channelusername)
  * @param subscriptionPeriod The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days).
- * @param subscriptionPrice The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500
+ * @param subscriptionPrice The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-10000
  * @param name Invite link name; 0-32 characters
  */
 @Serializable
@@ -1855,6 +1913,394 @@ data class DeleteMessagesRequest(
 }
 
 /**
+ * Request body for [sendGift].
+ *
+ * @param giftId Identifier of the gift
+ * @param userId Required if chat_id is not specified. Unique identifier of the target user who will receive the gift.
+ * @param chatId Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift.
+ * @param payForUpgrade Pass True to pay for the gift upgrade from the bot's balance, thereby making the upgrade free for the receiver
+ * @param text Text that will be shown along with the gift; 0-128 characters
+ * @param textParseMode Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+ * @param textEntities A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+ */
+@Serializable
+data class SendGiftRequest(
+    val giftId: String,
+    val userId: UserId? = null,
+    val chatId: ChatId? = null,
+    val payForUpgrade: Boolean? = null,
+    val text: String? = null,
+    val textParseMode: String? = null,
+    val textEntities: List<MessageEntity>? = null,
+) {
+    override fun toString() = DebugStringBuilder("SendGiftRequest").prop("giftId", giftId).prop("userId", userId).prop("chatId", chatId).prop("payForUpgrade", payForUpgrade).prop("text", text).prop("textParseMode", textParseMode).prop("textEntities", textEntities).toString()
+}
+
+/**
+ * Request body for [giftPremiumSubscription].
+ *
+ * @param userId Unique identifier of the target user who will receive a Telegram Premium subscription
+ * @param monthCount Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12
+ * @param starCount Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months
+ * @param text Text that will be shown along with the service message about the subscription; 0-128 characters
+ * @param textParseMode Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+ * @param textEntities A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+ */
+@Serializable
+data class GiftPremiumSubscriptionRequest(
+    val userId: UserId,
+    val monthCount: Long,
+    val starCount: Long,
+    val text: String? = null,
+    val textParseMode: String? = null,
+    val textEntities: List<MessageEntity>? = null,
+) {
+    override fun toString() = DebugStringBuilder("GiftPremiumSubscriptionRequest").prop("userId", userId).prop("monthCount", monthCount).prop("starCount", starCount).prop("text", text).prop("textParseMode", textParseMode).prop("textEntities", textEntities).toString()
+}
+
+/**
+ * Request body for [verifyUser].
+ *
+ * @param userId Unique identifier of the target user
+ * @param customDescription Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+ */
+@Serializable
+data class VerifyUserRequest(
+    val userId: UserId,
+    val customDescription: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("VerifyUserRequest").prop("userId", userId).prop("customDescription", customDescription).toString()
+}
+
+/**
+ * Request body for [verifyChat].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param customDescription Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+ */
+@Serializable
+data class VerifyChatRequest(
+    val chatId: ChatId,
+    val customDescription: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("VerifyChatRequest").prop("chatId", chatId).prop("customDescription", customDescription).toString()
+}
+
+/**
+ * Request body for [removeUserVerification].
+ *
+ * @param userId Unique identifier of the target user
+ */
+@Serializable
+data class RemoveUserVerificationRequest(
+    val userId: UserId,
+) {
+    override fun toString() = DebugStringBuilder("RemoveUserVerificationRequest").prop("userId", userId).toString()
+}
+
+/**
+ * Request body for [removeChatVerification].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ */
+@Serializable
+data class RemoveChatVerificationRequest(
+    val chatId: ChatId,
+) {
+    override fun toString() = DebugStringBuilder("RemoveChatVerificationRequest").prop("chatId", chatId).toString()
+}
+
+/**
+ * Request body for [readBusinessMessage].
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which to read the message
+ * @param chatId Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours.
+ * @param messageId Unique identifier of the message to mark as read
+ */
+@Serializable
+data class ReadBusinessMessageRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val chatId: ChatId,
+    val messageId: MessageId,
+) {
+    override fun toString() = DebugStringBuilder("ReadBusinessMessageRequest").prop("businessConnectionId", businessConnectionId).prop("chatId", chatId).prop("messageId", messageId).toString()
+}
+
+/**
+ * Request body for [deleteBusinessMessages].
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which to delete the messages
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See deleteMessage for limitations on which messages can be deleted
+ */
+@Serializable
+data class DeleteBusinessMessagesRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val messageIds: List<Long>,
+) {
+    override fun toString() = DebugStringBuilder("DeleteBusinessMessagesRequest").prop("businessConnectionId", businessConnectionId).prop("messageIds", messageIds).toString()
+}
+
+/**
+ * Request body for [setBusinessAccountName].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param firstName The new value of the first name for the business account; 1-64 characters
+ * @param lastName The new value of the last name for the business account; 0-64 characters
+ */
+@Serializable
+data class SetBusinessAccountNameRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val firstName: String,
+    val lastName: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("SetBusinessAccountNameRequest").prop("businessConnectionId", businessConnectionId).prop("firstName", firstName).prop("lastName", lastName).toString()
+}
+
+/**
+ * Request body for [setBusinessAccountUsername].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param username The new value of the username for the business account; 0-32 characters
+ */
+@Serializable
+data class SetBusinessAccountUsernameRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val username: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("SetBusinessAccountUsernameRequest").prop("businessConnectionId", businessConnectionId).prop("username", username).toString()
+}
+
+/**
+ * Request body for [setBusinessAccountBio].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param bio The new value of the bio for the business account; 0-140 characters
+ */
+@Serializable
+data class SetBusinessAccountBioRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val bio: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("SetBusinessAccountBioRequest").prop("businessConnectionId", businessConnectionId).prop("bio", bio).toString()
+}
+
+/**
+ * Request body for [setBusinessAccountProfilePhoto].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param photo The new profile photo to set
+ * @param isPublic Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account's privacy settings. An account can have only one public photo.
+ */
+@Serializable
+data class SetBusinessAccountProfilePhotoRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val photo: InputProfilePhoto,
+    val isPublic: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("SetBusinessAccountProfilePhotoRequest").prop("businessConnectionId", businessConnectionId).prop("photo", photo).prop("isPublic", isPublic).toString()
+}
+
+/**
+ * Request body for [removeBusinessAccountProfilePhoto].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param isPublic Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account's privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo.
+ */
+@Serializable
+data class RemoveBusinessAccountProfilePhotoRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val isPublic: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("RemoveBusinessAccountProfilePhotoRequest").prop("businessConnectionId", businessConnectionId).prop("isPublic", isPublic).toString()
+}
+
+/**
+ * Request body for [setBusinessAccountGiftSettings].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param showGiftButton Pass True, if a button for sending a gift to the user or by the business account must always be shown in the input field
+ * @param acceptedGiftTypes Types of gifts accepted by the business account
+ */
+@Serializable
+data class SetBusinessAccountGiftSettingsRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val showGiftButton: Boolean,
+    val acceptedGiftTypes: AcceptedGiftTypes,
+) {
+    override fun toString() = DebugStringBuilder("SetBusinessAccountGiftSettingsRequest").prop("businessConnectionId", businessConnectionId).prop("showGiftButton", showGiftButton).prop("acceptedGiftTypes", acceptedGiftTypes).toString()
+}
+
+/**
+ * Request body for [getBusinessAccountStarBalance].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ */
+@Serializable
+data class GetBusinessAccountStarBalanceRequest(
+    val businessConnectionId: BusinessConnectionId,
+) {
+    override fun toString() = DebugStringBuilder("GetBusinessAccountStarBalanceRequest").prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
+ * Request body for [transferBusinessAccountStars].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param starCount Number of Telegram Stars to transfer; 1-10000
+ */
+@Serializable
+data class TransferBusinessAccountStarsRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val starCount: Long,
+) {
+    override fun toString() = DebugStringBuilder("TransferBusinessAccountStarsRequest").prop("businessConnectionId", businessConnectionId).prop("starCount", starCount).toString()
+}
+
+/**
+ * Request body for [getBusinessAccountGifts].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param excludeUnsaved Pass True to exclude gifts that aren't saved to the account's profile page
+ * @param excludeSaved Pass True to exclude gifts that are saved to the account's profile page
+ * @param excludeUnlimited Pass True to exclude gifts that can be purchased an unlimited number of times
+ * @param excludeLimited Pass True to exclude gifts that can be purchased a limited number of times
+ * @param excludeUnique Pass True to exclude unique gifts
+ * @param sortByPrice Pass True to sort results by gift price instead of send date. Sorting is applied before pagination.
+ * @param offset Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results
+ * @param limit The maximum number of gifts to be returned; 1-100. Defaults to 100
+ */
+@Serializable
+data class GetBusinessAccountGiftsRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val excludeUnsaved: Boolean? = null,
+    val excludeSaved: Boolean? = null,
+    val excludeUnlimited: Boolean? = null,
+    val excludeLimited: Boolean? = null,
+    val excludeUnique: Boolean? = null,
+    val sortByPrice: Boolean? = null,
+    val offset: String? = null,
+    val limit: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("GetBusinessAccountGiftsRequest").prop("businessConnectionId", businessConnectionId).prop("excludeUnsaved", excludeUnsaved).prop("excludeSaved", excludeSaved).prop("excludeUnlimited", excludeUnlimited).prop("excludeLimited", excludeLimited).prop("excludeUnique", excludeUnique).prop("sortByPrice", sortByPrice).prop("offset", offset).prop("limit", limit).toString()
+}
+
+/**
+ * Request body for [convertGiftToStars].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param ownedGiftId Unique identifier of the regular gift that should be converted to Telegram Stars
+ */
+@Serializable
+data class ConvertGiftToStarsRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val ownedGiftId: String,
+) {
+    override fun toString() = DebugStringBuilder("ConvertGiftToStarsRequest").prop("businessConnectionId", businessConnectionId).prop("ownedGiftId", ownedGiftId).toString()
+}
+
+/**
+ * Request body for [upgradeGift].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param ownedGiftId Unique identifier of the regular gift that should be upgraded to a unique one
+ * @param keepOriginalDetails Pass True to keep the original gift text, sender and receiver in the upgraded gift
+ * @param starCount The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0, otherwise, the can_transfer_stars business bot right is required and gift.upgrade_star_count must be passed.
+ */
+@Serializable
+data class UpgradeGiftRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val ownedGiftId: String,
+    val keepOriginalDetails: Boolean? = null,
+    val starCount: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("UpgradeGiftRequest").prop("businessConnectionId", businessConnectionId).prop("ownedGiftId", ownedGiftId).prop("keepOriginalDetails", keepOriginalDetails).prop("starCount", starCount).toString()
+}
+
+/**
+ * Request body for [transferGift].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param ownedGiftId Unique identifier of the regular gift that should be transferred
+ * @param newOwnerChatId Unique identifier of the chat which will own the gift. The chat must be active in the last 24 hours.
+ * @param starCount The amount of Telegram Stars that will be paid for the transfer from the business account balance. If positive, then the can_transfer_stars business bot right is required.
+ */
+@Serializable
+data class TransferGiftRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val ownedGiftId: String,
+    val newOwnerChatId: ChatId,
+    val starCount: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("TransferGiftRequest").prop("businessConnectionId", businessConnectionId).prop("ownedGiftId", ownedGiftId).prop("newOwnerChatId", newOwnerChatId).prop("starCount", starCount).toString()
+}
+
+/**
+ * Request body for [postStory].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param content Content of the story
+ * @param activePeriod Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400
+ * @param caption Caption of the story, 0-2048 characters after entities parsing
+ * @param parseMode Mode for parsing entities in the story caption. See formatting options for more details.
+ * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param areas A JSON-serialized list of clickable areas to be shown on the story
+ * @param postToChatPage Pass True to keep the story accessible after it expires
+ * @param protectContent Pass True if the content of the story must be protected from forwarding and screenshotting
+ */
+@Serializable
+data class PostStoryRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val content: InputStoryContent,
+    val activePeriod: Long,
+    val caption: String? = null,
+    val parseMode: ParseMode? = null,
+    val captionEntities: List<MessageEntity>? = null,
+    val areas: List<StoryArea>? = null,
+    val postToChatPage: Boolean? = null,
+    val protectContent: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("PostStoryRequest").prop("businessConnectionId", businessConnectionId).prop("content", content).prop("activePeriod", activePeriod).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("areas", areas).prop("postToChatPage", postToChatPage).prop("protectContent", protectContent).toString()
+}
+
+/**
+ * Request body for [editStory].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param storyId Unique identifier of the story to edit
+ * @param content Content of the story
+ * @param caption Caption of the story, 0-2048 characters after entities parsing
+ * @param parseMode Mode for parsing entities in the story caption. See formatting options for more details.
+ * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param areas A JSON-serialized list of clickable areas to be shown on the story
+ */
+@Serializable
+data class EditStoryRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val storyId: Long,
+    val content: InputStoryContent,
+    val caption: String? = null,
+    val parseMode: ParseMode? = null,
+    val captionEntities: List<MessageEntity>? = null,
+    val areas: List<StoryArea>? = null,
+) {
+    override fun toString() = DebugStringBuilder("EditStoryRequest").prop("businessConnectionId", businessConnectionId).prop("storyId", storyId).prop("content", content).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("areas", areas).toString()
+}
+
+/**
+ * Request body for [deleteStory].
+ *
+ * @param businessConnectionId Unique identifier of the business connection
+ * @param storyId Unique identifier of the story to delete
+ */
+@Serializable
+data class DeleteStoryRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val storyId: Long,
+) {
+    override fun toString() = DebugStringBuilder("DeleteStoryRequest").prop("businessConnectionId", businessConnectionId).prop("storyId", storyId).toString()
+}
+
+/**
  * Request body for [sendSticker].
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -1867,6 +2313,7 @@ data class DeleteMessagesRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendStickerRequest(
@@ -1880,8 +2327,9 @@ data class SendStickerRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendStickerRequest").prop("chatId", chatId).prop("sticker", sticker).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendStickerRequest").prop("chatId", chatId).prop("sticker", sticker).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -2067,8 +2515,8 @@ data class SetStickerSetTitleRequest(
  *
  * @param name Sticker set name
  * @param userId User identifier of the sticker set owner
- * @param format Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video
- * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
+ * @param format Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a .WEBM video
+ * @param thumbnail A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a .WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.
  */
 @Serializable
 data class SetStickerSetThumbnailRequest(
@@ -2143,12 +2591,34 @@ data class AnswerWebAppQueryRequest(
 }
 
 /**
+ * Request body for [savePreparedInlineMessage].
+ *
+ * @param userId Unique identifier of the target user that can use the prepared message
+ * @param result A JSON-serialized object describing the message to be sent
+ * @param allowUserChats Pass True if the message can be sent to private chats with users
+ * @param allowBotChats Pass True if the message can be sent to private chats with bots
+ * @param allowGroupChats Pass True if the message can be sent to group and supergroup chats
+ * @param allowChannelChats Pass True if the message can be sent to channel chats
+ */
+@Serializable
+data class SavePreparedInlineMessageRequest(
+    val userId: UserId,
+    val result: InlineQueryResult,
+    val allowUserChats: Boolean? = null,
+    val allowBotChats: Boolean? = null,
+    val allowGroupChats: Boolean? = null,
+    val allowChannelChats: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("SavePreparedInlineMessageRequest").prop("userId", userId).prop("result", result).prop("allowUserChats", allowUserChats).prop("allowBotChats", allowBotChats).prop("allowGroupChats", allowGroupChats).prop("allowChannelChats", allowChannelChats).toString()
+}
+
+/**
  * Request body for [sendInvoice].
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param title Product name, 1-32 characters
  * @param description Product description, 1-255 characters
- * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+ * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
  * @param currency Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars.
  * @param prices Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -2173,6 +2643,7 @@ data class AnswerWebAppQueryRequest(
  * @param messageEffectId Unique identifier of the message effect to be added to the message; for private chats only
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button.
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendInvoiceRequest(
@@ -2204,8 +2675,9 @@ data class SendInvoiceRequest(
     val messageEffectId: MessageEffectId? = null,
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendInvoiceRequest").prop("chatId", chatId).prop("title", title).prop("description", description).prop("payload", payload).prop("currency", currency).prop("prices", prices).prop("messageThreadId", messageThreadId).prop("providerToken", providerToken).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("startParameter", startParameter).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
+    override fun toString() = DebugStringBuilder("SendInvoiceRequest").prop("chatId", chatId).prop("title", title).prop("description", description).prop("payload", payload).prop("currency", currency).prop("prices", prices).prop("messageThreadId", messageThreadId).prop("providerToken", providerToken).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("startParameter", startParameter).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**
@@ -2213,7 +2685,7 @@ data class SendInvoiceRequest(
  *
  * @param title Product name, 1-32 characters
  * @param description Product description, 1-255 characters
- * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+ * @param payload Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
  * @param currency Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars.
  * @param prices Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.
  * @param providerToken Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.
@@ -2231,6 +2703,8 @@ data class SendInvoiceRequest(
  * @param sendPhoneNumberToProvider Pass True if the user's phone number should be sent to the provider. Ignored for payments in Telegram Stars.
  * @param sendEmailToProvider Pass True if the user's email address should be sent to the provider. Ignored for payments in Telegram Stars.
  * @param isFlexible Pass True if the final price depends on the shipping method. Ignored for payments in Telegram Stars.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the link will be created. For payments in Telegram Stars only.
+ * @param subscriptionPeriod The number of seconds the subscription will be active for before the next payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed 10000 Telegram Stars.
  */
 @Serializable
 data class CreateInvoiceLinkRequest(
@@ -2254,8 +2728,10 @@ data class CreateInvoiceLinkRequest(
     val sendPhoneNumberToProvider: Boolean? = null,
     val sendEmailToProvider: Boolean? = null,
     val isFlexible: Boolean? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
+    val subscriptionPeriod: Seconds? = null,
 ) {
-    override fun toString() = DebugStringBuilder("CreateInvoiceLinkRequest").prop("title", title).prop("description", description).prop("payload", payload).prop("currency", currency).prop("prices", prices).prop("providerToken", providerToken).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).toString()
+    override fun toString() = DebugStringBuilder("CreateInvoiceLinkRequest").prop("title", title).prop("description", description).prop("payload", payload).prop("currency", currency).prop("prices", prices).prop("providerToken", providerToken).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).prop("businessConnectionId", businessConnectionId).prop("subscriptionPeriod", subscriptionPeriod).toString()
 }
 
 /**
@@ -2264,7 +2740,7 @@ data class CreateInvoiceLinkRequest(
  * @param shippingQueryId Unique identifier for the query to be answered
  * @param ok Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)
  * @param shippingOptions Required if ok is True. A JSON-serialized array of available shipping options.
- * @param errorMessage Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. "Sorry, delivery to your desired address is unavailable'). Telegram will display this message to the user.
+ * @param errorMessage Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. “Sorry, delivery to your desired address is unavailable”). Telegram will display this message to the user.
  */
 @Serializable
 data class AnswerShippingQueryRequest(
@@ -2321,6 +2797,22 @@ data class RefundStarPaymentRequest(
 }
 
 /**
+ * Request body for [editUserStarSubscription].
+ *
+ * @param userId Identifier of the user whose subscription will be edited
+ * @param telegramPaymentChargeId Telegram payment identifier for the subscription
+ * @param isCanceled Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+ */
+@Serializable
+data class EditUserStarSubscriptionRequest(
+    val userId: UserId,
+    val telegramPaymentChargeId: TelegramPaymentChargeId,
+    val isCanceled: Boolean,
+) {
+    override fun toString() = DebugStringBuilder("EditUserStarSubscriptionRequest").prop("userId", userId).prop("telegramPaymentChargeId", telegramPaymentChargeId).prop("isCanceled", isCanceled).toString()
+}
+
+/**
  * Request body for [setPassportDataErrors].
  *
  * @param userId User identifier
@@ -2346,6 +2838,7 @@ data class SetPassportDataErrorsRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
  */
 @Serializable
 data class SendGameRequest(
@@ -2358,8 +2851,9 @@ data class SendGameRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
+    val allowPaidBroadcast: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendGameRequest").prop("chatId", chatId).prop("gameShortName", gameShortName).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+    override fun toString() = DebugStringBuilder("SendGameRequest").prop("chatId", chatId).prop("gameShortName", gameShortName).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
 }
 
 /**

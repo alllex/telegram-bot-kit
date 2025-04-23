@@ -1,6 +1,7 @@
 package me.alllex.tbot.apigen
 
 import java.io.File
+import java.util.Map.entry
 
 class BotApiGenerator {
 
@@ -74,6 +75,7 @@ class BotApiGenerator {
 
                 appendLine("            is ${entry.typeWithoutUpdate}Update -> on${entry.typeWithoutUpdate}(update.${entry.field})")
             }
+            appendLine("            else -> error(\"Unknown update type: \${update::class.simpleName}\")")
             appendLine("        }")
             appendLine("    }")
 

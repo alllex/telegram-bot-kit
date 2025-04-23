@@ -17,7 +17,7 @@ To learn how to create…">
 <link rel="alternate icon" href="/img/favicon.ico" type="image/x-icon" />
     <link href="/css/bootstrap.min.css?3" rel="stylesheet">
     
-    <link href="/css/telegram.css?240" rel="stylesheet" media="screen">
+    <link href="/css/telegram.css?244" rel="stylesheet" media="screen">
     <style>
     </style>
   </head>
@@ -53,57 +53,84 @@ To learn how to create…">
 <blockquote>
 <p>Subscribe to <a href="https://t.me/botnews">@BotNews</a> to be the first to know about the latest updates and join the discussion in <a href="https://t.me/bottalk">@BotTalk</a></p>
 </blockquote>
-<h4><a class="anchor" name="august-14-2024" href="#august-14-2024"><i class="anchor-icon"></i></a>August 14, 2024</h4>
-<p><strong>Bot API 7.9</strong></p>
+<h4><a class="anchor" name="april-11-2025" href="#april-11-2025"><i class="anchor-icon"></i></a>April 11, 2025</h4>
+<p><strong>Bot API 9.0</strong></p>
+<p><strong>Business Accounts</strong></p>
 <ul>
-<li>Added support for <a href="https://telegram.org/blog/superchannels-star-reactions-subscriptions#super-channels">Super Channels</a>, allowing received channel messages to have users or other channels as their senders.</li>
-<li>Added the ability to send paid media to any chat.</li>
-<li>Added the parameter <em>business_connection_id</em> to the method <a href="#sendpaidmedia">sendPaidMedia</a>, allowing bots to send paid media on behalf of a business account.</li>
-<li>Added the field <em>paid_media</em> to the class <a href="#transactionpartneruser">TransactionPartnerUser</a> for transactions involving paid media.</li>
-<li>Added the method <a href="#createchatsubscriptioninvitelink">createChatSubscriptionInviteLink</a>, allowing bots to create subscription invite links.</li>
-<li>Added the method <a href="#editchatsubscriptioninvitelink">editChatSubscriptionInviteLink</a>, allowing bots to edit the <em>name</em> of subscription invite links.</li>
-<li>Added the field <em>until_date</em> to the class <a href="#chatmembermember">ChatMemberMember</a> for members with an active subscription.</li>
-<li>Added support for paid reactions and the class <a href="#reactiontypepaid">ReactionTypePaid</a>.</li>
+<li>Added the class <a href="#businessbotrights">BusinessBotRights</a> and replaced the field <em>can_reply</em> with the field <em>rights</em> of the type <a href="#businessbotrights">BusinessBotRights</a> in the class <a href="#businessconnection">BusinessConnection</a>.</li>
+<li>Added the method <a href="#readbusinessmessage">readBusinessMessage</a>, allowing bots to mark incoming messages as read on behalf of a business account.</li>
+<li>Added the method <a href="#deletebusinessmessages">deleteBusinessMessages</a>, allowing bots to delete messages on behalf of a business account.</li>
+<li>Added the method <a href="#setbusinessaccountname">setBusinessAccountName</a>, allowing bots to change the first and last name of a managed business account.</li>
+<li>Added the method <a href="#setbusinessaccountusername">setBusinessAccountUsername</a>, allowing bots to change the username of a managed business account.</li>
+<li>Added the method <a href="#setbusinessaccountbio">setBusinessAccountBio</a>, allowing bots to change the bio of a managed business account.</li>
+<li>Added the class <a href="#inputprofilephoto">InputProfilePhoto</a>, describing a profile photo to be set.</li>
+<li>Added the methods <a href="#setbusinessaccountprofilephoto">setBusinessAccountProfilePhoto</a> and <a href="#removebusinessaccountprofilephoto">removeBusinessAccountProfilePhoto</a>, allowing bots to change the profile photo of a managed business account.</li>
+<li>Added the method <a href="#setbusinessaccountgiftsettings">setBusinessAccountGiftSettings</a>, allowing bots to change the privacy settings pertaining to incoming gifts in a managed business account.</li>
+<li>Added the class <a href="#staramount">StarAmount</a> and the method <a href="#getbusinessaccountstarbalance">getBusinessAccountStarBalance</a>, allowing bots to check the current Telegram Star balance of a managed business account.</li>
+<li>Added the method <a href="#transferbusinessaccountstars">transferBusinessAccountStars</a>, allowing bots to transfer Telegram Stars from the balance of a managed business account to their own balance for withdrawal.</li>
+<li>Added the classes <a href="#ownedgiftregular">OwnedGiftRegular</a>, <a href="#ownedgiftunique">OwnedGiftUnique</a>, <a href="#ownedgifts">OwnedGifts</a> and the method <a href="#getbusinessaccountgifts">getBusinessAccountGifts</a>, allowing bots to fetch the list of gifts owned by a managed business account.</li>
+<li>Added the method <a href="#convertgifttostars">convertGiftToStars</a>, allowing bots to convert gifts received by a managed business account to Telegram Stars.</li>
+<li>Added the method <a href="#upgradegift">upgradeGift</a>, allowing bots to upgrade regular gifts received by a managed business account to unique gifts.</li>
+<li>Added the method <a href="#transfergift">transferGift</a>, allowing bots to transfer unique gifts owned by a managed business account.</li>
+<li>Added the classes <a href="#inputstorycontentphoto">InputStoryContentPhoto</a> and <a href="#inputstorycontentvideo">InputStoryContentVideo</a> representing the content of a story to post.</li>
+<li>Added the classes <a href="#storyarea">StoryArea</a>, <a href="#storyareaposition">StoryAreaPosition</a>, <a href="#locationaddress">LocationAddress</a>, <a href="#storyareatypelocation">StoryAreaTypeLocation</a>, <a href="#storyareatypesuggestedreaction">StoryAreaTypeSuggestedReaction</a>, <a href="#storyareatypelink">StoryAreaTypeLink</a>, <a href="#storyareatypeweather">StoryAreaTypeWeather</a> and <a href="#storyareatypeuniquegift">StoryAreaTypeUniqueGift</a>, describing clickable active areas on stories.</li>
+<li>Added the method <a href="#poststory">postStory</a>, allowing bots to post a story on behalf of a managed business account.</li>
+<li>Added the method <a href="#editstory">editStory</a>, allowing bots to edit stories they had previously posted on behalf of a managed business account.</li>
+<li>Added the method <a href="#deletestory">deleteStory</a>, allowing bots to delete stories they had previously posted on behalf of a managed business account.</li>
 </ul>
-<h4><a class="anchor" name="july-31-2024" href="#july-31-2024"><i class="anchor-icon"></i></a>July 31, 2024</h4>
-<p><strong>Bot API 7.8</strong></p>
+<p><strong>Mini Apps</strong></p>
 <ul>
-<li>Added the option for bots to set a <a href="/bots/webapps#launching-the-main-mini-app">Main Mini App</a>, which can be previewed and launched directly from a button in the bot&#39;s profile or a link.</li>
-<li>Added the method <em>shareToStory</em> to the class <a href="/bots/webapps#initializing-mini-apps">WebApp</a>.</li>
-<li>Added the field <em>has_main_web_app</em> to the class <a href="#user">User</a>, which is returned in the response to <a href="#getme">getMe</a>.</li>
-<li>Added the parameter <em>business_connection_id</em> to the methods <a href="#pinchatmessage">pinChatMessage</a> and <a href="#unpinchatmessage">unpinChatMessage</a>, allowing bots to manage pinned messages on behalf of a business account.</li>
+<li>Added the field <a href="/bots/webapps#devicestorage">DeviceStorage</a>, allowing Mini Apps to use persistent local storage on the user&#39;s device.</li>
+<li>Added the field <a href="/bots/webapps#securestorage">SecureStorage</a>, allowing Mini Apps to use a secure local storage on the user&#39;s device for sensitive data.</li>
 </ul>
-<h4><a class="anchor" name="july-7-2024" href="#july-7-2024"><i class="anchor-icon"></i></a>July 7, 2024</h4>
-<p><strong>Bot API 7.7</strong></p>
+<p><strong>Gifts</strong></p>
 <ul>
-<li>Added the class <a href="#refundedpayment">RefundedPayment</a>, containing information about a refunded payment.</li>
-<li>Added the field <em>refunded_payment</em> to the class <a href="#message">Message</a>, describing a service message about a refunded payment.</li>
-<li>Added the field <em>isVerticalSwipesEnabled</em> and the methods <em>enableVerticalSwipes</em>, <em>disableVerticalSwipes</em> to the class <a href="/bots/webapps#initializing-mini-apps">WebApp</a>.</li>
-<li>Added the <a href="/bots/webapps#events-available-for-mini-apps">event</a> <em>scanQrPopupClosed</em> for Mini Apps.</li>
+<li>Added the classes <a href="#uniquegiftmodel">UniqueGiftModel</a>, <a href="#uniquegiftsymbol">UniqueGiftSymbol</a>, <a href="#uniquegiftbackdropcolors">UniqueGiftBackdropColors</a>, and <a href="#uniquegiftbackdrop">UniqueGiftBackdrop</a> to describe the properties of a unique gift.</li>
+<li>Added the class <a href="#uniquegift">UniqueGift</a> describing a gift that was upgraded to a unique one.</li>
+<li>Added the class <a href="#acceptedgifttypes">AcceptedGiftTypes</a> describing the types of gifts that are accepted by a user or a chat.</li>
+<li>Replaced the field <em>can_send_gift</em> with the field <em>accepted_gift_types</em> of the type <a href="#acceptedgifttypes">AcceptedGiftTypes</a> in the class <a href="#chatfullinfo">ChatFullInfo</a>.</li>
+<li>Added the class <a href="#giftinfo">GiftInfo</a> and the field <em>gift</em> to the class <a href="#message">Message</a>, describing a service message about a regular gift that was sent or received.</li>
+<li>Added the class <a href="#uniquegiftinfo">UniqueGiftInfo</a> and the field <em>unique_gift</em> to the class <a href="#message">Message</a>, describing a service message about a unique gift that was sent or received.</li>
 </ul>
-<h4><a class="anchor" name="july-1-2024" href="#july-1-2024"><i class="anchor-icon"></i></a>July 1, 2024</h4>
-<p><strong>Bot API 7.6</strong></p>
+<p><strong>Telegram Premium</strong></p>
 <ul>
-<li>Added the classes <a href="#paidmedia">PaidMedia</a>, <a href="#paidmediainfo">PaidMediaInfo</a>, <a href="#paidmediapreview">PaidMediaPreview</a>, <a href="#paidmediaphoto">PaidMediaPhoto</a> and <a href="#paidmediavideo">PaidMediaVideo</a>, containing information about paid media.</li>
-<li>Added the method <a href="#sendpaidmedia">sendPaidMedia</a> and the classes <a href="#inputpaidmedia">InputPaidMedia</a>, <a href="#inputpaidmediaphoto">InputPaidMediaPhoto</a> and <a href="#inputpaidmediavideo">InputPaidMediaVideo</a>, to support sending paid media.</li>
-<li>Documented that the methods <a href="#copymessage">copyMessage</a> and <a href="#copymessages">copyMessages</a> cannot be used to copy paid media.</li>
-<li>Added the field <em>can_send_paid_media</em> to the class <a href="#chatfullinfo">ChatFullInfo</a>.</li>
-<li>Added the field <em>paid_media</em> to the classes <a href="#message">Message</a> and <a href="#externalreplyinfo">ExternalReplyInfo</a>.</li>
-<li>Added the class <a href="#transactionpartnertelegramads">TransactionPartnerTelegramAds</a>, containing information about Telegram Star transactions involving the Telegram Ads Platform.</li>
-<li>Added the field <em>invoice_payload</em> to the class <a href="#transactionpartneruser">TransactionPartnerUser</a>, containing the bot-specified invoice payload.</li>
-<li>Changed the default opening mode for <a href="/bots/webapps#direct-link-mini-apps">Direct Link Mini Apps</a>.</li>
-<li>Added support for launching Web Apps via <code>t.me</code> link in the class <a href="#menubuttonwebapp">MenuButtonWebApp</a>.</li>
-<li>Added the field <em>section_separator_color</em> to the class <a href="/bots/webapps#themeparams">ThemeParams</a>.</li>
+<li>Added the method <a href="#giftpremiumsubscription">giftPremiumSubscription</a>, allowing bots to gift a user a Telegram Premium subscription paid in Telegram Stars.</li>
+<li>Added the field <em>premium_subscription_duration</em> to the class <a href="#transactionpartneruser">TransactionPartnerUser</a> for transactions involving a Telegram Premium subscription purchased by the bot.</li>
+<li>Added the field <em>transaction_type</em> to the class <a href="#transactionpartneruser">TransactionPartnerUser</a>, simplifying the differentiation and processing of all transaction types.</li>
 </ul>
-<h4><a class="anchor" name="june-18-2024" href="#june-18-2024"><i class="anchor-icon"></i></a>June 18, 2024</h4>
-<p><strong>Bot API 7.5</strong></p>
+<p><strong>General</strong></p>
 <ul>
-<li>Added the classes <a href="#startransactions">StarTransactions</a>, <a href="#startransaction">StarTransaction</a>, <a href="#transactionpartner">TransactionPartner</a> and <a href="#revenuewithdrawalstate">RevenueWithdrawalState</a>, containing information about Telegram Star transactions involving the bot.</li>
-<li>Added the method <a href="#getstartransactions">getStarTransactions</a> that can be used to get the list of all Telegram Star transactions for the bot.</li>
-<li>Added support for <em>callback</em> buttons in <a href="#inlinekeyboardmarkup">InlineKeyboardMarkup</a> for messages sent on behalf of a business account.</li>
-<li>Added support for callback queries originating from a message sent on behalf of a business account.</li>
-<li>Added the parameter <em>business_connection_id</em> to the methods <a href="#editmessagetext">editMessageText</a>, <a href="#editmessagemedia">editMessageMedia</a>, <a href="#editmessagecaption">editMessageCaption</a>, <a href="#editmessagelivelocation">editMessageLiveLocation</a>, <a href="#stopmessagelivelocation">stopMessageLiveLocation</a> and <a href="#editmessagereplymarkup">editMessageReplyMarkup</a>, allowing the bot to edit business messages.</li>
-<li>Added the parameter <em>business_connection_id</em> to the method <a href="#stoppoll">stopPoll</a>, allowing the bot to stop polls it sent on behalf of a business account.</li>
+<li>Increased the maximum price for paid media to 10000 Telegram Stars.</li>
+<li>Increased the maximum price for a subscription period to 10000 Telegram Stars.</li>
+<li>Added the class <a href="#paidmessagepricechanged">PaidMessagePriceChanged</a> and the field <em>paid_message_price_changed</em> to the class <a href="#message">Message</a>, describing a service message about a price change for paid messages sent to the chat.</li>
+<li>Added the field <em>paid_star_count</em> to the class <a href="#message">Message</a>, containing the number of <a href="https://telegram.org/blog/telegram-stars">Telegram Stars</a> that were paid to send the message.</li>
+</ul>
+<h4><a class="anchor" name="february-12-2025" href="#february-12-2025"><i class="anchor-icon"></i></a>February 12, 2025</h4>
+<p><strong>Bot API 8.3</strong></p>
+<ul>
+<li>Added the parameter <em>chat_id</em> to the method <a href="#sendgift">sendGift</a>, allowing bots to send gifts to channel chats.</li>
+<li>Added the field <em>can_send_gift</em> to the class <a href="#chatfullinfo">ChatFullInfo</a>.</li>
+<li>Added the class <a href="#transactionpartnerchat">TransactionPartnerChat</a> describing transactions with chats.</li>
+<li>Added the fields <em>cover</em> and <em>start_timestamp</em> to the class <a href="#video">Video</a>, containing a message-specific cover and a start timestamp for the video.</li>
+<li>Added the parameters <em>cover</em> and <em>start_timestamp</em> to the method <a href="#sendvideo">sendVideo</a>, allowing bots to specify a cover and a start timestamp for the videos they send.</li>
+<li>Added the fields <em>cover</em> and <em>start_timestamp</em> to the classes <a href="#inputmediavideo">InputMediaVideo</a> and <a href="#inputpaidmediavideo">InputPaidMediaVideo</a>, allowing bots to edit video cover and start timestamp and specify them for videos in albums and paid media.</li>
+<li>Added the parameter <em>video_start_timestamp</em> to the methods <a href="#forwardmessage">forwardMessage</a> and  <a href="#copymessage">copyMessage</a>, allowing bots to change the start timestamp for forwarded and copied videos.</li>
+<li>Allowed to add reactions to most types of service messages.</li>
+</ul>
+<h4><a class="anchor" name="january-1-2025" href="#january-1-2025"><i class="anchor-icon"></i></a>January 1, 2025</h4>
+<p><strong>Bot API 8.2</strong></p>
+<ul>
+<li>Added the methods <a href="#verifyuser">verifyUser</a>, <a href="#verifychat">verifyChat</a>, <a href="#removeuserverification">removeUserVerification</a> and <a href="#removechatverification">removeChatVerification</a>, allowing bots to manage <a href="https://telegram.org/verify#third-party-verification">verifications on behalf of an organization</a>.</li>
+<li>Added the field <em>upgrade_star_count</em> to the class <a href="#gift">Gift</a>.</li>
+<li>Added the parameter <em>pay_for_upgrade</em> to the method <a href="#sendgift">sendGift</a>.</li>
+<li>Removed the field <em>hide_url</em> from the class <a href="#inlinequeryresultarticle">InlineQueryResultArticle</a>. Pass an empty string as <em>url</em> instead.</li>
+</ul>
+<h4><a class="anchor" name="december-4-2024" href="#december-4-2024"><i class="anchor-icon"></i></a>December 4, 2024</h4>
+<p><strong>Bot API 8.1</strong></p>
+<ul>
+<li>Added the field <em>nanostar_amount</em> to the class <a href="#startransaction">StarTransaction</a>.</li>
+<li>Added the class <a href="#transactionpartneraffiliateprogram">TransactionPartnerAffiliateProgram</a> for transactions pertaining to incoming affiliate commissions.</li>
+<li>Added the class <a href="#affiliateinfo">AffiliateInfo</a> and the field <em>affiliate</em> to the class <a href="#transactionpartneruser">TransactionPartnerUser</a>, allowing bots to identify the relevant affiliate in transactions with an affiliate commission.</li>
 </ul>
 <p><strong><a href="/bots/api-changelog">See earlier changes »</a></strong></p>
 <h3><a class="anchor" name="authorizing-your-bot" href="#authorizing-your-bot"><i class="anchor-icon"></i></a>Authorizing your bot</h3>
@@ -237,6 +264,11 @@ To learn how to create…">
 <td><em>Optional</em>. New incoming pre-checkout query. Contains full information about checkout</td>
 </tr>
 <tr>
+<td>purchased_paid_media</td>
+<td><a href="#paidmediapurchased">PaidMediaPurchased</a></td>
+<td><em>Optional</em>. A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat</td>
+</tr>
+<tr>
 <td>poll</td>
 <td><a href="#poll">Poll</a></td>
 <td><em>Optional</em>. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot</td>
@@ -307,7 +339,7 @@ To learn how to create…">
 <td>allowed_updates</td>
 <td>Array of String</td>
 <td>Optional</td>
-<td>A JSON-serialized list of the update types you want your bot to receive. For example, specify <code>[&quot;message&quot;, &quot;edited_channel_post&quot;, &quot;callback_query&quot;]</code> to only receive updates of these types. See <a href="#update">Update</a> for a complete list of available update types. Specify an empty list to receive all update types except <em>chat_member</em>, <em>message_reaction</em>, and <em>message_reaction_count</em> (default). If not specified, the previous setting will be used.<br><br>Please note that this parameter doesn&#39;t affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.</td>
+<td>A JSON-serialized list of the update types you want your bot to receive. For example, specify <code>[&quot;message&quot;, &quot;edited_channel_post&quot;, &quot;callback_query&quot;]</code> to only receive updates of these types. See <a href="#update">Update</a> for a complete list of available update types. Specify an empty list to receive all update types except <em>chat_member</em>, <em>message_reaction</em>, and <em>message_reaction_count</em> (default). If not specified, the previous setting will be used.<br><br>Please note that this parameter doesn&#39;t affect updates created before the call to getUpdates, so unwanted updates may be received for a short period of time.</td>
 </tr>
 </tbody>
 </table>
@@ -315,7 +347,7 @@ To learn how to create…">
 <p><strong>Notes</strong><br><strong>1.</strong> This method will not work if an outgoing webhook is set up.<br><strong>2.</strong> In order to avoid getting duplicate updates, recalculate <em>offset</em> after each server response.</p>
 </blockquote>
 <h4><a class="anchor" name="setwebhook" href="#setwebhook"><i class="anchor-icon"></i></a>setWebhook</h4>
-<p>Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized <a href="#update">Update</a>. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns <em>True</em> on success.</p>
+<p>Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized <a href="#update">Update</a>. In case of an unsuccessful request (a request with response <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP status code</a> different from <code>2XY</code>), we will repeat the request and give up after a reasonable amount of attempts. Returns <em>True</em> on success.</p>
 <p>If you&#39;d like to make sure that the webhook was set by you, you can specify secret data in the parameter <em>secret_token</em>. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.</p>
 <table class="table">
 <thead>
@@ -754,6 +786,11 @@ To learn how to create…">
 <td><em>Optional</em>. Default chat member permissions, for groups and supergroups</td>
 </tr>
 <tr>
+<td>accepted_gift_types</td>
+<td><a href="#acceptedgifttypes">AcceptedGiftTypes</a></td>
+<td>Information about types of gifts that are accepted by the chat or by the corresponding user for private chats</td>
+</tr>
+<tr>
 <td>can_send_paid_media</td>
 <td>True</td>
 <td><em>Optional</em>. <em>True</em>, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.</td>
@@ -834,7 +871,7 @@ To learn how to create…">
 <tr>
 <td>message_id</td>
 <td>Integer</td>
-<td>Unique message identifier inside this chat</td>
+<td>Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent</td>
 </tr>
 <tr>
 <td>message_thread_id</td>
@@ -940,6 +977,11 @@ To learn how to create…">
 <td>author_signature</td>
 <td>String</td>
 <td><em>Optional</em>. Signature of the post author for messages in channels, or the custom title of an anonymous group administrator</td>
+</tr>
+<tr>
+<td>paid_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of Telegram Stars that were paid by the sender of the message to send it</td>
 </tr>
 <tr>
 <td>text</td>
@@ -1147,6 +1189,16 @@ To learn how to create…">
 <td><em>Optional</em>. Service message: a chat was shared with the bot</td>
 </tr>
 <tr>
+<td>gift</td>
+<td><a href="#giftinfo">GiftInfo</a></td>
+<td><em>Optional</em>. Service message: a regular gift was sent or received</td>
+</tr>
+<tr>
+<td>unique_gift</td>
+<td><a href="#uniquegiftinfo">UniqueGiftInfo</a></td>
+<td><em>Optional</em>. Service message: a unique gift was sent or received</td>
+</tr>
+<tr>
 <td>connected_website</td>
 <td>String</td>
 <td><em>Optional</em>. The domain name of the website on which the user has logged in. <a href="/widgets/login">More about Telegram Login »</a></td>
@@ -1227,6 +1279,11 @@ To learn how to create…">
 <td><em>Optional</em>. Service message: a giveaway without public winners was completed</td>
 </tr>
 <tr>
+<td>paid_message_price_changed</td>
+<td><a href="#paidmessagepricechanged">PaidMessagePriceChanged</a></td>
+<td><em>Optional</em>. Service message: the price for paid messages has changed in the chat</td>
+</tr>
+<tr>
 <td>video_chat_scheduled</td>
 <td><a href="#videochatscheduled">VideoChatScheduled</a></td>
 <td><em>Optional</em>. Service message: video chat scheduled</td>
@@ -1272,7 +1329,7 @@ To learn how to create…">
 <tr>
 <td>message_id</td>
 <td>Integer</td>
-<td>Unique message identifier</td>
+<td>Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent</td>
 </tr>
 </tbody>
 </table>
@@ -1324,7 +1381,7 @@ To learn how to create…">
 <tr>
 <td>type</td>
 <td>String</td>
-<td>Type of the entity. Currently, can be “mention” (<code>@username</code>), “hashtag” (<code>#hashtag</code>), “cashtag” (<code>$USD</code>), “bot_command” (<code>/start@jobs_bot</code>), “url” (<code>https://telegram.org</code>), “email” (<code>do-not-reply@telegram.org</code>), “phone_number” (<code>+1-212-555-0123</code>), “bold” (<strong>bold text</strong>), “italic” (<em>italic text</em>), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users <a href="https://telegram.org/blog/edit#new-mentions">without usernames</a>), “custom_emoji” (for inline custom emoji stickers)</td>
+<td>Type of the entity. Currently, can be “mention” (<code>@username</code>), “hashtag” (<code>#hashtag</code> or <code>#hashtag@chatusername</code>), “cashtag” (<code>$USD</code> or <code>$USD@chatusername</code>), “bot_command” (<code>/start@jobs_bot</code>), “url” (<code>https://telegram.org</code>), “email” (<code>do-not-reply@telegram.org</code>), “phone_number” (<code>+1-212-555-0123</code>), “bold” (<strong>bold text</strong>), “italic” (<em>italic text</em>), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users <a href="https://telegram.org/blog/edit#new-mentions">without usernames</a>), “custom_emoji” (for inline custom emoji stickers)</td>
 </tr>
 <tr>
 <td>offset</td>
@@ -1967,6 +2024,16 @@ To learn how to create…">
 <td>thumbnail</td>
 <td><a href="#photosize">PhotoSize</a></td>
 <td><em>Optional</em>. Video thumbnail</td>
+</tr>
+<tr>
+<td>cover</td>
+<td>Array of <a href="#photosize">PhotoSize</a></td>
+<td><em>Optional</em>. Available sizes of the cover of the video in the message</td>
+</tr>
+<tr>
+<td>start_timestamp</td>
+<td>Integer</td>
+<td><em>Optional</em>. Timestamp in seconds from which the video will play in the message</td>
 </tr>
 <tr>
 <td>file_name</td>
@@ -2747,7 +2814,7 @@ To learn how to create…">
 </tbody>
 </table>
 <h4><a class="anchor" name="backgroundtypepattern" href="#backgroundtypepattern"><i class="anchor-icon"></i></a>BackgroundTypePattern</h4>
-<p>The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.</p>
+<p>The background is a .PNG or .TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.</p>
 <table class="table">
 <thead>
 <tr>
@@ -3072,8 +3139,42 @@ To learn how to create…">
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="paidmessagepricechanged" href="#paidmessagepricechanged"><i class="anchor-icon"></i></a>PaidMessagePriceChanged</h4>
+<p>Describes a service message about a change in the price of paid messages within a chat.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>paid_message_star_count</td>
+<td>Integer</td>
+<td>The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="giveawaycreated" href="#giveawaycreated"><i class="anchor-icon"></i></a>GiveawayCreated</h4>
-<p>This object represents a service message about the creation of a scheduled giveaway. Currently holds no information.</p>
+<p>This object represents a service message about the creation of a scheduled giveaway.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>prize_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="giveaway" href="#giveaway"><i class="anchor-icon"></i></a>Giveaway</h4>
 <p>This object represents a message about a scheduled giveaway.</p>
 <table class="table">
@@ -3121,9 +3222,14 @@ To learn how to create…">
 <td><em>Optional</em>. A list of two-letter <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> country codes indicating the countries from which eligible users for the giveaway must come. If empty, then all users can participate in the giveaway. Users with a phone number that was bought on Fragment can always participate in giveaways.</td>
 </tr>
 <tr>
+<td>prize_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only</td>
+</tr>
+<tr>
 <td>premium_subscription_month_count</td>
 <td>Integer</td>
-<td><em>Optional</em>. The number of months the Telegram Premium subscription won from the giveaway will be active for</td>
+<td><em>Optional</em>. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only</td>
 </tr>
 </tbody>
 </table>
@@ -3169,9 +3275,14 @@ To learn how to create…">
 <td><em>Optional</em>. The number of other chats the user had to join in order to be eligible for the giveaway</td>
 </tr>
 <tr>
+<td>prize_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only</td>
+</tr>
+<tr>
 <td>premium_subscription_month_count</td>
 <td>Integer</td>
-<td><em>Optional</em>. The number of months the Telegram Premium subscription won from the giveaway will be active for</td>
+<td><em>Optional</em>. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only</td>
 </tr>
 <tr>
 <td>unclaimed_prize_count</td>
@@ -3220,6 +3331,11 @@ To learn how to create…">
 <td>giveaway_message</td>
 <td><a href="#message">Message</a></td>
 <td><em>Optional</em>. Message with the giveaway that was completed, if it wasn&#39;t deleted</td>
+</tr>
+<tr>
+<td>is_star_giveaway</td>
+<td>True</td>
+<td><em>Optional</em>. <em>True</em>, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram Premium giveaway.</td>
 </tr>
 </tbody>
 </table>
@@ -3657,6 +3773,11 @@ To learn how to create…">
 <td><em>Optional</em>. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot&#39;s username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.</td>
 </tr>
 <tr>
+<td>copy_text</td>
+<td><a href="#copytextbutton">CopyTextButton</a></td>
+<td><em>Optional</em>. Description of the button that copies the specified text to the clipboard.</td>
+</tr>
+<tr>
 <td>callback_game</td>
 <td><a href="#callbackgame">CallbackGame</a></td>
 <td><em>Optional</em>. Description of the game that will be launched when the user presses the button.<br><br><strong>NOTE:</strong> This type of button <strong>must</strong> always be the first button in the first row.</td>
@@ -3744,6 +3865,24 @@ To learn how to create…">
 <td>allow_channel_chats</td>
 <td>Boolean</td>
 <td><em>Optional</em>. True, if channel chats can be chosen</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="copytextbutton" href="#copytextbutton"><i class="anchor-icon"></i></a>CopyTextButton</h4>
+<p>This object represents an inline keyboard button that copies specified text to the clipboard.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text</td>
+<td>String</td>
+<td>The text to be copied to the clipboard; 1-256 characters</td>
 </tr>
 </tbody>
 </table>
@@ -3922,6 +4061,16 @@ To learn how to create…">
 <td>pending_join_request_count</td>
 <td>Integer</td>
 <td><em>Optional</em>. Number of pending join requests created using this link</td>
+</tr>
+<tr>
+<td>subscription_period</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of seconds the subscription will be active for before the next payment</td>
+</tr>
+<tr>
+<td>subscription_price</td>
+<td>Integer</td>
+<td><em>Optional</em>. The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat using the link</td>
 </tr>
 </tbody>
 </table>
@@ -4650,6 +4799,259 @@ To learn how to create…">
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="storyareaposition" href="#storyareaposition"><i class="anchor-icon"></i></a>StoryAreaPosition</h4>
+<p>Describes the position of a clickable area within a story.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x_percentage</td>
+<td>Float</td>
+<td>The abscissa of the area&#39;s center, as a percentage of the media width</td>
+</tr>
+<tr>
+<td>y_percentage</td>
+<td>Float</td>
+<td>The ordinate of the area&#39;s center, as a percentage of the media height</td>
+</tr>
+<tr>
+<td>width_percentage</td>
+<td>Float</td>
+<td>The width of the area&#39;s rectangle, as a percentage of the media width</td>
+</tr>
+<tr>
+<td>height_percentage</td>
+<td>Float</td>
+<td>The height of the area&#39;s rectangle, as a percentage of the media height</td>
+</tr>
+<tr>
+<td>rotation_angle</td>
+<td>Float</td>
+<td>The clockwise rotation angle of the rectangle, in degrees; 0-360</td>
+</tr>
+<tr>
+<td>corner_radius_percentage</td>
+<td>Float</td>
+<td>The radius of the rectangle corner rounding, as a percentage of the media width</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="locationaddress" href="#locationaddress"><i class="anchor-icon"></i></a>LocationAddress</h4>
+<p>Describes the physical address of a location.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>country_code</td>
+<td>String</td>
+<td>The two-letter ISO 3166-1 alpha-2 country code of the country where the location is located</td>
+</tr>
+<tr>
+<td>state</td>
+<td>String</td>
+<td><em>Optional</em>. State of the location</td>
+</tr>
+<tr>
+<td>city</td>
+<td>String</td>
+<td><em>Optional</em>. City of the location</td>
+</tr>
+<tr>
+<td>street</td>
+<td>String</td>
+<td><em>Optional</em>. Street address of the location</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="storyareatype" href="#storyareatype"><i class="anchor-icon"></i></a>StoryAreaType</h4>
+<p>Describes the type of a clickable area on a story. Currently, it can be one of</p>
+<ul>
+<li><a href="#storyareatypelocation">StoryAreaTypeLocation</a></li>
+<li><a href="#storyareatypesuggestedreaction">StoryAreaTypeSuggestedReaction</a></li>
+<li><a href="#storyareatypelink">StoryAreaTypeLink</a></li>
+<li><a href="#storyareatypeweather">StoryAreaTypeWeather</a></li>
+<li><a href="#storyareatypeuniquegift">StoryAreaTypeUniqueGift</a></li>
+</ul>
+<h4><a class="anchor" name="storyareatypelocation" href="#storyareatypelocation"><i class="anchor-icon"></i></a>StoryAreaTypeLocation</h4>
+<p>Describes a story area pointing to a location. Currently, a story can have up to 10 location areas.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the area, always “location”</td>
+</tr>
+<tr>
+<td>latitude</td>
+<td>Float</td>
+<td>Location latitude in degrees</td>
+</tr>
+<tr>
+<td>longitude</td>
+<td>Float</td>
+<td>Location longitude in degrees</td>
+</tr>
+<tr>
+<td>address</td>
+<td><a href="#locationaddress">LocationAddress</a></td>
+<td><em>Optional</em>. Address of the location</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="storyareatypesuggestedreaction" href="#storyareatypesuggestedreaction"><i class="anchor-icon"></i></a>StoryAreaTypeSuggestedReaction</h4>
+<p>Describes a story area pointing to a suggested reaction. Currently, a story can have up to 5 suggested reaction areas.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the area, always “suggested_reaction”</td>
+</tr>
+<tr>
+<td>reaction_type</td>
+<td><a href="#reactiontype">ReactionType</a></td>
+<td>Type of the reaction</td>
+</tr>
+<tr>
+<td>is_dark</td>
+<td>Boolean</td>
+<td><em>Optional</em>. Pass <em>True</em> if the reaction area has a dark background</td>
+</tr>
+<tr>
+<td>is_flipped</td>
+<td>Boolean</td>
+<td><em>Optional</em>. Pass <em>True</em> if reaction area corner is flipped</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="storyareatypelink" href="#storyareatypelink"><i class="anchor-icon"></i></a>StoryAreaTypeLink</h4>
+<p>Describes a story area pointing to an HTTP or tg:// link. Currently, a story can have up to 3 link areas.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the area, always “link”</td>
+</tr>
+<tr>
+<td>url</td>
+<td>String</td>
+<td>HTTP or tg:// URL to be opened when the area is clicked</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="storyareatypeweather" href="#storyareatypeweather"><i class="anchor-icon"></i></a>StoryAreaTypeWeather</h4>
+<p>Describes a story area containing weather information. Currently, a story can have up to 3 weather areas.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the area, always “weather”</td>
+</tr>
+<tr>
+<td>temperature</td>
+<td>Float</td>
+<td>Temperature, in degree Celsius</td>
+</tr>
+<tr>
+<td>emoji</td>
+<td>String</td>
+<td>Emoji representing the weather</td>
+</tr>
+<tr>
+<td>background_color</td>
+<td>Integer</td>
+<td>A color of the area background in the ARGB format</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="storyareatypeuniquegift" href="#storyareatypeuniquegift"><i class="anchor-icon"></i></a>StoryAreaTypeUniqueGift</h4>
+<p>Describes a story area pointing to a unique gift. Currently, a story can have at most 1 unique gift area.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the area, always “unique_gift”</td>
+</tr>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Unique name of the gift</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="storyarea" href="#storyarea"><i class="anchor-icon"></i></a>StoryArea</h4>
+<p>Describes a clickable area on a story media.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>position</td>
+<td><a href="#storyareaposition">StoryAreaPosition</a></td>
+<td>Position of the area</td>
+</tr>
+<tr>
+<td>type</td>
+<td><a href="#storyareatype">StoryAreaType</a></td>
+<td>Type of the area</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="chatlocation" href="#chatlocation"><i class="anchor-icon"></i></a>ChatLocation</h4>
 <p>Represents a location to which a chat is connected.</p>
 <table class="table">
@@ -4878,6 +5280,534 @@ To learn how to create…">
 <td>icon_custom_emoji_id</td>
 <td>String</td>
 <td><em>Optional</em>. Unique identifier of the custom emoji shown as the topic icon</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="gift" href="#gift"><i class="anchor-icon"></i></a>Gift</h4>
+<p>This object represents a gift that can be sent by the bot.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>Unique identifier of the gift</td>
+</tr>
+<tr>
+<td>sticker</td>
+<td><a href="#sticker">Sticker</a></td>
+<td>The sticker that represents the gift</td>
+</tr>
+<tr>
+<td>star_count</td>
+<td>Integer</td>
+<td>The number of Telegram Stars that must be paid to send the sticker</td>
+</tr>
+<tr>
+<td>upgrade_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of Telegram Stars that must be paid to upgrade the gift to a unique one</td>
+</tr>
+<tr>
+<td>total_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. The total number of the gifts of this type that can be sent; for limited gifts only</td>
+</tr>
+<tr>
+<td>remaining_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of remaining gifts of this type that can be sent; for limited gifts only</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="gifts" href="#gifts"><i class="anchor-icon"></i></a>Gifts</h4>
+<p>This object represent a list of gifts.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gifts</td>
+<td>Array of <a href="#gift">Gift</a></td>
+<td>The list of gifts</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="uniquegiftmodel" href="#uniquegiftmodel"><i class="anchor-icon"></i></a>UniqueGiftModel</h4>
+<p>This object describes the model of a unique gift.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Name of the model</td>
+</tr>
+<tr>
+<td>sticker</td>
+<td><a href="#sticker">Sticker</a></td>
+<td>The sticker that represents the unique gift</td>
+</tr>
+<tr>
+<td>rarity_per_mille</td>
+<td>Integer</td>
+<td>The number of unique gifts that receive this model for every 1000 gifts upgraded</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="uniquegiftsymbol" href="#uniquegiftsymbol"><i class="anchor-icon"></i></a>UniqueGiftSymbol</h4>
+<p>This object describes the symbol shown on the pattern of a unique gift.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Name of the symbol</td>
+</tr>
+<tr>
+<td>sticker</td>
+<td><a href="#sticker">Sticker</a></td>
+<td>The sticker that represents the unique gift</td>
+</tr>
+<tr>
+<td>rarity_per_mille</td>
+<td>Integer</td>
+<td>The number of unique gifts that receive this model for every 1000 gifts upgraded</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="uniquegiftbackdropcolors" href="#uniquegiftbackdropcolors"><i class="anchor-icon"></i></a>UniqueGiftBackdropColors</h4>
+<p>This object describes the colors of the backdrop of a unique gift.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>center_color</td>
+<td>Integer</td>
+<td>The color in the center of the backdrop in RGB format</td>
+</tr>
+<tr>
+<td>edge_color</td>
+<td>Integer</td>
+<td>The color on the edges of the backdrop in RGB format</td>
+</tr>
+<tr>
+<td>symbol_color</td>
+<td>Integer</td>
+<td>The color to be applied to the symbol in RGB format</td>
+</tr>
+<tr>
+<td>text_color</td>
+<td>Integer</td>
+<td>The color for the text on the backdrop in RGB format</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="uniquegiftbackdrop" href="#uniquegiftbackdrop"><i class="anchor-icon"></i></a>UniqueGiftBackdrop</h4>
+<p>This object describes the backdrop of a unique gift.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Name of the backdrop</td>
+</tr>
+<tr>
+<td>colors</td>
+<td><a href="#uniquegiftbackdropcolors">UniqueGiftBackdropColors</a></td>
+<td>Colors of the backdrop</td>
+</tr>
+<tr>
+<td>rarity_per_mille</td>
+<td>Integer</td>
+<td>The number of unique gifts that receive this backdrop for every 1000 gifts upgraded</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="uniquegift" href="#uniquegift"><i class="anchor-icon"></i></a>UniqueGift</h4>
+<p>This object describes a unique gift that was upgraded from a regular gift.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>base_name</td>
+<td>String</td>
+<td>Human-readable name of the regular gift from which this unique gift was upgraded</td>
+</tr>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Unique name of the gift. This name can be used in <code>https://t.me/nft/...</code> links and story areas</td>
+</tr>
+<tr>
+<td>number</td>
+<td>Integer</td>
+<td>Unique number of the upgraded gift among gifts upgraded from the same regular gift</td>
+</tr>
+<tr>
+<td>model</td>
+<td><a href="#uniquegiftmodel">UniqueGiftModel</a></td>
+<td>Model of the gift</td>
+</tr>
+<tr>
+<td>symbol</td>
+<td><a href="#uniquegiftsymbol">UniqueGiftSymbol</a></td>
+<td>Symbol of the gift</td>
+</tr>
+<tr>
+<td>backdrop</td>
+<td><a href="#uniquegiftbackdrop">UniqueGiftBackdrop</a></td>
+<td>Backdrop of the gift</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="giftinfo" href="#giftinfo"><i class="anchor-icon"></i></a>GiftInfo</h4>
+<p>Describes a service message about a regular gift that was sent or received.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gift</td>
+<td><a href="#gift">Gift</a></td>
+<td>Information about the gift</td>
+</tr>
+<tr>
+<td>owned_gift_id</td>
+<td>String</td>
+<td><em>Optional</em>. Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts</td>
+</tr>
+<tr>
+<td>convert_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. Number of Telegram Stars that can be claimed by the receiver by converting the gift; omitted if conversion to Telegram Stars is impossible</td>
+</tr>
+<tr>
+<td>prepaid_upgrade_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. Number of Telegram Stars that were prepaid by the sender for the ability to upgrade the gift</td>
+</tr>
+<tr>
+<td>can_be_upgraded</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the gift can be upgraded to a unique gift</td>
+</tr>
+<tr>
+<td>text</td>
+<td>String</td>
+<td><em>Optional</em>. Text of the message that was added to the gift</td>
+</tr>
+<tr>
+<td>entities</td>
+<td>Array of <a href="#messageentity">MessageEntity</a></td>
+<td><em>Optional</em>. Special entities that appear in the text</td>
+</tr>
+<tr>
+<td>is_private</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="uniquegiftinfo" href="#uniquegiftinfo"><i class="anchor-icon"></i></a>UniqueGiftInfo</h4>
+<p>Describes a service message about a unique gift that was sent or received.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gift</td>
+<td><a href="#uniquegift">UniqueGift</a></td>
+<td>Information about the gift</td>
+</tr>
+<tr>
+<td>origin</td>
+<td>String</td>
+<td>Origin of the gift. Currently, either “upgrade” or “transfer”</td>
+</tr>
+<tr>
+<td>owned_gift_id</td>
+<td>String</td>
+<td><em>Optional</em>. Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts</td>
+</tr>
+<tr>
+<td>transfer_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="ownedgift" href="#ownedgift"><i class="anchor-icon"></i></a>OwnedGift</h4>
+<p>This object describes a gift received and owned by a user or a chat. Currently, it can be one of</p>
+<ul>
+<li><a href="#ownedgiftregular">OwnedGiftRegular</a></li>
+<li><a href="#ownedgiftunique">OwnedGiftUnique</a></li>
+</ul>
+<h4><a class="anchor" name="ownedgiftregular" href="#ownedgiftregular"><i class="anchor-icon"></i></a>OwnedGiftRegular</h4>
+<p>Describes a regular gift owned by a user or a chat.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the gift, always “regular”</td>
+</tr>
+<tr>
+<td>gift</td>
+<td><a href="#gift">Gift</a></td>
+<td>Information about the regular gift</td>
+</tr>
+<tr>
+<td>owned_gift_id</td>
+<td>String</td>
+<td><em>Optional</em>. Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only</td>
+</tr>
+<tr>
+<td>sender_user</td>
+<td><a href="#user">User</a></td>
+<td><em>Optional</em>. Sender of the gift if it is a known user</td>
+</tr>
+<tr>
+<td>send_date</td>
+<td>Integer</td>
+<td>Date the gift was sent in Unix time</td>
+</tr>
+<tr>
+<td>text</td>
+<td>String</td>
+<td><em>Optional</em>. Text of the message that was added to the gift</td>
+</tr>
+<tr>
+<td>entities</td>
+<td>Array of <a href="#messageentity">MessageEntity</a></td>
+<td><em>Optional</em>. Special entities that appear in the text</td>
+</tr>
+<tr>
+<td>is_private</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them</td>
+</tr>
+<tr>
+<td>is_saved</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the gift is displayed on the account&#39;s profile page; for gifts received on behalf of business accounts only</td>
+</tr>
+<tr>
+<td>can_be_upgraded</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only</td>
+</tr>
+<tr>
+<td>was_refunded</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the gift was refunded and isn&#39;t available anymore</td>
+</tr>
+<tr>
+<td>convert_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars</td>
+</tr>
+<tr>
+<td>prepaid_upgrade_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="ownedgiftunique" href="#ownedgiftunique"><i class="anchor-icon"></i></a>OwnedGiftUnique</h4>
+<p>Describes a unique gift received and owned by a user or a chat.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the gift, always “unique”</td>
+</tr>
+<tr>
+<td>gift</td>
+<td><a href="#uniquegift">UniqueGift</a></td>
+<td>Information about the unique gift</td>
+</tr>
+<tr>
+<td>owned_gift_id</td>
+<td>String</td>
+<td><em>Optional</em>. Unique identifier of the received gift for the bot; for gifts received on behalf of business accounts only</td>
+</tr>
+<tr>
+<td>sender_user</td>
+<td><a href="#user">User</a></td>
+<td><em>Optional</em>. Sender of the gift if it is a known user</td>
+</tr>
+<tr>
+<td>send_date</td>
+<td>Integer</td>
+<td>Date the gift was sent in Unix time</td>
+</tr>
+<tr>
+<td>is_saved</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the gift is displayed on the account&#39;s profile page; for gifts received on behalf of business accounts only</td>
+</tr>
+<tr>
+<td>can_be_transferred</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the gift can be transferred to another owner; for gifts received on behalf of business accounts only</td>
+</tr>
+<tr>
+<td>transfer_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="ownedgifts" href="#ownedgifts"><i class="anchor-icon"></i></a>OwnedGifts</h4>
+<p>Contains the list of gifts received and owned by a user or a chat.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>total_count</td>
+<td>Integer</td>
+<td>The total number of gifts owned by the user or the chat</td>
+</tr>
+<tr>
+<td>gifts</td>
+<td>Array of <a href="#ownedgift">OwnedGift</a></td>
+<td>The list of gifts</td>
+</tr>
+<tr>
+<td>next_offset</td>
+<td>String</td>
+<td><em>Optional</em>. Offset for the next request. If empty, then there are no more results</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="acceptedgifttypes" href="#acceptedgifttypes"><i class="anchor-icon"></i></a>AcceptedGiftTypes</h4>
+<p>This object describes the types of gifts that can be gifted to a user or a chat.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unlimited_gifts</td>
+<td>Boolean</td>
+<td>True, if unlimited regular gifts are accepted</td>
+</tr>
+<tr>
+<td>limited_gifts</td>
+<td>Boolean</td>
+<td>True, if limited regular gifts are accepted</td>
+</tr>
+<tr>
+<td>unique_gifts</td>
+<td>Boolean</td>
+<td>True, if unique gifts or gifts that can be upgraded to unique for free are accepted</td>
+</tr>
+<tr>
+<td>premium_subscription</td>
+<td>Boolean</td>
+<td>True, if a Telegram Premium subscription is accepted</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="staramount" href="#staramount"><i class="anchor-icon"></i></a>StarAmount</h4>
+<p>Describes an amount of Telegram Stars.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>amount</td>
+<td>Integer</td>
+<td>Integer amount of Telegram Stars, rounded to 0; can be negative</td>
+</tr>
+<tr>
+<td>nanostar_amount</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of 1/1000000000 shares of Telegram Stars; from -999999999 to 999999999; can be negative if and only if <em>amount</em> is non-positive</td>
 </tr>
 </tbody>
 </table>
@@ -5267,7 +6197,7 @@ To learn how to create…">
 </tbody>
 </table>
 <h4><a class="anchor" name="chatboostsourcegiveaway" href="#chatboostsourcegiveaway"><i class="anchor-icon"></i></a>ChatBoostSourceGiveaway</h4>
-<p>The boost was obtained by the creation of a Telegram Premium giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.</p>
+<p>The boost was obtained by the creation of a Telegram Premium or a Telegram Star giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription for Telegram Premium giveaways and <em>prize_star_count</em> / 500 times for one year for Telegram Star giveaways.</p>
 <table class="table">
 <thead>
 <tr>
@@ -5290,7 +6220,12 @@ To learn how to create…">
 <tr>
 <td>user</td>
 <td><a href="#user">User</a></td>
-<td><em>Optional</em>. User that won the prize in the giveaway if any</td>
+<td><em>Optional</em>. User that won the prize in the giveaway if any; for Telegram Premium giveaways only</td>
+</tr>
+<tr>
+<td>prize_star_count</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only</td>
 </tr>
 <tr>
 <td>is_unclaimed</td>
@@ -5406,6 +6341,89 @@ To learn how to create…">
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="businessbotrights" href="#businessbotrights"><i class="anchor-icon"></i></a>BusinessBotRights</h4>
+<p>Represents the rights of a business bot.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>can_reply</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can send and edit messages in the private chats that had incoming messages in the last 24 hours</td>
+</tr>
+<tr>
+<td>can_read_messages</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can mark incoming private messages as read</td>
+</tr>
+<tr>
+<td>can_delete_sent_messages</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can delete messages sent by the bot</td>
+</tr>
+<tr>
+<td>can_delete_all_messages</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can delete all private messages in managed chats</td>
+</tr>
+<tr>
+<td>can_edit_name</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can edit the first and last name of the business account</td>
+</tr>
+<tr>
+<td>can_edit_bio</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can edit the bio of the business account</td>
+</tr>
+<tr>
+<td>can_edit_profile_photo</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can edit the profile photo of the business account</td>
+</tr>
+<tr>
+<td>can_edit_username</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can edit the username of the business account</td>
+</tr>
+<tr>
+<td>can_change_gift_settings</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can change the privacy settings pertaining to gifts for the business account</td>
+</tr>
+<tr>
+<td>can_view_gifts_and_stars</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can view gifts and the amount of Telegram Stars owned by the business account</td>
+</tr>
+<tr>
+<td>can_convert_gifts_to_stars</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can convert regular gifts owned by the business account to Telegram Stars</td>
+</tr>
+<tr>
+<td>can_transfer_and_upgrade_gifts</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can transfer and upgrade gifts owned by the business account</td>
+</tr>
+<tr>
+<td>can_transfer_stars</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can transfer Telegram Stars received by the business account to its own account, or use them to upgrade and transfer gifts</td>
+</tr>
+<tr>
+<td>can_manage_stories</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the bot can post, edit and delete stories on behalf of the business account</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="businessconnection" href="#businessconnection"><i class="anchor-icon"></i></a>BusinessConnection</h4>
 <p>Describes the connection of the bot with a business account.</p>
 <table class="table">
@@ -5438,9 +6456,9 @@ To learn how to create…">
 <td>Date the connection was established in Unix time</td>
 </tr>
 <tr>
-<td>can_reply</td>
-<td>Boolean</td>
-<td>True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours</td>
+<td>rights</td>
+<td><a href="#businessbotrights">BusinessBotRights</a></td>
+<td><em>Optional</em>. Rights of the business bot</td>
 </tr>
 <tr>
 <td>is_enabled</td>
@@ -5580,8 +6598,18 @@ To learn how to create…">
 </tr>
 <tr>
 <td>thumbnail</td>
-<td><a href="#inputfile">InputFile</a> or String</td>
+<td>String</td>
 <td><em>Optional</em>. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail&#39;s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can&#39;t be reused and can be only uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the thumbnail was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+<tr>
+<td>cover</td>
+<td>String</td>
+<td><em>Optional</em>. Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://&lt;file_attach_name&gt;” to upload a new one using multipart/form-data under &lt;file_attach_name&gt; name. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+<tr>
+<td>start_timestamp</td>
+<td>Integer</td>
+<td><em>Optional</em>. Start timestamp for the video in the message</td>
 </tr>
 <tr>
 <td>caption</td>
@@ -5653,7 +6681,7 @@ To learn how to create…">
 </tr>
 <tr>
 <td>thumbnail</td>
-<td><a href="#inputfile">InputFile</a> or String</td>
+<td>String</td>
 <td><em>Optional</em>. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail&#39;s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can&#39;t be reused and can be only uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the thumbnail was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
 </tr>
 <tr>
@@ -5721,7 +6749,7 @@ To learn how to create…">
 </tr>
 <tr>
 <td>thumbnail</td>
-<td><a href="#inputfile">InputFile</a> or String</td>
+<td>String</td>
 <td><em>Optional</em>. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail&#39;s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can&#39;t be reused and can be only uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the thumbnail was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
 </tr>
 <tr>
@@ -5779,7 +6807,7 @@ To learn how to create…">
 </tr>
 <tr>
 <td>thumbnail</td>
-<td><a href="#inputfile">InputFile</a> or String</td>
+<td>String</td>
 <td><em>Optional</em>. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail&#39;s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can&#39;t be reused and can be only uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the thumbnail was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
 </tr>
 <tr>
@@ -5858,8 +6886,18 @@ To learn how to create…">
 </tr>
 <tr>
 <td>thumbnail</td>
-<td><a href="#inputfile">InputFile</a> or String</td>
+<td>String</td>
 <td><em>Optional</em>. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail&#39;s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can&#39;t be reused and can be only uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the thumbnail was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+<tr>
+<td>cover</td>
+<td>String</td>
+<td><em>Optional</em>. Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://&lt;file_attach_name&gt;” to upload a new one using multipart/form-data under &lt;file_attach_name&gt; name. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+<tr>
+<td>start_timestamp</td>
+<td>Integer</td>
+<td><em>Optional</em>. Start timestamp for the video in the message</td>
 </tr>
 <tr>
 <td>width</td>
@@ -5883,6 +6921,130 @@ To learn how to create…">
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="inputprofilephoto" href="#inputprofilephoto"><i class="anchor-icon"></i></a>InputProfilePhoto</h4>
+<p>This object describes a profile photo to set. Currently, it can be one of</p>
+<ul>
+<li><a href="#inputprofilephotostatic">InputProfilePhotoStatic</a></li>
+<li><a href="#inputprofilephotoanimated">InputProfilePhotoAnimated</a></li>
+</ul>
+<h4><a class="anchor" name="inputprofilephotostatic" href="#inputprofilephotostatic"><i class="anchor-icon"></i></a>InputProfilePhotoStatic</h4>
+<p>A static profile photo in the .JPG format.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the profile photo, must be <em>static</em></td>
+</tr>
+<tr>
+<td>photo</td>
+<td>String</td>
+<td>The static profile photo. Profile photos can&#39;t be reused and can only be uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the photo was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="inputprofilephotoanimated" href="#inputprofilephotoanimated"><i class="anchor-icon"></i></a>InputProfilePhotoAnimated</h4>
+<p>An animated profile photo in the MPEG4 format.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the profile photo, must be <em>animated</em></td>
+</tr>
+<tr>
+<td>animation</td>
+<td>String</td>
+<td>The animated profile photo. Profile photos can&#39;t be reused and can only be uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the photo was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+<tr>
+<td>main_frame_timestamp</td>
+<td>Float</td>
+<td><em>Optional</em>. Timestamp in seconds of the frame that will be used as the static profile photo. Defaults to 0.0.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="inputstorycontent" href="#inputstorycontent"><i class="anchor-icon"></i></a>InputStoryContent</h4>
+<p>This object describes the content of a story to post. Currently, it can be one of</p>
+<ul>
+<li><a href="#inputstorycontentphoto">InputStoryContentPhoto</a></li>
+<li><a href="#inputstorycontentvideo">InputStoryContentVideo</a></li>
+</ul>
+<h4><a class="anchor" name="inputstorycontentphoto" href="#inputstorycontentphoto"><i class="anchor-icon"></i></a>InputStoryContentPhoto</h4>
+<p>Describes a photo to post as a story.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the content, must be <em>photo</em></td>
+</tr>
+<tr>
+<td>photo</td>
+<td>String</td>
+<td>The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can&#39;t be reused and can only be uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the photo was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="inputstorycontentvideo" href="#inputstorycontentvideo"><i class="anchor-icon"></i></a>InputStoryContentVideo</h4>
+<p>Describes a video to post as a story.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the content, must be <em>video</em></td>
+</tr>
+<tr>
+<td>video</td>
+<td>String</td>
+<td>The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can&#39;t be reused and can only be uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the video was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+<tr>
+<td>duration</td>
+<td>Float</td>
+<td><em>Optional</em>. Precise duration of the video in seconds; 0-60</td>
+</tr>
+<tr>
+<td>cover_frame_timestamp</td>
+<td>Float</td>
+<td><em>Optional</em>. Timestamp in seconds of the frame that will be used as the static cover for the story. Defaults to 0.0.</td>
+</tr>
+<tr>
+<td>is_animation</td>
+<td>Boolean</td>
+<td><em>Optional</em>. Pass <em>True</em> if the video has no sound</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="sending-files" href="#sending-files"><i class="anchor-icon"></i></a>Sending files</h4>
 <p>There are three ways to send files (photos, stickers, audio, media, etc.):</p>
 <ol>
@@ -5901,12 +7063,12 @@ To learn how to create…">
 <p><strong>Sending by URL</strong></p>
 <ul>
 <li>When sending by URL the target file must have the correct MIME type (e.g., audio/mpeg for <a href="#sendaudio">sendAudio</a>, etc.).</li>
-<li>In <a href="#senddocument">sendDocument</a>, sending by URL will currently only work for <strong>GIF</strong>, <strong>PDF</strong> and <strong>ZIP</strong> files.</li>
+<li>In <a href="#senddocument">sendDocument</a>, sending by URL will currently only work for <strong>.PDF</strong> and <strong>.ZIP</strong> files.</li>
 <li>To use <a href="#sendvoice">sendVoice</a>, the file must have the type audio/ogg and be no more than 1MB in size. 1-20MB voice notes will be sent as files.</li>
 <li>Other configurations may work but we can&#39;t guarantee that they will.</li>
 </ul>
 <h4><a class="anchor" name="accent-colors" href="#accent-colors"><i class="anchor-icon"></i></a>Accent colors</h4>
-<p>Colors with identifiers 0 (red), 1 (orange), 2 (purple/violet), 3 (green), 4 (cyan), 5 (blue), 6 (pink) can be customized by app themes. Additionally, the following colors in RGB format are currently in use. </p>
+<p>Colors with identifiers 0 (red), 1 (orange), 2 (purple/violet), 3 (green), 4 (cyan), 5 (blue), 6 (pink) can be customized by app themes. Additionally, the following colors in RGB format are currently in use.</p>
 <p><table class="table table-hover table-bordered">
 <thead>
 <tr><th>Color identifier</th><th>Light colors</th><th>Dark colors</th></tr>
@@ -5929,7 +7091,7 @@ To learn how to create…">
 </tbody>
 </table></p>
 <h4><a class="anchor" name="profile-accent-colors" href="#profile-accent-colors"><i class="anchor-icon"></i></a>Profile accent colors</h4>
-<p>Currently, the following colors in RGB format are in use for profile backgrounds. </p>
+<p>Currently, the following colors in RGB format are in use for profile backgrounds.</p>
 <p><table class="table table-hover table-bordered">
 <thead>
 <tr><th>Color identifier</th><th>Light colors</th><th>Dark colors</th></tr>
@@ -6030,6 +7192,12 @@ To learn how to create…">
 <td>Boolean</td>
 <td>Optional</td>
 <td>Protects the contents of the sent message from forwarding and saving</td>
+</tr>
+<tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
 </tr>
 <tr>
 <td>message_effect_id</td>
@@ -6147,6 +7315,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <li>To escape characters &#39;_&#39;, &#39;*&#39;, &#39;`&#39;, &#39;[&#39; outside of an entity, prepend the characters &#39;\&#39; before them.</li>
 <li>Escaping inside entities is not allowed, so entity must be closed first and reopened again: use <code>_snake_\__case_</code> for italic <code>snake_case</code> and <code>*2*\**2=4*</code> for bold <code>2*2=4</code>.</li>
 </ul>
+<h4><a class="anchor" name="paid-broadcasts" href="#paid-broadcasts"><i class="anchor-icon"></i></a>Paid Broadcasts</h4>
+<p>By default, all bots are able to broadcast up to <a href="https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this">30 messages</a> per second to their users. Developers can increase this limit by enabling <em>Paid Broadcasts</em> in <a href="https://t.me/botfather">@Botfather</a> - allowing their bot to broadcast <strong>up to 1000 messages</strong> per second.</p>
+<p>Each message broadcasted over the free amount of 30 messages per second incurs a cost of 0.1 Stars per message, paid with Telegram Stars from the bot&#39;s balance. In order to use this feature, a bot must have at least <em>10,000 Stars</em> on its balance.</p>
+<blockquote>
+<p>Bots with increased limits are only charged for messages that are broadcasted successfully.</p>
+</blockquote>
 <h4><a class="anchor" name="forwardmessage" href="#forwardmessage"><i class="anchor-icon"></i></a>forwardMessage</h4>
 <p>Use this method to forward messages of any kind. Service messages and messages with protected content can&#39;t be forwarded. On success, the sent <a href="#message">Message</a> is returned.</p>
 <table class="table">
@@ -6176,6 +7350,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Integer or String</td>
 <td>Yes</td>
 <td>Unique identifier for the chat where the original message was sent (or channel username in the format <code>@channelusername</code>)</td>
+</tr>
+<tr>
+<td>video_start_timestamp</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>New start timestamp for the forwarded video in the message</td>
 </tr>
 <tr>
 <td>disable_notification</td>
@@ -6284,6 +7464,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Message identifier in the chat specified in <em>from_chat_id</em></td>
 </tr>
 <tr>
+<td>video_start_timestamp</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>New start timestamp for the copied video in the message</td>
+</tr>
+<tr>
 <td>caption</td>
 <td>String</td>
 <td>Optional</td>
@@ -6318,6 +7504,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Boolean</td>
 <td>Optional</td>
 <td>Protects the contents of the sent message from forwarding and saving</td>
+</tr>
+<tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
 </tr>
 <tr>
 <td>reply_parameters</td>
@@ -6468,6 +7660,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -6579,6 +7777,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -6677,6 +7881,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -6757,6 +7967,18 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail&#39;s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can&#39;t be reused and can be only uploaded as a new file, so you can pass “attach://&lt;file_attach_name&gt;” if the thumbnail was uploaded using multipart/form-data under &lt;file_attach_name&gt;. <a href="#sending-files">More information on Sending Files »</a></td>
 </tr>
 <tr>
+<td>cover</td>
+<td><a href="#inputfile">InputFile</a> or String</td>
+<td>Optional</td>
+<td>Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://&lt;file_attach_name&gt;” to upload a new one using multipart/form-data under &lt;file_attach_name&gt; name. <a href="#sending-files">More information on Sending Files »</a></td>
+</tr>
+<tr>
+<td>start_timestamp</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>Start timestamp for the video in the message</td>
+</tr>
+<tr>
 <td>caption</td>
 <td>String</td>
 <td>Optional</td>
@@ -6803,6 +8025,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Boolean</td>
 <td>Optional</td>
 <td>Protects the contents of the sent message from forwarding and saving</td>
+</tr>
+<tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
 </tr>
 <tr>
 <td>message_effect_id</td>
@@ -6927,6 +8155,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -7019,6 +8253,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -7105,6 +8345,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -7152,13 +8398,19 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>star_count</td>
 <td>Integer</td>
 <td>Yes</td>
-<td>The number of Telegram Stars that must be paid to buy access to the media</td>
+<td>The number of Telegram Stars that must be paid to buy access to the media; 1-10000</td>
 </tr>
 <tr>
 <td>media</td>
 <td>Array of <a href="#inputpaidmedia">InputPaidMedia</a></td>
 <td>Yes</td>
 <td>A JSON-serialized array describing the media to be sent; up to 10 items</td>
+</tr>
+<tr>
+<td>payload</td>
+<td>String</td>
+<td>Optional</td>
+<td>Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.</td>
 </tr>
 <tr>
 <td>caption</td>
@@ -7195,6 +8447,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Boolean</td>
 <td>Optional</td>
 <td>Protects the contents of the sent message from forwarding and saving</td>
+</tr>
+<tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
 </tr>
 <tr>
 <td>reply_parameters</td>
@@ -7257,6 +8515,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Boolean</td>
 <td>Optional</td>
 <td>Protects the contents of the sent messages from forwarding and saving</td>
+</tr>
+<tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
 </tr>
 <tr>
 <td>message_effect_id</td>
@@ -7349,6 +8613,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Boolean</td>
 <td>Optional</td>
 <td>Protects the contents of the sent message from forwarding and saving</td>
+</tr>
+<tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
 </tr>
 <tr>
 <td>message_effect_id</td>
@@ -7461,6 +8731,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -7545,6 +8821,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Boolean</td>
 <td>Optional</td>
 <td>Protects the contents of the sent message from forwarding and saving</td>
+</tr>
+<tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
 </tr>
 <tr>
 <td>message_effect_id</td>
@@ -7693,6 +8975,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -7761,6 +9049,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -7823,7 +9117,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="setmessagereaction" href="#setmessagereaction"><i class="anchor-icon"></i></a>setMessageReaction</h4>
-<p>Use this method to change the chosen reactions on a message. Service messages can&#39;t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can&#39;t use paid reactions. Returns <em>True</em> on success.</p>
+<p>Use this method to change the chosen reactions on a message. Service messages of some types can&#39;t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can&#39;t use paid reactions. Returns <em>True</em> on success.</p>
 <table class="table">
 <thead>
 <tr>
@@ -7889,6 +9183,38 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Integer</td>
 <td>Optional</td>
 <td>Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="setuseremojistatus" href="#setuseremojistatus"><i class="anchor-icon"></i></a>setUserEmojiStatus</h4>
+<p>Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method <a href="/bots/webapps#initializing-mini-apps">requestEmojiStatusAccess</a>. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the target user</td>
+</tr>
+<tr>
+<td>emoji_status_custom_emoji_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.</td>
+</tr>
+<tr>
+<td>emoji_status_expiration_date</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>Expiration date of the emoji status, if any</td>
 </tr>
 </tbody>
 </table>
@@ -8410,7 +9736,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>subscription_price</td>
 <td>Integer</td>
 <td>Yes</td>
-<td>The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500</td>
+<td>The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-10000</td>
 </tr>
 </tbody>
 </table>
@@ -9721,7 +11047,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="editmessagemedia" href="#editmessagemedia"><i class="anchor-icon"></i></a>editMessageMedia</h4>
-<p>Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can&#39;t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within <strong>48 hours</strong> from the time they were sent.</p>
+<p>Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can&#39;t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited <a href="#message">Message</a> is returned, otherwise <em>True</em> is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within <strong>48 hours</strong> from the time they were sent.</p>
 <table class="table">
 <thead>
 <tr>
@@ -10028,6 +11354,804 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="getavailablegifts" href="#getavailablegifts"><i class="anchor-icon"></i></a>getAvailableGifts</h4>
+<p>Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a <a href="#gifts">Gifts</a> object.</p>
+<h4><a class="anchor" name="sendgift" href="#sendgift"><i class="anchor-icon"></i></a>sendGift</h4>
+<p>Sends a gift to the given user or channel chat. The gift can&#39;t be converted to Telegram Stars by the receiver. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>Required if <em>chat_id</em> is not specified. Unique identifier of the target user who will receive the gift.</td>
+</tr>
+<tr>
+<td>chat_id</td>
+<td>Integer or String</td>
+<td>Optional</td>
+<td>Required if <em>user_id</em> is not specified. Unique identifier for the chat or username of the channel (in the format <code>@channelusername</code>) that will receive the gift.</td>
+</tr>
+<tr>
+<td>gift_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Identifier of the gift</td>
+</tr>
+<tr>
+<td>pay_for_upgrade</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to pay for the gift upgrade from the bot&#39;s balance, thereby making the upgrade free for the receiver</td>
+</tr>
+<tr>
+<td>text</td>
+<td>String</td>
+<td>Optional</td>
+<td>Text that will be shown along with the gift; 0-128 characters</td>
+</tr>
+<tr>
+<td>text_parse_mode</td>
+<td>String</td>
+<td>Optional</td>
+<td>Mode for parsing entities in the text. See <a href="#formatting-options">formatting options</a> for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.</td>
+</tr>
+<tr>
+<td>text_entities</td>
+<td>Array of <a href="#messageentity">MessageEntity</a></td>
+<td>Optional</td>
+<td>A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of <em>text_parse_mode</em>. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="giftpremiumsubscription" href="#giftpremiumsubscription"><i class="anchor-icon"></i></a>giftPremiumSubscription</h4>
+<p>Gifts a Telegram Premium subscription to the given user. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the target user who will receive a Telegram Premium subscription</td>
+</tr>
+<tr>
+<td>month_count</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12</td>
+</tr>
+<tr>
+<td>star_count</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months</td>
+</tr>
+<tr>
+<td>text</td>
+<td>String</td>
+<td>Optional</td>
+<td>Text that will be shown along with the service message about the subscription; 0-128 characters</td>
+</tr>
+<tr>
+<td>text_parse_mode</td>
+<td>String</td>
+<td>Optional</td>
+<td>Mode for parsing entities in the text. See <a href="#formatting-options">formatting options</a> for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.</td>
+</tr>
+<tr>
+<td>text_entities</td>
+<td>Array of <a href="#messageentity">MessageEntity</a></td>
+<td>Optional</td>
+<td>A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of <em>text_parse_mode</em>. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="verifyuser" href="#verifyuser"><i class="anchor-icon"></i></a>verifyUser</h4>
+<p>Verifies a user <a href="https://telegram.org/verify#third-party-verification">on behalf of the organization</a> which is represented by the bot. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the target user</td>
+</tr>
+<tr>
+<td>custom_description</td>
+<td>String</td>
+<td>Optional</td>
+<td>Custom description for the verification; 0-70 characters. Must be empty if the organization isn&#39;t allowed to provide a custom verification description.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="verifychat" href="#verifychat"><i class="anchor-icon"></i></a>verifyChat</h4>
+<p>Verifies a chat <a href="https://telegram.org/verify#third-party-verification">on behalf of the organization</a> which is represented by the bot. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>chat_id</td>
+<td>Integer or String</td>
+<td>Yes</td>
+<td>Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>)</td>
+</tr>
+<tr>
+<td>custom_description</td>
+<td>String</td>
+<td>Optional</td>
+<td>Custom description for the verification; 0-70 characters. Must be empty if the organization isn&#39;t allowed to provide a custom verification description.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="removeuserverification" href="#removeuserverification"><i class="anchor-icon"></i></a>removeUserVerification</h4>
+<p>Removes verification from a user who is currently verified <a href="https://telegram.org/verify#third-party-verification">on behalf of the organization</a> represented by the bot. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the target user</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="removechatverification" href="#removechatverification"><i class="anchor-icon"></i></a>removeChatVerification</h4>
+<p>Removes verification from a chat that is currently verified <a href="https://telegram.org/verify#third-party-verification">on behalf of the organization</a> represented by the bot. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>chat_id</td>
+<td>Integer or String</td>
+<td>Yes</td>
+<td>Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>)</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="readbusinessmessage" href="#readbusinessmessage"><i class="anchor-icon"></i></a>readBusinessMessage</h4>
+<p>Marks incoming message as read on behalf of a business account. Requires the <em>can_read_messages</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection on behalf of which to read the message</td>
+</tr>
+<tr>
+<td>chat_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours.</td>
+</tr>
+<tr>
+<td>message_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the message to mark as read</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="deletebusinessmessages" href="#deletebusinessmessages"><i class="anchor-icon"></i></a>deleteBusinessMessages</h4>
+<p>Delete messages on behalf of a business account. Requires the <em>can_delete_sent_messages</em> business bot right to delete messages sent by the bot itself, or the <em>can_delete_all_messages</em> business bot right to delete any message. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection on behalf of which to delete the messages</td>
+</tr>
+<tr>
+<td>message_ids</td>
+<td>Array of Integer</td>
+<td>Yes</td>
+<td>A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See <a href="#deletemessage">deleteMessage</a> for limitations on which messages can be deleted</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="setbusinessaccountname" href="#setbusinessaccountname"><i class="anchor-icon"></i></a>setBusinessAccountName</h4>
+<p>Changes the first and last name of a managed business account. Requires the <em>can_change_name</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>first_name</td>
+<td>String</td>
+<td>Yes</td>
+<td>The new value of the first name for the business account; 1-64 characters</td>
+</tr>
+<tr>
+<td>last_name</td>
+<td>String</td>
+<td>Optional</td>
+<td>The new value of the last name for the business account; 0-64 characters</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="setbusinessaccountusername" href="#setbusinessaccountusername"><i class="anchor-icon"></i></a>setBusinessAccountUsername</h4>
+<p>Changes the username of a managed business account. Requires the <em>can_change_username</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>username</td>
+<td>String</td>
+<td>Optional</td>
+<td>The new value of the username for the business account; 0-32 characters</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="setbusinessaccountbio" href="#setbusinessaccountbio"><i class="anchor-icon"></i></a>setBusinessAccountBio</h4>
+<p>Changes the bio of a managed business account. Requires the <em>can_change_bio</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>bio</td>
+<td>String</td>
+<td>Optional</td>
+<td>The new value of the bio for the business account; 0-140 characters</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="setbusinessaccountprofilephoto" href="#setbusinessaccountprofilephoto"><i class="anchor-icon"></i></a>setBusinessAccountProfilePhoto</h4>
+<p>Changes the profile photo of a managed business account. Requires the <em>can_edit_profile_photo</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>photo</td>
+<td><a href="#inputprofilephoto">InputProfilePhoto</a></td>
+<td>Yes</td>
+<td>The new profile photo to set</td>
+</tr>
+<tr>
+<td>is_public</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account&#39;s privacy settings. An account can have only one public photo.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="removebusinessaccountprofilephoto" href="#removebusinessaccountprofilephoto"><i class="anchor-icon"></i></a>removeBusinessAccountProfilePhoto</h4>
+<p>Removes the current profile photo of a managed business account. Requires the <em>can_edit_profile_photo</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>is_public</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account&#39;s privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="setbusinessaccountgiftsettings" href="#setbusinessaccountgiftsettings"><i class="anchor-icon"></i></a>setBusinessAccountGiftSettings</h4>
+<p>Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the <em>can_change_gift_settings</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>show_gift_button</td>
+<td>Boolean</td>
+<td>Yes</td>
+<td>Pass True, if a button for sending a gift to the user or by the business account must always be shown in the input field</td>
+</tr>
+<tr>
+<td>accepted_gift_types</td>
+<td><a href="#acceptedgifttypes">AcceptedGiftTypes</a></td>
+<td>Yes</td>
+<td>Types of gifts accepted by the business account</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="getbusinessaccountstarbalance" href="#getbusinessaccountstarbalance"><i class="anchor-icon"></i></a>getBusinessAccountStarBalance</h4>
+<p>Returns the amount of Telegram Stars owned by a managed business account. Requires the <em>can_view_gifts_and_stars</em> business bot right. Returns <a href="#staramount">StarAmount</a> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="transferbusinessaccountstars" href="#transferbusinessaccountstars"><i class="anchor-icon"></i></a>transferBusinessAccountStars</h4>
+<p>Transfers Telegram Stars from the business account balance to the bot&#39;s balance. Requires the <em>can_transfer_stars</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>star_count</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Number of Telegram Stars to transfer; 1-10000</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="getbusinessaccountgifts" href="#getbusinessaccountgifts"><i class="anchor-icon"></i></a>getBusinessAccountGifts</h4>
+<p>Returns the gifts received and owned by a managed business account. Requires the <em>can_view_gifts_and_stars</em> business bot right. Returns <a href="#ownedgifts">OwnedGifts</a> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>exclude_unsaved</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass True to exclude gifts that aren&#39;t saved to the account&#39;s profile page</td>
+</tr>
+<tr>
+<td>exclude_saved</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass True to exclude gifts that are saved to the account&#39;s profile page</td>
+</tr>
+<tr>
+<td>exclude_unlimited</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass True to exclude gifts that can be purchased an unlimited number of times</td>
+</tr>
+<tr>
+<td>exclude_limited</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass True to exclude gifts that can be purchased a limited number of times</td>
+</tr>
+<tr>
+<td>exclude_unique</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass True to exclude unique gifts</td>
+</tr>
+<tr>
+<td>sort_by_price</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass True to sort results by gift price instead of send date. Sorting is applied before pagination.</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>String</td>
+<td>Optional</td>
+<td>Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>The maximum number of gifts to be returned; 1-100. Defaults to 100</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="convertgifttostars" href="#convertgifttostars"><i class="anchor-icon"></i></a>convertGiftToStars</h4>
+<p>Converts a given regular gift to Telegram Stars. Requires the <em>can_convert_gifts_to_stars</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>owned_gift_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the regular gift that should be converted to Telegram Stars</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="upgradegift" href="#upgradegift"><i class="anchor-icon"></i></a>upgradeGift</h4>
+<p>Upgrades a given regular gift to a unique gift. Requires the <em>can_transfer_and_upgrade_gifts</em> business bot right. Additionally requires the <em>can_transfer_stars</em> business bot right if the upgrade is paid. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>owned_gift_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the regular gift that should be upgraded to a unique one</td>
+</tr>
+<tr>
+<td>keep_original_details</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass True to keep the original gift text, sender and receiver in the upgraded gift</td>
+</tr>
+<tr>
+<td>star_count</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If <code>gift.prepaid_upgrade_star_count &gt; 0</code>, then pass 0, otherwise, the <em>can_transfer_stars</em> business bot right is required and <code>gift.upgrade_star_count</code> must be passed.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="transfergift" href="#transfergift"><i class="anchor-icon"></i></a>transferGift</h4>
+<p>Transfers an owned unique gift to another user. Requires the <em>can_transfer_and_upgrade_gifts</em> business bot right. Requires <em>can_transfer_stars</em> business bot right if the transfer is paid. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>owned_gift_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the regular gift that should be transferred</td>
+</tr>
+<tr>
+<td>new_owner_chat_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the chat which will own the gift. The chat must be active in the last 24 hours.</td>
+</tr>
+<tr>
+<td>star_count</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>The amount of Telegram Stars that will be paid for the transfer from the business account balance. If positive, then the <em>can_transfer_stars</em> business bot right is required.</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="poststory" href="#poststory"><i class="anchor-icon"></i></a>postStory</h4>
+<p>Posts a story on behalf of a managed business account. Requires the <em>can_manage_stories</em> business bot right. Returns <a href="#story">Story</a> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>content</td>
+<td><a href="#inputstorycontent">InputStoryContent</a></td>
+<td>Yes</td>
+<td>Content of the story</td>
+</tr>
+<tr>
+<td>active_period</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Period after which the story is moved to the archive, in seconds; must be one of <code>6 * 3600</code>, <code>12 * 3600</code>, <code>86400</code>, or <code>2 * 86400</code></td>
+</tr>
+<tr>
+<td>caption</td>
+<td>String</td>
+<td>Optional</td>
+<td>Caption of the story, 0-2048 characters after entities parsing</td>
+</tr>
+<tr>
+<td>parse_mode</td>
+<td>String</td>
+<td>Optional</td>
+<td>Mode for parsing entities in the story caption. See <a href="#formatting-options">formatting options</a> for more details.</td>
+</tr>
+<tr>
+<td>caption_entities</td>
+<td>Array of <a href="#messageentity">MessageEntity</a></td>
+<td>Optional</td>
+<td>A JSON-serialized list of special entities that appear in the caption, which can be specified instead of <em>parse_mode</em></td>
+</tr>
+<tr>
+<td>areas</td>
+<td>Array of <a href="#storyarea">StoryArea</a></td>
+<td>Optional</td>
+<td>A JSON-serialized list of clickable areas to be shown on the story</td>
+</tr>
+<tr>
+<td>post_to_chat_page</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to keep the story accessible after it expires</td>
+</tr>
+<tr>
+<td>protect_content</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> if the content of the story must be protected from forwarding and screenshotting</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="editstory" href="#editstory"><i class="anchor-icon"></i></a>editStory</h4>
+<p>Edits a story previously posted by the bot on behalf of a managed business account. Requires the <em>can_manage_stories</em> business bot right. Returns <a href="#story">Story</a> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>story_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the story to edit</td>
+</tr>
+<tr>
+<td>content</td>
+<td><a href="#inputstorycontent">InputStoryContent</a></td>
+<td>Yes</td>
+<td>Content of the story</td>
+</tr>
+<tr>
+<td>caption</td>
+<td>String</td>
+<td>Optional</td>
+<td>Caption of the story, 0-2048 characters after entities parsing</td>
+</tr>
+<tr>
+<td>parse_mode</td>
+<td>String</td>
+<td>Optional</td>
+<td>Mode for parsing entities in the story caption. See <a href="#formatting-options">formatting options</a> for more details.</td>
+</tr>
+<tr>
+<td>caption_entities</td>
+<td>Array of <a href="#messageentity">MessageEntity</a></td>
+<td>Optional</td>
+<td>A JSON-serialized list of special entities that appear in the caption, which can be specified instead of <em>parse_mode</em></td>
+</tr>
+<tr>
+<td>areas</td>
+<td>Array of <a href="#storyarea">StoryArea</a></td>
+<td>Optional</td>
+<td>A JSON-serialized list of clickable areas to be shown on the story</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="deletestory" href="#deletestory"><i class="anchor-icon"></i></a>deleteStory</h4>
+<p>Deletes a story previously posted by the bot on behalf of a managed business account. Requires the <em>can_manage_stories</em> business bot right. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Unique identifier of the business connection</td>
+</tr>
+<tr>
+<td>story_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the story to delete</td>
+</tr>
+</tbody>
+</table>
 <h3><a class="anchor" name="stickers" href="#stickers"><i class="anchor-icon"></i></a>Stickers</h3>
 <p>The following methods and objects allow your bot to handle stickers and sticker sets.</p>
 <h4><a class="anchor" name="sticker" href="#sticker"><i class="anchor-icon"></i></a>Sticker</h4>
@@ -10202,13 +12326,13 @@ pre-formatted fixed-width code block written in the Python programming language
 <tbody>
 <tr>
 <td>sticker</td>
-<td><a href="#inputfile">InputFile</a> or String</td>
-<td>The added sticker. Pass a <em>file_id</em> as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://&lt;file_attach_name&gt;” to upload a new one using multipart/form-data under &lt;file_attach_name&gt; name. Animated and video stickers can&#39;t be uploaded via HTTP URL. <a href="#sending-files">More information on Sending Files »</a></td>
+<td>String</td>
+<td>The added sticker. Pass a <em>file_id</em> as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or pass “attach://&lt;file_attach_name&gt;” to upload a new file using multipart/form-data under &lt;file_attach_name&gt; name. Animated and video stickers can&#39;t be uploaded via HTTP URL. <a href="#sending-files">More information on Sending Files »</a></td>
 </tr>
 <tr>
 <td>format</td>
 <td>String</td>
-<td>Format of the added sticker, must be one of “static” for a <strong>.WEBP</strong> or <strong>.PNG</strong> image, “animated” for a <strong>.TGS</strong> animation, “video” for a <strong>WEBM</strong> video</td>
+<td>Format of the added sticker, must be one of “static” for a <strong>.WEBP</strong> or <strong>.PNG</strong> image, “animated” for a <strong>.TGS</strong> animation, “video” for a <strong>.WEBM</strong> video</td>
 </tr>
 <tr>
 <td>emoji_list</td>
@@ -10280,6 +12404,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Boolean</td>
 <td>Optional</td>
 <td>Protects the contents of the sent message from forwarding and saving</td>
+</tr>
+<tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
 </tr>
 <tr>
 <td>message_effect_id</td>
@@ -10671,13 +12801,13 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>thumbnail</td>
 <td><a href="#inputfile">InputFile</a> or String</td>
 <td>Optional</td>
-<td>A <strong>.WEBP</strong> or <strong>.PNG</strong> image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a <strong>.TGS</strong> animation with a thumbnail up to 32 kilobytes in size (see <a href="/stickers#animation-requirements"><a href="https://core.telegram.org/stickers#animation-requirements">https://core.telegram.org/stickers#animation-requirements</a></a> for animated sticker technical requirements), or a <strong>WEBM</strong> video with the thumbnail up to 32 kilobytes in size; see <a href="/stickers#video-requirements"><a href="https://core.telegram.org/stickers#video-requirements">https://core.telegram.org/stickers#video-requirements</a></a> for video sticker technical requirements. Pass a <em>file_id</em> as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. <a href="#sending-files">More information on Sending Files »</a>. Animated and video sticker set thumbnails can&#39;t be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.</td>
+<td>A <strong>.WEBP</strong> or <strong>.PNG</strong> image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a <strong>.TGS</strong> animation with a thumbnail up to 32 kilobytes in size (see <a href="/stickers#animation-requirements"><a href="https://core.telegram.org/stickers#animation-requirements">https://core.telegram.org/stickers#animation-requirements</a></a> for animated sticker technical requirements), or a <strong>.WEBM</strong> video with the thumbnail up to 32 kilobytes in size; see <a href="/stickers#video-requirements"><a href="https://core.telegram.org/stickers#video-requirements">https://core.telegram.org/stickers#video-requirements</a></a> for video sticker technical requirements. Pass a <em>file_id</em> as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. <a href="#sending-files">More information on Sending Files »</a>. Animated and video sticker set thumbnails can&#39;t be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.</td>
 </tr>
 <tr>
 <td>format</td>
 <td>String</td>
 <td>Yes</td>
-<td>Format of the thumbnail, must be one of “static” for a <strong>.WEBP</strong> or <strong>.PNG</strong> image, “animated” for a <strong>.TGS</strong> animation, or “video” for a <strong>WEBM</strong> video</td>
+<td>Format of the thumbnail, must be one of “static” for a <strong>.WEBP</strong> or <strong>.PNG</strong> image, “animated” for a <strong>.TGS</strong> animation, or “video” for a <strong>.WEBM</strong> video</td>
 </tr>
 </tbody>
 </table>
@@ -10918,11 +13048,6 @@ pre-formatted fixed-width code block written in the Python programming language
 <td><em>Optional</em>. URL of the result</td>
 </tr>
 <tr>
-<td>hide_url</td>
-<td>Boolean</td>
-<td><em>Optional</em>. Pass <em>True</em> if you don&#39;t want the URL to be shown in the message</td>
-</tr>
-<tr>
 <td>description</td>
 <td>String</td>
 <td><em>Optional</em>. Short description of the result</td>
@@ -11051,7 +13176,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <tr>
 <td>gif_url</td>
 <td>String</td>
-<td>A valid URL for the GIF file. File size must not exceed 1MB</td>
+<td>A valid URL for the GIF file</td>
 </tr>
 <tr>
 <td>gif_width</td>
@@ -11139,7 +13264,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <tr>
 <td>mpeg4_url</td>
 <td>String</td>
-<td>A valid URL for the MPEG4 file. File size must not exceed 1MB</td>
+<td>A valid URL for the MPEG4 file</td>
 </tr>
 <tr>
 <td>mpeg4_width</td>
@@ -12454,7 +14579,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <tr>
 <td>payload</td>
 <td>String</td>
-<td>Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.</td>
+<td>Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.</td>
 </tr>
 <tr>
 <td>provider_token</td>
@@ -12626,6 +14751,79 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="savepreparedinlinemessage" href="#savepreparedinlinemessage"><i class="anchor-icon"></i></a>savePreparedInlineMessage</h4>
+<p>Stores a message that can be sent by a user of a Mini App. Returns a <a href="#preparedinlinemessage">PreparedInlineMessage</a> object.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Unique identifier of the target user that can use the prepared message</td>
+</tr>
+<tr>
+<td>result</td>
+<td><a href="#inlinequeryresult">InlineQueryResult</a></td>
+<td>Yes</td>
+<td>A JSON-serialized object describing the message to be sent</td>
+</tr>
+<tr>
+<td>allow_user_chats</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> if the message can be sent to private chats with users</td>
+</tr>
+<tr>
+<td>allow_bot_chats</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> if the message can be sent to private chats with bots</td>
+</tr>
+<tr>
+<td>allow_group_chats</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> if the message can be sent to group and supergroup chats</td>
+</tr>
+<tr>
+<td>allow_channel_chats</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> if the message can be sent to channel chats</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="preparedinlinemessage" href="#preparedinlinemessage"><i class="anchor-icon"></i></a>PreparedInlineMessage</h4>
+<p>Describes an inline message to be sent by a user of a Mini App.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>Unique identifier of the prepared message</td>
+</tr>
+<tr>
+<td>expiration_date</td>
+<td>Integer</td>
+<td>Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used</td>
+</tr>
+</tbody>
+</table>
 <h3><a class="anchor" name="payments" href="#payments"><i class="anchor-icon"></i></a>Payments</h3>
 <p>Your bot can accept payments from Telegram users. Please see the <a href="/bots/payments">introduction to payments</a> for more details on the process and how to set up payments for your bot.</p>
 <h4><a class="anchor" name="sendinvoice" href="#sendinvoice"><i class="anchor-icon"></i></a>sendInvoice</h4>
@@ -12668,7 +14866,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>payload</td>
 <td>String</td>
 <td>Yes</td>
-<td>Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.</td>
+<td>Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.</td>
 </tr>
 <tr>
 <td>provider_token</td>
@@ -12791,6 +14989,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -12823,6 +15027,12 @@ pre-formatted fixed-width code block written in the Python programming language
 </thead>
 <tbody>
 <tr>
+<td>business_connection_id</td>
+<td>String</td>
+<td>Optional</td>
+<td>Unique identifier of the business connection on behalf of which the link will be created. For payments in <a href="https://t.me/BotNews/90">Telegram Stars</a> only.</td>
+</tr>
+<tr>
 <td>title</td>
 <td>String</td>
 <td>Yes</td>
@@ -12838,7 +15048,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>payload</td>
 <td>String</td>
 <td>Yes</td>
-<td>Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.</td>
+<td>Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.</td>
 </tr>
 <tr>
 <td>provider_token</td>
@@ -12857,6 +15067,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Array of <a href="#labeledprice">LabeledPrice</a></td>
 <td>Yes</td>
 <td>Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in <a href="https://t.me/BotNews/90">Telegram Stars</a>.</td>
+</tr>
+<tr>
+<td>subscription_period</td>
+<td>Integer</td>
+<td>Optional</td>
+<td>The number of seconds the subscription will be active for before the next payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed 10000 Telegram Stars.</td>
 </tr>
 <tr>
 <td>max_tip_amount</td>
@@ -12978,7 +15194,7 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>error_message</td>
 <td>String</td>
 <td>Optional</td>
-<td>Required if <em>ok</em> is <em>False</em>. Error message in human readable form that explains why it is impossible to complete the order (e.g. &quot;Sorry, delivery to your desired address is unavailable&#39;). Telegram will display this message to the user.</td>
+<td>Required if <em>ok</em> is <em>False</em>. Error message in human readable form that explains why it is impossible to complete the order (e.g. “Sorry, delivery to your desired address is unavailable”). Telegram will display this message to the user.</td>
 </tr>
 </tbody>
 </table>
@@ -13063,6 +15279,38 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>String</td>
 <td>Yes</td>
 <td>Telegram payment identifier</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="edituserstarsubscription" href="#edituserstarsubscription"><i class="anchor-icon"></i></a>editUserStarSubscription</h4>
+<p>Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns <em>True</em> on success.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>Identifier of the user whose subscription will be edited</td>
+</tr>
+<tr>
+<td>telegram_payment_charge_id</td>
+<td>String</td>
+<td>Yes</td>
+<td>Telegram payment identifier for the subscription</td>
+</tr>
+<tr>
+<td>is_canceled</td>
+<td>Boolean</td>
+<td>Yes</td>
+<td>Pass <em>True</em> to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass <em>False</em> to allow the user to re-enable a subscription that was previously canceled by the bot.</td>
 </tr>
 </tbody>
 </table>
@@ -13232,7 +15480,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="successfulpayment" href="#successfulpayment"><i class="anchor-icon"></i></a>SuccessfulPayment</h4>
-<p>This object contains basic information about a successful payment.</p>
+<p>This object contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram&#39;s control.</p>
 <table class="table">
 <thead>
 <tr>
@@ -13256,6 +15504,21 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>invoice_payload</td>
 <td>String</td>
 <td>Bot-specified invoice payload</td>
+</tr>
+<tr>
+<td>subscription_expiration_date</td>
+<td>Integer</td>
+<td><em>Optional</em>. Expiration date of the subscription, in Unix time; for recurring payments only</td>
+</tr>
+<tr>
+<td>is_recurring</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the payment is a recurring payment for a subscription</td>
+</tr>
+<tr>
+<td>is_first_recurring</td>
+<td>True</td>
+<td><em>Optional</em>. True, if the payment is the first payment for a subscription</td>
 </tr>
 <tr>
 <td>shipping_option_id</td>
@@ -13398,6 +15661,29 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="paidmediapurchased" href="#paidmediapurchased"><i class="anchor-icon"></i></a>PaidMediaPurchased</h4>
+<p>This object contains information about a paid media purchase.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>from</td>
+<td><a href="#user">User</a></td>
+<td>User who purchased the media</td>
+</tr>
+<tr>
+<td>paid_media_payload</td>
+<td>String</td>
+<td>Bot-specified paid media payload</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="revenuewithdrawalstate" href="#revenuewithdrawalstate"><i class="anchor-icon"></i></a>RevenueWithdrawalState</h4>
 <p>This object describes the state of a revenue withdrawal operation. Currently, it can be one of</p>
 <ul>
@@ -13469,12 +15755,53 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="affiliateinfo" href="#affiliateinfo"><i class="anchor-icon"></i></a>AffiliateInfo</h4>
+<p>Contains information about the affiliate that received a commission via this transaction.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>affiliate_user</td>
+<td><a href="#user">User</a></td>
+<td><em>Optional</em>. The bot or the user that received an affiliate commission if it was received by a bot or a user</td>
+</tr>
+<tr>
+<td>affiliate_chat</td>
+<td><a href="#chat">Chat</a></td>
+<td><em>Optional</em>. The chat that received an affiliate commission if it was received by a chat</td>
+</tr>
+<tr>
+<td>commission_per_mille</td>
+<td>Integer</td>
+<td>The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the bot from referred users</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Integer</td>
+<td>Integer amount of Telegram Stars received by the affiliate from the transaction, rounded to 0; can be negative for refunds</td>
+</tr>
+<tr>
+<td>nanostar_amount</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of 1/1000000000 shares of Telegram Stars received by the affiliate; from -999999999 to 999999999; can be negative for refunds</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="transactionpartner" href="#transactionpartner"><i class="anchor-icon"></i></a>TransactionPartner</h4>
 <p>This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of</p>
 <ul>
 <li><a href="#transactionpartneruser">TransactionPartnerUser</a></li>
+<li><a href="#transactionpartnerchat">TransactionPartnerChat</a></li>
+<li><a href="#transactionpartneraffiliateprogram">TransactionPartnerAffiliateProgram</a></li>
 <li><a href="#transactionpartnerfragment">TransactionPartnerFragment</a></li>
 <li><a href="#transactionpartnertelegramads">TransactionPartnerTelegramAds</a></li>
+<li><a href="#transactionpartnertelegramapi">TransactionPartnerTelegramApi</a></li>
 <li><a href="#transactionpartnerother">TransactionPartnerOther</a></li>
 </ul>
 <h4><a class="anchor" name="transactionpartneruser" href="#transactionpartneruser"><i class="anchor-icon"></i></a>TransactionPartnerUser</h4>
@@ -13494,19 +15821,105 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Type of the transaction partner, always “user”</td>
 </tr>
 <tr>
+<td>transaction_type</td>
+<td>String</td>
+<td>Type of the transaction, currently one of “invoice_payment” for payments via invoices, “paid_media_payment” for payments for paid media, “gift_purchase” for gifts sent by the bot, “premium_purchase” for Telegram Premium subscriptions gifted by the bot, “business_account_transfer” for direct transfers from managed business accounts</td>
+</tr>
+<tr>
 <td>user</td>
 <td><a href="#user">User</a></td>
 <td>Information about the user</td>
 </tr>
 <tr>
+<td>affiliate</td>
+<td><a href="#affiliateinfo">AffiliateInfo</a></td>
+<td><em>Optional</em>. Information about the affiliate that received a commission via this transaction. Can be available only for “invoice_payment” and “paid_media_payment” transactions.</td>
+</tr>
+<tr>
 <td>invoice_payload</td>
 <td>String</td>
-<td><em>Optional</em>. Bot-specified invoice payload</td>
+<td><em>Optional</em>. Bot-specified invoice payload. Can be available only for “invoice_payment” transactions.</td>
+</tr>
+<tr>
+<td>subscription_period</td>
+<td>Integer</td>
+<td><em>Optional</em>. The duration of the paid subscription. Can be available only for “invoice_payment” transactions.</td>
 </tr>
 <tr>
 <td>paid_media</td>
 <td>Array of <a href="#paidmedia">PaidMedia</a></td>
-<td><em>Optional</em>. Information about the paid media bought by the user</td>
+<td><em>Optional</em>. Information about the paid media bought by the user; for “paid_media_payment” transactions only</td>
+</tr>
+<tr>
+<td>paid_media_payload</td>
+<td>String</td>
+<td><em>Optional</em>. Bot-specified paid media payload. Can be available only for “paid_media_payment” transactions.</td>
+</tr>
+<tr>
+<td>gift</td>
+<td><a href="#gift">Gift</a></td>
+<td><em>Optional</em>. The gift sent to the user by the bot; for “gift_purchase” transactions only</td>
+</tr>
+<tr>
+<td>premium_subscription_duration</td>
+<td>Integer</td>
+<td><em>Optional</em>. Number of months the gifted Telegram Premium subscription will be active for; for “premium_purchase” transactions only</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="transactionpartnerchat" href="#transactionpartnerchat"><i class="anchor-icon"></i></a>TransactionPartnerChat</h4>
+<p>Describes a transaction with a chat.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the transaction partner, always “chat”</td>
+</tr>
+<tr>
+<td>chat</td>
+<td><a href="#chat">Chat</a></td>
+<td>Information about the chat</td>
+</tr>
+<tr>
+<td>gift</td>
+<td><a href="#gift">Gift</a></td>
+<td><em>Optional</em>. The gift sent to the chat by the bot</td>
+</tr>
+</tbody>
+</table>
+<h4><a class="anchor" name="transactionpartneraffiliateprogram" href="#transactionpartneraffiliateprogram"><i class="anchor-icon"></i></a>TransactionPartnerAffiliateProgram</h4>
+<p>Describes the affiliate program that issued the affiliate commission received via this transaction.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the transaction partner, always “affiliate_program”</td>
+</tr>
+<tr>
+<td>sponsor_user</td>
+<td><a href="#user">User</a></td>
+<td><em>Optional</em>. Information about the bot that sponsored the affiliate program</td>
+</tr>
+<tr>
+<td>commission_per_mille</td>
+<td>Integer</td>
+<td>The number of Telegram Stars received by the bot for each 1000 Telegram Stars received by the affiliate program sponsor from referred users</td>
 </tr>
 </tbody>
 </table>
@@ -13551,6 +15964,29 @@ pre-formatted fixed-width code block written in the Python programming language
 </tr>
 </tbody>
 </table>
+<h4><a class="anchor" name="transactionpartnertelegramapi" href="#transactionpartnertelegramapi"><i class="anchor-icon"></i></a>TransactionPartnerTelegramApi</h4>
+<p>Describes a transaction with payment for <a href="#paid-broadcasts">paid broadcasting</a>.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Type of the transaction partner, always “telegram_api”</td>
+</tr>
+<tr>
+<td>request_count</td>
+<td>Integer</td>
+<td>The number of successful requests that exceeded regular limits and were therefore billed</td>
+</tr>
+</tbody>
+</table>
 <h4><a class="anchor" name="transactionpartnerother" href="#transactionpartnerother"><i class="anchor-icon"></i></a>TransactionPartnerOther</h4>
 <p>Describes a transaction with an unknown source or recipient.</p>
 <table class="table">
@@ -13570,7 +16006,7 @@ pre-formatted fixed-width code block written in the Python programming language
 </tbody>
 </table>
 <h4><a class="anchor" name="startransaction" href="#startransaction"><i class="anchor-icon"></i></a>StarTransaction</h4>
-<p>Describes a Telegram Star transaction.</p>
+<p>Describes a Telegram Star transaction. Note that if the buyer initiates a chargeback with the payment provider from whom they acquired Stars (e.g., Apple, Google) following this transaction, the refunded Stars will be deducted from the bot&#39;s balance. This is outside of Telegram&#39;s control.</p>
 <table class="table">
 <thead>
 <tr>
@@ -13583,12 +16019,17 @@ pre-formatted fixed-width code block written in the Python programming language
 <tr>
 <td>id</td>
 <td>String</td>
-<td>Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with <em>SuccessfulPayment.telegram_payment_charge_id</em> for successful incoming payments from users.</td>
+<td>Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with <em>SuccessfulPayment.telegram_payment_charge_id</em> for successful incoming payments from users.</td>
 </tr>
 <tr>
 <td>amount</td>
 <td>Integer</td>
-<td>Number of Telegram Stars transferred by the transaction</td>
+<td>Integer amount of Telegram Stars transferred by the transaction</td>
+</tr>
+<tr>
+<td>nanostar_amount</td>
+<td>Integer</td>
+<td><em>Optional</em>. The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999</td>
 </tr>
 <tr>
 <td>date</td>
@@ -14178,6 +16619,12 @@ pre-formatted fixed-width code block written in the Python programming language
 <td>Protects the contents of the sent message from forwarding and saving</td>
 </tr>
 <tr>
+<td>allow_paid_broadcast</td>
+<td>Boolean</td>
+<td>Optional</td>
+<td>Pass <em>True</em> to allow up to 1000 messages per second, ignoring <a href="https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once">broadcasting limits</a> for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot&#39;s balance</td>
+</tr>
+<tr>
 <td>message_effect_id</td>
 <td>String</td>
 <td>Optional</td>
@@ -14424,13 +16871,10 @@ pre-formatted fixed-width code block written in the Python programming language
       <h5><a href="//telegram.org/blog">Blog</a></h5>
     </div>
     <div class="footer_column">
-      <h5><a href="//telegram.org/apps">Apps</a></h5>
-    </div>
-    <div class="footer_column">
-      <h5><a href="/">Platform</a></h5>
-    </div>
-    <div class="footer_column">
       <h5><a href="//telegram.org/press">Press</a></h5>
+    </div>
+    <div class="footer_column">
+      <h5><a href="//telegram.org/moderation">Moderation</a></h5>
     </div>
   </div>
 </div>

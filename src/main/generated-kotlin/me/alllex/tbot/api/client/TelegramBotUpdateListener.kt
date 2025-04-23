@@ -98,6 +98,7 @@ interface TelegramBotUpdateListener {
             is MessageReactionUpdate -> onMessageReaction(update.messageReaction)
             is ChatBoostUpdate -> onChatBoost(update.chatBoost)
             is RemovedChatBoostUpdate -> onRemovedChatBoost(update.removedChatBoost)
+            else -> error("Unknown update type: ${update::class.simpleName}")
         }
     }
 }

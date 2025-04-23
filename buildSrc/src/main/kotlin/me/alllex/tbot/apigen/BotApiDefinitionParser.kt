@@ -1,5 +1,6 @@
 package me.alllex.tbot.apigen
 
+import java.io.File
 import kotlinx.serialization.Serializable
 import me.alllex.parsus.parser.Grammar
 import me.alllex.parsus.parser.ParseException
@@ -11,7 +12,6 @@ import me.alllex.parsus.parser.repeatOneOrMore
 import me.alllex.parsus.token.regexToken
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import java.io.File
 
 
 /**
@@ -59,7 +59,9 @@ data class ApiMethodDefinition(
 @JvmInline
 value class BotApiElementName(val value: String) {
     init {
-        require(regex.matches(value)) { "Invalid Bot API element name: '$value'" }
+        require(regex.matches(value)) {
+            "Invalid Bot API element name: '$value'. Should this section be ignored? See `availableTypesIgnoredSections`"
+        }
     }
 
     override fun toString(): String = value
@@ -118,6 +120,7 @@ val availableTypesIgnoredSections: Set<String> = setOf(
     "Accent colors",
     "Profile accent colors",
     "Inline mode methods",
+    "Paid Broadcasts"
 )
 
 val topLevelSections = listOf(

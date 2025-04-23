@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    alias(libs.plugins.kotlin.serialization)
+    id("org.jetbrains.kotlin.plugin.serialization") version embeddedKotlinVersion
 }
 
 repositories {

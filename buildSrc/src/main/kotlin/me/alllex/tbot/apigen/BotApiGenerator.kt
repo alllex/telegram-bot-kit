@@ -344,6 +344,7 @@ class BotApiGenerator {
             appendMethodDoc(description, parameters)
             appendLine("context(TelegramBotApiContext)")
             appendLine("@Throws(TelegramBotApiException::class)")
+            appendLine("@JvmName(\"call${methodBaseName.toTitleCase()}\")")
             append("suspend fun $methodBaseName(")
             appendParameters(apiMethodName, parameters)
             appendLine("): ${returnType.value} =")

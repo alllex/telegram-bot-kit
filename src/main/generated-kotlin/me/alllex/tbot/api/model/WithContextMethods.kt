@@ -14,6 +14,7 @@ import me.alllex.tbot.api.client.*
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetUpdates")
 suspend fun getUpdates(
     offset: Long? = null,
     limit: Long? = null,
@@ -37,6 +38,7 @@ suspend fun getUpdates(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetWebhook")
 suspend fun setWebhook(
     url: String,
     certificate: String? = null,
@@ -55,6 +57,7 @@ suspend fun setWebhook(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeleteWebhook")
 suspend fun deleteWebhook(
     dropPendingUpdates: Boolean? = null,
 ): Boolean =
@@ -65,6 +68,7 @@ suspend fun deleteWebhook(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetWebhookInfo")
 suspend fun getWebhookInfo(): WebhookInfo =
     botApiClient.tryGetWebhookInfo().getResultOrThrow()
 
@@ -73,6 +77,7 @@ suspend fun getWebhookInfo(): WebhookInfo =
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetMe")
 suspend fun getMe(): User =
     botApiClient.tryGetMe().getResultOrThrow()
 
@@ -81,6 +86,7 @@ suspend fun getMe(): User =
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callLogOut")
 suspend fun logOut(): Boolean =
     botApiClient.tryLogOut().getResultOrThrow()
 
@@ -89,6 +95,7 @@ suspend fun logOut(): Boolean =
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callClose")
 suspend fun close(): Boolean =
     botApiClient.tryClose().getResultOrThrow()
 
@@ -110,6 +117,7 @@ suspend fun close(): Boolean =
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendMessage")
 suspend fun sendMessage(
     chatId: ChatId,
     text: String,
@@ -329,6 +337,7 @@ suspend fun Message.replyHtml(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callForwardMessage")
 suspend fun forwardMessage(
     chatId: ChatId,
     fromChatId: ChatId,
@@ -361,6 +370,7 @@ suspend fun Message.forward(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callForwardMessages")
 suspend fun forwardMessages(
     chatId: ChatId,
     fromChatId: ChatId,
@@ -389,6 +399,7 @@ suspend fun forwardMessages(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callCopyMessage")
 suspend fun copyMessage(
     chatId: ChatId,
     fromChatId: ChatId,
@@ -434,6 +445,7 @@ suspend fun Message.copyMessage(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callCopyMessages")
 suspend fun copyMessages(
     chatId: ChatId,
     fromChatId: ChatId,
@@ -465,6 +477,7 @@ suspend fun copyMessages(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendPhoto")
 suspend fun sendPhoto(
     chatId: ChatId,
     photo: String,
@@ -545,6 +558,7 @@ suspend fun ChatId.sendPhoto(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendAudio")
 suspend fun sendAudio(
     chatId: ChatId,
     audio: String,
@@ -627,6 +641,7 @@ suspend fun ChatId.sendAudio(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendDocument")
 suspend fun sendDocument(
     chatId: ChatId,
     document: String,
@@ -708,6 +723,7 @@ suspend fun ChatId.sendDocument(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendVideo")
 suspend fun sendVideo(
     chatId: ChatId,
     video: String,
@@ -803,6 +819,7 @@ suspend fun ChatId.sendVideo(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendAnimation")
 suspend fun sendAnimation(
     chatId: ChatId,
     animation: String,
@@ -890,6 +907,7 @@ suspend fun ChatId.sendAnimation(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendVoice")
 suspend fun sendVoice(
     chatId: ChatId,
     voice: String,
@@ -961,6 +979,7 @@ suspend fun ChatId.sendVoice(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendVideoNote")
 suspend fun sendVideoNote(
     chatId: ChatId,
     videoNote: String,
@@ -1029,6 +1048,7 @@ suspend fun ChatId.sendVideoNote(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendPaidMedia")
 suspend fun sendPaidMedia(
     chatId: ChatId,
     starCount: Long,
@@ -1059,6 +1079,7 @@ suspend fun sendPaidMedia(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendMediaGroup")
 suspend fun sendMediaGroup(
     chatId: ChatId,
     media: List<InputMedia>,
@@ -1117,6 +1138,7 @@ suspend fun ChatId.sendMediaGroup(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendLocation")
 suspend fun sendLocation(
     chatId: ChatId,
     latitude: Double,
@@ -1195,6 +1217,7 @@ suspend fun ChatId.sendLocation(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendVenue")
 suspend fun sendVenue(
     chatId: ChatId,
     latitude: Double,
@@ -1275,6 +1298,7 @@ suspend fun ChatId.sendVenue(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendContact")
 suspend fun sendContact(
     chatId: ChatId,
     phoneNumber: String,
@@ -1353,6 +1377,7 @@ suspend fun ChatId.sendContact(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendPoll")
 suspend fun sendPoll(
     chatId: ChatId,
     question: String,
@@ -1448,6 +1473,7 @@ suspend fun ChatId.sendPoll(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendDice")
 suspend fun sendDice(
     chatId: ChatId,
     messageThreadId: MessageThreadId? = null,
@@ -1503,6 +1529,7 @@ suspend fun ChatId.sendDice(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendChatAction")
 suspend fun sendChatAction(
     chatId: ChatId,
     action: String,
@@ -1539,6 +1566,7 @@ suspend fun ChatId.sendChatAction(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetMessageReaction")
 suspend fun setMessageReaction(
     chatId: ChatId,
     messageId: MessageId,
@@ -1556,6 +1584,7 @@ suspend fun setMessageReaction(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetUserProfilePhotos")
 suspend fun getUserProfilePhotos(
     userId: UserId,
     offset: Long? = null,
@@ -1570,6 +1599,7 @@ suspend fun getUserProfilePhotos(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetFile")
 suspend fun getFile(
     fileId: FileId,
 ): File =
@@ -1585,6 +1615,7 @@ suspend fun getFile(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callBanChatMember")
 suspend fun banChatMember(
     chatId: ChatId,
     userId: UserId,
@@ -1602,6 +1633,7 @@ suspend fun banChatMember(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callUnbanChatMember")
 suspend fun unbanChatMember(
     chatId: ChatId,
     userId: UserId,
@@ -1620,6 +1652,7 @@ suspend fun unbanChatMember(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callRestrictChatMember")
 suspend fun restrictChatMember(
     chatId: ChatId,
     userId: UserId,
@@ -1652,6 +1685,7 @@ suspend fun restrictChatMember(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callPromoteChatMember")
 suspend fun promoteChatMember(
     chatId: ChatId,
     userId: UserId,
@@ -1682,6 +1716,7 @@ suspend fun promoteChatMember(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetChatAdministratorCustomTitle")
 suspend fun setChatAdministratorCustomTitle(
     chatId: ChatId,
     userId: UserId,
@@ -1697,6 +1732,7 @@ suspend fun setChatAdministratorCustomTitle(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callBanChatSenderChat")
 suspend fun banChatSenderChat(
     chatId: ChatId,
     senderChatId: ChatId,
@@ -1711,6 +1747,7 @@ suspend fun banChatSenderChat(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callUnbanChatSenderChat")
 suspend fun unbanChatSenderChat(
     chatId: ChatId,
     senderChatId: ChatId,
@@ -1726,6 +1763,7 @@ suspend fun unbanChatSenderChat(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetChatPermissions")
 suspend fun setChatPermissions(
     chatId: ChatId,
     permissions: ChatPermissions,
@@ -1740,6 +1778,7 @@ suspend fun setChatPermissions(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callExportChatInviteLink")
 suspend fun exportChatInviteLink(
     chatId: ChatId,
 ): String =
@@ -1756,6 +1795,7 @@ suspend fun exportChatInviteLink(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callCreateChatInviteLink")
 suspend fun createChatInviteLink(
     chatId: ChatId,
     name: String? = null,
@@ -1777,6 +1817,7 @@ suspend fun createChatInviteLink(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditChatInviteLink")
 suspend fun editChatInviteLink(
     chatId: ChatId,
     inviteLink: String,
@@ -1797,6 +1838,7 @@ suspend fun editChatInviteLink(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callCreateChatSubscriptionInviteLink")
 suspend fun createChatSubscriptionInviteLink(
     chatId: ChatId,
     subscriptionPeriod: Seconds,
@@ -1814,6 +1856,7 @@ suspend fun createChatSubscriptionInviteLink(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditChatSubscriptionInviteLink")
 suspend fun editChatSubscriptionInviteLink(
     chatId: ChatId,
     inviteLink: String,
@@ -1829,6 +1872,7 @@ suspend fun editChatSubscriptionInviteLink(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callRevokeChatInviteLink")
 suspend fun revokeChatInviteLink(
     chatId: ChatId,
     inviteLink: String,
@@ -1843,6 +1887,7 @@ suspend fun revokeChatInviteLink(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callApproveChatJoinRequest")
 suspend fun approveChatJoinRequest(
     chatId: ChatId,
     userId: UserId,
@@ -1857,6 +1902,7 @@ suspend fun approveChatJoinRequest(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeclineChatJoinRequest")
 suspend fun declineChatJoinRequest(
     chatId: ChatId,
     userId: UserId,
@@ -1871,6 +1917,7 @@ suspend fun declineChatJoinRequest(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetChatPhoto")
 suspend fun setChatPhoto(
     chatId: ChatId,
     photo: String,
@@ -1884,6 +1931,7 @@ suspend fun setChatPhoto(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeleteChatPhoto")
 suspend fun deleteChatPhoto(
     chatId: ChatId,
 ): Boolean =
@@ -1897,6 +1945,7 @@ suspend fun deleteChatPhoto(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetChatTitle")
 suspend fun setChatTitle(
     chatId: ChatId,
     title: String,
@@ -1911,6 +1960,7 @@ suspend fun setChatTitle(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetChatDescription")
 suspend fun setChatDescription(
     chatId: ChatId,
     description: String? = null,
@@ -1927,6 +1977,7 @@ suspend fun setChatDescription(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callPinChatMessage")
 suspend fun pinChatMessage(
     chatId: ChatId,
     messageId: MessageId,
@@ -1944,6 +1995,7 @@ suspend fun pinChatMessage(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callUnpinChatMessage")
 suspend fun unpinChatMessage(
     chatId: ChatId,
     messageId: MessageId? = null,
@@ -1958,6 +2010,7 @@ suspend fun unpinChatMessage(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callUnpinAllChatMessages")
 suspend fun unpinAllChatMessages(
     chatId: ChatId,
 ): Boolean =
@@ -1970,6 +2023,7 @@ suspend fun unpinAllChatMessages(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callLeaveChat")
 suspend fun leaveChat(
     chatId: ChatId,
 ): Boolean =
@@ -1982,6 +2036,7 @@ suspend fun leaveChat(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetChat")
 suspend fun getChat(
     chatId: ChatId,
 ): ChatFullInfo =
@@ -1994,6 +2049,7 @@ suspend fun getChat(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetChatAdministrators")
 suspend fun getChatAdministrators(
     chatId: ChatId,
 ): List<ChatMember> =
@@ -2006,6 +2062,7 @@ suspend fun getChatAdministrators(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetChatMemberCount")
 suspend fun getChatMemberCount(
     chatId: ChatId,
 ): Int =
@@ -2029,6 +2086,7 @@ suspend fun ChatId.getMemberCount(): Int =
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetChatMember")
 suspend fun getChatMember(
     chatId: ChatId,
     userId: UserId,
@@ -2057,6 +2115,7 @@ suspend fun ChatId.getMember(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetChatStickerSet")
 suspend fun setChatStickerSet(
     chatId: ChatId,
     stickerSetName: String,
@@ -2070,6 +2129,7 @@ suspend fun setChatStickerSet(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeleteChatStickerSet")
 suspend fun deleteChatStickerSet(
     chatId: ChatId,
 ): Boolean =
@@ -2080,6 +2140,7 @@ suspend fun deleteChatStickerSet(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetForumTopicIconStickers")
 suspend fun getForumTopicIconStickers(): List<Sticker> =
     botApiClient.tryGetForumTopicIconStickers().getResultOrThrow()
 
@@ -2093,6 +2154,7 @@ suspend fun getForumTopicIconStickers(): List<Sticker> =
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callCreateForumTopic")
 suspend fun createForumTopic(
     chatId: ChatId,
     name: String,
@@ -2111,6 +2173,7 @@ suspend fun createForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditForumTopic")
 suspend fun editForumTopic(
     chatId: ChatId,
     messageThreadId: MessageThreadId,
@@ -2127,6 +2190,7 @@ suspend fun editForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callCloseForumTopic")
 suspend fun closeForumTopic(
     chatId: ChatId,
     messageThreadId: MessageThreadId,
@@ -2141,6 +2205,7 @@ suspend fun closeForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callReopenForumTopic")
 suspend fun reopenForumTopic(
     chatId: ChatId,
     messageThreadId: MessageThreadId,
@@ -2155,6 +2220,7 @@ suspend fun reopenForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeleteForumTopic")
 suspend fun deleteForumTopic(
     chatId: ChatId,
     messageThreadId: MessageThreadId,
@@ -2169,6 +2235,7 @@ suspend fun deleteForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callUnpinAllForumTopicMessages")
 suspend fun unpinAllForumTopicMessages(
     chatId: ChatId,
     messageThreadId: MessageThreadId,
@@ -2183,6 +2250,7 @@ suspend fun unpinAllForumTopicMessages(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditGeneralForumTopic")
 suspend fun editGeneralForumTopic(
     chatId: ChatId,
     name: String,
@@ -2196,6 +2264,7 @@ suspend fun editGeneralForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callCloseGeneralForumTopic")
 suspend fun closeGeneralForumTopic(
     chatId: ChatId,
 ): Boolean =
@@ -2208,6 +2277,7 @@ suspend fun closeGeneralForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callReopenGeneralForumTopic")
 suspend fun reopenGeneralForumTopic(
     chatId: ChatId,
 ): Boolean =
@@ -2220,6 +2290,7 @@ suspend fun reopenGeneralForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callHideGeneralForumTopic")
 suspend fun hideGeneralForumTopic(
     chatId: ChatId,
 ): Boolean =
@@ -2232,6 +2303,7 @@ suspend fun hideGeneralForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callUnhideGeneralForumTopic")
 suspend fun unhideGeneralForumTopic(
     chatId: ChatId,
 ): Boolean =
@@ -2244,6 +2316,7 @@ suspend fun unhideGeneralForumTopic(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callUnpinAllGeneralForumTopicMessages")
 suspend fun unpinAllGeneralForumTopicMessages(
     chatId: ChatId,
 ): Boolean =
@@ -2262,6 +2335,7 @@ suspend fun unpinAllGeneralForumTopicMessages(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callAnswerCallbackQuery")
 suspend fun answerCallbackQuery(
     callbackQueryId: CallbackQueryId,
     text: String? = null,
@@ -2299,6 +2373,7 @@ suspend fun CallbackQueryId.answer(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetUserChatBoosts")
 suspend fun getUserChatBoosts(
     chatId: ChatId,
     userId: UserId,
@@ -2312,6 +2387,7 @@ suspend fun getUserChatBoosts(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetBusinessConnection")
 suspend fun getBusinessConnection(
     businessConnectionId: BusinessConnectionId,
 ): BusinessConnection =
@@ -2326,6 +2402,7 @@ suspend fun getBusinessConnection(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetMyCommands")
 suspend fun setMyCommands(
     commands: List<BotCommand>,
     scope: BotCommandScope? = null,
@@ -2341,6 +2418,7 @@ suspend fun setMyCommands(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeleteMyCommands")
 suspend fun deleteMyCommands(
     scope: BotCommandScope? = null,
     languageCode: String? = null,
@@ -2355,6 +2433,7 @@ suspend fun deleteMyCommands(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetMyCommands")
 suspend fun getMyCommands(
     scope: BotCommandScope? = null,
     languageCode: String? = null,
@@ -2369,6 +2448,7 @@ suspend fun getMyCommands(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetMyName")
 suspend fun setMyName(
     name: String? = null,
     languageCode: String? = null,
@@ -2382,6 +2462,7 @@ suspend fun setMyName(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetMyName")
 suspend fun getMyName(
     languageCode: String? = null,
 ): BotName =
@@ -2395,6 +2476,7 @@ suspend fun getMyName(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetMyDescription")
 suspend fun setMyDescription(
     description: String? = null,
     languageCode: String? = null,
@@ -2408,6 +2490,7 @@ suspend fun setMyDescription(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetMyDescription")
 suspend fun getMyDescription(
     languageCode: String? = null,
 ): BotDescription =
@@ -2421,6 +2504,7 @@ suspend fun getMyDescription(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetMyShortDescription")
 suspend fun setMyShortDescription(
     shortDescription: String? = null,
     languageCode: String? = null,
@@ -2434,6 +2518,7 @@ suspend fun setMyShortDescription(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetMyShortDescription")
 suspend fun getMyShortDescription(
     languageCode: String? = null,
 ): BotShortDescription =
@@ -2447,6 +2532,7 @@ suspend fun getMyShortDescription(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetChatMenuButton")
 suspend fun setChatMenuButton(
     chatId: ChatId? = null,
     menuButton: MenuButton? = null,
@@ -2460,6 +2546,7 @@ suspend fun setChatMenuButton(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetChatMenuButton")
 suspend fun getChatMenuButton(
     chatId: ChatId? = null,
 ): MenuButton =
@@ -2473,6 +2560,7 @@ suspend fun getChatMenuButton(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetMyDefaultAdministratorRights")
 suspend fun setMyDefaultAdministratorRights(
     rights: ChatAdministratorRights? = null,
     forChannels: Boolean? = null,
@@ -2486,6 +2574,7 @@ suspend fun setMyDefaultAdministratorRights(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetMyDefaultAdministratorRights")
 suspend fun getMyDefaultAdministratorRights(
     forChannels: Boolean? = null,
 ): ChatAdministratorRights =
@@ -2505,6 +2594,7 @@ suspend fun getMyDefaultAdministratorRights(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditMessageText")
 suspend fun editMessageText(
     text: String,
     chatId: ChatId,
@@ -2575,6 +2665,7 @@ suspend fun Message.editTextHtml(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditInlineMessageText")
 suspend fun editInlineMessageText(
     text: String,
     inlineMessageId: InlineMessageId,
@@ -2600,6 +2691,7 @@ suspend fun editInlineMessageText(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditMessageCaption")
 suspend fun editMessageCaption(
     chatId: ChatId,
     messageId: MessageId,
@@ -2625,6 +2717,7 @@ suspend fun editMessageCaption(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditInlineMessageCaption")
 suspend fun editInlineMessageCaption(
     inlineMessageId: InlineMessageId,
     caption: String? = null,
@@ -2647,6 +2740,7 @@ suspend fun editInlineMessageCaption(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditMessageMedia")
 suspend fun editMessageMedia(
     media: InputMedia,
     chatId: ChatId,
@@ -2666,6 +2760,7 @@ suspend fun editMessageMedia(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditInlineMessageMedia")
 suspend fun editInlineMessageMedia(
     media: InputMedia,
     inlineMessageId: InlineMessageId,
@@ -2690,6 +2785,7 @@ suspend fun editInlineMessageMedia(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditMessageLiveLocation")
 suspend fun editMessageLiveLocation(
     latitude: Double,
     longitude: Double,
@@ -2719,6 +2815,7 @@ suspend fun editMessageLiveLocation(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditInlineMessageLiveLocation")
 suspend fun editInlineMessageLiveLocation(
     latitude: Double,
     longitude: Double,
@@ -2742,6 +2839,7 @@ suspend fun editInlineMessageLiveLocation(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callStopMessageLiveLocation")
 suspend fun stopMessageLiveLocation(
     chatId: ChatId,
     messageId: MessageId,
@@ -2759,6 +2857,7 @@ suspend fun stopMessageLiveLocation(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callStopInlineMessageLiveLocation")
 suspend fun stopInlineMessageLiveLocation(
     inlineMessageId: InlineMessageId,
     replyMarkup: InlineKeyboardMarkup? = null,
@@ -2776,6 +2875,7 @@ suspend fun stopInlineMessageLiveLocation(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditMessageReplyMarkup")
 suspend fun editMessageReplyMarkup(
     chatId: ChatId,
     messageId: MessageId,
@@ -2793,6 +2893,7 @@ suspend fun editMessageReplyMarkup(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callEditInlineMessageReplyMarkup")
 suspend fun editInlineMessageReplyMarkup(
     inlineMessageId: InlineMessageId,
     replyMarkup: InlineKeyboardMarkup? = null,
@@ -2810,6 +2911,7 @@ suspend fun editInlineMessageReplyMarkup(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callStopPoll")
 suspend fun stopPoll(
     chatId: ChatId,
     messageId: MessageId,
@@ -2826,6 +2928,7 @@ suspend fun stopPoll(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeleteMessage")
 suspend fun deleteMessage(
     chatId: ChatId,
     messageId: MessageId,
@@ -2845,6 +2948,7 @@ suspend fun Message.delete(): Boolean =
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeleteMessages")
 suspend fun deleteMessages(
     chatId: ChatId,
     messageIds: List<Long>,
@@ -2867,6 +2971,7 @@ suspend fun deleteMessages(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendSticker")
 suspend fun sendSticker(
     chatId: ChatId,
     sticker: String,
@@ -2888,6 +2993,7 @@ suspend fun sendSticker(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetStickerSet")
 suspend fun getStickerSet(
     name: String,
 ): StickerSet =
@@ -2900,6 +3006,7 @@ suspend fun getStickerSet(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetCustomEmojiStickers")
 suspend fun getCustomEmojiStickers(
     customEmojiIds: List<String>,
 ): List<Sticker> =
@@ -2914,6 +3021,7 @@ suspend fun getCustomEmojiStickers(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callUploadStickerFile")
 suspend fun uploadStickerFile(
     userId: UserId,
     sticker: String,
@@ -2933,6 +3041,7 @@ suspend fun uploadStickerFile(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callCreateNewStickerSet")
 suspend fun createNewStickerSet(
     userId: UserId,
     name: String,
@@ -2952,6 +3061,7 @@ suspend fun createNewStickerSet(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callAddStickerToSet")
 suspend fun addStickerToSet(
     userId: UserId,
     name: String,
@@ -2967,6 +3077,7 @@ suspend fun addStickerToSet(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetStickerPositionInSet")
 suspend fun setStickerPositionInSet(
     sticker: String,
     position: Long,
@@ -2980,6 +3091,7 @@ suspend fun setStickerPositionInSet(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeleteStickerFromSet")
 suspend fun deleteStickerFromSet(
     sticker: String,
 ): Boolean =
@@ -2995,6 +3107,7 @@ suspend fun deleteStickerFromSet(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callReplaceStickerInSet")
 suspend fun replaceStickerInSet(
     userId: UserId,
     name: String,
@@ -3011,6 +3124,7 @@ suspend fun replaceStickerInSet(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetStickerEmojiList")
 suspend fun setStickerEmojiList(
     sticker: String,
     emojiList: List<String>,
@@ -3025,6 +3139,7 @@ suspend fun setStickerEmojiList(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetStickerKeywords")
 suspend fun setStickerKeywords(
     sticker: String,
     keywords: List<String>? = null,
@@ -3039,6 +3154,7 @@ suspend fun setStickerKeywords(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetStickerMaskPosition")
 suspend fun setStickerMaskPosition(
     sticker: String,
     maskPosition: MaskPosition? = null,
@@ -3053,6 +3169,7 @@ suspend fun setStickerMaskPosition(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetStickerSetTitle")
 suspend fun setStickerSetTitle(
     name: String,
     title: String,
@@ -3069,6 +3186,7 @@ suspend fun setStickerSetTitle(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetStickerSetThumbnail")
 suspend fun setStickerSetThumbnail(
     name: String,
     userId: UserId,
@@ -3085,6 +3203,7 @@ suspend fun setStickerSetThumbnail(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetCustomEmojiStickerSetThumbnail")
 suspend fun setCustomEmojiStickerSetThumbnail(
     name: String,
     customEmojiId: CustomEmojiId? = null,
@@ -3098,6 +3217,7 @@ suspend fun setCustomEmojiStickerSetThumbnail(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callDeleteStickerSet")
 suspend fun deleteStickerSet(
     name: String,
 ): Boolean =
@@ -3115,6 +3235,7 @@ suspend fun deleteStickerSet(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callAnswerInlineQuery")
 suspend fun answerInlineQuery(
     inlineQueryId: InlineQueryId,
     results: List<InlineQueryResult>,
@@ -3155,6 +3276,7 @@ suspend fun InlineQueryId.answer(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callAnswerWebAppQuery")
 suspend fun answerWebAppQuery(
     webAppQueryId: WebAppQueryId,
     result: InlineQueryResult,
@@ -3195,6 +3317,7 @@ suspend fun answerWebAppQuery(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendInvoice")
 suspend fun sendInvoice(
     chatId: ChatId,
     title: String,
@@ -3253,6 +3376,7 @@ suspend fun sendInvoice(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callCreateInvoiceLink")
 suspend fun createInvoiceLink(
     title: String,
     description: String,
@@ -3287,6 +3411,7 @@ suspend fun createInvoiceLink(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callAnswerShippingQuery")
 suspend fun answerShippingQuery(
     shippingQueryId: ShippingQueryId,
     ok: Boolean,
@@ -3304,6 +3429,7 @@ suspend fun answerShippingQuery(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callAnswerPreCheckoutQuery")
 suspend fun answerPreCheckoutQuery(
     preCheckoutQueryId: String,
     ok: Boolean,
@@ -3319,6 +3445,7 @@ suspend fun answerPreCheckoutQuery(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetStarTransactions")
 suspend fun getStarTransactions(
     offset: Long? = null,
     limit: Long? = null,
@@ -3333,6 +3460,7 @@ suspend fun getStarTransactions(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callRefundStarPayment")
 suspend fun refundStarPayment(
     userId: UserId,
     telegramPaymentChargeId: TelegramPaymentChargeId,
@@ -3349,6 +3477,7 @@ suspend fun refundStarPayment(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetPassportDataErrors")
 suspend fun setPassportDataErrors(
     userId: UserId,
     errors: List<PassportElementError>,
@@ -3370,6 +3499,7 @@ suspend fun setPassportDataErrors(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSendGame")
 suspend fun sendGame(
     chatId: ChatId,
     gameShortName: String,
@@ -3395,6 +3525,7 @@ suspend fun sendGame(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetGameScore")
 suspend fun setGameScore(
     userId: UserId,
     score: Long,
@@ -3416,6 +3547,7 @@ suspend fun setGameScore(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callSetInlineGameScore")
 suspend fun setInlineGameScore(
     userId: UserId,
     score: Long,
@@ -3437,6 +3569,7 @@ suspend fun setInlineGameScore(
  */
 context(TelegramBotApiContext)
 @Throws(TelegramBotApiException::class)
+@JvmName("callGetGameHighScores")
 suspend fun getGameHighScores(
     userId: UserId,
     chatId: ChatId? = null,

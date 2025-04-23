@@ -3039,8 +3039,7 @@
         {
             "name": "ForumTopicClosed",
             "description": "This object represents a service message about a forum topic closed in the chat. Currently holds no information.",
-            "fields": [
-            ]
+            "fields": []
         },
         {
             "name": "ForumTopicEdited",
@@ -3065,20 +3064,17 @@
         {
             "name": "ForumTopicReopened",
             "description": "This object represents a service message about a forum topic reopened in the chat. Currently holds no information.",
-            "fields": [
-            ]
+            "fields": []
         },
         {
             "name": "GeneralForumTopicHidden",
             "description": "This object represents a service message about General forum topic hidden in the chat. Currently holds no information.",
-            "fields": [
-            ]
+            "fields": []
         },
         {
             "name": "GeneralForumTopicUnhidden",
             "description": "This object represents a service message about General forum topic unhidden in the chat. Currently holds no information.",
-            "fields": [
-            ]
+            "fields": []
         },
         {
             "name": "SharedUser",
@@ -3225,8 +3221,7 @@
         {
             "name": "VideoChatStarted",
             "description": "This object represents a service message about a video chat started in the chat. Currently holds no information.",
-            "fields": [
-            ]
+            "fields": []
         },
         {
             "name": "VideoChatEnded",
@@ -11080,8 +11075,7 @@
         {
             "name": "CallbackGame",
             "description": "A placeholder, currently holds no information. Use BotFather to set up your game.",
-            "fields": [
-            ]
+            "fields": []
         },
         {
             "name": "GameHighScore",
@@ -11230,29 +11224,25 @@
         {
             "name": "getWebhookInfo",
             "description": "Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty.",
-            "parameters": [
-            ],
+            "parameters": [],
             "returnType": "WebhookInfo"
         },
         {
             "name": "getMe",
             "description": "A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object.",
-            "parameters": [
-            ],
+            "parameters": [],
             "returnType": "User"
         },
         {
             "name": "logOut",
             "description": "Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.",
-            "parameters": [
-            ],
+            "parameters": [],
             "returnType": "Boolean"
         },
         {
             "name": "close",
             "description": "Use this method to close the bot instance before moving it from one local server to another. You need to delete the webhook before calling this method to ensure that the bot isn't launched again after server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns True on success. Requires no parameters.",
-            "parameters": [
-            ],
+            "parameters": [],
             "returnType": "Boolean"
         },
         {
@@ -14198,8 +14188,7 @@
         {
             "name": "getForumTopicIconStickers",
             "description": "Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects.",
-            "parameters": [
-            ],
+            "parameters": [],
             "returnType": "List<Sticker>"
         },
         {
@@ -15206,8 +15195,7 @@
         {
             "name": "getAvailableGifts",
             "description": "Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.",
-            "parameters": [
-            ],
+            "parameters": [],
             "returnType": "Gifts"
         },
         {

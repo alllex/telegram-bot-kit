@@ -42,4 +42,4 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
 kotlinx-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 dokka = { id = "org.jetbrains.dokka", version = "1.9.0" }
-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }
+nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }

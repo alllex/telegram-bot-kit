@@ -63,12 +63,12 @@ class BotApiGenerator {
 
             for (entry in updateListenerEntries) {
                 appendLine()
-                appendLine("    context(TelegramBotApiContext)")
+                appendLine("    context(botApi: TelegramBotApiContext)")
                 appendLine("    suspend fun on${entry.typeWithoutUpdate}(${entry.field}: ${entry.fieldType}) {}")
             }
 
             appendLine()
-            appendLine("    context(TelegramBotApiContext)")
+            appendLine("    context(botApi: TelegramBotApiContext)")
             appendLine("    suspend fun onUpdate(update: Update) {")
             appendLine("        when (update) {")
             for (entry in updateListenerEntries) {
@@ -91,7 +91,7 @@ class BotApiGenerator {
             appendLine("    return object : $listenerTypeName {")
             for (entry in updateListenerEntries) {
                 appendLine()
-                appendLine("        context(TelegramBotApiContext)")
+                appendLine("        context(botApi: TelegramBotApiContext)")
                 appendLine("        override suspend fun on${entry.typeWithoutUpdate}(${entry.field}: ${entry.fieldType}) =")
                 appendLine("            on${entry.typeWithoutUpdate}?.handle(${entry.field}) ?: Unit")
             }
@@ -329,11 +329,11 @@ class BotApiGenerator {
         val tryWithContextMethodSourceCode = buildString {
             appendLine()
             appendMethodDoc(description, parameters)
-            appendLine("context(TelegramBotApiContext)")
+            appendLine("context(botApi: TelegramBotApiContext)")
             append("suspend fun $tryMethodName(")
             appendParameters(apiMethodName, parameters)
             appendLine("): TelegramResponse<${returnType.value}> =")
-            appendLine("    botApiClient.$tryMethodName($requestValueArg)")
+            appendLine("    botApi.botApiClient.$tryMethodName($requestValueArg)")
         }
 
         // Convenience method
@@ -351,13 +351,13 @@ class BotApiGenerator {
         val methodWithContextSourceCode = buildString {
             appendLine()
             appendMethodDoc(description, parameters)
-            appendLine("context(TelegramBotApiContext)")
+            appendLine("context(botApi: TelegramBotApiContext)")
             appendLine("@Throws(TelegramBotApiException::class)")
             appendLine("@JvmName(\"call${methodBaseName.toTitleCase()}\")")
             append("suspend fun $methodBaseName(")
             appendParameters(apiMethodName, parameters)
             appendLine("): ${returnType.value} =")
-            appendLine("    botApiClient.$tryMethodName($requestValueArg).getResultOrThrow()")
+            appendLine("    botApi.botApiClient.$tryMethodName($requestValueArg).getResultOrThrow()")
         }
 
         val fluentContextMethods = fluentMethods.filter { it.delegateName == methodBaseName }.map { fluent ->
@@ -365,7 +365,7 @@ class BotApiGenerator {
             check(unexpectedArgs.isEmpty()) { "Unexpected replacement args for fluent method ${fluent.name}/$methodBaseName: $unexpectedArgs" }
 
             buildString {
-                appendLine("context(TelegramBotApiContext)")
+                appendLine("context(botApi: TelegramBotApiContext)")
                 appendLine("@Throws(TelegramBotApiException::class)")
                 append("suspend fun ${fluent.receiver}.${fluent.name}(")
                 appendParameters(apiMethodName, parameters.filter { it.name !in fluent.args })

@@ -7,73 +7,73 @@ import me.alllex.tbot.api.model.*
 
 interface TelegramBotUpdateListener {
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onMessage(message: Message) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onEditedMessage(editedMessage: Message) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onChannelPost(channelPost: Message) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onEditedChannelPost(editedChannelPost: Message) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onInlineQuery(inlineQuery: InlineQuery) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onChosenInlineResult(chosenInlineResult: ChosenInlineResult) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onCallbackQuery(callbackQuery: CallbackQuery) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onShippingQuery(shippingQuery: ShippingQuery) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onPreCheckoutQuery(preCheckoutQuery: PreCheckoutQuery) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onPoll(poll: Poll) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onPollAnswer(pollAnswer: PollAnswer) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onMyChatMember(myChatMember: ChatMemberUpdated) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onChatMember(chatMember: ChatMemberUpdated) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onChatJoinRequest(chatJoinRequest: ChatJoinRequest) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onBusinessConnection(businessConnection: BusinessConnection) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onBusinessMessage(businessMessage: Message) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onDeletedBusinessMessages(deletedBusinessMessages: BusinessMessagesDeleted) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onEditedBusinessMessage(editedBusinessMessage: Message) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onMessageReactionCount(messageReactionCount: MessageReactionCountUpdated) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onMessageReaction(messageReaction: MessageReactionUpdated) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onChatBoost(chatBoost: ChatBoostUpdated) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onRemovedChatBoost(removedChatBoost: ChatBoostRemoved) {}
 
-    context(TelegramBotApiContext)
+    context(botApi: TelegramBotApiContext)
     suspend fun onUpdate(update: Update) {
         when (update) {
             is MessageUpdate -> onMessage(update.message)
@@ -130,91 +130,91 @@ fun TelegramBotUpdateListener(
 ): TelegramBotUpdateListener {
     return object : TelegramBotUpdateListener {
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onMessage(message: Message) =
             onMessage?.handle(message) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onEditedMessage(editedMessage: Message) =
             onEditedMessage?.handle(editedMessage) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onChannelPost(channelPost: Message) =
             onChannelPost?.handle(channelPost) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onEditedChannelPost(editedChannelPost: Message) =
             onEditedChannelPost?.handle(editedChannelPost) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onInlineQuery(inlineQuery: InlineQuery) =
             onInlineQuery?.handle(inlineQuery) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onChosenInlineResult(chosenInlineResult: ChosenInlineResult) =
             onChosenInlineResult?.handle(chosenInlineResult) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onCallbackQuery(callbackQuery: CallbackQuery) =
             onCallbackQuery?.handle(callbackQuery) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onShippingQuery(shippingQuery: ShippingQuery) =
             onShippingQuery?.handle(shippingQuery) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onPreCheckoutQuery(preCheckoutQuery: PreCheckoutQuery) =
             onPreCheckoutQuery?.handle(preCheckoutQuery) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onPoll(poll: Poll) =
             onPoll?.handle(poll) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onPollAnswer(pollAnswer: PollAnswer) =
             onPollAnswer?.handle(pollAnswer) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onMyChatMember(myChatMember: ChatMemberUpdated) =
             onMyChatMember?.handle(myChatMember) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onChatMember(chatMember: ChatMemberUpdated) =
             onChatMember?.handle(chatMember) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onChatJoinRequest(chatJoinRequest: ChatJoinRequest) =
             onChatJoinRequest?.handle(chatJoinRequest) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onBusinessConnection(businessConnection: BusinessConnection) =
             onBusinessConnection?.handle(businessConnection) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onBusinessMessage(businessMessage: Message) =
             onBusinessMessage?.handle(businessMessage) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onDeletedBusinessMessages(deletedBusinessMessages: BusinessMessagesDeleted) =
             onDeletedBusinessMessages?.handle(deletedBusinessMessages) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onEditedBusinessMessage(editedBusinessMessage: Message) =
             onEditedBusinessMessage?.handle(editedBusinessMessage) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onMessageReactionCount(messageReactionCount: MessageReactionCountUpdated) =
             onMessageReactionCount?.handle(messageReactionCount) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onMessageReaction(messageReaction: MessageReactionUpdated) =
             onMessageReaction?.handle(messageReaction) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onChatBoost(chatBoost: ChatBoostUpdated) =
             onChatBoost?.handle(chatBoost) ?: Unit
 
-        context(TelegramBotApiContext)
+        context(botApi: TelegramBotApiContext)
         override suspend fun onRemovedChatBoost(removedChatBoost: ChatBoostRemoved) =
             onRemovedChatBoost?.handle(removedChatBoost) ?: Unit
     }

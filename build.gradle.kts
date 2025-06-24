@@ -127,7 +127,7 @@ kotlin.sourceSets.main {
 }
 
 kotlin.compilerOptions {
-    freeCompilerArgs.add("-Xcontext-receivers")
+    freeCompilerArgs.add("-Xcontext-parameters")
 }
 
 val sourcesJar by tasks.registering(Jar::class) {

@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jsoup:jsoup:1.19.1")
+    implementation("org.jsoup:jsoup:1.21.1")
     implementation("me.alllex.parsus:parsus-jvm:0.6.1")
     implementation(libs.kotlinx.serialization.json)
 }

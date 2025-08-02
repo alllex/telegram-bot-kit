@@ -137,8 +137,7 @@ val sourcesJar by tasks.registering(Jar::class) {
 
 val javadocJar by tasks.registering(Jar::class) {
     description = "Produce javadoc with Dokka HTML inside"
-    dependsOn(tasks.dokkaHtml)
-    from(tasks.dokkaHtml)
+    from(tasks.dokkaGeneratePublicationHtml)
     archiveClassifier = "javadoc"
 }
 

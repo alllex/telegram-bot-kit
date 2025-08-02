@@ -12,6 +12,8 @@ import me.alllex.parsus.parser.repeatOneOrMore
 import me.alllex.parsus.token.regexToken
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 /**
@@ -180,6 +182,8 @@ private val implicitReplyMarkupElement = BotApiElement(
 
 class BotApiDefinitionParser {
 
+    private val logger: Logger = LoggerFactory.getLogger(BotApiDefinitionParser::class.java)
+
     fun run(
         originalHtml: File,
         argListsFile: File?,
@@ -199,7 +203,7 @@ class BotApiDefinitionParser {
             contentEls.selectSections(startsSection = Element::isH3, stopsSequence = { it.isH1() || it.isH2() })
 
         val groupSections = h3Sections.filter { it.first().ownText() in topLevelSections }
-        println("Found ${groupSections.size} top-level sections")
+        logger.info("Found ${groupSections.size} top-level sections")
 
         val (typeDefSections, methodDefSections) = groupSections.flatMap {
             it.selectSections(startsSection = Element::isH4)
@@ -208,8 +212,8 @@ class BotApiDefinitionParser {
             sectionEls.first().ownText().first().isUpperCase()
         }
 
-        println("Found ${typeDefSections.size} type definition sections")
-        println("Found ${methodDefSections.size} method definition sections")
+        logger.info("Found ${typeDefSections.size} type definition sections")
+        logger.info("Found ${methodDefSections.size} method definition sections")
 
         val typeDefinitions = typeDefSections.map(::parseElementDefinition)
 

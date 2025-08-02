@@ -2,8 +2,12 @@ package me.alllex.tbot.apigen
 
 import java.io.File
 import java.util.Map.entry
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class BotApiGenerator {
+
+    private val logger: Logger = LoggerFactory.getLogger(BotApiGenerator::class.java)
 
     fun run(
         apiJsonFile: File,
@@ -14,9 +18,9 @@ class BotApiGenerator {
         val botApi = jsonSerialization.decodeFromString<BotApi>(apiJsonFile.readText())
 
         val allTypes = botApi.types
-        println("Parsed ${allTypes.size} types")
+        logger.info("Parsed ${allTypes.size} types")
         val allMethods = botApi.methods
-        println("Parsed ${allMethods.size} methods")
+        logger.info("Parsed ${allMethods.size} methods")
 
         val unionTypes = collectUnionTypes(allTypes)
         val unionTypeParentByChild = unionTypes

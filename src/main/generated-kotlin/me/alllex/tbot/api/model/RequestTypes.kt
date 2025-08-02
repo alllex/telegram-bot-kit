@@ -693,7 +693,7 @@ data class SendContactRequest(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param question Poll question, 1-300 characters
- * @param options A JSON-serialized list of 2-10 answer options
+ * @param options A JSON-serialized list of 2-12 answer options
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param questionParseMode Mode for parsing entities in the question. See formatting options for more details. Currently, only custom emoji entities are allowed
  * @param questionEntities A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of question_parse_mode
@@ -742,6 +742,32 @@ data class SendPollRequest(
     val allowPaidBroadcast: Boolean? = null,
 ) {
     override fun toString() = DebugStringBuilder("SendPollRequest").prop("chatId", chatId).prop("question", question).prop("options", options).prop("messageThreadId", messageThreadId).prop("questionParseMode", questionParseMode).prop("questionEntities", questionEntities).prop("isAnonymous", isAnonymous).prop("type", type).prop("allowsMultipleAnswers", allowsMultipleAnswers).prop("correctOptionId", correctOptionId).prop("explanation", explanation).prop("explanationParseMode", explanationParseMode).prop("explanationEntities", explanationEntities).prop("openPeriod", openPeriod).prop("closeDate", closeDate).prop("isClosed", isClosed).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+}
+
+/**
+ * Request body for [sendChecklist].
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param chatId Unique identifier for the target chat
+ * @param checklist A JSON-serialized object for the checklist to send
+ * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
+ * @param protectContent Protects the contents of the sent message from forwarding and saving
+ * @param messageEffectId Unique identifier of the message effect to be added to the message
+ * @param replyParameters A JSON-serialized object for description of the message to reply to
+ * @param replyMarkup A JSON-serialized object for an inline keyboard
+ */
+@Serializable
+data class SendChecklistRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val chatId: ChatId,
+    val checklist: InputChecklist,
+    val disableNotification: Boolean? = null,
+    val protectContent: Boolean? = null,
+    val messageEffectId: MessageEffectId? = null,
+    val replyParameters: ReplyParameters? = null,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+) {
+    override fun toString() = DebugStringBuilder("SendChecklistRequest").prop("businessConnectionId", businessConnectionId).prop("chatId", chatId).prop("checklist", checklist).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**
@@ -914,7 +940,7 @@ data class RestrictChatMemberRequest(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  * @param isAnonymous Pass True if the administrator's presence in the chat is hidden
- * @param canManageChat Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+ * @param canManageChat Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
  * @param canDeleteMessages Pass True if the administrator can delete messages of other users
  * @param canManageVideoChats Pass True if the administrator can manage video chats
  * @param canRestrictMembers Pass True if the administrator can restrict, ban or unban chat members, or access supergroup statistics
@@ -924,7 +950,7 @@ data class RestrictChatMemberRequest(
  * @param canPostStories Pass True if the administrator can post stories to the chat
  * @param canEditStories Pass True if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
  * @param canDeleteStories Pass True if the administrator can delete stories posted by other users
- * @param canPostMessages Pass True if the administrator can post messages in the channel, or access channel statistics; for channels only
+ * @param canPostMessages Pass True if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
  * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; for channels only
  * @param canPinMessages Pass True if the administrator can pin messages; for supergroups only
  * @param canManageTopics Pass True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
@@ -1844,6 +1870,26 @@ data class StopMessageLiveLocationRequest(
     val businessConnectionId: BusinessConnectionId? = null,
 ) {
     override fun toString() = DebugStringBuilder("StopMessageLiveLocationRequest").prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
+ * Request body for [editMessageChecklist].
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param chatId Unique identifier for the target chat
+ * @param messageId Unique identifier for the target message
+ * @param checklist A JSON-serialized object for the new checklist
+ * @param replyMarkup A JSON-serialized object for the new inline keyboard for the message
+ */
+@Serializable
+data class EditMessageChecklistRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val chatId: ChatId,
+    val messageId: MessageId,
+    val checklist: InputChecklist,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+) {
+    override fun toString() = DebugStringBuilder("EditMessageChecklistRequest").prop("businessConnectionId", businessConnectionId).prop("chatId", chatId).prop("messageId", messageId).prop("checklist", checklist).prop("replyMarkup", replyMarkup).toString()
 }
 
 /**

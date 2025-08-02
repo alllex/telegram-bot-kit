@@ -1323,6 +1323,13 @@
                     "defaultValue": "null"
                 },
                 {
+                    "serialName": "checklist",
+                    "description": "Optional. Message is a checklist",
+                    "type": "Checklist",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
                     "serialName": "gift",
                     "description": "Optional. Service message: a regular gift was sent or received",
                     "type": "GiftInfo",
@@ -1333,6 +1340,27 @@
                     "serialName": "unique_gift",
                     "description": "Optional. Service message: a unique gift was sent or received",
                     "type": "UniqueGiftInfo",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "checklist_tasks_done",
+                    "description": "Optional. Service message: some tasks in a checklist were marked as done or not done",
+                    "type": "ChecklistTasksDone",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "checklist_tasks_added",
+                    "description": "Optional. Service message: tasks were added to a checklist",
+                    "type": "ChecklistTasksAdded",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "direct_message_price_changed",
+                    "description": "Optional. Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed",
+                    "type": "DirectMessagePriceChanged",
                     "isOptional": true,
                     "defaultValue": "null"
                 },
@@ -1617,6 +1645,13 @@
                     "serialName": "paid_media",
                     "description": "Optional. Message contains paid media; information about the paid media",
                     "type": "PaidMediaInfo",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "checklist",
+                    "description": "Optional. Message is a checklist",
+                    "type": "Checklist",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -2592,6 +2627,217 @@
             ]
         },
         {
+            "name": "ChecklistTask",
+            "description": "Describes a task in a checklist.",
+            "fields": [
+                {
+                    "serialName": "id",
+                    "description": "Unique identifier of the task",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "text",
+                    "description": "Text of the task",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "text_entities",
+                    "description": "Optional. Special entities that appear in the task text",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "completed_by_user",
+                    "description": "Optional. User that completed the task; omitted if the task wasn't completed",
+                    "type": "User",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "completion_date",
+                    "description": "Optional. Point in time (Unix timestamp) when the task was completed; 0 if the task wasn't completed",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "Checklist",
+            "description": "Describes a checklist.",
+            "fields": [
+                {
+                    "serialName": "title",
+                    "description": "Title of the checklist",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "tasks",
+                    "description": "List of tasks in the checklist",
+                    "type": "List<ChecklistTask>",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "title_entities",
+                    "description": "Optional. Special entities that appear in the checklist title",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "others_can_add_tasks",
+                    "description": "Optional. True, if users other than the creator of the list can add tasks to the list",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "others_can_mark_tasks_as_done",
+                    "description": "Optional. True, if users other than the creator of the list can mark tasks as done or not done",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "InputChecklistTask",
+            "description": "Describes a task to add to a checklist.",
+            "fields": [
+                {
+                    "serialName": "id",
+                    "description": "Unique identifier of the task; must be positive and unique among all task identifiers currently present in the checklist",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "text",
+                    "description": "Text of the task; 1-100 characters after entities parsing",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "parse_mode",
+                    "description": "Optional. Mode for parsing entities in the text. See formatting options for more details.",
+                    "type": "ParseMode",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "text_entities",
+                    "description": "Optional. List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "InputChecklist",
+            "description": "Describes a checklist to create.",
+            "fields": [
+                {
+                    "serialName": "title",
+                    "description": "Title of the checklist; 1-255 characters after entities parsing",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "tasks",
+                    "description": "List of 1-30 tasks in the checklist",
+                    "type": "List<InputChecklistTask>",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "parse_mode",
+                    "description": "Optional. Mode for parsing entities in the title. See formatting options for more details.",
+                    "type": "ParseMode",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "title_entities",
+                    "description": "Optional. List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.",
+                    "type": "List<MessageEntity>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "others_can_add_tasks",
+                    "description": "Optional. Pass True if other users can add tasks to the checklist",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "others_can_mark_tasks_as_done",
+                    "description": "Optional. Pass True if other users can mark tasks as done or not done in the checklist",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "ChecklistTasksDone",
+            "description": "Describes a service message about checklist tasks marked as done or not done.",
+            "fields": [
+                {
+                    "serialName": "checklist_message",
+                    "description": "Optional. Message containing the checklist whose tasks were marked as done or not done. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+                    "type": "Message",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "marked_as_done_task_ids",
+                    "description": "Optional. Identifiers of the tasks that were marked as done",
+                    "type": "List<Long>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "marked_as_not_done_task_ids",
+                    "description": "Optional. Identifiers of the tasks that were marked as not done",
+                    "type": "List<Long>",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
+            "name": "ChecklistTasksAdded",
+            "description": "Describes a service message about tasks added to a checklist.",
+            "fields": [
+                {
+                    "serialName": "tasks",
+                    "description": "List of tasks added to the checklist",
+                    "type": "List<ChecklistTask>",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "checklist_message",
+                    "description": "Optional. Message containing the checklist to which the tasks were added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+                    "type": "Message",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ]
+        },
+        {
             "name": "Location",
             "description": "This object represents a point on the map.",
             "fields": [
@@ -3259,6 +3505,26 @@
                     "type": "Long",
                     "isOptional": false,
                     "defaultValue": null
+                }
+            ]
+        },
+        {
+            "name": "DirectMessagePriceChanged",
+            "description": "Describes a service message about a change in the price of direct messages sent to a channel chat.",
+            "fields": [
+                {
+                    "serialName": "are_direct_messages_enabled",
+                    "description": "True, if direct messages are enabled for the channel chat; false otherwise",
+                    "type": "Boolean",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "direct_message_star_count",
+                    "description": "Optional. The new number of Telegram Stars that must be paid by users for each direct message sent to the channel. Does not apply to users who have been exempted by administrators. Defaults to 0.",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 }
             ]
         },
@@ -4246,7 +4512,7 @@
                 },
                 {
                     "serialName": "can_manage_chat",
-                    "description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.",
+                    "description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.",
                     "type": "Boolean",
                     "isOptional": false,
                     "defaultValue": null
@@ -4316,7 +4582,7 @@
                 },
                 {
                     "serialName": "can_post_messages",
-                    "description": "Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only",
+                    "description": "Optional. True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only",
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -4486,7 +4752,7 @@
                 },
                 {
                     "serialName": "can_manage_chat",
-                    "description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.",
+                    "description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.",
                     "type": "Boolean",
                     "isOptional": false,
                     "defaultValue": null
@@ -4556,7 +4822,7 @@
                 },
                 {
                     "serialName": "can_post_messages",
-                    "description": "Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only",
+                    "description": "Optional. True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only",
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -4694,7 +4960,7 @@
                 },
                 {
                     "serialName": "can_send_polls",
-                    "description": "True, if the user is allowed to send polls",
+                    "description": "True, if the user is allowed to send polls and checklists",
                     "type": "Boolean",
                     "isOptional": false,
                     "defaultValue": null
@@ -4900,7 +5166,7 @@
                 },
                 {
                     "serialName": "can_send_polls",
-                    "description": "Optional. True, if the user is allowed to send polls",
+                    "description": "Optional. True, if the user is allowed to send polls and checklists",
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -5842,10 +6108,17 @@
                 },
                 {
                     "serialName": "origin",
-                    "description": "Origin of the gift. Currently, either “upgrade” or “transfer”",
+                    "description": "Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, or “resale” for gifts bought from other users",
                     "type": "String",
                     "isOptional": false,
                     "defaultValue": null
+                },
+                {
+                    "serialName": "last_resale_star_count",
+                    "description": "Optional. For gifts bought from other users, the price paid for the gift",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
                 },
                 {
                     "serialName": "owned_gift_id",
@@ -5857,6 +6130,13 @@
                 {
                     "serialName": "transfer_star_count",
                     "description": "Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "next_transfer_date",
+                    "description": "Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now",
                     "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -6024,6 +6304,13 @@
                 {
                     "serialName": "transfer_star_count",
                     "description": "Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift",
+                    "type": "Long",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "next_transfer_date",
+                    "description": "Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now",
                     "type": "Long",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -12570,7 +12857,7 @@
         },
         {
             "name": "sendMediaGroup",
-            "description": "Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.",
+            "description": "Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Message objects that were sent is returned.",
             "parameters": [
                 {
                     "serialName": "chat_id",
@@ -12994,7 +13281,7 @@
                 },
                 {
                     "serialName": "options",
-                    "description": "A JSON-serialized list of 2-10 answer options",
+                    "description": "A JSON-serialized list of 2-12 answer options",
                     "type": "List<InputPollOption>",
                     "isOptional": false,
                     "defaultValue": null
@@ -13136,6 +13423,69 @@
                     "serialName": "allow_paid_broadcast",
                     "description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance",
                     "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Message"
+        },
+        {
+            "name": "sendChecklist",
+            "description": "Use this method to send a checklist on behalf of a connected business account. On success, the sent Message is returned.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection on behalf of which the message will be sent",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "chat_id",
+                    "description": "Unique identifier for the target chat",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "checklist",
+                    "description": "A JSON-serialized object for the checklist to send",
+                    "type": "InputChecklist",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "disable_notification",
+                    "description": "Sends the message silently. Users will receive a notification with no sound.",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "protect_content",
+                    "description": "Protects the contents of the sent message from forwarding and saving",
+                    "type": "Boolean",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "message_effect_id",
+                    "description": "Unique identifier of the message effect to be added to the message",
+                    "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "reply_parameters",
+                    "description": "A JSON-serialized object for description of the message to reply to",
+                    "type": "ReplyParameters",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                },
+                {
+                    "serialName": "reply_markup",
+                    "description": "A JSON-serialized object for an inline keyboard",
+                    "type": "InlineKeyboardMarkup",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -13491,7 +13841,7 @@
                 },
                 {
                     "serialName": "can_manage_chat",
-                    "description": "Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.",
+                    "description": "Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.",
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -13561,7 +13911,7 @@
                 },
                 {
                     "serialName": "can_post_messages",
-                    "description": "Pass True if the administrator can post messages in the channel, or access channel statistics; for channels only",
+                    "description": "Pass True if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only",
                     "type": "Boolean",
                     "isOptional": true,
                     "defaultValue": "null"
@@ -15067,6 +15417,48 @@
                     "serialName": "business_connection_id",
                     "description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
                     "type": "String",
+                    "isOptional": true,
+                    "defaultValue": "null"
+                }
+            ],
+            "returnType": "Message"
+        },
+        {
+            "name": "editMessageChecklist",
+            "description": "Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.",
+            "parameters": [
+                {
+                    "serialName": "business_connection_id",
+                    "description": "Unique identifier of the business connection on behalf of which the message will be sent",
+                    "type": "String",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "chat_id",
+                    "description": "Unique identifier for the target chat",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "message_id",
+                    "description": "Unique identifier for the target message",
+                    "type": "Long",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "checklist",
+                    "description": "A JSON-serialized object for the new checklist",
+                    "type": "InputChecklist",
+                    "isOptional": false,
+                    "defaultValue": null
+                },
+                {
+                    "serialName": "reply_markup",
+                    "description": "A JSON-serialized object for the new inline keyboard for the message",
+                    "type": "InlineKeyboardMarkup",
                     "isOptional": true,
                     "defaultValue": "null"
                 }
@@ -16905,6 +17297,12 @@
                 }
             ],
             "returnType": "Boolean"
+        },
+        {
+            "name": "getMyStarBalance",
+            "description": "A method to get the current Telegram Stars balance of the bot. Requires no parameters. On success, returns a StarAmount object.",
+            "parameters": [],
+            "returnType": "StarAmount"
         },
         {
             "name": "getStarTransactions",

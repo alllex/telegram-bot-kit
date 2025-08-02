@@ -559,7 +559,7 @@ suspend fun trySendPaidMedia(
     botApiClient.trySendPaidMedia(SendPaidMediaRequest(chatId, starCount, media, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup, businessConnectionId, payload, allowPaidBroadcast))
 
 /**
- * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
+ * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Message objects that were sent is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param media A JSON-serialized array describing messages to be sent, must include 2-10 items
@@ -707,7 +707,7 @@ suspend fun trySendContact(
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param question Poll question, 1-300 characters
- * @param options A JSON-serialized list of 2-10 answer options
+ * @param options A JSON-serialized list of 2-12 answer options
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param questionParseMode Mode for parsing entities in the question. See formatting options for more details. Currently, only custom emoji entities are allowed
  * @param questionEntities A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of question_parse_mode
@@ -756,6 +756,31 @@ suspend fun trySendPoll(
     allowPaidBroadcast: Boolean? = null,
 ): TelegramResponse<Message> =
     botApiClient.trySendPoll(SendPollRequest(chatId, question, options, messageThreadId, questionParseMode, questionEntities, isAnonymous, type, allowsMultipleAnswers, correctOptionId, explanation, explanationParseMode, explanationEntities, openPeriod, closeDate, isClosed, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+
+/**
+ * Use this method to send a checklist on behalf of a connected business account. On success, the sent Message is returned.
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param chatId Unique identifier for the target chat
+ * @param checklist A JSON-serialized object for the checklist to send
+ * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
+ * @param protectContent Protects the contents of the sent message from forwarding and saving
+ * @param messageEffectId Unique identifier of the message effect to be added to the message
+ * @param replyParameters A JSON-serialized object for description of the message to reply to
+ * @param replyMarkup A JSON-serialized object for an inline keyboard
+ */
+context(TelegramBotApiContext)
+suspend fun trySendChecklist(
+    businessConnectionId: BusinessConnectionId,
+    chatId: ChatId,
+    checklist: InputChecklist,
+    disableNotification: Boolean? = null,
+    protectContent: Boolean? = null,
+    messageEffectId: MessageEffectId? = null,
+    replyParameters: ReplyParameters? = null,
+    replyMarkup: InlineKeyboardMarkup? = null,
+): TelegramResponse<Message> =
+    botApiClient.trySendChecklist(SendChecklistRequest(businessConnectionId, chatId, checklist, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup))
 
 /**
  * Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned.
@@ -922,7 +947,7 @@ suspend fun tryRestrictChatMember(
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param userId Unique identifier of the target user
  * @param isAnonymous Pass True if the administrator's presence in the chat is hidden
- * @param canManageChat Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+ * @param canManageChat Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
  * @param canDeleteMessages Pass True if the administrator can delete messages of other users
  * @param canManageVideoChats Pass True if the administrator can manage video chats
  * @param canRestrictMembers Pass True if the administrator can restrict, ban or unban chat members, or access supergroup statistics
@@ -932,7 +957,7 @@ suspend fun tryRestrictChatMember(
  * @param canPostStories Pass True if the administrator can post stories to the chat
  * @param canEditStories Pass True if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
  * @param canDeleteStories Pass True if the administrator can delete stories posted by other users
- * @param canPostMessages Pass True if the administrator can post messages in the channel, or access channel statistics; for channels only
+ * @param canPostMessages Pass True if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
  * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; for channels only
  * @param canPinMessages Pass True if the administrator can pin messages; for supergroups only
  * @param canManageTopics Pass True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
@@ -1899,6 +1924,25 @@ suspend fun tryStopInlineMessageLiveLocation(
     botApiClient.tryStopInlineMessageLiveLocation(StopMessageLiveLocationRequest(inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
 
 /**
+ * Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param chatId Unique identifier for the target chat
+ * @param messageId Unique identifier for the target message
+ * @param checklist A JSON-serialized object for the new checklist
+ * @param replyMarkup A JSON-serialized object for the new inline keyboard for the message
+ */
+context(TelegramBotApiContext)
+suspend fun tryEditMessageChecklist(
+    businessConnectionId: BusinessConnectionId,
+    chatId: ChatId,
+    messageId: MessageId,
+    checklist: InputChecklist,
+    replyMarkup: InlineKeyboardMarkup? = null,
+): TelegramResponse<Message> =
+    botApiClient.tryEditMessageChecklist(EditMessageChecklistRequest(businessConnectionId, chatId, messageId, checklist, replyMarkup))
+
+/**
  * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  *
  * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -2789,6 +2833,13 @@ suspend fun tryAnswerPreCheckoutQuery(
     errorMessage: String? = null,
 ): TelegramResponse<Boolean> =
     botApiClient.tryAnswerPreCheckoutQuery(AnswerPreCheckoutQueryRequest(preCheckoutQueryId, ok, errorMessage))
+
+/**
+ * A method to get the current Telegram Stars balance of the bot. Requires no parameters. On success, returns a StarAmount object.
+ */
+context(TelegramBotApiContext)
+suspend fun tryGetMyStarBalance(): TelegramResponse<StarAmount> =
+    botApiClient.tryGetMyStarBalance()
 
 /**
  * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.

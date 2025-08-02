@@ -128,7 +128,7 @@ suspend fun TelegramBotApiClient.trySendPaidMedia(requestBody: SendPaidMediaRequ
     telegramPost("sendPaidMedia", requestBody)
 
 /**
- * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
+ * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Message objects that were sent is returned.
  */
 suspend fun TelegramBotApiClient.trySendMediaGroup(requestBody: SendMediaGroupRequest): TelegramResponse<List<Message>> =
     telegramPost("sendMediaGroup", requestBody)
@@ -156,6 +156,12 @@ suspend fun TelegramBotApiClient.trySendContact(requestBody: SendContactRequest)
  */
 suspend fun TelegramBotApiClient.trySendPoll(requestBody: SendPollRequest): TelegramResponse<Message> =
     telegramPost("sendPoll", requestBody)
+
+/**
+ * Use this method to send a checklist on behalf of a connected business account. On success, the sent Message is returned.
+ */
+suspend fun TelegramBotApiClient.trySendChecklist(requestBody: SendChecklistRequest): TelegramResponse<Message> =
+    telegramPost("sendChecklist", requestBody)
 
 /**
  * Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned.
@@ -614,6 +620,12 @@ suspend fun TelegramBotApiClient.tryStopInlineMessageLiveLocation(requestBody: S
     telegramPost("stopMessageLiveLocation", requestBody)
 
 /**
+ * Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageChecklist(requestBody: EditMessageChecklistRequest): TelegramResponse<Message> =
+    telegramPost("editMessageChecklist", requestBody)
+
+/**
  * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 suspend fun TelegramBotApiClient.tryEditMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Message> =
@@ -924,6 +936,12 @@ suspend fun TelegramBotApiClient.tryAnswerShippingQuery(requestBody: AnswerShipp
  */
 suspend fun TelegramBotApiClient.tryAnswerPreCheckoutQuery(requestBody: AnswerPreCheckoutQueryRequest): TelegramResponse<Boolean> =
     telegramPost("answerPreCheckoutQuery", requestBody)
+
+/**
+ * A method to get the current Telegram Stars balance of the bot. Requires no parameters. On success, returns a StarAmount object.
+ */
+suspend fun TelegramBotApiClient.tryGetMyStarBalance(): TelegramResponse<StarAmount> =
+    telegramGet("getMyStarBalance")
 
 /**
  * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.

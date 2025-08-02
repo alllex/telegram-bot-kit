@@ -628,8 +628,12 @@ data class ChatFullInfo(
  * @param paidMedia Optional. Message contains paid media; information about the paid media
  * @param refundedPayment Optional. Message is a service message about a refunded payment, information about the payment. More about payments »
  * @param paidStarCount Optional. The number of Telegram Stars that were paid by the sender of the message to send it
+ * @param checklist Optional. Message is a checklist
  * @param gift Optional. Service message: a regular gift was sent or received
  * @param uniqueGift Optional. Service message: a unique gift was sent or received
+ * @param checklistTasksDone Optional. Service message: some tasks in a checklist were marked as done or not done
+ * @param checklistTasksAdded Optional. Service message: tasks were added to a checklist
+ * @param directMessagePriceChanged Optional. Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed
  * @param paidMessagePriceChanged Optional. Service message: the price for paid messages has changed in the chat
  */
 @Serializable
@@ -720,11 +724,15 @@ data class Message(
     val paidMedia: PaidMediaInfo? = null,
     val refundedPayment: RefundedPayment? = null,
     val paidStarCount: Long? = null,
+    val checklist: Checklist? = null,
     val gift: GiftInfo? = null,
     val uniqueGift: UniqueGiftInfo? = null,
+    val checklistTasksDone: ChecklistTasksDone? = null,
+    val checklistTasksAdded: ChecklistTasksAdded? = null,
+    val directMessagePriceChanged: DirectMessagePriceChanged? = null,
     val paidMessagePriceChanged: PaidMessagePriceChanged? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).prop("paidMedia", paidMedia).prop("refundedPayment", refundedPayment).prop("paidStarCount", paidStarCount).prop("gift", gift).prop("uniqueGift", uniqueGift).prop("paidMessagePriceChanged", paidMessagePriceChanged).toString()
+    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).prop("paidMedia", paidMedia).prop("refundedPayment", refundedPayment).prop("paidStarCount", paidStarCount).prop("checklist", checklist).prop("gift", gift).prop("uniqueGift", uniqueGift).prop("checklistTasksDone", checklistTasksDone).prop("checklistTasksAdded", checklistTasksAdded).prop("directMessagePriceChanged", directMessagePriceChanged).prop("paidMessagePriceChanged", paidMessagePriceChanged).toString()
 }
 
 /**
@@ -804,6 +812,7 @@ data class TextQuote(
  * @param poll Optional. Message is a native poll, information about the poll
  * @param venue Optional. Message is a venue, information about the venue
  * @param paidMedia Optional. Message contains paid media; information about the paid media
+ * @param checklist Optional. Message is a checklist
  */
 @Serializable
 data class ExternalReplyInfo(
@@ -831,8 +840,9 @@ data class ExternalReplyInfo(
     val poll: Poll? = null,
     val venue: Venue? = null,
     val paidMedia: PaidMediaInfo? = null,
+    val checklist: Checklist? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ExternalReplyInfo").prop("origin", origin).prop("chat", chat).prop("messageId", messageId).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("invoice", invoice).prop("location", location).prop("poll", poll).prop("venue", venue).prop("paidMedia", paidMedia).toString()
+    override fun toString() = DebugStringBuilder("ExternalReplyInfo").prop("origin", origin).prop("chat", chat).prop("messageId", messageId).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("invoice", invoice).prop("location", location).prop("poll", poll).prop("venue", venue).prop("paidMedia", paidMedia).prop("checklist", checklist).toString()
 }
 
 /**
@@ -1289,6 +1299,110 @@ data class Poll(
 }
 
 /**
+ * Describes a task in a checklist.
+ * @param id Unique identifier of the task
+ * @param text Text of the task
+ * @param textEntities Optional. Special entities that appear in the task text
+ * @param completedByUser Optional. User that completed the task; omitted if the task wasn't completed
+ * @param completionDate Optional. Point in time (Unix timestamp) when the task was completed; 0 if the task wasn't completed
+ */
+@Serializable
+data class ChecklistTask(
+    val id: Long,
+    val text: String,
+    val textEntities: List<MessageEntity>? = null,
+    val completedByUser: User? = null,
+    val completionDate: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("ChecklistTask").prop("id", id).prop("text", text).prop("textEntities", textEntities).prop("completedByUser", completedByUser).prop("completionDate", completionDate).toString()
+}
+
+/**
+ * Describes a checklist.
+ * @param title Title of the checklist
+ * @param tasks List of tasks in the checklist
+ * @param titleEntities Optional. Special entities that appear in the checklist title
+ * @param othersCanAddTasks Optional. True, if users other than the creator of the list can add tasks to the list
+ * @param othersCanMarkTasksAsDone Optional. True, if users other than the creator of the list can mark tasks as done or not done
+ */
+@Serializable
+data class Checklist(
+    val title: String,
+    val tasks: List<ChecklistTask>,
+    val titleEntities: List<MessageEntity>? = null,
+    val othersCanAddTasks: Boolean? = null,
+    val othersCanMarkTasksAsDone: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("Checklist").prop("title", title).prop("tasks", tasks).prop("titleEntities", titleEntities).prop("othersCanAddTasks", othersCanAddTasks).prop("othersCanMarkTasksAsDone", othersCanMarkTasksAsDone).toString()
+}
+
+/**
+ * Describes a task to add to a checklist.
+ * @param id Unique identifier of the task; must be positive and unique among all task identifiers currently present in the checklist
+ * @param text Text of the task; 1-100 characters after entities parsing
+ * @param parseMode Optional. Mode for parsing entities in the text. See formatting options for more details.
+ * @param textEntities Optional. List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.
+ */
+@Serializable
+data class InputChecklistTask(
+    val id: Long,
+    val text: String,
+    val parseMode: ParseMode? = null,
+    val textEntities: List<MessageEntity>? = null,
+) {
+    override fun toString() = DebugStringBuilder("InputChecklistTask").prop("id", id).prop("text", text).prop("parseMode", parseMode).prop("textEntities", textEntities).toString()
+}
+
+/**
+ * Describes a checklist to create.
+ * @param title Title of the checklist; 1-255 characters after entities parsing
+ * @param tasks List of 1-30 tasks in the checklist
+ * @param parseMode Optional. Mode for parsing entities in the title. See formatting options for more details.
+ * @param titleEntities Optional. List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.
+ * @param othersCanAddTasks Optional. Pass True if other users can add tasks to the checklist
+ * @param othersCanMarkTasksAsDone Optional. Pass True if other users can mark tasks as done or not done in the checklist
+ */
+@Serializable
+data class InputChecklist(
+    val title: String,
+    val tasks: List<InputChecklistTask>,
+    val parseMode: ParseMode? = null,
+    val titleEntities: List<MessageEntity>? = null,
+    val othersCanAddTasks: Boolean? = null,
+    val othersCanMarkTasksAsDone: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("InputChecklist").prop("title", title).prop("tasks", tasks).prop("parseMode", parseMode).prop("titleEntities", titleEntities).prop("othersCanAddTasks", othersCanAddTasks).prop("othersCanMarkTasksAsDone", othersCanMarkTasksAsDone).toString()
+}
+
+/**
+ * Describes a service message about checklist tasks marked as done or not done.
+ * @param checklistMessage Optional. Message containing the checklist whose tasks were marked as done or not done. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param markedAsDoneTaskIds Optional. Identifiers of the tasks that were marked as done
+ * @param markedAsNotDoneTaskIds Optional. Identifiers of the tasks that were marked as not done
+ */
+@Serializable
+data class ChecklistTasksDone(
+    val checklistMessage: Message? = null,
+    val markedAsDoneTaskIds: List<Long>? = null,
+    val markedAsNotDoneTaskIds: List<Long>? = null,
+) {
+    override fun toString() = DebugStringBuilder("ChecklistTasksDone").prop("checklistMessage", checklistMessage).prop("markedAsDoneTaskIds", markedAsDoneTaskIds).prop("markedAsNotDoneTaskIds", markedAsNotDoneTaskIds).toString()
+}
+
+/**
+ * Describes a service message about tasks added to a checklist.
+ * @param tasks List of tasks added to the checklist
+ * @param checklistMessage Optional. Message containing the checklist to which the tasks were added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ */
+@Serializable
+data class ChecklistTasksAdded(
+    val tasks: List<ChecklistTask>,
+    val checklistMessage: Message? = null,
+) {
+    override fun toString() = DebugStringBuilder("ChecklistTasksAdded").prop("tasks", tasks).prop("checklistMessage", checklistMessage).toString()
+}
+
+/**
  * This object represents a point on the map.
  * @param latitude Latitude as defined by the sender
  * @param longitude Longitude as defined by the sender
@@ -1684,6 +1798,19 @@ data class PaidMessagePriceChanged(
     val paidMessageStarCount: Long,
 ) {
     override fun toString() = DebugStringBuilder("PaidMessagePriceChanged").prop("paidMessageStarCount", paidMessageStarCount).toString()
+}
+
+/**
+ * Describes a service message about a change in the price of direct messages sent to a channel chat.
+ * @param areDirectMessagesEnabled True, if direct messages are enabled for the channel chat; false otherwise
+ * @param directMessageStarCount Optional. The new number of Telegram Stars that must be paid by users for each direct message sent to the channel. Does not apply to users who have been exempted by administrators. Defaults to 0.
+ */
+@Serializable
+data class DirectMessagePriceChanged(
+    val areDirectMessagesEnabled: Boolean,
+    val directMessageStarCount: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("DirectMessagePriceChanged").prop("areDirectMessagesEnabled", areDirectMessagesEnabled).prop("directMessageStarCount", directMessageStarCount).toString()
 }
 
 /**
@@ -2140,7 +2267,7 @@ data class ChatInviteLink(
 /**
  * Represents the rights of an administrator in a chat.
  * @param isAnonymous True, if the user's presence in the chat is hidden
- * @param canManageChat True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+ * @param canManageChat True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
  * @param canDeleteMessages True, if the administrator can delete messages of other users
  * @param canManageVideoChats True, if the administrator can manage video chats
  * @param canRestrictMembers True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics
@@ -2150,7 +2277,7 @@ data class ChatInviteLink(
  * @param canPostStories True, if the administrator can post stories to the chat
  * @param canEditStories True, if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
  * @param canDeleteStories True, if the administrator can delete stories posted by other users
- * @param canPostMessages Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only
+ * @param canPostMessages Optional. True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
  * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
  * @param canPinMessages Optional. True, if the user is allowed to pin messages; for groups and supergroups only
  * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
@@ -2235,7 +2362,7 @@ data class ChatMemberOwner(
  * @param user Information about the user
  * @param canBeEdited True, if the bot is allowed to edit administrator privileges of that user
  * @param isAnonymous True, if the user's presence in the chat is hidden
- * @param canManageChat True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+ * @param canManageChat True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
  * @param canDeleteMessages True, if the administrator can delete messages of other users
  * @param canManageVideoChats True, if the administrator can manage video chats
  * @param canRestrictMembers True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics
@@ -2245,7 +2372,7 @@ data class ChatMemberOwner(
  * @param canPostStories True, if the administrator can post stories to the chat
  * @param canEditStories True, if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
  * @param canDeleteStories True, if the administrator can delete stories posted by other users
- * @param canPostMessages Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels only
+ * @param canPostMessages Optional. True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
  * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
  * @param canPinMessages Optional. True, if the user is allowed to pin messages; for groups and supergroups only
  * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
@@ -2301,7 +2428,7 @@ data class ChatMemberMember(
  * @param canSendVideos True, if the user is allowed to send videos
  * @param canSendVideoNotes True, if the user is allowed to send video notes
  * @param canSendVoiceNotes True, if the user is allowed to send voice notes
- * @param canSendPolls True, if the user is allowed to send polls
+ * @param canSendPolls True, if the user is allowed to send polls and checklists
  * @param canSendOtherMessages True, if the user is allowed to send animations, games, stickers and use inline bots
  * @param canAddWebPagePreviews True, if the user is allowed to add web page previews to their messages
  * @param canChangeInfo True, if the user is allowed to change the chat title, photo and other settings
@@ -2390,7 +2517,7 @@ data class ChatJoinRequest(
  * @param canSendVideos Optional. True, if the user is allowed to send videos
  * @param canSendVideoNotes Optional. True, if the user is allowed to send video notes
  * @param canSendVoiceNotes Optional. True, if the user is allowed to send voice notes
- * @param canSendPolls Optional. True, if the user is allowed to send polls
+ * @param canSendPolls Optional. True, if the user is allowed to send polls and checklists
  * @param canSendOtherMessages Optional. True, if the user is allowed to send animations, games, stickers and use inline bots
  * @param canAddWebPagePreviews Optional. True, if the user is allowed to add web page previews to their messages
  * @param canChangeInfo Optional. True, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
@@ -2889,18 +3016,22 @@ data class GiftInfo(
 /**
  * Describes a service message about a unique gift that was sent or received.
  * @param gift Information about the gift
- * @param origin Origin of the gift. Currently, either “upgrade” or “transfer”
+ * @param origin Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, or “resale” for gifts bought from other users
+ * @param lastResaleStarCount Optional. For gifts bought from other users, the price paid for the gift
  * @param ownedGiftId Optional. Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts
  * @param transferStarCount Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
+ * @param nextTransferDate Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now
  */
 @Serializable
 data class UniqueGiftInfo(
     val gift: UniqueGift,
     val origin: String,
+    val lastResaleStarCount: Long? = null,
     val ownedGiftId: String? = null,
     val transferStarCount: Long? = null,
+    val nextTransferDate: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("UniqueGiftInfo").prop("gift", gift).prop("origin", origin).prop("ownedGiftId", ownedGiftId).prop("transferStarCount", transferStarCount).toString()
+    override fun toString() = DebugStringBuilder("UniqueGiftInfo").prop("gift", gift).prop("origin", origin).prop("lastResaleStarCount", lastResaleStarCount).prop("ownedGiftId", ownedGiftId).prop("transferStarCount", transferStarCount).prop("nextTransferDate", nextTransferDate).toString()
 }
 
 /**
@@ -2955,6 +3086,7 @@ data class OwnedGiftRegular(
  * @param isSaved Optional. True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only
  * @param canBeTransferred Optional. True, if the gift can be transferred to another owner; for gifts received on behalf of business accounts only
  * @param transferStarCount Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
+ * @param nextTransferDate Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now
  */
 @Serializable
 @SerialName("unique")
@@ -2966,8 +3098,9 @@ data class OwnedGiftUnique(
     val isSaved: Boolean? = null,
     val canBeTransferred: Boolean? = null,
     val transferStarCount: Long? = null,
+    val nextTransferDate: Long? = null,
 ) : OwnedGift {
-    override fun toString() = DebugStringBuilder("OwnedGiftUnique").prop("gift", gift).prop("sendDate", sendDate).prop("ownedGiftId", ownedGiftId).prop("senderUser", senderUser).prop("isSaved", isSaved).prop("canBeTransferred", canBeTransferred).prop("transferStarCount", transferStarCount).toString()
+    override fun toString() = DebugStringBuilder("OwnedGiftUnique").prop("gift", gift).prop("sendDate", sendDate).prop("ownedGiftId", ownedGiftId).prop("senderUser", senderUser).prop("isSaved", isSaved).prop("canBeTransferred", canBeTransferred).prop("transferStarCount", transferStarCount).prop("nextTransferDate", nextTransferDate).toString()
 }
 
 /**

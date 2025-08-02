@@ -51,7 +51,6 @@ dependencies {
 <summary>Using with Maven for JVM projects</summary>
 
 ```xml
-
 <dependency>
     <groupId>me.alllex.telegram.botkit</groupId>
     <artifactId>tbot-api-jvm</artifactId>

@@ -79,9 +79,9 @@ val updateApiSpec by tasks.registering {
     val specFile = layout.projectDirectory.file("api-spec/telegram-bot-api.html")
     outputs.file(specFile)
     outputs.upToDateWhen { false }
+    val specUrl = uri("https://core.telegram.org/bots/api").toURL()
     doLast {
-        val url = "https://core.telegram.org/bots/api"
-        val rawText = uri(url).toURL().readText()
+        val rawText = specUrl.readText()
         val genTimeRe = "^<!-- page generated in .* -->$".toRegex()
         val text = rawText.lineSequence()
             .filterNot { genTimeRe.matches(it) }

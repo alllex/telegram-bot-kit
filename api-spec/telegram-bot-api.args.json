@@ -70,7 +70,8 @@
                 "username",
                 "firstName",
                 "lastName",
-                "isForum"
+                "isForum",
+                "isDirectMessages"
             ]
         },
         {
@@ -120,7 +121,9 @@
                 "linkedChatId",
                 "location",
                 "canSendPaidMedia",
-                "acceptedGiftTypes"
+                "acceptedGiftTypes",
+                "isDirectMessages",
+                "parentChat"
             ]
         },
         {
@@ -218,7 +221,16 @@
                 "checklistTasksDone",
                 "checklistTasksAdded",
                 "directMessagePriceChanged",
-                "paidMessagePriceChanged"
+                "paidMessagePriceChanged",
+                "directMessagesTopic",
+                "replyToChecklistTaskId",
+                "isPaidPost",
+                "suggestedPostInfo",
+                "suggestedPostApproved",
+                "suggestedPostApprovalFailed",
+                "suggestedPostDeclined",
+                "suggestedPostPaid",
+                "suggestedPostRefunded"
             ]
         },
         {
@@ -287,7 +299,8 @@
                 "quote",
                 "quoteParseMode",
                 "quoteEntities",
-                "quotePosition"
+                "quotePosition",
+                "checklistTaskId"
             ]
         },
         {
@@ -797,6 +810,44 @@
             ]
         },
         {
+            "name": "SuggestedPostApproved",
+            "args": [
+                "sendDate",
+                "suggestedPostMessage",
+                "price"
+            ]
+        },
+        {
+            "name": "SuggestedPostApprovalFailed",
+            "args": [
+                "price",
+                "suggestedPostMessage"
+            ]
+        },
+        {
+            "name": "SuggestedPostDeclined",
+            "args": [
+                "suggestedPostMessage",
+                "comment"
+            ]
+        },
+        {
+            "name": "SuggestedPostPaid",
+            "args": [
+                "currency",
+                "suggestedPostMessage",
+                "amount",
+                "starAmount"
+            ]
+        },
+        {
+            "name": "SuggestedPostRefunded",
+            "args": [
+                "reason",
+                "suggestedPostMessage"
+            ]
+        },
+        {
             "name": "GiveawayCreated",
             "args": [
                 "prizeStarCount"
@@ -850,6 +901,35 @@
                 "preferSmallMedia",
                 "preferLargeMedia",
                 "showAboveText"
+            ]
+        },
+        {
+            "name": "SuggestedPostPrice",
+            "args": [
+                "currency",
+                "amount"
+            ]
+        },
+        {
+            "name": "SuggestedPostInfo",
+            "args": [
+                "state",
+                "price",
+                "sendDate"
+            ]
+        },
+        {
+            "name": "SuggestedPostParameters",
+            "args": [
+                "price",
+                "sendDate"
+            ]
+        },
+        {
+            "name": "DirectMessagesTopic",
+            "args": [
+                "topicId",
+                "user"
             ]
         },
         {
@@ -1047,7 +1127,8 @@
                 "canPostMessages",
                 "canEditMessages",
                 "canPinMessages",
-                "canManageTopics"
+                "canManageTopics",
+                "canManageDirectMessages"
             ]
         },
         {
@@ -1097,7 +1178,8 @@
                 "canEditMessages",
                 "canPinMessages",
                 "canManageTopics",
-                "customTitle"
+                "customTitle",
+                "canManageDirectMessages"
             ]
         },
         {
@@ -1361,7 +1443,8 @@
                 "starCount",
                 "upgradeStarCount",
                 "totalCount",
-                "remainingCount"
+                "remainingCount",
+                "publisherChat"
             ]
         },
         {
@@ -1411,7 +1494,8 @@
                 "number",
                 "model",
                 "symbol",
-                "backdrop"
+                "backdrop",
+                "publisherChat"
             ]
         },
         {
@@ -2754,7 +2838,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2766,7 +2852,9 @@
                 "messageThreadId",
                 "disableNotification",
                 "protectContent",
-                "videoStartTimestamp"
+                "videoStartTimestamp",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2777,7 +2865,8 @@
                 "messageIds",
                 "messageThreadId",
                 "disableNotification",
-                "protectContent"
+                "protectContent",
+                "directMessagesTopicId"
             ]
         },
         {
@@ -2796,7 +2885,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "videoStartTimestamp",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2808,7 +2899,8 @@
                 "messageThreadId",
                 "disableNotification",
                 "protectContent",
-                "removeCaption"
+                "removeCaption",
+                "directMessagesTopicId"
             ]
         },
         {
@@ -2828,7 +2920,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2850,7 +2944,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2870,7 +2966,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2897,7 +2995,9 @@
                 "businessConnectionId",
                 "cover",
                 "startTimestamp",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2921,7 +3021,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2940,7 +3042,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2958,7 +3062,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2977,7 +3083,10 @@
                 "replyMarkup",
                 "businessConnectionId",
                 "payload",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "messageThreadId",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -2991,7 +3100,8 @@
                 "messageEffectId",
                 "replyParameters",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId"
             ]
         },
         {
@@ -3011,7 +3121,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -3033,7 +3145,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -3051,7 +3165,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -3107,7 +3223,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -3196,7 +3314,8 @@
                 "canPostMessages",
                 "canEditMessages",
                 "canPinMessages",
-                "canManageTopics"
+                "canManageTopics",
+                "canManageDirectMessages"
             ]
         },
         {
@@ -3586,114 +3705,6 @@
             ]
         },
         {
-            "name": "editMessageText",
-            "args": [
-                "text",
-                "chatId",
-                "messageId",
-                "inlineMessageId",
-                "parseMode",
-                "entities",
-                "linkPreviewOptions",
-                "replyMarkup",
-                "businessConnectionId"
-            ]
-        },
-        {
-            "name": "editMessageCaption",
-            "args": [
-                "chatId",
-                "messageId",
-                "inlineMessageId",
-                "caption",
-                "parseMode",
-                "captionEntities",
-                "showCaptionAboveMedia",
-                "replyMarkup",
-                "businessConnectionId"
-            ]
-        },
-        {
-            "name": "editMessageMedia",
-            "args": [
-                "media",
-                "chatId",
-                "messageId",
-                "inlineMessageId",
-                "replyMarkup",
-                "businessConnectionId"
-            ]
-        },
-        {
-            "name": "editMessageLiveLocation",
-            "args": [
-                "latitude",
-                "longitude",
-                "chatId",
-                "messageId",
-                "inlineMessageId",
-                "livePeriod",
-                "horizontalAccuracy",
-                "heading",
-                "proximityAlertRadius",
-                "replyMarkup",
-                "businessConnectionId"
-            ]
-        },
-        {
-            "name": "stopMessageLiveLocation",
-            "args": [
-                "chatId",
-                "messageId",
-                "inlineMessageId",
-                "replyMarkup",
-                "businessConnectionId"
-            ]
-        },
-        {
-            "name": "editMessageChecklist",
-            "args": [
-                "businessConnectionId",
-                "chatId",
-                "messageId",
-                "checklist",
-                "replyMarkup"
-            ]
-        },
-        {
-            "name": "editMessageReplyMarkup",
-            "args": [
-                "chatId",
-                "messageId",
-                "inlineMessageId",
-                "replyMarkup",
-                "businessConnectionId"
-            ]
-        },
-        {
-            "name": "stopPoll",
-            "args": [
-                "chatId",
-                "messageId",
-                "replyMarkup",
-                "businessConnectionId"
-            ]
-        },
-        {
-            "name": "deleteMessage",
-            "args": [
-                "chatId",
-                "messageId"
-            ]
-        },
-        {
-            "name": "deleteMessages",
-            "args": [
-                "chatId",
-                "messageIds"
-            ]
-        },
-        {
             "name": "getAvailableGifts",
             "args": []
         },
@@ -3892,6 +3903,130 @@
             ]
         },
         {
+            "name": "editMessageText",
+            "args": [
+                "text",
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "parseMode",
+                "entities",
+                "linkPreviewOptions",
+                "replyMarkup",
+                "businessConnectionId"
+            ]
+        },
+        {
+            "name": "editMessageCaption",
+            "args": [
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "caption",
+                "parseMode",
+                "captionEntities",
+                "showCaptionAboveMedia",
+                "replyMarkup",
+                "businessConnectionId"
+            ]
+        },
+        {
+            "name": "editMessageMedia",
+            "args": [
+                "media",
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "replyMarkup",
+                "businessConnectionId"
+            ]
+        },
+        {
+            "name": "editMessageLiveLocation",
+            "args": [
+                "latitude",
+                "longitude",
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "livePeriod",
+                "horizontalAccuracy",
+                "heading",
+                "proximityAlertRadius",
+                "replyMarkup",
+                "businessConnectionId"
+            ]
+        },
+        {
+            "name": "stopMessageLiveLocation",
+            "args": [
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "replyMarkup",
+                "businessConnectionId"
+            ]
+        },
+        {
+            "name": "editMessageChecklist",
+            "args": [
+                "businessConnectionId",
+                "chatId",
+                "messageId",
+                "checklist",
+                "replyMarkup"
+            ]
+        },
+        {
+            "name": "editMessageReplyMarkup",
+            "args": [
+                "chatId",
+                "messageId",
+                "inlineMessageId",
+                "replyMarkup",
+                "businessConnectionId"
+            ]
+        },
+        {
+            "name": "stopPoll",
+            "args": [
+                "chatId",
+                "messageId",
+                "replyMarkup",
+                "businessConnectionId"
+            ]
+        },
+        {
+            "name": "approveSuggestedPost",
+            "args": [
+                "chatId",
+                "messageId",
+                "sendDate"
+            ]
+        },
+        {
+            "name": "declineSuggestedPost",
+            "args": [
+                "chatId",
+                "messageId",
+                "comment"
+            ]
+        },
+        {
+            "name": "deleteMessage",
+            "args": [
+                "chatId",
+                "messageId"
+            ]
+        },
+        {
+            "name": "deleteMessages",
+            "args": [
+                "chatId",
+                "messageIds"
+            ]
+        },
+        {
             "name": "sendSticker",
             "args": [
                 "chatId",
@@ -3904,7 +4039,9 @@
                 "replyParameters",
                 "replyMarkup",
                 "businessConnectionId",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {
@@ -4078,7 +4215,9 @@
                 "messageEffectId",
                 "replyParameters",
                 "replyMarkup",
-                "allowPaidBroadcast"
+                "allowPaidBroadcast",
+                "directMessagesTopicId",
+                "suggestedPostParameters"
             ]
         },
         {

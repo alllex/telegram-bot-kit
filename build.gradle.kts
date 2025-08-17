@@ -119,6 +119,7 @@ val extractBotApiArgLists by tasks.registering(BotApiArgListExtract::class) {
 }
 
 tasks.register("rollNextApi") {
+    group = "telegram"
     dependsOn(updateApiSpec, generateBotApi, extractBotApiArgLists, "apiDump")
 }
 

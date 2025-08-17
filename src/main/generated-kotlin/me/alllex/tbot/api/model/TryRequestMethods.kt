@@ -324,19 +324,19 @@ suspend fun TelegramBotApiClient.trySetChatDescription(requestBody: SetChatDescr
     telegramPost("setChatDescription", requestBody)
 
 /**
- * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
+ * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryPinChatMessage(requestBody: PinChatMessageRequest): TelegramResponse<Boolean> =
     telegramPost("pinChatMessage", requestBody)
 
 /**
- * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
+ * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryUnpinChatMessage(requestBody: UnpinChatMessageRequest): TelegramResponse<Boolean> =
     telegramPost("unpinChatMessage", requestBody)
 
 /**
- * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
+ * Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryUnpinAllChatMessages(requestBody: UnpinAllChatMessagesRequest): TelegramResponse<Boolean> =
     telegramPost("unpinAllChatMessages", requestBody)
@@ -560,102 +560,6 @@ suspend fun TelegramBotApiClient.tryGetMyDefaultAdministratorRights(requestBody:
     telegramPost("getMyDefaultAdministratorRights", requestBody)
 
 /**
- * Use this method to edit text and game messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Message> =
-    telegramPost("editMessageText", requestBody)
-
-/**
- * Use this method to edit text and game messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageText", requestBody)
-
-/**
- * Use this method to edit captions of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Message> =
-    telegramPost("editMessageCaption", requestBody)
-
-/**
- * Use this method to edit captions of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageCaption", requestBody)
-
-/**
- * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Message> =
-    telegramPost("editMessageMedia", requestBody)
-
-/**
- * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageMedia", requestBody)
-
-/**
- * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success the edited Message is returned.
- */
-suspend fun TelegramBotApiClient.tryEditMessageLiveLocation(requestBody: EditMessageLiveLocationRequest): TelegramResponse<Message> =
-    telegramPost("editMessageLiveLocation", requestBody)
-
-/**
- * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success True is returned.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageLiveLocation(requestBody: EditMessageLiveLocationRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageLiveLocation", requestBody)
-
-/**
- * Use this method to stop updating a live location message before live_period expires. On success the edited Message is returned.
- */
-suspend fun TelegramBotApiClient.tryStopMessageLiveLocation(requestBody: StopMessageLiveLocationRequest): TelegramResponse<Message> =
-    telegramPost("stopMessageLiveLocation", requestBody)
-
-/**
- * Use this method to stop updating a live location message before live_period expires. On success True is returned.
- */
-suspend fun TelegramBotApiClient.tryStopInlineMessageLiveLocation(requestBody: StopMessageLiveLocationRequest): TelegramResponse<Boolean> =
-    telegramPost("stopMessageLiveLocation", requestBody)
-
-/**
- * Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.
- */
-suspend fun TelegramBotApiClient.tryEditMessageChecklist(requestBody: EditMessageChecklistRequest): TelegramResponse<Message> =
-    telegramPost("editMessageChecklist", requestBody)
-
-/**
- * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Message> =
-    telegramPost("editMessageReplyMarkup", requestBody)
-
-/**
- * Use this method to edit only the reply markup of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageReplyMarkup", requestBody)
-
-/**
- * Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.
- */
-suspend fun TelegramBotApiClient.tryStopPoll(requestBody: StopPollRequest): TelegramResponse<Poll> =
-    telegramPost("stopPoll", requestBody)
-
-/**
- * Use this method to delete a message, including service messages, with the following limitations: - A message can only be deleted if it was sent less than 48 hours ago. - Service messages about a supergroup, channel, or forum topic creation can't be deleted. - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago. - Bots can delete outgoing messages in private chats, groups, and supergroups. - Bots can delete incoming messages in private chats. - Bots granted can_post_messages permissions can delete outgoing messages in channels. - If the bot is an administrator of a group, it can delete any message there. - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there. Returns True on success.
- */
-suspend fun TelegramBotApiClient.tryDeleteMessage(requestBody: DeleteMessageRequest): TelegramResponse<Boolean> =
-    telegramPost("deleteMessage", requestBody)
-
-/**
- * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
- */
-suspend fun TelegramBotApiClient.tryDeleteMessages(requestBody: DeleteMessagesRequest): TelegramResponse<Boolean> =
-    telegramPost("deleteMessages", requestBody)
-
-/**
  * Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.
  */
 suspend fun TelegramBotApiClient.tryGetAvailableGifts(): TelegramResponse<Gifts> =
@@ -798,6 +702,114 @@ suspend fun TelegramBotApiClient.tryEditStory(requestBody: EditStoryRequest): Te
  */
 suspend fun TelegramBotApiClient.tryDeleteStory(requestBody: DeleteStoryRequest): TelegramResponse<Boolean> =
     telegramPost("deleteStory", requestBody)
+
+/**
+ * Use this method to edit text and game messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Message> =
+    telegramPost("editMessageText", requestBody)
+
+/**
+ * Use this method to edit text and game messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageText", requestBody)
+
+/**
+ * Use this method to edit captions of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Message> =
+    telegramPost("editMessageCaption", requestBody)
+
+/**
+ * Use this method to edit captions of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageCaption", requestBody)
+
+/**
+ * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Message> =
+    telegramPost("editMessageMedia", requestBody)
+
+/**
+ * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageMedia", requestBody)
+
+/**
+ * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success the edited Message is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageLiveLocation(requestBody: EditMessageLiveLocationRequest): TelegramResponse<Message> =
+    telegramPost("editMessageLiveLocation", requestBody)
+
+/**
+ * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success True is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageLiveLocation(requestBody: EditMessageLiveLocationRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageLiveLocation", requestBody)
+
+/**
+ * Use this method to stop updating a live location message before live_period expires. On success the edited Message is returned.
+ */
+suspend fun TelegramBotApiClient.tryStopMessageLiveLocation(requestBody: StopMessageLiveLocationRequest): TelegramResponse<Message> =
+    telegramPost("stopMessageLiveLocation", requestBody)
+
+/**
+ * Use this method to stop updating a live location message before live_period expires. On success True is returned.
+ */
+suspend fun TelegramBotApiClient.tryStopInlineMessageLiveLocation(requestBody: StopMessageLiveLocationRequest): TelegramResponse<Boolean> =
+    telegramPost("stopMessageLiveLocation", requestBody)
+
+/**
+ * Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageChecklist(requestBody: EditMessageChecklistRequest): TelegramResponse<Message> =
+    telegramPost("editMessageChecklist", requestBody)
+
+/**
+ * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Message> =
+    telegramPost("editMessageReplyMarkup", requestBody)
+
+/**
+ * Use this method to edit only the reply markup of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageReplyMarkup", requestBody)
+
+/**
+ * Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.
+ */
+suspend fun TelegramBotApiClient.tryStopPoll(requestBody: StopPollRequest): TelegramResponse<Poll> =
+    telegramPost("stopPoll", requestBody)
+
+/**
+ * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryApproveSuggestedPost(requestBody: ApproveSuggestedPostRequest): TelegramResponse<Boolean> =
+    telegramPost("approveSuggestedPost", requestBody)
+
+/**
+ * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeclineSuggestedPost(requestBody: DeclineSuggestedPostRequest): TelegramResponse<Boolean> =
+    telegramPost("declineSuggestedPost", requestBody)
+
+/**
+ * Use this method to delete a message, including service messages, with the following limitations: - A message can only be deleted if it was sent less than 48 hours ago. - Service messages about a supergroup, channel, or forum topic creation can't be deleted. - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago. - Bots can delete outgoing messages in private chats, groups, and supergroups. - Bots can delete incoming messages in private chats. - Bots granted can_post_messages permissions can delete outgoing messages in channels. - If the bot is an administrator of a group, it can delete any message there. - If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there. - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteMessage(requestBody: DeleteMessageRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteMessage", requestBody)
+
+/**
+ * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteMessages(requestBody: DeleteMessagesRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteMessages", requestBody)
 
 /**
  * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.

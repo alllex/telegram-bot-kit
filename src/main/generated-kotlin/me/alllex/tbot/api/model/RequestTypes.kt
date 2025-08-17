@@ -74,6 +74,8 @@ data class DeleteWebhookRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendMessageRequest(
@@ -90,8 +92,10 @@ data class SendMessageRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendMessageRequest").prop("chatId", chatId).prop("text", text).prop("messageThreadId", messageThreadId).prop("parseMode", parseMode).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendMessageRequest").prop("chatId", chatId).prop("text", text).prop("messageThreadId", messageThreadId).prop("parseMode", parseMode).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -104,6 +108,8 @@ data class SendMessageRequest(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the forwarded message from forwarding and saving
  * @param videoStartTimestamp New start timestamp for the forwarded video in the message
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be forwarded; required if the message is forwarded to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only
  */
 @Serializable
 data class ForwardMessageRequest(
@@ -114,8 +120,10 @@ data class ForwardMessageRequest(
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
     val videoStartTimestamp: Long? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ForwardMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("videoStartTimestamp", videoStartTimestamp).toString()
+    override fun toString() = DebugStringBuilder("ForwardMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("videoStartTimestamp", videoStartTimestamp).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -127,6 +135,7 @@ data class ForwardMessageRequest(
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends the messages silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the forwarded messages from forwarding and saving
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the messages will be forwarded; required if the messages are forwarded to a direct messages chat
  */
 @Serializable
 data class ForwardMessagesRequest(
@@ -136,8 +145,9 @@ data class ForwardMessagesRequest(
     val messageThreadId: MessageThreadId? = null,
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ForwardMessagesRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageIds", messageIds).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).toString()
+    override fun toString() = DebugStringBuilder("ForwardMessagesRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageIds", messageIds).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("directMessagesTopicId", directMessagesTopicId).toString()
 }
 
 /**
@@ -157,6 +167,8 @@ data class ForwardMessagesRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param videoStartTimestamp New start timestamp for the copied video in the message
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class CopyMessageRequest(
@@ -174,8 +186,10 @@ data class CopyMessageRequest(
     val replyMarkup: ReplyMarkup? = null,
     val videoStartTimestamp: Long? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("CopyMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("videoStartTimestamp", videoStartTimestamp).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("CopyMessageRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageId", messageId).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("videoStartTimestamp", videoStartTimestamp).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -188,6 +202,7 @@ data class CopyMessageRequest(
  * @param disableNotification Sends the messages silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent messages from forwarding and saving
  * @param removeCaption Pass True to copy the messages without their captions
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat
  */
 @Serializable
 data class CopyMessagesRequest(
@@ -198,8 +213,9 @@ data class CopyMessagesRequest(
     val disableNotification: Boolean? = null,
     val protectContent: Boolean? = null,
     val removeCaption: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("CopyMessagesRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageIds", messageIds).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("removeCaption", removeCaption).toString()
+    override fun toString() = DebugStringBuilder("CopyMessagesRequest").prop("chatId", chatId).prop("fromChatId", fromChatId).prop("messageIds", messageIds).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("removeCaption", removeCaption).prop("directMessagesTopicId", directMessagesTopicId).toString()
 }
 
 /**
@@ -220,6 +236,8 @@ data class CopyMessagesRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendPhotoRequest(
@@ -238,8 +256,10 @@ data class SendPhotoRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendPhotoRequest").prop("chatId", chatId).prop("photo", photo).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendPhotoRequest").prop("chatId", chatId).prop("photo", photo).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -262,6 +282,8 @@ data class SendPhotoRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendAudioRequest(
@@ -282,8 +304,10 @@ data class SendAudioRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendAudioRequest").prop("chatId", chatId).prop("audio", audio).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("performer", performer).prop("title", title).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendAudioRequest").prop("chatId", chatId).prop("audio", audio).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("performer", performer).prop("title", title).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -304,6 +328,8 @@ data class SendAudioRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendDocumentRequest(
@@ -322,8 +348,10 @@ data class SendDocumentRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendDocumentRequest").prop("chatId", chatId).prop("document", document).prop("messageThreadId", messageThreadId).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableContentTypeDetection", disableContentTypeDetection).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendDocumentRequest").prop("chatId", chatId).prop("document", document).prop("messageThreadId", messageThreadId).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("disableContentTypeDetection", disableContentTypeDetection).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -351,6 +379,8 @@ data class SendDocumentRequest(
  * @param cover Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
  * @param startTimestamp Start timestamp for the video in the message
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendVideoRequest(
@@ -376,8 +406,10 @@ data class SendVideoRequest(
     val cover: String? = null,
     val startTimestamp: Long? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVideoRequest").prop("chatId", chatId).prop("video", video).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("supportsStreaming", supportsStreaming).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("cover", cover).prop("startTimestamp", startTimestamp).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendVideoRequest").prop("chatId", chatId).prop("video", video).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("supportsStreaming", supportsStreaming).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("cover", cover).prop("startTimestamp", startTimestamp).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -402,6 +434,8 @@ data class SendVideoRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendAnimationRequest(
@@ -424,8 +458,10 @@ data class SendAnimationRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendAnimationRequest").prop("chatId", chatId).prop("animation", animation).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendAnimationRequest").prop("chatId", chatId).prop("animation", animation).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("width", width).prop("height", height).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -445,6 +481,8 @@ data class SendAnimationRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendVoiceRequest(
@@ -462,8 +500,10 @@ data class SendVoiceRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVoiceRequest").prop("chatId", chatId).prop("voice", voice).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendVoiceRequest").prop("chatId", chatId).prop("voice", voice).prop("messageThreadId", messageThreadId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -482,6 +522,8 @@ data class SendVoiceRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendVideoNoteRequest(
@@ -498,8 +540,10 @@ data class SendVideoNoteRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVideoNoteRequest").prop("chatId", chatId).prop("videoNote", videoNote).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("length", length).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendVideoNoteRequest").prop("chatId", chatId).prop("videoNote", videoNote).prop("messageThreadId", messageThreadId).prop("duration", duration).prop("length", length).prop("thumbnail", thumbnail).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -519,6 +563,9 @@ data class SendVideoNoteRequest(
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param payload Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendPaidMediaRequest(
@@ -536,8 +583,11 @@ data class SendPaidMediaRequest(
     val businessConnectionId: BusinessConnectionId? = null,
     val payload: String? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val messageThreadId: MessageThreadId? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendPaidMediaRequest").prop("chatId", chatId).prop("starCount", starCount).prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("payload", payload).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendPaidMediaRequest").prop("chatId", chatId).prop("starCount", starCount).prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("payload", payload).prop("allowPaidBroadcast", allowPaidBroadcast).prop("messageThreadId", messageThreadId).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -552,6 +602,7 @@ data class SendPaidMediaRequest(
  * @param replyParameters Description of the message to reply to
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat
  */
 @Serializable
 data class SendMediaGroupRequest(
@@ -564,8 +615,9 @@ data class SendMediaGroupRequest(
     val replyParameters: ReplyParameters? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendMediaGroupRequest").prop("chatId", chatId).prop("media", media).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendMediaGroupRequest").prop("chatId", chatId).prop("media", media).prop("messageThreadId", messageThreadId).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).toString()
 }
 
 /**
@@ -586,6 +638,8 @@ data class SendMediaGroupRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendLocationRequest(
@@ -604,8 +658,10 @@ data class SendLocationRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendLocationRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("messageThreadId", messageThreadId).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendLocationRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("messageThreadId", messageThreadId).prop("horizontalAccuracy", horizontalAccuracy).prop("livePeriod", livePeriod).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -628,6 +684,8 @@ data class SendLocationRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendVenueRequest(
@@ -648,8 +706,10 @@ data class SendVenueRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendVenueRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("address", address).prop("messageThreadId", messageThreadId).prop("foursquareId", foursquareId).prop("foursquareType", foursquareType).prop("googlePlaceId", googlePlaceId).prop("googlePlaceType", googlePlaceType).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendVenueRequest").prop("chatId", chatId).prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("address", address).prop("messageThreadId", messageThreadId).prop("foursquareId", foursquareId).prop("foursquareType", foursquareType).prop("googlePlaceId", googlePlaceId).prop("googlePlaceType", googlePlaceType).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -668,6 +728,8 @@ data class SendVenueRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendContactRequest(
@@ -684,14 +746,16 @@ data class SendContactRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendContactRequest").prop("chatId", chatId).prop("phoneNumber", phoneNumber).prop("firstName", firstName).prop("messageThreadId", messageThreadId).prop("lastName", lastName).prop("vcard", vcard).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendContactRequest").prop("chatId", chatId).prop("phoneNumber", phoneNumber).prop("firstName", firstName).prop("messageThreadId", messageThreadId).prop("lastName", lastName).prop("vcard", vcard).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
  * Request body for [sendPoll].
  *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). Polls can't be sent to channel direct messages chats.
  * @param question Poll question, 1-300 characters
  * @param options A JSON-serialized list of 2-12 answer options
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -783,6 +847,8 @@ data class SendChecklistRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendDiceRequest(
@@ -796,14 +862,16 @@ data class SendDiceRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendDiceRequest").prop("chatId", chatId).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendDiceRequest").prop("chatId", chatId).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
  * Request body for [sendChatAction].
  *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel chats and channel direct messages chats aren't supported.
  * @param action Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes.
  * @param messageThreadId Unique identifier for the target message thread; for supergroups only
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the action will be sent
@@ -954,6 +1022,7 @@ data class RestrictChatMemberRequest(
  * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; for channels only
  * @param canPinMessages Pass True if the administrator can pin messages; for supergroups only
  * @param canManageTopics Pass True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
+ * @param canManageDirectMessages Pass True if the administrator can manage direct messages within the channel and decline suggested posts; for channels only
  */
 @Serializable
 data class PromoteChatMemberRequest(
@@ -974,8 +1043,9 @@ data class PromoteChatMemberRequest(
     val canEditMessages: Boolean? = null,
     val canPinMessages: Boolean? = null,
     val canManageTopics: Boolean? = null,
+    val canManageDirectMessages: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("PromoteChatMemberRequest").prop("chatId", chatId).prop("userId", userId).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).toString()
+    override fun toString() = DebugStringBuilder("PromoteChatMemberRequest").prop("chatId", chatId).prop("userId", userId).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("canManageDirectMessages", canManageDirectMessages).toString()
 }
 
 /**
@@ -1271,7 +1341,7 @@ data class UnpinAllChatMessagesRequest(
 /**
  * Request body for [leaveChat].
  *
- * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername). Channel direct messages chats aren't supported; leave the corresponding channel instead.
  */
 @Serializable
 data class LeaveChatRequest(
@@ -1743,222 +1813,6 @@ data class GetMyDefaultAdministratorRightsRequest(
 }
 
 /**
- * Request body for [editMessageText].
- *
- * @param text New text of the message, 1-4096 characters after entities parsing
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
- * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
- * @param linkPreviewOptions Link preview generation options for the message
- * @param replyMarkup A JSON-serialized object for an inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-@Serializable
-data class EditMessageTextRequest(
-    val text: String,
-    val chatId: ChatId? = null,
-    val messageId: MessageId? = null,
-    val inlineMessageId: InlineMessageId? = null,
-    val parseMode: ParseMode? = null,
-    val entities: List<MessageEntity>? = null,
-    val linkPreviewOptions: LinkPreviewOptions? = null,
-    val replyMarkup: InlineKeyboardMarkup? = null,
-    val businessConnectionId: BusinessConnectionId? = null,
-) {
-    override fun toString() = DebugStringBuilder("EditMessageTextRequest").prop("text", text).prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("parseMode", parseMode).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
-}
-
-/**
- * Request body for [editMessageCaption].
- *
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param caption New caption of the message, 0-1024 characters after entities parsing
- * @param parseMode Mode for parsing entities in the message caption. See formatting options for more details.
- * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
- * @param replyMarkup A JSON-serialized object for an inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-@Serializable
-data class EditMessageCaptionRequest(
-    val chatId: ChatId? = null,
-    val messageId: MessageId? = null,
-    val inlineMessageId: InlineMessageId? = null,
-    val caption: String? = null,
-    val parseMode: ParseMode? = null,
-    val captionEntities: List<MessageEntity>? = null,
-    val showCaptionAboveMedia: Boolean? = null,
-    val replyMarkup: InlineKeyboardMarkup? = null,
-    val businessConnectionId: BusinessConnectionId? = null,
-) {
-    override fun toString() = DebugStringBuilder("EditMessageCaptionRequest").prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
-}
-
-/**
- * Request body for [editMessageMedia].
- *
- * @param media A JSON-serialized object for a new media content of the message
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param replyMarkup A JSON-serialized object for a new inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-@Serializable
-data class EditMessageMediaRequest(
-    val media: InputMedia,
-    val chatId: ChatId? = null,
-    val messageId: MessageId? = null,
-    val inlineMessageId: InlineMessageId? = null,
-    val replyMarkup: InlineKeyboardMarkup? = null,
-    val businessConnectionId: BusinessConnectionId? = null,
-) {
-    override fun toString() = DebugStringBuilder("EditMessageMediaRequest").prop("media", media).prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
-}
-
-/**
- * Request body for [editMessageLiveLocation].
- *
- * @param latitude Latitude of new location
- * @param longitude Longitude of new location
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param livePeriod New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged
- * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
- * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
- * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
- * @param replyMarkup A JSON-serialized object for a new inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-@Serializable
-data class EditMessageLiveLocationRequest(
-    val latitude: Double,
-    val longitude: Double,
-    val chatId: ChatId? = null,
-    val messageId: MessageId? = null,
-    val inlineMessageId: InlineMessageId? = null,
-    val livePeriod: Long? = null,
-    val horizontalAccuracy: Double? = null,
-    val heading: Long? = null,
-    val proximityAlertRadius: Long? = null,
-    val replyMarkup: InlineKeyboardMarkup? = null,
-    val businessConnectionId: BusinessConnectionId? = null,
-) {
-    override fun toString() = DebugStringBuilder("EditMessageLiveLocationRequest").prop("latitude", latitude).prop("longitude", longitude).prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("livePeriod", livePeriod).prop("horizontalAccuracy", horizontalAccuracy).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
-}
-
-/**
- * Request body for [stopMessageLiveLocation].
- *
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message with live location to stop
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param replyMarkup A JSON-serialized object for a new inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-@Serializable
-data class StopMessageLiveLocationRequest(
-    val chatId: ChatId? = null,
-    val messageId: MessageId? = null,
-    val inlineMessageId: InlineMessageId? = null,
-    val replyMarkup: InlineKeyboardMarkup? = null,
-    val businessConnectionId: BusinessConnectionId? = null,
-) {
-    override fun toString() = DebugStringBuilder("StopMessageLiveLocationRequest").prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
-}
-
-/**
- * Request body for [editMessageChecklist].
- *
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
- * @param chatId Unique identifier for the target chat
- * @param messageId Unique identifier for the target message
- * @param checklist A JSON-serialized object for the new checklist
- * @param replyMarkup A JSON-serialized object for the new inline keyboard for the message
- */
-@Serializable
-data class EditMessageChecklistRequest(
-    val businessConnectionId: BusinessConnectionId,
-    val chatId: ChatId,
-    val messageId: MessageId,
-    val checklist: InputChecklist,
-    val replyMarkup: InlineKeyboardMarkup? = null,
-) {
-    override fun toString() = DebugStringBuilder("EditMessageChecklistRequest").prop("businessConnectionId", businessConnectionId).prop("chatId", chatId).prop("messageId", messageId).prop("checklist", checklist).prop("replyMarkup", replyMarkup).toString()
-}
-
-/**
- * Request body for [editMessageReplyMarkup].
- *
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param replyMarkup A JSON-serialized object for an inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-@Serializable
-data class EditMessageReplyMarkupRequest(
-    val chatId: ChatId? = null,
-    val messageId: MessageId? = null,
-    val inlineMessageId: InlineMessageId? = null,
-    val replyMarkup: InlineKeyboardMarkup? = null,
-    val businessConnectionId: BusinessConnectionId? = null,
-) {
-    override fun toString() = DebugStringBuilder("EditMessageReplyMarkupRequest").prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
-}
-
-/**
- * Request body for [stopPoll].
- *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Identifier of the original message with the poll
- * @param replyMarkup A JSON-serialized object for a new message inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-@Serializable
-data class StopPollRequest(
-    val chatId: ChatId,
-    val messageId: MessageId,
-    val replyMarkup: InlineKeyboardMarkup? = null,
-    val businessConnectionId: BusinessConnectionId? = null,
-) {
-    override fun toString() = DebugStringBuilder("StopPollRequest").prop("chatId", chatId).prop("messageId", messageId).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
-}
-
-/**
- * Request body for [deleteMessage].
- *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Identifier of the message to delete
- */
-@Serializable
-data class DeleteMessageRequest(
-    val chatId: ChatId,
-    val messageId: MessageId,
-) {
-    override fun toString() = DebugStringBuilder("DeleteMessageRequest").prop("chatId", chatId).prop("messageId", messageId).toString()
-}
-
-/**
- * Request body for [deleteMessages].
- *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageIds A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted
- */
-@Serializable
-data class DeleteMessagesRequest(
-    val chatId: ChatId,
-    val messageIds: List<Long>,
-) {
-    override fun toString() = DebugStringBuilder("DeleteMessagesRequest").prop("chatId", chatId).prop("messageIds", messageIds).toString()
-}
-
-/**
  * Request body for [sendGift].
  *
  * @param giftId Identifier of the gift
@@ -2021,7 +1875,7 @@ data class VerifyUserRequest(
 /**
  * Request body for [verifyChat].
  *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). Channel direct messages chats can't be verified.
  * @param customDescription Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
  */
 @Serializable
@@ -2347,6 +2201,254 @@ data class DeleteStoryRequest(
 }
 
 /**
+ * Request body for [editMessageText].
+ *
+ * @param text New text of the message, 1-4096 characters after entities parsing
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
+ * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
+ * @param linkPreviewOptions Link preview generation options for the message
+ * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+@Serializable
+data class EditMessageTextRequest(
+    val text: String,
+    val chatId: ChatId? = null,
+    val messageId: MessageId? = null,
+    val inlineMessageId: InlineMessageId? = null,
+    val parseMode: ParseMode? = null,
+    val entities: List<MessageEntity>? = null,
+    val linkPreviewOptions: LinkPreviewOptions? = null,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
+) {
+    override fun toString() = DebugStringBuilder("EditMessageTextRequest").prop("text", text).prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("parseMode", parseMode).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
+ * Request body for [editMessageCaption].
+ *
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param caption New caption of the message, 0-1024 characters after entities parsing
+ * @param parseMode Mode for parsing entities in the message caption. See formatting options for more details.
+ * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
+ * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+@Serializable
+data class EditMessageCaptionRequest(
+    val chatId: ChatId? = null,
+    val messageId: MessageId? = null,
+    val inlineMessageId: InlineMessageId? = null,
+    val caption: String? = null,
+    val parseMode: ParseMode? = null,
+    val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
+) {
+    override fun toString() = DebugStringBuilder("EditMessageCaptionRequest").prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
+ * Request body for [editMessageMedia].
+ *
+ * @param media A JSON-serialized object for a new media content of the message
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+@Serializable
+data class EditMessageMediaRequest(
+    val media: InputMedia,
+    val chatId: ChatId? = null,
+    val messageId: MessageId? = null,
+    val inlineMessageId: InlineMessageId? = null,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
+) {
+    override fun toString() = DebugStringBuilder("EditMessageMediaRequest").prop("media", media).prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
+ * Request body for [editMessageLiveLocation].
+ *
+ * @param latitude Latitude of new location
+ * @param longitude Longitude of new location
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param livePeriod New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged
+ * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
+ * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
+ * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
+ * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+@Serializable
+data class EditMessageLiveLocationRequest(
+    val latitude: Double,
+    val longitude: Double,
+    val chatId: ChatId? = null,
+    val messageId: MessageId? = null,
+    val inlineMessageId: InlineMessageId? = null,
+    val livePeriod: Long? = null,
+    val horizontalAccuracy: Double? = null,
+    val heading: Long? = null,
+    val proximityAlertRadius: Long? = null,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
+) {
+    override fun toString() = DebugStringBuilder("EditMessageLiveLocationRequest").prop("latitude", latitude).prop("longitude", longitude).prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("livePeriod", livePeriod).prop("horizontalAccuracy", horizontalAccuracy).prop("heading", heading).prop("proximityAlertRadius", proximityAlertRadius).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
+ * Request body for [stopMessageLiveLocation].
+ *
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message with live location to stop
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+@Serializable
+data class StopMessageLiveLocationRequest(
+    val chatId: ChatId? = null,
+    val messageId: MessageId? = null,
+    val inlineMessageId: InlineMessageId? = null,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
+) {
+    override fun toString() = DebugStringBuilder("StopMessageLiveLocationRequest").prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
+ * Request body for [editMessageChecklist].
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param chatId Unique identifier for the target chat
+ * @param messageId Unique identifier for the target message
+ * @param checklist A JSON-serialized object for the new checklist
+ * @param replyMarkup A JSON-serialized object for the new inline keyboard for the message
+ */
+@Serializable
+data class EditMessageChecklistRequest(
+    val businessConnectionId: BusinessConnectionId,
+    val chatId: ChatId,
+    val messageId: MessageId,
+    val checklist: InputChecklist,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+) {
+    override fun toString() = DebugStringBuilder("EditMessageChecklistRequest").prop("businessConnectionId", businessConnectionId).prop("chatId", chatId).prop("messageId", messageId).prop("checklist", checklist).prop("replyMarkup", replyMarkup).toString()
+}
+
+/**
+ * Request body for [editMessageReplyMarkup].
+ *
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+@Serializable
+data class EditMessageReplyMarkupRequest(
+    val chatId: ChatId? = null,
+    val messageId: MessageId? = null,
+    val inlineMessageId: InlineMessageId? = null,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
+) {
+    override fun toString() = DebugStringBuilder("EditMessageReplyMarkupRequest").prop("chatId", chatId).prop("messageId", messageId).prop("inlineMessageId", inlineMessageId).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
+ * Request body for [stopPoll].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Identifier of the original message with the poll
+ * @param replyMarkup A JSON-serialized object for a new message inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+@Serializable
+data class StopPollRequest(
+    val chatId: ChatId,
+    val messageId: MessageId,
+    val replyMarkup: InlineKeyboardMarkup? = null,
+    val businessConnectionId: BusinessConnectionId? = null,
+) {
+    override fun toString() = DebugStringBuilder("StopPollRequest").prop("chatId", chatId).prop("messageId", messageId).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).toString()
+}
+
+/**
+ * Request body for [approveSuggestedPost].
+ *
+ * @param chatId Unique identifier for the target direct messages chat
+ * @param messageId Identifier of a suggested post message to approve
+ * @param sendDate Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future
+ */
+@Serializable
+data class ApproveSuggestedPostRequest(
+    val chatId: ChatId,
+    val messageId: MessageId,
+    val sendDate: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("ApproveSuggestedPostRequest").prop("chatId", chatId).prop("messageId", messageId).prop("sendDate", sendDate).toString()
+}
+
+/**
+ * Request body for [declineSuggestedPost].
+ *
+ * @param chatId Unique identifier for the target direct messages chat
+ * @param messageId Identifier of a suggested post message to decline
+ * @param comment Comment for the creator of the suggested post; 0-128 characters
+ */
+@Serializable
+data class DeclineSuggestedPostRequest(
+    val chatId: ChatId,
+    val messageId: MessageId,
+    val comment: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("DeclineSuggestedPostRequest").prop("chatId", chatId).prop("messageId", messageId).prop("comment", comment).toString()
+}
+
+/**
+ * Request body for [deleteMessage].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Identifier of the message to delete
+ */
+@Serializable
+data class DeleteMessageRequest(
+    val chatId: ChatId,
+    val messageId: MessageId,
+) {
+    override fun toString() = DebugStringBuilder("DeleteMessageRequest").prop("chatId", chatId).prop("messageId", messageId).toString()
+}
+
+/**
+ * Request body for [deleteMessages].
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted
+ */
+@Serializable
+data class DeleteMessagesRequest(
+    val chatId: ChatId,
+    val messageIds: List<Long>,
+) {
+    override fun toString() = DebugStringBuilder("DeleteMessagesRequest").prop("chatId", chatId).prop("messageIds", messageIds).toString()
+}
+
+/**
  * Request body for [sendSticker].
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -2360,6 +2462,8 @@ data class DeleteStoryRequest(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendStickerRequest(
@@ -2374,8 +2478,10 @@ data class SendStickerRequest(
     val replyMarkup: ReplyMarkup? = null,
     val businessConnectionId: BusinessConnectionId? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendStickerRequest").prop("chatId", chatId).prop("sticker", sticker).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendStickerRequest").prop("chatId", chatId).prop("sticker", sticker).prop("messageThreadId", messageThreadId).prop("emoji", emoji).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("businessConnectionId", businessConnectionId).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -2690,6 +2796,8 @@ data class SavePreparedInlineMessageRequest(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button.
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 @Serializable
 data class SendInvoiceRequest(
@@ -2722,8 +2830,10 @@ data class SendInvoiceRequest(
     val replyParameters: ReplyParameters? = null,
     val replyMarkup: InlineKeyboardMarkup? = null,
     val allowPaidBroadcast: Boolean? = null,
+    val directMessagesTopicId: Long? = null,
+    val suggestedPostParameters: SuggestedPostParameters? = null,
 ) {
-    override fun toString() = DebugStringBuilder("SendInvoiceRequest").prop("chatId", chatId).prop("title", title).prop("description", description).prop("payload", payload).prop("currency", currency).prop("prices", prices).prop("messageThreadId", messageThreadId).prop("providerToken", providerToken).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("startParameter", startParameter).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("allowPaidBroadcast", allowPaidBroadcast).toString()
+    override fun toString() = DebugStringBuilder("SendInvoiceRequest").prop("chatId", chatId).prop("title", title).prop("description", description).prop("payload", payload).prop("currency", currency).prop("prices", prices).prop("messageThreadId", messageThreadId).prop("providerToken", providerToken).prop("maxTipAmount", maxTipAmount).prop("suggestedTipAmounts", suggestedTipAmounts).prop("startParameter", startParameter).prop("providerData", providerData).prop("photoUrl", photoUrl).prop("photoSize", photoSize).prop("photoWidth", photoWidth).prop("photoHeight", photoHeight).prop("needName", needName).prop("needPhoneNumber", needPhoneNumber).prop("needEmail", needEmail).prop("needShippingAddress", needShippingAddress).prop("sendPhoneNumberToProvider", sendPhoneNumberToProvider).prop("sendEmailToProvider", sendEmailToProvider).prop("isFlexible", isFlexible).prop("disableNotification", disableNotification).prop("protectContent", protectContent).prop("messageEffectId", messageEffectId).prop("replyParameters", replyParameters).prop("replyMarkup", replyMarkup).prop("allowPaidBroadcast", allowPaidBroadcast).prop("directMessagesTopicId", directMessagesTopicId).prop("suggestedPostParameters", suggestedPostParameters).toString()
 }
 
 /**
@@ -2875,7 +2985,7 @@ data class SetPassportDataErrorsRequest(
 /**
  * Request body for [sendGame].
  *
- * @param chatId Unique identifier for the target chat
+ * @param chatId Unique identifier for the target chat. Games can't be sent to channel direct messages chats and channel chats.
  * @param gameShortName Short name of the game, serves as the unique identifier for the game. Set up your games via @BotFather.
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.

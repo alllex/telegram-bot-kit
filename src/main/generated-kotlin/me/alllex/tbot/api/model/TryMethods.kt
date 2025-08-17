@@ -70,6 +70,8 @@ suspend fun TelegramBotApiClient.tryDeleteWebhook(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendMessage(
     chatId: ChatId,
@@ -85,8 +87,10 @@ suspend fun TelegramBotApiClient.trySendMessage(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendMessage(SendMessageRequest(chatId, text, messageThreadId, parseMode, entities, linkPreviewOptions, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendMessage(SendMessageRequest(chatId, text, messageThreadId, parseMode, entities, linkPreviewOptions, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned.
@@ -98,6 +102,8 @@ suspend fun TelegramBotApiClient.trySendMessage(
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the forwarded message from forwarding and saving
  * @param videoStartTimestamp New start timestamp for the forwarded video in the message
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be forwarded; required if the message is forwarded to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only
  */
 suspend fun TelegramBotApiClient.tryForwardMessage(
     chatId: ChatId,
@@ -107,8 +113,10 @@ suspend fun TelegramBotApiClient.tryForwardMessage(
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
     videoStartTimestamp: Long? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    tryForwardMessage(ForwardMessageRequest(chatId, fromChatId, messageId, messageThreadId, disableNotification, protectContent, videoStartTimestamp))
+    tryForwardMessage(ForwardMessageRequest(chatId, fromChatId, messageId, messageThreadId, disableNotification, protectContent, videoStartTimestamp, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.
@@ -119,6 +127,7 @@ suspend fun TelegramBotApiClient.tryForwardMessage(
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends the messages silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the forwarded messages from forwarding and saving
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the messages will be forwarded; required if the messages are forwarded to a direct messages chat
  */
 suspend fun TelegramBotApiClient.tryForwardMessages(
     chatId: ChatId,
@@ -127,8 +136,9 @@ suspend fun TelegramBotApiClient.tryForwardMessages(
     messageThreadId: MessageThreadId? = null,
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
+    directMessagesTopicId: Long? = null,
 ): TelegramResponse<List<MessageRef>> =
-    tryForwardMessages(ForwardMessagesRequest(chatId, fromChatId, messageIds, messageThreadId, disableNotification, protectContent))
+    tryForwardMessages(ForwardMessagesRequest(chatId, fromChatId, messageIds, messageThreadId, disableNotification, protectContent, directMessagesTopicId))
 
 /**
  * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
@@ -147,6 +157,8 @@ suspend fun TelegramBotApiClient.tryForwardMessages(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param videoStartTimestamp New start timestamp for the copied video in the message
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.tryCopyMessage(
     chatId: ChatId,
@@ -163,8 +175,10 @@ suspend fun TelegramBotApiClient.tryCopyMessage(
     replyMarkup: ReplyMarkup? = null,
     videoStartTimestamp: Long? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<MessageRef> =
-    tryCopyMessage(CopyMessageRequest(chatId, fromChatId, messageId, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup, videoStartTimestamp, allowPaidBroadcast))
+    tryCopyMessage(CopyMessageRequest(chatId, fromChatId, messageId, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup, videoStartTimestamp, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
@@ -176,6 +190,7 @@ suspend fun TelegramBotApiClient.tryCopyMessage(
  * @param disableNotification Sends the messages silently. Users will receive a notification with no sound.
  * @param protectContent Protects the contents of the sent messages from forwarding and saving
  * @param removeCaption Pass True to copy the messages without their captions
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat
  */
 suspend fun TelegramBotApiClient.tryCopyMessages(
     chatId: ChatId,
@@ -185,8 +200,9 @@ suspend fun TelegramBotApiClient.tryCopyMessages(
     disableNotification: Boolean? = null,
     protectContent: Boolean? = null,
     removeCaption: Boolean? = null,
+    directMessagesTopicId: Long? = null,
 ): TelegramResponse<List<MessageRef>> =
-    tryCopyMessages(CopyMessagesRequest(chatId, fromChatId, messageIds, messageThreadId, disableNotification, protectContent, removeCaption))
+    tryCopyMessages(CopyMessagesRequest(chatId, fromChatId, messageIds, messageThreadId, disableNotification, protectContent, removeCaption, directMessagesTopicId))
 
 /**
  * Use this method to send photos. On success, the sent Message is returned.
@@ -206,6 +222,8 @@ suspend fun TelegramBotApiClient.tryCopyMessages(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendPhoto(
     chatId: ChatId,
@@ -223,8 +241,10 @@ suspend fun TelegramBotApiClient.trySendPhoto(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendPhoto(SendPhotoRequest(chatId, photo, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendPhoto(SendPhotoRequest(chatId, photo, messageThreadId, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -248,6 +268,8 @@ suspend fun TelegramBotApiClient.trySendPhoto(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendAudio(
     chatId: ChatId,
@@ -267,8 +289,10 @@ suspend fun TelegramBotApiClient.trySendAudio(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendAudio(SendAudioRequest(chatId, audio, messageThreadId, caption, parseMode, captionEntities, duration, performer, title, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendAudio(SendAudioRequest(chatId, audio, messageThreadId, caption, parseMode, captionEntities, duration, performer, title, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
@@ -288,6 +312,8 @@ suspend fun TelegramBotApiClient.trySendAudio(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendDocument(
     chatId: ChatId,
@@ -305,8 +331,10 @@ suspend fun TelegramBotApiClient.trySendDocument(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendDocument(SendDocumentRequest(chatId, document, messageThreadId, thumbnail, caption, parseMode, captionEntities, disableContentTypeDetection, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendDocument(SendDocumentRequest(chatId, document, messageThreadId, thumbnail, caption, parseMode, captionEntities, disableContentTypeDetection, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
@@ -333,6 +361,8 @@ suspend fun TelegramBotApiClient.trySendDocument(
  * @param cover Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
  * @param startTimestamp Start timestamp for the video in the message
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendVideo(
     chatId: ChatId,
@@ -357,8 +387,10 @@ suspend fun TelegramBotApiClient.trySendVideo(
     cover: String? = null,
     startTimestamp: Long? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendVideo(SendVideoRequest(chatId, video, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, supportsStreaming, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, cover, startTimestamp, allowPaidBroadcast))
+    trySendVideo(SendVideoRequest(chatId, video, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, supportsStreaming, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, cover, startTimestamp, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
@@ -382,6 +414,8 @@ suspend fun TelegramBotApiClient.trySendVideo(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendAnimation(
     chatId: ChatId,
@@ -403,8 +437,10 @@ suspend fun TelegramBotApiClient.trySendAnimation(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendAnimation(SendAnimationRequest(chatId, animation, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendAnimation(SendAnimationRequest(chatId, animation, messageThreadId, duration, width, height, thumbnail, caption, parseMode, captionEntities, showCaptionAboveMedia, hasSpoiler, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
@@ -423,6 +459,8 @@ suspend fun TelegramBotApiClient.trySendAnimation(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendVoice(
     chatId: ChatId,
@@ -439,8 +477,10 @@ suspend fun TelegramBotApiClient.trySendVoice(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendVoice(SendVoiceRequest(chatId, voice, messageThreadId, caption, parseMode, captionEntities, duration, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendVoice(SendVoiceRequest(chatId, voice, messageThreadId, caption, parseMode, captionEntities, duration, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.
@@ -458,6 +498,8 @@ suspend fun TelegramBotApiClient.trySendVoice(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendVideoNote(
     chatId: ChatId,
@@ -473,8 +515,10 @@ suspend fun TelegramBotApiClient.trySendVideoNote(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendVideoNote(SendVideoNoteRequest(chatId, videoNote, messageThreadId, duration, length, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendVideoNote(SendVideoNoteRequest(chatId, videoNote, messageThreadId, duration, length, thumbnail, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send paid media. On success, the sent Message is returned.
@@ -493,6 +537,9 @@ suspend fun TelegramBotApiClient.trySendVideoNote(
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param payload Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendPaidMedia(
     chatId: ChatId,
@@ -509,8 +556,11 @@ suspend fun TelegramBotApiClient.trySendPaidMedia(
     businessConnectionId: BusinessConnectionId? = null,
     payload: String? = null,
     allowPaidBroadcast: Boolean? = null,
+    messageThreadId: MessageThreadId? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendPaidMedia(SendPaidMediaRequest(chatId, starCount, media, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup, businessConnectionId, payload, allowPaidBroadcast))
+    trySendPaidMedia(SendPaidMediaRequest(chatId, starCount, media, caption, parseMode, captionEntities, showCaptionAboveMedia, disableNotification, protectContent, replyParameters, replyMarkup, businessConnectionId, payload, allowPaidBroadcast, messageThreadId, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Message objects that were sent is returned.
@@ -524,6 +574,7 @@ suspend fun TelegramBotApiClient.trySendPaidMedia(
  * @param replyParameters Description of the message to reply to
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat
  */
 suspend fun TelegramBotApiClient.trySendMediaGroup(
     chatId: ChatId,
@@ -535,8 +586,9 @@ suspend fun TelegramBotApiClient.trySendMediaGroup(
     replyParameters: ReplyParameters? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
 ): TelegramResponse<List<Message>> =
-    trySendMediaGroup(SendMediaGroupRequest(chatId, media, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters, businessConnectionId, allowPaidBroadcast))
+    trySendMediaGroup(SendMediaGroupRequest(chatId, media, messageThreadId, disableNotification, protectContent, messageEffectId, replyParameters, businessConnectionId, allowPaidBroadcast, directMessagesTopicId))
 
 /**
  * Use this method to send point on the map. On success, the sent Message is returned.
@@ -556,6 +608,8 @@ suspend fun TelegramBotApiClient.trySendMediaGroup(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendLocation(
     chatId: ChatId,
@@ -573,8 +627,10 @@ suspend fun TelegramBotApiClient.trySendLocation(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendLocation(SendLocationRequest(chatId, latitude, longitude, messageThreadId, horizontalAccuracy, livePeriod, heading, proximityAlertRadius, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendLocation(SendLocationRequest(chatId, latitude, longitude, messageThreadId, horizontalAccuracy, livePeriod, heading, proximityAlertRadius, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send information about a venue. On success, the sent Message is returned.
@@ -596,6 +652,8 @@ suspend fun TelegramBotApiClient.trySendLocation(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendVenue(
     chatId: ChatId,
@@ -615,8 +673,10 @@ suspend fun TelegramBotApiClient.trySendVenue(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendVenue(SendVenueRequest(chatId, latitude, longitude, title, address, messageThreadId, foursquareId, foursquareType, googlePlaceId, googlePlaceType, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendVenue(SendVenueRequest(chatId, latitude, longitude, title, address, messageThreadId, foursquareId, foursquareType, googlePlaceId, googlePlaceType, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send phone contacts. On success, the sent Message is returned.
@@ -634,6 +694,8 @@ suspend fun TelegramBotApiClient.trySendVenue(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendContact(
     chatId: ChatId,
@@ -649,13 +711,15 @@ suspend fun TelegramBotApiClient.trySendContact(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendContact(SendContactRequest(chatId, phoneNumber, firstName, messageThreadId, lastName, vcard, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendContact(SendContactRequest(chatId, phoneNumber, firstName, messageThreadId, lastName, vcard, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to send a native poll. On success, the sent Message is returned.
  *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). Polls can't be sent to channel direct messages chats.
  * @param question Poll question, 1-300 characters
  * @param options A JSON-serialized list of 2-12 answer options
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
@@ -743,6 +807,8 @@ suspend fun TelegramBotApiClient.trySendChecklist(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendDice(
     chatId: ChatId,
@@ -755,8 +821,10 @@ suspend fun TelegramBotApiClient.trySendDice(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendDice(SendDiceRequest(chatId, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendDice(SendDiceRequest(chatId, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
@@ -765,7 +833,7 @@ suspend fun TelegramBotApiClient.trySendDice(
  *
  * We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive.
  *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel chats and channel direct messages chats aren't supported.
  * @param action Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes.
  * @param messageThreadId Unique identifier for the target message thread; for supergroups only
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the action will be sent
@@ -900,6 +968,7 @@ suspend fun TelegramBotApiClient.tryRestrictChatMember(
  * @param canEditMessages Pass True if the administrator can edit messages of other users and can pin messages; for channels only
  * @param canPinMessages Pass True if the administrator can pin messages; for supergroups only
  * @param canManageTopics Pass True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
+ * @param canManageDirectMessages Pass True if the administrator can manage direct messages within the channel and decline suggested posts; for channels only
  */
 suspend fun TelegramBotApiClient.tryPromoteChatMember(
     chatId: ChatId,
@@ -919,8 +988,9 @@ suspend fun TelegramBotApiClient.tryPromoteChatMember(
     canEditMessages: Boolean? = null,
     canPinMessages: Boolean? = null,
     canManageTopics: Boolean? = null,
+    canManageDirectMessages: Boolean? = null,
 ): TelegramResponse<Boolean> =
-    tryPromoteChatMember(PromoteChatMemberRequest(chatId, userId, isAnonymous, canManageChat, canDeleteMessages, canManageVideoChats, canRestrictMembers, canPromoteMembers, canChangeInfo, canInviteUsers, canPostStories, canEditStories, canDeleteStories, canPostMessages, canEditMessages, canPinMessages, canManageTopics))
+    tryPromoteChatMember(PromoteChatMemberRequest(chatId, userId, isAnonymous, canManageChat, canDeleteMessages, canManageVideoChats, canRestrictMembers, canPromoteMembers, canChangeInfo, canInviteUsers, canPostStories, canEditStories, canDeleteStories, canPostMessages, canEditMessages, canPinMessages, canManageTopics, canManageDirectMessages))
 
 /**
  * Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success.
@@ -1135,7 +1205,7 @@ suspend fun TelegramBotApiClient.trySetChatDescription(
     trySetChatDescription(SetChatDescriptionRequest(chatId, description))
 
 /**
- * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
+ * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of a message to pin
@@ -1151,7 +1221,7 @@ suspend fun TelegramBotApiClient.tryPinChatMessage(
     tryPinChatMessage(PinChatMessageRequest(chatId, messageId, disableNotification, businessConnectionId))
 
 /**
- * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
+ * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively. Returns True on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  * @param messageId Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be unpinned.
@@ -1165,7 +1235,7 @@ suspend fun TelegramBotApiClient.tryUnpinChatMessage(
     tryUnpinChatMessage(UnpinChatMessageRequest(chatId, messageId, businessConnectionId))
 
 /**
- * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
+ * Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively. Returns True on success.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
  */
@@ -1177,7 +1247,7 @@ suspend fun TelegramBotApiClient.tryUnpinAllChatMessages(
 /**
  * Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
  *
- * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername). Channel direct messages chats aren't supported; leave the corresponding channel instead.
  */
 suspend fun TelegramBotApiClient.tryLeaveChat(
     chatId: ChatId,
@@ -1581,304 +1651,6 @@ suspend fun TelegramBotApiClient.tryGetMyDefaultAdministratorRights(
     tryGetMyDefaultAdministratorRights(GetMyDefaultAdministratorRightsRequest(forChannels))
 
 /**
- * Use this method to edit text and game messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- *
- * @param text New text of the message, 1-4096 characters after entities parsing
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
- * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
- * @param linkPreviewOptions Link preview generation options for the message
- * @param replyMarkup A JSON-serialized object for an inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditMessageText(
-    text: String,
-    chatId: ChatId,
-    messageId: MessageId,
-    parseMode: ParseMode? = null,
-    entities: List<MessageEntity>? = null,
-    linkPreviewOptions: LinkPreviewOptions? = null,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Message> =
-    tryEditMessageText(EditMessageTextRequest(text = text, chatId = chatId, messageId = messageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to edit text and game messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- *
- * @param text New text of the message, 1-4096 characters after entities parsing
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
- * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
- * @param linkPreviewOptions Link preview generation options for the message
- * @param replyMarkup A JSON-serialized object for an inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageText(
-    text: String,
-    inlineMessageId: InlineMessageId,
-    parseMode: ParseMode? = null,
-    entities: List<MessageEntity>? = null,
-    linkPreviewOptions: LinkPreviewOptions? = null,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Boolean> =
-    tryEditInlineMessageText(EditMessageTextRequest(text = text, inlineMessageId = inlineMessageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to edit captions of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- *
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param caption New caption of the message, 0-1024 characters after entities parsing
- * @param parseMode Mode for parsing entities in the message caption. See formatting options for more details.
- * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
- * @param replyMarkup A JSON-serialized object for an inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditMessageCaption(
-    chatId: ChatId,
-    messageId: MessageId,
-    caption: String? = null,
-    parseMode: ParseMode? = null,
-    captionEntities: List<MessageEntity>? = null,
-    showCaptionAboveMedia: Boolean? = null,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Message> =
-    tryEditMessageCaption(EditMessageCaptionRequest(chatId = chatId, messageId = messageId, caption = caption, parseMode = parseMode, captionEntities = captionEntities, showCaptionAboveMedia = showCaptionAboveMedia, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to edit captions of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- *
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param caption New caption of the message, 0-1024 characters after entities parsing
- * @param parseMode Mode for parsing entities in the message caption. See formatting options for more details.
- * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
- * @param replyMarkup A JSON-serialized object for an inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageCaption(
-    inlineMessageId: InlineMessageId,
-    caption: String? = null,
-    parseMode: ParseMode? = null,
-    captionEntities: List<MessageEntity>? = null,
-    showCaptionAboveMedia: Boolean? = null,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Boolean> =
-    tryEditInlineMessageCaption(EditMessageCaptionRequest(inlineMessageId = inlineMessageId, caption = caption, parseMode = parseMode, captionEntities = captionEntities, showCaptionAboveMedia = showCaptionAboveMedia, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- *
- * @param media A JSON-serialized object for a new media content of the message
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param replyMarkup A JSON-serialized object for a new inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditMessageMedia(
-    media: InputMedia,
-    chatId: ChatId,
-    messageId: MessageId,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Message> =
-    tryEditMessageMedia(EditMessageMediaRequest(media = media, chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- *
- * @param media A JSON-serialized object for a new media content of the message
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param replyMarkup A JSON-serialized object for a new inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageMedia(
-    media: InputMedia,
-    inlineMessageId: InlineMessageId,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Boolean> =
-    tryEditInlineMessageMedia(EditMessageMediaRequest(media = media, inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success the edited Message is returned.
- *
- * @param latitude Latitude of new location
- * @param longitude Longitude of new location
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param livePeriod New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged
- * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
- * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
- * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
- * @param replyMarkup A JSON-serialized object for a new inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditMessageLiveLocation(
-    latitude: Double,
-    longitude: Double,
-    chatId: ChatId,
-    messageId: MessageId,
-    livePeriod: Long? = null,
-    horizontalAccuracy: Double? = null,
-    heading: Long? = null,
-    proximityAlertRadius: Long? = null,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Message> =
-    tryEditMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, chatId = chatId, messageId = messageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success True is returned.
- *
- * @param latitude Latitude of new location
- * @param longitude Longitude of new location
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param livePeriod New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged
- * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
- * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
- * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
- * @param replyMarkup A JSON-serialized object for a new inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageLiveLocation(
-    latitude: Double,
-    longitude: Double,
-    inlineMessageId: InlineMessageId,
-    livePeriod: Long? = null,
-    horizontalAccuracy: Double? = null,
-    heading: Long? = null,
-    proximityAlertRadius: Long? = null,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Boolean> =
-    tryEditInlineMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, inlineMessageId = inlineMessageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to stop updating a live location message before live_period expires. On success the edited Message is returned.
- *
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message with live location to stop
- * @param replyMarkup A JSON-serialized object for a new inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryStopMessageLiveLocation(
-    chatId: ChatId,
-    messageId: MessageId,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Message> =
-    tryStopMessageLiveLocation(StopMessageLiveLocationRequest(chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to stop updating a live location message before live_period expires. On success True is returned.
- *
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param replyMarkup A JSON-serialized object for a new inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryStopInlineMessageLiveLocation(
-    inlineMessageId: InlineMessageId,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Boolean> =
-    tryStopInlineMessageLiveLocation(StopMessageLiveLocationRequest(inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.
- *
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
- * @param chatId Unique identifier for the target chat
- * @param messageId Unique identifier for the target message
- * @param checklist A JSON-serialized object for the new checklist
- * @param replyMarkup A JSON-serialized object for the new inline keyboard for the message
- */
-suspend fun TelegramBotApiClient.tryEditMessageChecklist(
-    businessConnectionId: BusinessConnectionId,
-    chatId: ChatId,
-    messageId: MessageId,
-    checklist: InputChecklist,
-    replyMarkup: InlineKeyboardMarkup? = null,
-): TelegramResponse<Message> =
-    tryEditMessageChecklist(EditMessageChecklistRequest(businessConnectionId, chatId, messageId, checklist, replyMarkup))
-
-/**
- * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- *
- * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
- * @param replyMarkup A JSON-serialized object for an inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditMessageReplyMarkup(
-    chatId: ChatId,
-    messageId: MessageId,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Message> =
-    tryEditMessageReplyMarkup(EditMessageReplyMarkupRequest(chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to edit only the reply markup of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- *
- * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
- * @param replyMarkup A JSON-serialized object for an inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageReplyMarkup(
-    inlineMessageId: InlineMessageId,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Boolean> =
-    tryEditInlineMessageReplyMarkup(EditMessageReplyMarkupRequest(inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
-
-/**
- * Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.
- *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Identifier of the original message with the poll
- * @param replyMarkup A JSON-serialized object for a new message inline keyboard.
- * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
- */
-suspend fun TelegramBotApiClient.tryStopPoll(
-    chatId: ChatId,
-    messageId: MessageId,
-    replyMarkup: InlineKeyboardMarkup? = null,
-    businessConnectionId: BusinessConnectionId? = null,
-): TelegramResponse<Poll> =
-    tryStopPoll(StopPollRequest(chatId, messageId, replyMarkup, businessConnectionId))
-
-/**
- * Use this method to delete a message, including service messages, with the following limitations: - A message can only be deleted if it was sent less than 48 hours ago. - Service messages about a supergroup, channel, or forum topic creation can't be deleted. - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago. - Bots can delete outgoing messages in private chats, groups, and supergroups. - Bots can delete incoming messages in private chats. - Bots granted can_post_messages permissions can delete outgoing messages in channels. - If the bot is an administrator of a group, it can delete any message there. - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there. Returns True on success.
- *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageId Identifier of the message to delete
- */
-suspend fun TelegramBotApiClient.tryDeleteMessage(
-    chatId: ChatId,
-    messageId: MessageId,
-): TelegramResponse<Boolean> =
-    tryDeleteMessage(DeleteMessageRequest(chatId, messageId))
-
-/**
- * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
- *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
- * @param messageIds A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted
- */
-suspend fun TelegramBotApiClient.tryDeleteMessages(
-    chatId: ChatId,
-    messageIds: List<Long>,
-): TelegramResponse<Boolean> =
-    tryDeleteMessages(DeleteMessagesRequest(chatId, messageIds))
-
-/**
  * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receiver. Returns True on success.
  *
  * @param giftId Identifier of the gift
@@ -1935,7 +1707,7 @@ suspend fun TelegramBotApiClient.tryVerifyUser(
 /**
  * Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.
  *
- * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). Channel direct messages chats can't be verified.
  * @param customDescription Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
  */
 suspend fun TelegramBotApiClient.tryVerifyChat(
@@ -2221,6 +1993,332 @@ suspend fun TelegramBotApiClient.tryDeleteStory(
     tryDeleteStory(DeleteStoryRequest(businessConnectionId, storyId))
 
 /**
+ * Use this method to edit text and game messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ *
+ * @param text New text of the message, 1-4096 characters after entities parsing
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
+ * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
+ * @param linkPreviewOptions Link preview generation options for the message
+ * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditMessageText(
+    text: String,
+    chatId: ChatId,
+    messageId: MessageId,
+    parseMode: ParseMode? = null,
+    entities: List<MessageEntity>? = null,
+    linkPreviewOptions: LinkPreviewOptions? = null,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Message> =
+    tryEditMessageText(EditMessageTextRequest(text = text, chatId = chatId, messageId = messageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to edit text and game messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ *
+ * @param text New text of the message, 1-4096 characters after entities parsing
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param parseMode Mode for parsing entities in the message text. See formatting options for more details.
+ * @param entities A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode
+ * @param linkPreviewOptions Link preview generation options for the message
+ * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageText(
+    text: String,
+    inlineMessageId: InlineMessageId,
+    parseMode: ParseMode? = null,
+    entities: List<MessageEntity>? = null,
+    linkPreviewOptions: LinkPreviewOptions? = null,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Boolean> =
+    tryEditInlineMessageText(EditMessageTextRequest(text = text, inlineMessageId = inlineMessageId, parseMode = parseMode, entities = entities, linkPreviewOptions = linkPreviewOptions, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to edit captions of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ *
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param caption New caption of the message, 0-1024 characters after entities parsing
+ * @param parseMode Mode for parsing entities in the message caption. See formatting options for more details.
+ * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
+ * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditMessageCaption(
+    chatId: ChatId,
+    messageId: MessageId,
+    caption: String? = null,
+    parseMode: ParseMode? = null,
+    captionEntities: List<MessageEntity>? = null,
+    showCaptionAboveMedia: Boolean? = null,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Message> =
+    tryEditMessageCaption(EditMessageCaptionRequest(chatId = chatId, messageId = messageId, caption = caption, parseMode = parseMode, captionEntities = captionEntities, showCaptionAboveMedia = showCaptionAboveMedia, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to edit captions of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ *
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param caption New caption of the message, 0-1024 characters after entities parsing
+ * @param parseMode Mode for parsing entities in the message caption. See formatting options for more details.
+ * @param captionEntities A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
+ * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageCaption(
+    inlineMessageId: InlineMessageId,
+    caption: String? = null,
+    parseMode: ParseMode? = null,
+    captionEntities: List<MessageEntity>? = null,
+    showCaptionAboveMedia: Boolean? = null,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Boolean> =
+    tryEditInlineMessageCaption(EditMessageCaptionRequest(inlineMessageId = inlineMessageId, caption = caption, parseMode = parseMode, captionEntities = captionEntities, showCaptionAboveMedia = showCaptionAboveMedia, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ *
+ * @param media A JSON-serialized object for a new media content of the message
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditMessageMedia(
+    media: InputMedia,
+    chatId: ChatId,
+    messageId: MessageId,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Message> =
+    tryEditMessageMedia(EditMessageMediaRequest(media = media, chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ *
+ * @param media A JSON-serialized object for a new media content of the message
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageMedia(
+    media: InputMedia,
+    inlineMessageId: InlineMessageId,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Boolean> =
+    tryEditInlineMessageMedia(EditMessageMediaRequest(media = media, inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success the edited Message is returned.
+ *
+ * @param latitude Latitude of new location
+ * @param longitude Longitude of new location
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param livePeriod New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged
+ * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
+ * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
+ * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
+ * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditMessageLiveLocation(
+    latitude: Double,
+    longitude: Double,
+    chatId: ChatId,
+    messageId: MessageId,
+    livePeriod: Long? = null,
+    horizontalAccuracy: Double? = null,
+    heading: Long? = null,
+    proximityAlertRadius: Long? = null,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Message> =
+    tryEditMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, chatId = chatId, messageId = messageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success True is returned.
+ *
+ * @param latitude Latitude of new location
+ * @param longitude Longitude of new location
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param livePeriod New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged
+ * @param horizontalAccuracy The radius of uncertainty for the location, measured in meters; 0-1500
+ * @param heading Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
+ * @param proximityAlertRadius The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
+ * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageLiveLocation(
+    latitude: Double,
+    longitude: Double,
+    inlineMessageId: InlineMessageId,
+    livePeriod: Long? = null,
+    horizontalAccuracy: Double? = null,
+    heading: Long? = null,
+    proximityAlertRadius: Long? = null,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Boolean> =
+    tryEditInlineMessageLiveLocation(EditMessageLiveLocationRequest(latitude = latitude, longitude = longitude, inlineMessageId = inlineMessageId, livePeriod = livePeriod, horizontalAccuracy = horizontalAccuracy, heading = heading, proximityAlertRadius = proximityAlertRadius, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to stop updating a live location message before live_period expires. On success the edited Message is returned.
+ *
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message with live location to stop
+ * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryStopMessageLiveLocation(
+    chatId: ChatId,
+    messageId: MessageId,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Message> =
+    tryStopMessageLiveLocation(StopMessageLiveLocationRequest(chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to stop updating a live location message before live_period expires. On success True is returned.
+ *
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param replyMarkup A JSON-serialized object for a new inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryStopInlineMessageLiveLocation(
+    inlineMessageId: InlineMessageId,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Boolean> =
+    tryStopInlineMessageLiveLocation(StopMessageLiveLocationRequest(inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.
+ *
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
+ * @param chatId Unique identifier for the target chat
+ * @param messageId Unique identifier for the target message
+ * @param checklist A JSON-serialized object for the new checklist
+ * @param replyMarkup A JSON-serialized object for the new inline keyboard for the message
+ */
+suspend fun TelegramBotApiClient.tryEditMessageChecklist(
+    businessConnectionId: BusinessConnectionId,
+    chatId: ChatId,
+    messageId: MessageId,
+    checklist: InputChecklist,
+    replyMarkup: InlineKeyboardMarkup? = null,
+): TelegramResponse<Message> =
+    tryEditMessageChecklist(EditMessageChecklistRequest(businessConnectionId, chatId, messageId, checklist, replyMarkup))
+
+/**
+ * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ *
+ * @param chatId Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Required if inline_message_id is not specified. Identifier of the message to edit
+ * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditMessageReplyMarkup(
+    chatId: ChatId,
+    messageId: MessageId,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Message> =
+    tryEditMessageReplyMarkup(EditMessageReplyMarkupRequest(chatId = chatId, messageId = messageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to edit only the reply markup of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ *
+ * @param inlineMessageId Required if chat_id and message_id are not specified. Identifier of the inline message
+ * @param replyMarkup A JSON-serialized object for an inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageReplyMarkup(
+    inlineMessageId: InlineMessageId,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Boolean> =
+    tryEditInlineMessageReplyMarkup(EditMessageReplyMarkupRequest(inlineMessageId = inlineMessageId, replyMarkup = replyMarkup, businessConnectionId = businessConnectionId))
+
+/**
+ * Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Identifier of the original message with the poll
+ * @param replyMarkup A JSON-serialized object for a new message inline keyboard.
+ * @param businessConnectionId Unique identifier of the business connection on behalf of which the message to be edited was sent
+ */
+suspend fun TelegramBotApiClient.tryStopPoll(
+    chatId: ChatId,
+    messageId: MessageId,
+    replyMarkup: InlineKeyboardMarkup? = null,
+    businessConnectionId: BusinessConnectionId? = null,
+): TelegramResponse<Poll> =
+    tryStopPoll(StopPollRequest(chatId, messageId, replyMarkup, businessConnectionId))
+
+/**
+ * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat. Returns True on success.
+ *
+ * @param chatId Unique identifier for the target direct messages chat
+ * @param messageId Identifier of a suggested post message to approve
+ * @param sendDate Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future
+ */
+suspend fun TelegramBotApiClient.tryApproveSuggestedPost(
+    chatId: ChatId,
+    messageId: MessageId,
+    sendDate: Long? = null,
+): TelegramResponse<Boolean> =
+    tryApproveSuggestedPost(ApproveSuggestedPostRequest(chatId, messageId, sendDate))
+
+/**
+ * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat. Returns True on success.
+ *
+ * @param chatId Unique identifier for the target direct messages chat
+ * @param messageId Identifier of a suggested post message to decline
+ * @param comment Comment for the creator of the suggested post; 0-128 characters
+ */
+suspend fun TelegramBotApiClient.tryDeclineSuggestedPost(
+    chatId: ChatId,
+    messageId: MessageId,
+    comment: String? = null,
+): TelegramResponse<Boolean> =
+    tryDeclineSuggestedPost(DeclineSuggestedPostRequest(chatId, messageId, comment))
+
+/**
+ * Use this method to delete a message, including service messages, with the following limitations: - A message can only be deleted if it was sent less than 48 hours ago. - Service messages about a supergroup, channel, or forum topic creation can't be deleted. - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago. - Bots can delete outgoing messages in private chats, groups, and supergroups. - Bots can delete incoming messages in private chats. - Bots granted can_post_messages permissions can delete outgoing messages in channels. - If the bot is an administrator of a group, it can delete any message there. - If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there. - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat. Returns True on success.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageId Identifier of the message to delete
+ */
+suspend fun TelegramBotApiClient.tryDeleteMessage(
+    chatId: ChatId,
+    messageId: MessageId,
+): TelegramResponse<Boolean> =
+    tryDeleteMessage(DeleteMessageRequest(chatId, messageId))
+
+/**
+ * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
+ *
+ * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+ * @param messageIds A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted
+ */
+suspend fun TelegramBotApiClient.tryDeleteMessages(
+    chatId: ChatId,
+    messageIds: List<Long>,
+): TelegramResponse<Boolean> =
+    tryDeleteMessages(DeleteMessagesRequest(chatId, messageIds))
+
+/**
  * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
  *
  * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -2234,6 +2332,8 @@ suspend fun TelegramBotApiClient.tryDeleteStory(
  * @param replyMarkup Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user
  * @param businessConnectionId Unique identifier of the business connection on behalf of which the message will be sent
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendSticker(
     chatId: ChatId,
@@ -2247,8 +2347,10 @@ suspend fun TelegramBotApiClient.trySendSticker(
     replyMarkup: ReplyMarkup? = null,
     businessConnectionId: BusinessConnectionId? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendSticker(SendStickerRequest(chatId, sticker, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast))
+    trySendSticker(SendStickerRequest(chatId, sticker, messageThreadId, emoji, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, businessConnectionId, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to get a sticker set. On success, a StickerSet object is returned.
@@ -2526,6 +2628,8 @@ suspend fun TelegramBotApiClient.trySavePreparedInlineMessage(
  * @param replyParameters Description of the message to reply to
  * @param replyMarkup A JSON-serialized object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button.
  * @param allowPaidBroadcast Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+ * @param directMessagesTopicId Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
+ * @param suggestedPostParameters A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
  */
 suspend fun TelegramBotApiClient.trySendInvoice(
     chatId: ChatId,
@@ -2557,8 +2661,10 @@ suspend fun TelegramBotApiClient.trySendInvoice(
     replyParameters: ReplyParameters? = null,
     replyMarkup: InlineKeyboardMarkup? = null,
     allowPaidBroadcast: Boolean? = null,
+    directMessagesTopicId: Long? = null,
+    suggestedPostParameters: SuggestedPostParameters? = null,
 ): TelegramResponse<Message> =
-    trySendInvoice(SendInvoiceRequest(chatId, title, description, payload, currency, prices, messageThreadId, providerToken, maxTipAmount, suggestedTipAmounts, startParameter, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, allowPaidBroadcast))
+    trySendInvoice(SendInvoiceRequest(chatId, title, description, payload, currency, prices, messageThreadId, providerToken, maxTipAmount, suggestedTipAmounts, startParameter, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, disableNotification, protectContent, messageEffectId, replyParameters, replyMarkup, allowPaidBroadcast, directMessagesTopicId, suggestedPostParameters))
 
 /**
  * Use this method to create a link for an invoice. Returns the created invoice link as String on success.
@@ -2697,7 +2803,7 @@ suspend fun TelegramBotApiClient.trySetPassportDataErrors(
 /**
  * Use this method to send a game. On success, the sent Message is returned.
  *
- * @param chatId Unique identifier for the target chat
+ * @param chatId Unique identifier for the target chat. Games can't be sent to channel direct messages chats and channel chats.
  * @param gameShortName Short name of the game, serves as the unique identifier for the game. Set up your games via @BotFather.
  * @param messageThreadId Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
  * @param disableNotification Sends the message silently. Users will receive a notification with no sound.

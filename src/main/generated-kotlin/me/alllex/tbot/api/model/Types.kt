@@ -427,6 +427,7 @@ data class User(
  * @param firstName Optional. First name of the other party in a private chat
  * @param lastName Optional. Last name of the other party in a private chat
  * @param isForum Optional. True, if the supergroup chat is a forum (has topics enabled)
+ * @param isDirectMessages Optional. True, if the chat is the direct messages chat of a channel
  */
 @Serializable
 data class Chat(
@@ -437,8 +438,9 @@ data class Chat(
     val firstName: String? = null,
     val lastName: String? = null,
     val isForum: Boolean? = null,
+    val isDirectMessages: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Chat").prop("id", id).prop("type", type).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).toString()
+    override fun toString() = DebugStringBuilder("Chat").prop("id", id).prop("type", type).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("isDirectMessages", isDirectMessages).toString()
 }
 
 /**
@@ -488,6 +490,8 @@ data class Chat(
  * @param location Optional. For supergroups, the location to which the supergroup is connected
  * @param canSendPaidMedia Optional. True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.
  * @param acceptedGiftTypes Information about types of gifts that are accepted by the chat or by the corresponding user for private chats
+ * @param isDirectMessages Optional. True, if the chat is the direct messages chat of a channel
+ * @param parentChat Optional. Information about the corresponding channel chat; for direct messages chats only
  */
 @Serializable
 data class ChatFullInfo(
@@ -536,8 +540,10 @@ data class ChatFullInfo(
     val location: ChatLocation? = null,
     val canSendPaidMedia: Boolean? = null,
     val acceptedGiftTypes: AcceptedGiftTypes,
+    val isDirectMessages: Boolean? = null,
+    val parentChat: Chat? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatFullInfo").prop("id", id).prop("type", type).prop("accentColorId", accentColorId).prop("maxReactionCount", maxReactionCount).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).prop("canSendPaidMedia", canSendPaidMedia).prop("acceptedGiftTypes", acceptedGiftTypes).toString()
+    override fun toString() = DebugStringBuilder("ChatFullInfo").prop("id", id).prop("type", type).prop("accentColorId", accentColorId).prop("maxReactionCount", maxReactionCount).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).prop("canSendPaidMedia", canSendPaidMedia).prop("acceptedGiftTypes", acceptedGiftTypes).prop("isDirectMessages", isDirectMessages).prop("parentChat", parentChat).toString()
 }
 
 /**
@@ -635,6 +641,15 @@ data class ChatFullInfo(
  * @param checklistTasksAdded Optional. Service message: tasks were added to a checklist
  * @param directMessagePriceChanged Optional. Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed
  * @param paidMessagePriceChanged Optional. Service message: the price for paid messages has changed in the chat
+ * @param directMessagesTopic Optional. Information about the direct messages chat topic that contains the message
+ * @param replyToChecklistTaskId Optional. Identifier of the specific checklist task that is being replied to
+ * @param isPaidPost Optional. True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can't be edited.
+ * @param suggestedPostInfo Optional. Information about suggested post parameters if the message is a suggested post in a channel direct messages chat. If the message is an approved or declined suggested post, then it can't be edited.
+ * @param suggestedPostApproved Optional. Service message: a suggested post was approved
+ * @param suggestedPostApprovalFailed Optional. Service message: approval of a suggested post has failed
+ * @param suggestedPostDeclined Optional. Service message: a suggested post was declined
+ * @param suggestedPostPaid Optional. Service message: payment for a suggested post was received
+ * @param suggestedPostRefunded Optional. Service message: payment for a suggested post was refunded
  */
 @Serializable
 data class Message(
@@ -731,8 +746,17 @@ data class Message(
     val checklistTasksAdded: ChecklistTasksAdded? = null,
     val directMessagePriceChanged: DirectMessagePriceChanged? = null,
     val paidMessagePriceChanged: PaidMessagePriceChanged? = null,
+    val directMessagesTopic: DirectMessagesTopic? = null,
+    val replyToChecklistTaskId: Long? = null,
+    val isPaidPost: Boolean? = null,
+    val suggestedPostInfo: SuggestedPostInfo? = null,
+    val suggestedPostApproved: SuggestedPostApproved? = null,
+    val suggestedPostApprovalFailed: SuggestedPostApprovalFailed? = null,
+    val suggestedPostDeclined: SuggestedPostDeclined? = null,
+    val suggestedPostPaid: SuggestedPostPaid? = null,
+    val suggestedPostRefunded: SuggestedPostRefunded? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).prop("paidMedia", paidMedia).prop("refundedPayment", refundedPayment).prop("paidStarCount", paidStarCount).prop("checklist", checklist).prop("gift", gift).prop("uniqueGift", uniqueGift).prop("checklistTasksDone", checklistTasksDone).prop("checklistTasksAdded", checklistTasksAdded).prop("directMessagePriceChanged", directMessagePriceChanged).prop("paidMessagePriceChanged", paidMessagePriceChanged).toString()
+    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).prop("paidMedia", paidMedia).prop("refundedPayment", refundedPayment).prop("paidStarCount", paidStarCount).prop("checklist", checklist).prop("gift", gift).prop("uniqueGift", uniqueGift).prop("checklistTasksDone", checklistTasksDone).prop("checklistTasksAdded", checklistTasksAdded).prop("directMessagePriceChanged", directMessagePriceChanged).prop("paidMessagePriceChanged", paidMessagePriceChanged).prop("directMessagesTopic", directMessagesTopic).prop("replyToChecklistTaskId", replyToChecklistTaskId).prop("isPaidPost", isPaidPost).prop("suggestedPostInfo", suggestedPostInfo).prop("suggestedPostApproved", suggestedPostApproved).prop("suggestedPostApprovalFailed", suggestedPostApprovalFailed).prop("suggestedPostDeclined", suggestedPostDeclined).prop("suggestedPostPaid", suggestedPostPaid).prop("suggestedPostRefunded", suggestedPostRefunded).toString()
 }
 
 /**
@@ -848,12 +872,13 @@ data class ExternalReplyInfo(
 /**
  * Describes reply parameters for the message that is being sent.
  * @param messageId Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified
- * @param chatId Optional. If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account.
+ * @param chatId Optional. If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account and messages from channel direct messages chats.
  * @param allowSendingWithoutReply Optional. Pass True if the message should be sent even if the specified message to be replied to is not found. Always False for replies in another chat or forum topic. Always True for messages sent on behalf of a business account.
  * @param quote Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message.
  * @param quoteParseMode Optional. Mode for parsing entities in the quote. See formatting options for more details.
  * @param quoteEntities Optional. A JSON-serialized list of special entities that appear in the quote. It can be specified instead of quote_parse_mode.
  * @param quotePosition Optional. Position of the quote in the original message in UTF-16 code units
+ * @param checklistTaskId Optional. Identifier of the specific checklist task to be replied to
  */
 @Serializable
 data class ReplyParameters(
@@ -864,8 +889,9 @@ data class ReplyParameters(
     val quoteParseMode: String? = null,
     val quoteEntities: List<MessageEntity>? = null,
     val quotePosition: Long? = null,
+    val checklistTaskId: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ReplyParameters").prop("messageId", messageId).prop("chatId", chatId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("quote", quote).prop("quoteParseMode", quoteParseMode).prop("quoteEntities", quoteEntities).prop("quotePosition", quotePosition).toString()
+    override fun toString() = DebugStringBuilder("ReplyParameters").prop("messageId", messageId).prop("chatId", chatId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("quote", quote).prop("quoteParseMode", quoteParseMode).prop("quoteEntities", quoteEntities).prop("quotePosition", quotePosition).prop("checklistTaskId", checklistTaskId).toString()
 }
 
 /**
@@ -1814,6 +1840,77 @@ data class DirectMessagePriceChanged(
 }
 
 /**
+ * Describes a service message about the approval of a suggested post.
+ * @param sendDate Date when the post will be published
+ * @param suggestedPostMessage Optional. Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param price Optional. Amount paid for the post
+ */
+@Serializable
+data class SuggestedPostApproved(
+    val sendDate: Long,
+    val suggestedPostMessage: Message? = null,
+    val price: SuggestedPostPrice? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostApproved").prop("sendDate", sendDate).prop("suggestedPostMessage", suggestedPostMessage).prop("price", price).toString()
+}
+
+/**
+ * Describes a service message about the failed approval of a suggested post. Currently, only caused by insufficient user funds at the time of approval.
+ * @param price Expected price of the post
+ * @param suggestedPostMessage Optional. Message containing the suggested post whose approval has failed. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ */
+@Serializable
+data class SuggestedPostApprovalFailed(
+    val price: SuggestedPostPrice,
+    val suggestedPostMessage: Message? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostApprovalFailed").prop("price", price).prop("suggestedPostMessage", suggestedPostMessage).toString()
+}
+
+/**
+ * Describes a service message about the rejection of a suggested post.
+ * @param suggestedPostMessage Optional. Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param comment Optional. Comment with which the post was declined
+ */
+@Serializable
+data class SuggestedPostDeclined(
+    val suggestedPostMessage: Message? = null,
+    val comment: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostDeclined").prop("suggestedPostMessage", suggestedPostMessage).prop("comment", comment).toString()
+}
+
+/**
+ * Describes a service message about a successful payment for a suggested post.
+ * @param currency Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or “TON” for toncoins
+ * @param suggestedPostMessage Optional. Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param amount Optional. The amount of the currency that was received by the channel in nanotoncoins; for payments in toncoins only
+ * @param starAmount Optional. The amount of Telegram Stars that was received by the channel; for payments in Telegram Stars only
+ */
+@Serializable
+data class SuggestedPostPaid(
+    val currency: String,
+    val suggestedPostMessage: Message? = null,
+    val amount: Long? = null,
+    val starAmount: StarAmount? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostPaid").prop("currency", currency).prop("suggestedPostMessage", suggestedPostMessage).prop("amount", amount).prop("starAmount", starAmount).toString()
+}
+
+/**
+ * Describes a service message about a payment refund for a suggested post.
+ * @param reason Reason for the refund. Currently, one of “post_deleted” if the post was deleted within 24 hours of being posted or removed from scheduled messages without being posted, or “payment_refunded” if the payer refunded their payment.
+ * @param suggestedPostMessage Optional. Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ */
+@Serializable
+data class SuggestedPostRefunded(
+    val reason: String,
+    val suggestedPostMessage: Message? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostRefunded").prop("reason", reason).prop("suggestedPostMessage", suggestedPostMessage).toString()
+}
+
+/**
  * This object represents a service message about the creation of a scheduled giveaway.
  * @param prizeStarCount Optional. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
  */
@@ -1918,6 +2015,60 @@ data class LinkPreviewOptions(
     val showAboveText: Boolean? = null,
 ) {
     override fun toString() = DebugStringBuilder("LinkPreviewOptions").prop("isDisabled", isDisabled).prop("url", url).prop("preferSmallMedia", preferSmallMedia).prop("preferLargeMedia", preferLargeMedia).prop("showAboveText", showAboveText).toString()
+}
+
+/**
+ * Desribes price of a suggested post.
+ * @param currency Currency in which the post will be paid. Currently, must be one of “XTR” for Telegram Stars or “TON” for toncoins
+ * @param amount The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanotoncoins must be between 10000000 and 10000000000000.
+ */
+@Serializable
+data class SuggestedPostPrice(
+    val currency: String,
+    val amount: Long,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostPrice").prop("currency", currency).prop("amount", amount).toString()
+}
+
+/**
+ * Contains information about a suggested post.
+ * @param state State of the suggested post. Currently, it can be one of “pending”, “approved”, “declined”.
+ * @param price Optional. Proposed price of the post. If the field is omitted, then the post is unpaid.
+ * @param sendDate Optional. Proposed send date of the post. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user or administrator who approves it.
+ */
+@Serializable
+data class SuggestedPostInfo(
+    val state: String,
+    val price: SuggestedPostPrice? = null,
+    val sendDate: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostInfo").prop("state", state).prop("price", price).prop("sendDate", sendDate).toString()
+}
+
+/**
+ * Contains parameters of a post that is being suggested by the bot.
+ * @param price Optional. Proposed price for the post. If the field is omitted, then the post is unpaid.
+ * @param sendDate Optional. Proposed send date of the post. If specified, then the date must be between 300 second and 2678400 seconds (30 days) in the future. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user who approves it.
+ */
+@Serializable
+data class SuggestedPostParameters(
+    val price: SuggestedPostPrice? = null,
+    val sendDate: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostParameters").prop("price", price).prop("sendDate", sendDate).toString()
+}
+
+/**
+ * Describes a topic of a direct messages chat.
+ * @param topicId Unique identifier of the topic
+ * @param user Optional. Information about the user that created the topic. Currently, it is always present
+ */
+@Serializable
+data class DirectMessagesTopic(
+    val topicId: Long,
+    val user: User? = null,
+) {
+    override fun toString() = DebugStringBuilder("DirectMessagesTopic").prop("topicId", topicId).prop("user", user).toString()
 }
 
 /**
@@ -2103,9 +2254,9 @@ data class InlineKeyboardMarkup(
  * @param callbackData Optional. Data to be sent in a callback query to the bot when the button is pressed, 1-64 bytes
  * @param webApp Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a Telegram Business account.
  * @param loginUrl Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
- * @param switchInlineQuery Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent on behalf of a Telegram Business account.
- * @param switchInlineQueryCurrentChat Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business account.
- * @param switchInlineQueryChosenChat Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
+ * @param switchInlineQuery Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
+ * @param switchInlineQueryCurrentChat Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
+ * @param switchInlineQueryChosenChat Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
  * @param callbackGame Optional. Description of the game that will be launched when the user presses the button. NOTE: This type of button must always be the first button in the first row.
  * @param pay Optional. Specify True, to send a Pay button. Substrings “” and “XTR” in the buttons's text will be replaced with a Telegram Star icon. NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
  * @param copyText Optional. Description of the button that copies the specified text to the clipboard.
@@ -2281,6 +2432,7 @@ data class ChatInviteLink(
  * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
  * @param canPinMessages Optional. True, if the user is allowed to pin messages; for groups and supergroups only
  * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
+ * @param canManageDirectMessages Optional. True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
  */
 @Serializable
 data class ChatAdministratorRights(
@@ -2299,8 +2451,9 @@ data class ChatAdministratorRights(
     val canEditMessages: Boolean? = null,
     val canPinMessages: Boolean? = null,
     val canManageTopics: Boolean? = null,
+    val canManageDirectMessages: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatAdministratorRights").prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).toString()
+    override fun toString() = DebugStringBuilder("ChatAdministratorRights").prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("canManageDirectMessages", canManageDirectMessages).toString()
 }
 
 /**
@@ -2377,6 +2530,7 @@ data class ChatMemberOwner(
  * @param canPinMessages Optional. True, if the user is allowed to pin messages; for groups and supergroups only
  * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
  * @param customTitle Optional. Custom title for this user
+ * @param canManageDirectMessages Optional. True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
  */
 @Serializable
 @SerialName("administrator")
@@ -2399,8 +2553,9 @@ data class ChatMemberAdministrator(
     val canPinMessages: Boolean? = null,
     val canManageTopics: Boolean? = null,
     val customTitle: String? = null,
+    val canManageDirectMessages: Boolean? = null,
 ) : ChatMember {
-    override fun toString() = DebugStringBuilder("ChatMemberAdministrator").prop("user", user).prop("canBeEdited", canBeEdited).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("customTitle", customTitle).toString()
+    override fun toString() = DebugStringBuilder("ChatMemberAdministrator").prop("user", user).prop("canBeEdited", canBeEdited).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("customTitle", customTitle).prop("canManageDirectMessages", canManageDirectMessages).toString()
 }
 
 /**
@@ -2881,6 +3036,7 @@ data class ForumTopic(
  * @param upgradeStarCount Optional. The number of Telegram Stars that must be paid to upgrade the gift to a unique one
  * @param totalCount Optional. The total number of the gifts of this type that can be sent; for limited gifts only
  * @param remainingCount Optional. The number of remaining gifts of this type that can be sent; for limited gifts only
+ * @param publisherChat Optional. Information about the chat that published the gift
  */
 @Serializable
 data class Gift(
@@ -2890,8 +3046,9 @@ data class Gift(
     val upgradeStarCount: Long? = null,
     val totalCount: Long? = null,
     val remainingCount: Long? = null,
+    val publisherChat: Chat? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Gift").prop("id", id).prop("sticker", sticker).prop("starCount", starCount).prop("upgradeStarCount", upgradeStarCount).prop("totalCount", totalCount).prop("remainingCount", remainingCount).toString()
+    override fun toString() = DebugStringBuilder("Gift").prop("id", id).prop("sticker", sticker).prop("starCount", starCount).prop("upgradeStarCount", upgradeStarCount).prop("totalCount", totalCount).prop("remainingCount", remainingCount).prop("publisherChat", publisherChat).toString()
 }
 
 /**
@@ -2975,6 +3132,7 @@ data class UniqueGiftBackdrop(
  * @param model Model of the gift
  * @param symbol Symbol of the gift
  * @param backdrop Backdrop of the gift
+ * @param publisherChat Optional. Information about the chat that published the gift
  */
 @Serializable
 data class UniqueGift(
@@ -2984,8 +3142,9 @@ data class UniqueGift(
     val model: UniqueGiftModel,
     val symbol: UniqueGiftSymbol,
     val backdrop: UniqueGiftBackdrop,
+    val publisherChat: Chat? = null,
 ) {
-    override fun toString() = DebugStringBuilder("UniqueGift").prop("baseName", baseName).prop("name", name).prop("number", number).prop("model", model).prop("symbol", symbol).prop("backdrop", backdrop).toString()
+    override fun toString() = DebugStringBuilder("UniqueGift").prop("baseName", baseName).prop("name", name).prop("number", number).prop("model", model).prop("symbol", symbol).prop("backdrop", backdrop).prop("publisherChat", publisherChat).toString()
 }
 
 /**
@@ -3205,7 +3364,7 @@ data object BotCommandScopeAllChatAdministrators : BotCommandScope
 
 /**
  * Represents the scope of bot commands, covering a specific chat.
- * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren't supported.
  */
 @Serializable
 @SerialName("chat")
@@ -3217,7 +3376,7 @@ data class BotCommandScopeChat(
 
 /**
  * Represents the scope of bot commands, covering all administrators of a specific group or supergroup chat.
- * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren't supported.
  */
 @Serializable
 @SerialName("chat_administrators")
@@ -3229,7 +3388,7 @@ data class BotCommandScopeChatAdministrators(
 
 /**
  * Represents the scope of bot commands, covering a specific member of a group or supergroup chat.
- * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren't supported.
  * @param userId Unique identifier of the target user
  */
 @Serializable

@@ -8,7 +8,7 @@ kotlinx-serialization = "1.8.1"
 ktor = "2.3.7"
 log4j = "2.24.3"
 junit5 = "5.10.0"
-jsoup = "1.21.1"
+jsoup = "1.21.2"
 parsus = "0.6.1"
 
 [libraries]

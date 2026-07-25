@@ -220,7 +220,7 @@ data class FluentContextMethod(
 /**
  * Fluent methods move some of the parameters from the base method signatures
  * into a direct receiver of the function, thus making it more idiomatic.
- * The ability to call a base method is retained by having `TelegramBotApiContext` as a context receiver.
+ * The ability to call a base method is retained by having `TelegramBotApiContext` as a context parameter.
  *
  * Fluent methods generation happens after the [methodVariations] are expanded.
  */

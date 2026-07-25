@@ -121,6 +121,8 @@ class TelegramBotApiPoller(
 
     private suspend fun TelegramBotUpdateListener.onUpdateSafely(update: Update) {
         try {
+            // `with` is deliberate: the stdlib `context(...)` introducer is unavailable on this
+            // toolchain, so it is currently the only way to supply a context parameter at a call site.
             with(botApiContext) {
                 onUpdate(update)
             }

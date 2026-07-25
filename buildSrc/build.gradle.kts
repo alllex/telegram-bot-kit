@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    id("org.jetbrains.kotlin.plugin.serialization") version embeddedKotlinVersion
+    id("org.jetbrains.kotlin.plugin.serialization") version libs.versions.kotlinPlugin.get()
 }
 
 repositories {

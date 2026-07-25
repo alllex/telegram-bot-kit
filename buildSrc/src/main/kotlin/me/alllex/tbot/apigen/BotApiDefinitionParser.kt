@@ -12,6 +12,7 @@ import me.alllex.parsus.parser.repeatOneOrMore
 import me.alllex.parsus.token.regexToken
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import org.jsoup.nodes.TextNode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -137,6 +138,32 @@ val topLevelSections = listOf(
     "Games",
 )
 
+/**
+ * Top-level sections that are prose rather than type or method definitions.
+ *
+ * Every top-level section must appear either here or in [topLevelSections]: an unlisted section
+ * is an error rather than something to skip, so that a new section in the spec cannot silently
+ * drop its definitions from the generated API.
+ */
+val ignoredTopLevelSections = setOf(
+    "Recent changes",
+    "Authorizing your bot",
+    "Making requests",
+    "Using a Local Bot API Server",
+)
+
+/**
+ * Sealed type names for unions the spec spells out as a list of members.
+ *
+ * Keyed by the set of member names so that ordering and separator style ("or" vs ", ... and")
+ * do not matter. The name is not derivable from the members — `ReplyMarkup` never appears in
+ * the union text that defines it — so it has to be stated here.
+ */
+val unionTypeNames: Map<Set<String>, String> = mapOf(
+    setOf("InlineKeyboardMarkup", "ReplyKeyboardMarkup", "ReplyKeyboardRemove", "ForceReply") to "ReplyMarkup",
+    setOf("InputMediaAudio", "InputMediaDocument", "InputMediaPhoto", "InputMediaVideo") to "InputMedia",
+)
+
 val responseTypeRegexes = listOf(
     Regex("An (.+) objects is returned"),
     Regex("Returns (\\w+) on success"),
@@ -190,6 +217,15 @@ class BotApiDefinitionParser {
     ): BotApi {
 
         val doc = Jsoup.parse(originalHtml.readText())
+
+        // Telegram renders emoji as <img class="emoji" alt="🎲">. Jsoup's text() ignores the alt
+        // attribute, so emoji would be dropped from descriptions entirely. Substituting the alt
+        // text into the DOM before any text() call both preserves the emoji and makes the output
+        // independent of how a given jsoup version spaces replaced inline elements.
+        for (emojiImg in doc.select("img.emoji")) {
+            emojiImg.replaceWith(TextNode(emojiImg.attr("alt")))
+        }
+
         val devPageContent = doc.select("#dev_page_content").firstOrNull()
             ?: error("Could not find #dev_page_content")
 
@@ -201,6 +237,18 @@ class BotApiDefinitionParser {
 
         val h3Sections =
             contentEls.selectSections(startsSection = Element::isH3, stopsSequence = { it.isH1() || it.isH2() })
+
+        val unknownSections = h3Sections
+            .map { it.first().ownText() }
+            .filter { it !in topLevelSections && it !in ignoredTopLevelSections }
+
+        check(unknownSections.isEmpty()) {
+            "Unrecognized top-level section(s) in the Bot API spec: " +
+                unknownSections.joinToString { "'$it'" } + ". " +
+                "Add each to `topLevelSections` if it contains type or method definitions, " +
+                "or to `ignoredTopLevelSections` if it is prose. " +
+                "Leaving a section unlisted would silently drop its definitions from the generated API."
+        }
 
         val groupSections = h3Sections.filter { it.first().ownText() in topLevelSections }
         logger.info("Found ${groupSections.size} top-level sections")
@@ -360,7 +408,7 @@ class BotApiDefinitionParser {
             val nameEl = row.child(0)
             val typeEl = row.child(1)
             val descriptionEl = row.child(2)
-            val description = descriptionEl.text().trim() // TODO: replace <img ... alt="😐"> with actual emoji text
+            val description = descriptionEl.text().trim()
             val isOptional = description.startsWith("Optional")
             val serialFieldName = nameEl.text().trim()
             val typeText = typeEl.text().trim()
@@ -456,11 +504,26 @@ object FieldTypeGrammar : Grammar<String>(ignoreCase = true) {
     val boolean by regexToken("Boolean|False|True") map { "Boolean" }
     val string by regexToken("InputFile or String|InputFile") map { "String" }
     val message by regexToken("Messages") map { "Message" } // typo in the original HTML spec
-    val replayMarkup by regexToken("InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply") map { "ReplyMarkup" } // this is a custom sealed type
-    val inputMedia by regexToken("InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo") map { "InputMedia" }
+
+    // Unions are matched structurally ("A or B or C", "A, B and C") rather than as fixed literals,
+    // so adding a member to an existing union no longer breaks parsing. The resulting sealed type
+    // name cannot be derived from the members, though, so it is looked up in [unionTypeNames]:
+    // "InlineKeyboardMarkup or ReplyKeyboardMarkup or ..." has to become `ReplyMarkup`, a name that
+    // appears nowhere in the spec text. An unknown combination is an error rather than a guess.
+    val unionType by regexToken("\\w+(?:(?:,| and| or) \\w+)+") map { token ->
+        val members = token.text.split(",", " and ", " or ")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+        unionTypeNames[members.toSet()]
+            ?: error(
+                "Unrecognized union type: '${token.text}'. " +
+                    "Add its members to `unionTypeNames` mapped to the sealed type they represent."
+            )
+    }
+
     val apiType by regexToken("\\w+") map { resolveElementTypeName(it.text) }
 
-    val simpleType by int or double or boolean or string or message or replayMarkup or inputMedia or apiType
+    val simpleType by int or double or boolean or string or message or unionType or apiType
     val listType by parser {
         val listDepth = repeatOneOrMore(arrayOf).size
         val atom = simpleType()

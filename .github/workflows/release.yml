@@ -27,6 +27,11 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      # Validate before anything is uploaded: a failure here aborts the release
+      # rather than leaving a partially published staging repository behind.
+      - name: Check
+        run: ./gradlew check
+
       - name: Publish artifacts
         run: ./gradlew :publishToSonatype :closeAndReleaseSonatypeStagingRepository --no-configuration-cache
         env:

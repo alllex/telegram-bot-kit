@@ -30,3 +30,18 @@ jobs:
 
       - name: Check with Gradle
         run: ./gradlew check
+
+      # Guard against generated output drifting from the committed sources.
+      # Generation is deterministic given the committed spec, so a dirty tree
+      # here means the toolchain changed what it produces (as a jsoup upgrade
+      # once did, silently dropping emoji) or that someone edited generated
+      # files by hand. Either way the fix is to regenerate and commit.
+      - name: Verify generated sources are up to date
+        run: |
+          ./gradlew extractBotApi generateBotApi
+          if [ -n "$(git status --porcelain api-spec src/main/generated-kotlin)" ]; then
+            echo "Generated output differs from committed sources:"
+            git --no-pager diff --stat api-spec src/main/generated-kotlin
+            echo "Run './gradlew extractBotApi generateBotApi' and commit the result."
+            exit 1
+          fi

@@ -10,6 +10,9 @@ log4j = "2.24.3"
 junit5 = "5.10.0"
 jsoup = "1.21.1"
 parsus = "0.6.1"
+binary-compatibility-validator = "0.18.0"
+dokka = "2.2.0"
+nexus-publish = "2.0.0"
 
 [libraries]
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlinPlugin" }
@@ -41,6 +44,6 @@ log4j = ["log4j-api", "log4j-core", "log4j-slf4j-impl"]
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
-kotlinx-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.18.0" }
-dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
+kotlinx-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binary-compatibility-validator" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus-publish" }

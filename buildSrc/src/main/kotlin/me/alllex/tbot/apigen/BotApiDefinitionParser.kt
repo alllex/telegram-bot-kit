@@ -123,7 +123,9 @@ val availableTypesIgnoredSections: Set<String> = setOf(
     "Accent colors",
     "Profile accent colors",
     "Inline mode methods",
-    "Paid Broadcasts"
+    "Paid Broadcasts",
+    "Ephemeral Messages and Commands",
+    "Rich Message Formatting Options"
 )
 
 val topLevelSections = listOf(
@@ -132,6 +134,7 @@ val topLevelSections = listOf(
     "Available methods",
     "Updating messages",
     "Stickers",
+    "Rich messages",
     "Inline mode",
     "Payments",
     "Telegram Passport",
@@ -162,6 +165,15 @@ val ignoredTopLevelSections = setOf(
 val unionTypeNames: Map<Set<String>, String> = mapOf(
     setOf("InlineKeyboardMarkup", "ReplyKeyboardMarkup", "ReplyKeyboardRemove", "ForceReply") to "ReplyMarkup",
     setOf("InputMediaAudio", "InputMediaDocument", "InputMediaPhoto", "InputMediaVideo") to "InputMedia",
+    // Bot API 10.2 added InputMediaLivePhoto to the union.
+    setOf(
+        "InputMediaAudio", "InputMediaDocument", "InputMediaLivePhoto", "InputMediaPhoto", "InputMediaVideo"
+    ) to "InputMedia",
+    // The `media` field of InputRichMessageMedia is an anonymous union in the spec: it has no name
+    // to generate a sealed type from, so one is chosen here, matching how ReplyMarkup is named.
+    setOf(
+        "InputMediaAnimation", "InputMediaAudio", "InputMediaPhoto", "InputMediaVideo", "InputMediaVoiceNote"
+    ) to "InputRichMedia",
 )
 
 val responseTypeRegexes = listOf(
@@ -181,6 +193,7 @@ val responseTypeRegexes = listOf(
     Regex("returns the edited (\\w+),"),
     Regex("Returns the uploaded (\\w+) on success"),
     Regex("Returns the (?:new invite link|created invoice link) as (String) on success"),
+    Regex("Returns the (?:new )?token as (String) on success"),
     Regex("Returns information about the created topic as a (\\w+) object"),
     Regex("Returns (.+) on success"),
     Regex("as (\\w+) on success"),
@@ -205,6 +218,18 @@ private val implicitReplyMarkupElement = BotApiElement(
     unionTypes = listOf("InlineKeyboardMarkup", "ReplyKeyboardMarkup", "ReplyKeyboardRemove", "ForceReply").map {
         BotApiElementName(it)
     }
+)
+
+/**
+ * The `media` field of `InputRichMessageMedia` is an anonymous union in the spec, so there is no
+ * definition to parse it from. Declared here the same way as [implicitReplyMarkupElement].
+ */
+private val implicitInputRichMediaElement = BotApiElement(
+    BotApiElementName("InputRichMedia"),
+    description = "Media that can be embedded in an outgoing rich message.",
+    unionTypes = listOf(
+        "InputMediaAnimation", "InputMediaAudio", "InputMediaPhoto", "InputMediaVideo", "InputMediaVoiceNote"
+    ).map { BotApiElementName(it) }
 )
 
 class BotApiDefinitionParser {
@@ -269,6 +294,9 @@ class BotApiDefinitionParser {
         val types = buildList<BotApiElement> {
             this += typeDefinitions.map(::parseElement).filter { it.originalName.value !in typeSubstitution }
             this += implicitReplyMarkupElement
+            if (any { it.name.value == "InputRichMessageMedia" }) {
+                this += implicitInputRichMediaElement
+            }
         }
 
         val typesWithSortedFields = if (argLists == null) types else types.toSortedFields(argLists)

@@ -42,10 +42,13 @@ enum class UpdateType {
     @SerialName("edited_business_message") EDITED_BUSINESS_MESSAGE,
     @SerialName("deleted_business_messages") DELETED_BUSINESS_MESSAGES,
     @SerialName("purchased_paid_media") PURCHASED_PAID_MEDIA,
+    @SerialName("guest_message") GUEST_MESSAGE,
+    @SerialName("managed_bot") MANAGED_BOT,
+    @SerialName("subscription") SUBSCRIPTION,
 }
 
 /**
- * This object represents an incoming update. At most one of the optional parameters can be present in any given update.
+ * This object represents an incoming update. At most one of the optional fields can be present in any given update.
  *
  * Sub-types:
  * - [MessageUpdate]
@@ -71,6 +74,9 @@ enum class UpdateType {
  * - [EditedBusinessMessageUpdate]
  * - [DeletedBusinessMessagesUpdate]
  * - [PurchasedPaidMediaUpdate]
+ * - [GuestMessageUpdate]
+ * - [ManagedBotUpdate]
+ * - [SubscriptionUpdate]
  */
 @Serializable(with = UpdateSerializer::class)
 sealed interface Update {
@@ -178,7 +184,7 @@ data class CallbackQueryUpdate(
 }
 
 /**
- * New incoming shipping query. Only for invoices with flexible price
+ * New incoming shipping query. Only for invoices with flexible price.
  */
 @Serializable
 data class ShippingQueryUpdate(
@@ -189,7 +195,7 @@ data class ShippingQueryUpdate(
 }
 
 /**
- * New incoming pre-checkout query. Contains full information about checkout
+ * New incoming pre-checkout query. Contains full information about checkout.
  */
 @Serializable
 data class PreCheckoutQueryUpdate(
@@ -200,7 +206,7 @@ data class PreCheckoutQueryUpdate(
 }
 
 /**
- * New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
+ * New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot.
  */
 @Serializable
 data class PollUpdate(
@@ -331,6 +337,39 @@ data class PurchasedPaidMediaUpdate(
     override val updateType: UpdateType get() = UpdateType.PURCHASED_PAID_MEDIA
 }
 
+/**
+ * New guest message. The bot can use the field Message.guest_query_id and the method answerGuestQuery to send a message in response.
+ */
+@Serializable
+data class GuestMessageUpdate(
+    override val updateId: Long,
+    val guestMessage: Message,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.GUEST_MESSAGE
+}
+
+/**
+ * A new bot was created to be managed by the bot, or token or owner of a managed bot was changed
+ */
+@Serializable
+data class ManagedBotUpdate(
+    override val updateId: Long,
+    val managedBot: ManagedBotUpdated,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.MANAGED_BOT
+}
+
+/**
+ * User payment subscription has changed
+ */
+@Serializable
+data class SubscriptionUpdate(
+    override val updateId: Long,
+    val subscription: BotSubscriptionUpdated,
+): Update {
+    override val updateType: UpdateType get() = UpdateType.SUBSCRIPTION
+}
+
 object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Update> {
         val json = element.jsonObject
@@ -358,6 +397,9 @@ object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class
             "edited_business_message" in json -> EditedBusinessMessageUpdate.serializer()
             "deleted_business_messages" in json -> DeletedBusinessMessagesUpdate.serializer()
             "purchased_paid_media" in json -> PurchasedPaidMediaUpdate.serializer()
+            "guest_message" in json -> GuestMessageUpdate.serializer()
+            "managed_bot" in json -> ManagedBotUpdate.serializer()
+            "subscription" in json -> SubscriptionUpdate.serializer()
             else -> error("Failed to deserialize an update type: $json")
         }
     }
@@ -372,7 +414,7 @@ object UpdateSerializer : JsonContentPolymorphicSerializer<Update>(Update::class
  * @param lastErrorMessage Optional. Error message in human-readable format for the most recent error that happened when trying to deliver an update via webhook
  * @param lastSynchronizationErrorDate Optional. Unix time of the most recent error that happened when trying to synchronize available updates with Telegram datacenters
  * @param maxConnections Optional. The maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
- * @param allowedUpdates Optional. A list of update types the bot is subscribed to. Defaults to all update types except chat_member
+ * @param allowedUpdates Optional. A list of update types the bot is subscribed to. Defaults to all update types except chat_member, message_reaction, and message_reaction_count.
  */
 @Serializable
 data class WebhookInfo(
@@ -402,8 +444,13 @@ data class WebhookInfo(
  * @param canJoinGroups Optional. True, if the bot can be invited to groups. Returned only in getMe.
  * @param canReadAllGroupMessages Optional. True, if privacy mode is disabled for the bot. Returned only in getMe.
  * @param supportsInlineQueries Optional. True, if the bot supports inline queries. Returned only in getMe.
- * @param canConnectToBusiness Optional. True, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in getMe.
+ * @param canConnectToBusiness Optional. True, if the bot can be connected to a user account to manage it. Returned only in getMe.
  * @param hasMainWebApp Optional. True, if the bot has a main Web App. Returned only in getMe.
+ * @param supportsGuestQueries Optional. True, if the bot supports guest queries from chats it is not a member of. Returned only in getMe.
+ * @param hasTopicsEnabled Optional. True, if the bot has forum topic mode enabled in private chats. Returned only in getMe.
+ * @param allowsUsersToCreateTopics Optional. True, if the bot allows users to create and delete topics in private chats. Returned only in getMe.
+ * @param canManageBots Optional. True, if other bots can be created to be controlled by the bot. Returned only in getMe.
+ * @param supportsJoinRequestQueries Optional. True, if the bot supports join request queries and can be assigned to process them. Returned only in getMe.
  */
 @Serializable
 data class User(
@@ -420,8 +467,13 @@ data class User(
     val supportsInlineQueries: Boolean? = null,
     val canConnectToBusiness: Boolean? = null,
     val hasMainWebApp: Boolean? = null,
+    val supportsGuestQueries: Boolean? = null,
+    val hasTopicsEnabled: Boolean? = null,
+    val allowsUsersToCreateTopics: Boolean? = null,
+    val canManageBots: Boolean? = null,
+    val supportsJoinRequestQueries: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("User").prop("id", id).prop("isBot", isBot).prop("firstName", firstName).prop("lastName", lastName).prop("username", username).prop("languageCode", languageCode).prop("isPremium", isPremium).prop("addedToAttachmentMenu", addedToAttachmentMenu).prop("canJoinGroups", canJoinGroups).prop("canReadAllGroupMessages", canReadAllGroupMessages).prop("supportsInlineQueries", supportsInlineQueries).prop("canConnectToBusiness", canConnectToBusiness).prop("hasMainWebApp", hasMainWebApp).toString()
+    override fun toString() = DebugStringBuilder("User").prop("id", id).prop("isBot", isBot).prop("firstName", firstName).prop("lastName", lastName).prop("username", username).prop("languageCode", languageCode).prop("isPremium", isPremium).prop("addedToAttachmentMenu", addedToAttachmentMenu).prop("canJoinGroups", canJoinGroups).prop("canReadAllGroupMessages", canReadAllGroupMessages).prop("supportsInlineQueries", supportsInlineQueries).prop("canConnectToBusiness", canConnectToBusiness).prop("hasMainWebApp", hasMainWebApp).prop("supportsGuestQueries", supportsGuestQueries).prop("hasTopicsEnabled", hasTopicsEnabled).prop("allowsUsersToCreateTopics", allowsUsersToCreateTopics).prop("canManageBots", canManageBots).prop("supportsJoinRequestQueries", supportsJoinRequestQueries).toString()
 }
 
 /**
@@ -433,6 +485,7 @@ data class User(
  * @param firstName Optional. First name of the other party in a private chat
  * @param lastName Optional. Last name of the other party in a private chat
  * @param isForum Optional. True, if the supergroup chat is a forum (has topics enabled)
+ * @param isDirectMessages Optional. True, if the chat is the direct messages chat of a channel
  */
 @Serializable
 data class Chat(
@@ -443,8 +496,9 @@ data class Chat(
     val firstName: String? = null,
     val lastName: String? = null,
     val isForum: Boolean? = null,
+    val isDirectMessages: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Chat").prop("id", id).prop("type", type).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).toString()
+    override fun toString() = DebugStringBuilder("Chat").prop("id", id).prop("type", type).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("isDirectMessages", isDirectMessages).toString()
 }
 
 /**
@@ -494,6 +548,14 @@ data class Chat(
  * @param location Optional. For supergroups, the location to which the supergroup is connected
  * @param canSendPaidMedia Optional. True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.
  * @param acceptedGiftTypes Information about types of gifts that are accepted by the chat or by the corresponding user for private chats
+ * @param isDirectMessages Optional. True, if the chat is the direct messages chat of a channel
+ * @param parentChat Optional. Information about the corresponding channel chat; for direct messages chats only
+ * @param rating Optional. For private chats, the rating of the user if any
+ * @param firstProfileAudio Optional. For private chats, the first audio added to the profile of the user
+ * @param uniqueGiftColors Optional. The color scheme based on a unique gift that must be used for the chat's name, message replies and link previews
+ * @param paidMessageStarCount Optional. The number of Telegram Stars a general user has to pay to send a message to the chat
+ * @param guardBot Optional. The bot that processes join request queries in the chat. The field is only available to chat administrators.
+ * @param community Optional. The Community to which the chat belongs
  */
 @Serializable
 data class ChatFullInfo(
@@ -542,25 +604,33 @@ data class ChatFullInfo(
     val location: ChatLocation? = null,
     val canSendPaidMedia: Boolean? = null,
     val acceptedGiftTypes: AcceptedGiftTypes,
+    val isDirectMessages: Boolean? = null,
+    val parentChat: Chat? = null,
+    val rating: UserRating? = null,
+    val firstProfileAudio: Audio? = null,
+    val uniqueGiftColors: UniqueGiftColors? = null,
+    val paidMessageStarCount: Long? = null,
+    val guardBot: User? = null,
+    val community: Community? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatFullInfo").prop("id", id).prop("type", type).prop("accentColorId", accentColorId).prop("maxReactionCount", maxReactionCount).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).prop("canSendPaidMedia", canSendPaidMedia).prop("acceptedGiftTypes", acceptedGiftTypes).toString()
+    override fun toString() = DebugStringBuilder("ChatFullInfo").prop("id", id).prop("type", type).prop("accentColorId", accentColorId).prop("maxReactionCount", maxReactionCount).prop("title", title).prop("username", username).prop("firstName", firstName).prop("lastName", lastName).prop("isForum", isForum).prop("photo", photo).prop("activeUsernames", activeUsernames).prop("birthdate", birthdate).prop("businessIntro", businessIntro).prop("businessLocation", businessLocation).prop("businessOpeningHours", businessOpeningHours).prop("personalChat", personalChat).prop("availableReactions", availableReactions).prop("backgroundCustomEmojiId", backgroundCustomEmojiId).prop("profileAccentColorId", profileAccentColorId).prop("profileBackgroundCustomEmojiId", profileBackgroundCustomEmojiId).prop("emojiStatusCustomEmojiId", emojiStatusCustomEmojiId).prop("emojiStatusExpirationDate", emojiStatusExpirationDate).prop("bio", bio).prop("hasPrivateForwards", hasPrivateForwards).prop("hasRestrictedVoiceAndVideoMessages", hasRestrictedVoiceAndVideoMessages).prop("joinToSendMessages", joinToSendMessages).prop("joinByRequest", joinByRequest).prop("description", description).prop("inviteLink", inviteLink).prop("pinnedMessage", pinnedMessage).prop("permissions", permissions).prop("slowModeDelay", slowModeDelay).prop("unrestrictBoostCount", unrestrictBoostCount).prop("messageAutoDeleteTime", messageAutoDeleteTime).prop("hasAggressiveAntiSpamEnabled", hasAggressiveAntiSpamEnabled).prop("hasHiddenMembers", hasHiddenMembers).prop("hasProtectedContent", hasProtectedContent).prop("hasVisibleHistory", hasVisibleHistory).prop("stickerSetName", stickerSetName).prop("canSetStickerSet", canSetStickerSet).prop("customEmojiStickerSetName", customEmojiStickerSetName).prop("linkedChatId", linkedChatId).prop("location", location).prop("canSendPaidMedia", canSendPaidMedia).prop("acceptedGiftTypes", acceptedGiftTypes).prop("isDirectMessages", isDirectMessages).prop("parentChat", parentChat).prop("rating", rating).prop("firstProfileAudio", firstProfileAudio).prop("uniqueGiftColors", uniqueGiftColors).prop("paidMessageStarCount", paidMessageStarCount).prop("guardBot", guardBot).prop("community", community).toString()
 }
 
 /**
  * This object represents a message.
- * @param messageId Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
+ * @param messageId Unique message identifier inside this chat; 0 for ephemeral messages. In specific instances (e.g., a message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
  * @param date Date the message was sent in Unix time. It is always a positive number, representing a valid date.
  * @param chat Chat the message belongs to
- * @param messageThreadId Optional. Unique identifier of a message thread to which the message belongs; for supergroups only
- * @param from Optional. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
+ * @param messageThreadId Optional. Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only
+ * @param from Optional. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats.
  * @param senderChat Optional. Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field from contains a fake sender user in non-channel chats.
  * @param senderBoostCount Optional. If the sender of the message boosted the chat, the number of boosts added by the user
  * @param senderBusinessBot Optional. The bot that actually sent the message on behalf of the business account. Available only for outgoing messages sent on behalf of the connected business account.
  * @param businessConnectionId Optional. Unique identifier of the business connection from which the message was received. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
  * @param forwardOrigin Optional. Information about the original message for forwarded messages
- * @param isTopicMessage Optional. True, if the message is sent to a forum topic
+ * @param isTopicMessage Optional. True, if the message is sent to a topic in a forum supergroup or a private chat with the bot
  * @param isAutomaticForward Optional. True, if the message is a channel post that was automatically forwarded to the connected discussion group
- * @param replyToMessage Optional. For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
+ * @param replyToMessage Optional. For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply. If the message is a reply to an ephemeral message, then this field may be omitted.
  * @param externalReply Optional. Information about the message that is being replied to, which may come from another chat or forum topic
  * @param quote Optional. For replies that quote part of the original message, the quoted part of the message
  * @param replyToStory Optional. For replies to a story, the original story
@@ -568,13 +638,13 @@ data class ChatFullInfo(
  * @param editDate Optional. Date the message was last edited in Unix time
  * @param hasProtectedContent Optional. True, if the message can't be forwarded
  * @param isFromOffline Optional. True, if the message was sent by an implicit action, for example, as an away or a greeting business message, or as a scheduled message
- * @param mediaGroupId Optional. The unique identifier of a media message group this message belongs to
+ * @param mediaGroupId Optional. The unique identifier inside this chat of a media message group this message belongs to
  * @param authorSignature Optional. Signature of the post author for messages in channels, or the custom title of an anonymous group administrator
  * @param text Optional. For text messages, the actual UTF-8 text of the message
  * @param entities Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
  * @param linkPreviewOptions Optional. Options used for link preview generation for the message, if it is a text message and link preview options were changed
  * @param effectId Optional. Unique identifier of the message effect added to the message
- * @param animation Optional. Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set
+ * @param animation Optional. Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set.
  * @param audio Optional. Message is an audio file, information about the file
  * @param document Optional. Message is a general file, information about the file
  * @param photo Optional. Message is a photo, available sizes of the photo
@@ -591,7 +661,7 @@ data class ChatFullInfo(
  * @param dice Optional. Message is a dice with random value
  * @param game Optional. Message is a game, information about the game. More about games »
  * @param poll Optional. Message is a native poll, information about the poll
- * @param venue Optional. Message is a venue, information about the venue. For backward compatibility, when this field is set, the location field will also be set
+ * @param venue Optional. Message is a venue, information about the venue. For backward compatibility, when this field is set, the location field will also be set.
  * @param location Optional. Message is a shared location, information about the location
  * @param newChatMembers Optional. New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
  * @param leftChatMember Optional. A member was removed from the group, information about them (this member may be the bot itself)
@@ -612,7 +682,7 @@ data class ChatFullInfo(
  * @param connectedWebsite Optional. The domain name of the website on which the user has logged in. More about Telegram Login »
  * @param writeAccessAllowed Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess
  * @param passportData Optional. Telegram Passport data
- * @param proximityAlertTriggered Optional. Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
+ * @param proximityAlertTriggered Optional. Service message: a user in the chat triggered another user's proximity alert while sharing Live Location
  * @param boostAdded Optional. Service message: user boosted the chat
  * @param chatBackgroundSet Optional. Service message: chat background set
  * @param forumTopicCreated Optional. Service message: forum topic created
@@ -641,6 +711,32 @@ data class ChatFullInfo(
  * @param checklistTasksAdded Optional. Service message: tasks were added to a checklist
  * @param directMessagePriceChanged Optional. Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed
  * @param paidMessagePriceChanged Optional. Service message: the price for paid messages has changed in the chat
+ * @param directMessagesTopic Optional. Information about the direct messages chat topic that contains the message
+ * @param senderTag Optional. Tag or custom title of the sender of the message; for supergroups only
+ * @param receiverUser Optional. For ephemeral messages, the user who received the message
+ * @param ephemeralMessageId Optional. For ephemeral messages, identifier of the ephemeral message inside this chat. The identifier may be reused for another ephemeral message after the message is deleted or expires.
+ * @param guestQueryId Optional. The unique identifier for the guest query. Use this identifier with the method answerGuestQuery to send a response message. If non-empty, the message belongs to the chat where the guest bot was summoned, which may not coincide with other existing bot chats sharing the same identifier.
+ * @param replyToChecklistTaskId Optional. Identifier of the specific checklist task that is being replied to
+ * @param replyToPollOptionId Optional. Persistent identifier of the specific poll option that is being replied to
+ * @param guestBotCallerUser Optional. For a message sent by a guest bot, this is the user whose original message triggered the bot's response
+ * @param guestBotCallerChat Optional. For a message sent by a guest bot, this is the chat whose original message triggered the bot's response
+ * @param isPaidPost Optional. True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can't be edited.
+ * @param suggestedPostInfo Optional. Information about suggested post parameters if the message is a suggested post in a channel direct messages chat. If the message is an approved or declined suggested post, then it can't be edited.
+ * @param richMessage Optional. Message is a rich formatted message
+ * @param livePhoto Optional. Message is a live photo, information about the live photo. For backward compatibility, when this field is set, the photo field will also be set.
+ * @param chatOwnerLeft Optional. Service message: chat owner has left
+ * @param chatOwnerChanged Optional. Service message: chat owner has changed
+ * @param giftUpgradeSent Optional. Service message: upgrade of a gift was purchased after the gift was sent
+ * @param communityChatAdded Optional. Service message: chat added to a Community
+ * @param communityChatRemoved Optional. Service message: chat removed from a Community
+ * @param managedBotCreated Optional. Service message: user created a bot that will be managed by the current bot
+ * @param pollOptionAdded Optional. Service message: answer option was added to a poll
+ * @param pollOptionDeleted Optional. Service message: answer option was deleted from a poll
+ * @param suggestedPostApproved Optional. Service message: a suggested post was approved
+ * @param suggestedPostApprovalFailed Optional. Service message: approval of a suggested post has failed
+ * @param suggestedPostDeclined Optional. Service message: a suggested post was declined
+ * @param suggestedPostPaid Optional. Service message: payment for a suggested post was received
+ * @param suggestedPostRefunded Optional. Service message: payment for a suggested post was refunded
  */
 @Serializable
 data class Message(
@@ -737,13 +833,39 @@ data class Message(
     val checklistTasksAdded: ChecklistTasksAdded? = null,
     val directMessagePriceChanged: DirectMessagePriceChanged? = null,
     val paidMessagePriceChanged: PaidMessagePriceChanged? = null,
+    val directMessagesTopic: DirectMessagesTopic? = null,
+    val senderTag: String? = null,
+    val receiverUser: User? = null,
+    val ephemeralMessageId: MessageId? = null,
+    val guestQueryId: String? = null,
+    val replyToChecklistTaskId: Long? = null,
+    val replyToPollOptionId: String? = null,
+    val guestBotCallerUser: User? = null,
+    val guestBotCallerChat: Chat? = null,
+    val isPaidPost: Boolean? = null,
+    val suggestedPostInfo: SuggestedPostInfo? = null,
+    val richMessage: RichMessage? = null,
+    val livePhoto: LivePhoto? = null,
+    val chatOwnerLeft: ChatOwnerLeft? = null,
+    val chatOwnerChanged: ChatOwnerChanged? = null,
+    val giftUpgradeSent: GiftInfo? = null,
+    val communityChatAdded: CommunityChatAdded? = null,
+    val communityChatRemoved: CommunityChatRemoved? = null,
+    val managedBotCreated: ManagedBotCreated? = null,
+    val pollOptionAdded: PollOptionAdded? = null,
+    val pollOptionDeleted: PollOptionDeleted? = null,
+    val suggestedPostApproved: SuggestedPostApproved? = null,
+    val suggestedPostApprovalFailed: SuggestedPostApprovalFailed? = null,
+    val suggestedPostDeclined: SuggestedPostDeclined? = null,
+    val suggestedPostPaid: SuggestedPostPaid? = null,
+    val suggestedPostRefunded: SuggestedPostRefunded? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).prop("paidMedia", paidMedia).prop("refundedPayment", refundedPayment).prop("paidStarCount", paidStarCount).prop("checklist", checklist).prop("gift", gift).prop("uniqueGift", uniqueGift).prop("checklistTasksDone", checklistTasksDone).prop("checklistTasksAdded", checklistTasksAdded).prop("directMessagePriceChanged", directMessagePriceChanged).prop("paidMessagePriceChanged", paidMessagePriceChanged).toString()
+    override fun toString() = DebugStringBuilder("Message").prop("messageId", messageId).prop("date", date).prop("chat", chat).prop("messageThreadId", messageThreadId).prop("from", from).prop("senderChat", senderChat).prop("senderBoostCount", senderBoostCount).prop("senderBusinessBot", senderBusinessBot).prop("businessConnectionId", businessConnectionId).prop("forwardOrigin", forwardOrigin).prop("isTopicMessage", isTopicMessage).prop("isAutomaticForward", isAutomaticForward).prop("replyToMessage", replyToMessage).prop("externalReply", externalReply).prop("quote", quote).prop("replyToStory", replyToStory).prop("viaBot", viaBot).prop("editDate", editDate).prop("hasProtectedContent", hasProtectedContent).prop("isFromOffline", isFromOffline).prop("mediaGroupId", mediaGroupId).prop("authorSignature", authorSignature).prop("text", text).prop("entities", entities).prop("linkPreviewOptions", linkPreviewOptions).prop("effectId", effectId).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("caption", caption).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("poll", poll).prop("venue", venue).prop("location", location).prop("newChatMembers", newChatMembers).prop("leftChatMember", leftChatMember).prop("newChatTitle", newChatTitle).prop("newChatPhoto", newChatPhoto).prop("deleteChatPhoto", deleteChatPhoto).prop("groupChatCreated", groupChatCreated).prop("supergroupChatCreated", supergroupChatCreated).prop("channelChatCreated", channelChatCreated).prop("messageAutoDeleteTimerChanged", messageAutoDeleteTimerChanged).prop("migrateToChatId", migrateToChatId).prop("migrateFromChatId", migrateFromChatId).prop("pinnedMessage", pinnedMessage).prop("invoice", invoice).prop("successfulPayment", successfulPayment).prop("usersShared", usersShared).prop("chatShared", chatShared).prop("connectedWebsite", connectedWebsite).prop("writeAccessAllowed", writeAccessAllowed).prop("passportData", passportData).prop("proximityAlertTriggered", proximityAlertTriggered).prop("boostAdded", boostAdded).prop("chatBackgroundSet", chatBackgroundSet).prop("forumTopicCreated", forumTopicCreated).prop("forumTopicEdited", forumTopicEdited).prop("forumTopicClosed", forumTopicClosed).prop("forumTopicReopened", forumTopicReopened).prop("generalForumTopicHidden", generalForumTopicHidden).prop("generalForumTopicUnhidden", generalForumTopicUnhidden).prop("giveawayCreated", giveawayCreated).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("giveawayCompleted", giveawayCompleted).prop("videoChatScheduled", videoChatScheduled).prop("videoChatStarted", videoChatStarted).prop("videoChatEnded", videoChatEnded).prop("videoChatParticipantsInvited", videoChatParticipantsInvited).prop("webAppData", webAppData).prop("replyMarkup", replyMarkup).prop("paidMedia", paidMedia).prop("refundedPayment", refundedPayment).prop("paidStarCount", paidStarCount).prop("checklist", checklist).prop("gift", gift).prop("uniqueGift", uniqueGift).prop("checklistTasksDone", checklistTasksDone).prop("checklistTasksAdded", checklistTasksAdded).prop("directMessagePriceChanged", directMessagePriceChanged).prop("paidMessagePriceChanged", paidMessagePriceChanged).prop("directMessagesTopic", directMessagesTopic).prop("senderTag", senderTag).prop("receiverUser", receiverUser).prop("ephemeralMessageId", ephemeralMessageId).prop("guestQueryId", guestQueryId).prop("replyToChecklistTaskId", replyToChecklistTaskId).prop("replyToPollOptionId", replyToPollOptionId).prop("guestBotCallerUser", guestBotCallerUser).prop("guestBotCallerChat", guestBotCallerChat).prop("isPaidPost", isPaidPost).prop("suggestedPostInfo", suggestedPostInfo).prop("richMessage", richMessage).prop("livePhoto", livePhoto).prop("chatOwnerLeft", chatOwnerLeft).prop("chatOwnerChanged", chatOwnerChanged).prop("giftUpgradeSent", giftUpgradeSent).prop("communityChatAdded", communityChatAdded).prop("communityChatRemoved", communityChatRemoved).prop("managedBotCreated", managedBotCreated).prop("pollOptionAdded", pollOptionAdded).prop("pollOptionDeleted", pollOptionDeleted).prop("suggestedPostApproved", suggestedPostApproved).prop("suggestedPostApprovalFailed", suggestedPostApprovalFailed).prop("suggestedPostDeclined", suggestedPostDeclined).prop("suggestedPostPaid", suggestedPostPaid).prop("suggestedPostRefunded", suggestedPostRefunded).toString()
 }
 
 /**
  * This object represents a unique message identifier.
- * @param messageId Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
+ * @param messageId Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
  */
 @Serializable
 data class MessageRef(
@@ -754,13 +876,15 @@ data class MessageRef(
 
 /**
  * This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
- * @param type Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
+ * @param type Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers), or “date_time” (for formatted date and time).
  * @param offset Offset in UTF-16 code units to the start of the entity
  * @param length Length of the entity in UTF-16 code units
  * @param url Optional. For “text_link” only, URL that will be opened after user taps on the text
  * @param user Optional. For “text_mention” only, the mentioned user
  * @param language Optional. For “pre” only, the programming language of the entity text
- * @param customEmojiId Optional. For “custom_emoji” only, unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker
+ * @param customEmojiId Optional. For “custom_emoji” only, unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker.
+ * @param unixTime Optional. For “date_time” only, the Unix time associated with the entity
+ * @param dateTimeFormat Optional. For “date_time” only, the string that defines the formatting of the date and time. See date-time entity formatting for more details.
  */
 @Serializable
 data class MessageEntity(
@@ -771,15 +895,17 @@ data class MessageEntity(
     val user: User? = null,
     val language: String? = null,
     val customEmojiId: CustomEmojiId? = null,
+    val unixTime: Long? = null,
+    val dateTimeFormat: String? = null,
 ) {
-    override fun toString() = DebugStringBuilder("MessageEntity").prop("type", type).prop("offset", offset).prop("length", length).prop("url", url).prop("user", user).prop("language", language).prop("customEmojiId", customEmojiId).toString()
+    override fun toString() = DebugStringBuilder("MessageEntity").prop("type", type).prop("offset", offset).prop("length", length).prop("url", url).prop("user", user).prop("language", language).prop("customEmojiId", customEmojiId).prop("unixTime", unixTime).prop("dateTimeFormat", dateTimeFormat).toString()
 }
 
 /**
  * This object contains information about the quoted part of a message that is replied to by the given message.
  * @param text Text of the quoted part of a message that is replied to by the given message
  * @param position Approximate quote position in the original message in UTF-16 code units as specified by the sender
- * @param entities Optional. Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes.
+ * @param entities Optional. Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are kept in quotes.
  * @param isManual Optional. True, if the quote was chosen manually by the message sender. Otherwise, the quote was added automatically by the server.
  */
 @Serializable
@@ -819,6 +945,7 @@ data class TextQuote(
  * @param venue Optional. Message is a venue, information about the venue
  * @param paidMedia Optional. Message contains paid media; information about the paid media
  * @param checklist Optional. Message is a checklist
+ * @param livePhoto Optional. Message is a live photo, information about the live photo
  */
 @Serializable
 data class ExternalReplyInfo(
@@ -847,31 +974,38 @@ data class ExternalReplyInfo(
     val venue: Venue? = null,
     val paidMedia: PaidMediaInfo? = null,
     val checklist: Checklist? = null,
+    val livePhoto: LivePhoto? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ExternalReplyInfo").prop("origin", origin).prop("chat", chat).prop("messageId", messageId).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("invoice", invoice).prop("location", location).prop("poll", poll).prop("venue", venue).prop("paidMedia", paidMedia).prop("checklist", checklist).toString()
+    override fun toString() = DebugStringBuilder("ExternalReplyInfo").prop("origin", origin).prop("chat", chat).prop("messageId", messageId).prop("linkPreviewOptions", linkPreviewOptions).prop("animation", animation).prop("audio", audio).prop("document", document).prop("photo", photo).prop("sticker", sticker).prop("story", story).prop("video", video).prop("videoNote", videoNote).prop("voice", voice).prop("hasMediaSpoiler", hasMediaSpoiler).prop("contact", contact).prop("dice", dice).prop("game", game).prop("giveaway", giveaway).prop("giveawayWinners", giveawayWinners).prop("invoice", invoice).prop("location", location).prop("poll", poll).prop("venue", venue).prop("paidMedia", paidMedia).prop("checklist", checklist).prop("livePhoto", livePhoto).toString()
 }
 
 /**
  * Describes reply parameters for the message that is being sent.
- * @param messageId Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified
- * @param chatId Optional. If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account.
- * @param allowSendingWithoutReply Optional. Pass True if the message should be sent even if the specified message to be replied to is not found. Always False for replies in another chat or forum topic. Always True for messages sent on behalf of a business account.
- * @param quote Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message.
+ * @param messageId Optional. Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified. Required if ephemeral_message_id isn't specified.
+ * @param chatId Optional. If the message to be replied to is from a different chat, unique identifier for the chat or username of the bot, supergroup or channel in the format @username. Not supported for messages sent on behalf of a business account, messages from channel direct messages chats and ephemeral messages.
+ * @param allowSendingWithoutReply Optional. Pass True if the message should be sent even if the specified message to be replied to is not found. Always False for replies in another chat or forum topic, and sent ephemeral messages. Always True for messages sent on behalf of a business account.
+ * @param quote Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities. The message will fail to send if the quote isn't found in the original message. Ignored for ephemeral messages.
  * @param quoteParseMode Optional. Mode for parsing entities in the quote. See formatting options for more details.
  * @param quoteEntities Optional. A JSON-serialized list of special entities that appear in the quote. It can be specified instead of quote_parse_mode.
  * @param quotePosition Optional. Position of the quote in the original message in UTF-16 code units
+ * @param ephemeralMessageId Optional. Identifier of the incoming ephemeral message that will be replied to in the current chat. A reply to an ephemeral message must itself be an ephemeral message. An ephemeral message may only be replied to within 15 seconds of being sent. Required if message_id isn't specified.
+ * @param checklistTaskId Optional. Identifier of the specific checklist task to be replied to
+ * @param pollOptionId Optional. Persistent identifier of the specific poll option to be replied to
  */
 @Serializable
 data class ReplyParameters(
-    val messageId: MessageId,
+    val messageId: MessageId? = null,
     val chatId: ChatId? = null,
     val allowSendingWithoutReply: Boolean? = null,
     val quote: String? = null,
     val quoteParseMode: String? = null,
     val quoteEntities: List<MessageEntity>? = null,
     val quotePosition: Long? = null,
+    val ephemeralMessageId: MessageId? = null,
+    val checklistTaskId: Long? = null,
+    val pollOptionId: String? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ReplyParameters").prop("messageId", messageId).prop("chatId", chatId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("quote", quote).prop("quoteParseMode", quoteParseMode).prop("quoteEntities", quoteEntities).prop("quotePosition", quotePosition).toString()
+    override fun toString() = DebugStringBuilder("ReplyParameters").prop("messageId", messageId).prop("chatId", chatId).prop("allowSendingWithoutReply", allowSendingWithoutReply).prop("quote", quote).prop("quoteParseMode", quoteParseMode).prop("quoteEntities", quoteEntities).prop("quotePosition", quotePosition).prop("ephemeralMessageId", ephemeralMessageId).prop("checklistTaskId", checklistTaskId).prop("pollOptionId", pollOptionId).toString()
 }
 
 /**
@@ -1042,6 +1176,31 @@ data class Document(
 }
 
 /**
+ * This object represents a live photo.
+ * @param fileId Identifier for the video file which can be used to download or reuse the file
+ * @param fileUniqueId Unique identifier for the video file which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+ * @param width Video width as defined by the sender
+ * @param height Video height as defined by the sender
+ * @param duration Duration of the video in seconds as defined by the sender
+ * @param photo Optional. Available sizes of the corresponding static photo
+ * @param mimeType Optional. MIME type of the file as defined by the sender
+ * @param fileSize Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+ */
+@Serializable
+data class LivePhoto(
+    val fileId: FileId,
+    val fileUniqueId: FileUniqueId,
+    val width: Long,
+    val height: Long,
+    val duration: Seconds,
+    val photo: List<PhotoSize>? = null,
+    val mimeType: String? = null,
+    val fileSize: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("LivePhoto").prop("fileId", fileId).prop("fileUniqueId", fileUniqueId).prop("width", width).prop("height", height).prop("duration", duration).prop("photo", photo).prop("mimeType", mimeType).prop("fileSize", fileSize).toString()
+}
+
+/**
  * This object represents a story.
  * @param chat Chat that posted the story
  * @param id Unique identifier for the story in the chat
@@ -1052,6 +1211,27 @@ data class Story(
     val id: Long,
 ) {
     override fun toString() = DebugStringBuilder("Story").prop("chat", chat).prop("id", id).toString()
+}
+
+/**
+ * This object represents a video file of a specific quality.
+ * @param fileId Identifier for this file, which can be used to download or reuse the file
+ * @param fileUniqueId Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+ * @param width Video width
+ * @param height Video height
+ * @param codec Codec that was used to encode the video, for example, “h264”, “h265”, or “av01”
+ * @param fileSize Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+ */
+@Serializable
+data class VideoQuality(
+    val fileId: FileId,
+    val fileUniqueId: FileUniqueId,
+    val width: Long,
+    val height: Long,
+    val codec: String,
+    val fileSize: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("VideoQuality").prop("fileId", fileId).prop("fileUniqueId", fileUniqueId).prop("width", width).prop("height", height).prop("codec", codec).prop("fileSize", fileSize).toString()
 }
 
 /**
@@ -1067,6 +1247,7 @@ data class Story(
  * @param fileSize Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
  * @param cover Optional. Available sizes of the cover of the video in the message
  * @param startTimestamp Optional. Timestamp in seconds from which the video will play in the message
+ * @param qualities Optional. List of available qualities of the video
  */
 @Serializable
 data class Video(
@@ -1081,8 +1262,9 @@ data class Video(
     val fileSize: Long? = null,
     val cover: List<PhotoSize>? = null,
     val startTimestamp: Long? = null,
+    val qualities: List<VideoQuality>? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Video").prop("fileId", fileId).prop("fileUniqueId", fileUniqueId).prop("width", width).prop("height", height).prop("duration", duration).prop("thumbnail", thumbnail).prop("fileName", fileName).prop("mimeType", mimeType).prop("fileSize", fileSize).prop("cover", cover).prop("startTimestamp", startTimestamp).toString()
+    override fun toString() = DebugStringBuilder("Video").prop("fileId", fileId).prop("fileUniqueId", fileUniqueId).prop("width", width).prop("height", height).prop("duration", duration).prop("thumbnail", thumbnail).prop("fileName", fileName).prop("mimeType", mimeType).prop("fileSize", fileSize).prop("cover", cover).prop("startTimestamp", startTimestamp).prop("qualities", qualities).toString()
 }
 
 /**
@@ -1140,13 +1322,38 @@ data class PaidMediaInfo(
 
 /**
  * This object describes paid media. Currently, it can be one of
- * - [PaidMediaPreview]
+ * - [PaidMediaLivePhoto]
  * - [PaidMediaPhoto]
+ * - [PaidMediaPreview]
  * - [PaidMediaVideo]
  */
 @Serializable
 @JsonClassDiscriminator("type")
 sealed interface PaidMedia
+
+/**
+ * The paid media is a live photo.
+ * @param livePhoto The photo
+ */
+@Serializable
+@SerialName("live_photo")
+data class PaidMediaLivePhoto(
+    val livePhoto: LivePhoto,
+) : PaidMedia {
+    override fun toString() = DebugStringBuilder("PaidMediaLivePhoto").prop("livePhoto", livePhoto).toString()
+}
+
+/**
+ * The paid media is a photo.
+ * @param photo The photo
+ */
+@Serializable
+@SerialName("photo")
+data class PaidMediaPhoto(
+    val photo: List<PhotoSize>,
+) : PaidMedia {
+    override fun toString() = DebugStringBuilder("PaidMediaPhoto").prop("photo", photo).toString()
+}
 
 /**
  * The paid media isn't available before the payment.
@@ -1162,18 +1369,6 @@ data class PaidMediaPreview(
     val duration: Seconds? = null,
 ) : PaidMedia {
     override fun toString() = DebugStringBuilder("PaidMediaPreview").prop("width", width).prop("height", height).prop("duration", duration).toString()
-}
-
-/**
- * The paid media is a photo.
- * @param photo The photo
- */
-@Serializable
-@SerialName("photo")
-data class PaidMediaPhoto(
-    val photo: List<PhotoSize>,
-) : PaidMedia {
-    override fun toString() = DebugStringBuilder("PaidMediaPhoto").prop("photo", photo).toString()
 }
 
 /**
@@ -1221,33 +1416,115 @@ data class Dice(
 }
 
 /**
+ * Represents an HTTP link.
+ * @param url URL of the link
+ */
+@Serializable
+data class Link(
+    val url: String,
+) {
+    override fun toString() = DebugStringBuilder("Link").prop("url", url).toString()
+}
+
+/**
+ * At most one of the optional fields can be present in any given object.
+ * @param animation Optional. Media is an animation, information about the animation
+ * @param audio Optional. Media is an audio file, information about the file; currently, can't be received in a poll option
+ * @param document Optional. Media is a general file, information about the file; currently, can't be received in a poll option
+ * @param link Optional. The HTTP link attached to the poll option
+ * @param livePhoto Optional. Media is a live photo, information about the live photo
+ * @param location Optional. Media is a shared location, information about the location
+ * @param photo Optional. Media is a photo, available sizes of the photo
+ * @param sticker Optional. Media is a sticker, information about the sticker; currently, for poll options only
+ * @param venue Optional. Media is a venue, information about the venue
+ * @param video Optional. Media is a video, information about the video
+ */
+@Serializable
+data class PollMedia(
+    val animation: Animation? = null,
+    val audio: Audio? = null,
+    val document: Document? = null,
+    val link: Link? = null,
+    val livePhoto: LivePhoto? = null,
+    val location: Location? = null,
+    val photo: List<PhotoSize>? = null,
+    val sticker: Sticker? = null,
+    val venue: Venue? = null,
+    val video: Video? = null,
+) {
+    override fun toString() = DebugStringBuilder("PollMedia").prop("animation", animation).prop("audio", audio).prop("document", document).prop("link", link).prop("livePhoto", livePhoto).prop("location", location).prop("photo", photo).prop("sticker", sticker).prop("venue", venue).prop("video", video).toString()
+}
+
+/**
+ * This object represents the content of a poll description or a quiz explanation to be sent. It should be one of
+ * - [InputMediaAnimation]
+ * - [InputMediaAudio]
+ * - [InputMediaDocument]
+ * - [InputMediaLivePhoto]
+ * - [InputMediaLocation]
+ * - [InputMediaPhoto]
+ * - [InputMediaVenue]
+ * - [InputMediaVideo]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface InputPollMedia
+
+/**
+ * This object represents the content of a poll option to be sent. It should be one of
+ * - [InputMediaAnimation]
+ * - [InputMediaLink]
+ * - [InputMediaLivePhoto]
+ * - [InputMediaLocation]
+ * - [InputMediaPhoto]
+ * - [InputMediaSticker]
+ * - [InputMediaVenue]
+ * - [InputMediaVideo]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface InputPollOptionMedia
+
+/**
  * This object contains information about one answer option in a poll.
  * @param text Option text, 1-100 characters
- * @param voterCount Number of users that voted for this option
+ * @param voterCount Number of users who voted for this option; may be 0 if unknown
  * @param textEntities Optional. Special entities that appear in the option text. Currently, only custom emoji entities are allowed in poll option texts
+ * @param persistentId Unique identifier of the option, persistent on option addition and deletion
+ * @param media Optional. Media added to the poll option
+ * @param addedByUser Optional. User who added the option; omitted if the option wasn't added by a user after poll creation
+ * @param addedByChat Optional. Chat that added the option; omitted if the option wasn't added by a chat after poll creation
+ * @param additionDate Optional. Point in time (Unix timestamp) when the option was added; omitted if the option existed in the original poll
  */
 @Serializable
 data class PollOption(
     val text: String,
     val voterCount: Long,
     val textEntities: List<MessageEntity>? = null,
+    val persistentId: String,
+    val media: PollMedia? = null,
+    val addedByUser: User? = null,
+    val addedByChat: Chat? = null,
+    val additionDate: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("PollOption").prop("text", text).prop("voterCount", voterCount).prop("textEntities", textEntities).toString()
+    override fun toString() = DebugStringBuilder("PollOption").prop("text", text).prop("voterCount", voterCount).prop("textEntities", textEntities).prop("persistentId", persistentId).prop("media", media).prop("addedByUser", addedByUser).prop("addedByChat", addedByChat).prop("additionDate", additionDate).toString()
 }
 
 /**
  * This object contains information about one answer option in a poll to be sent.
  * @param text Option text, 1-100 characters
- * @param textParseMode Optional. Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed
- * @param textEntities Optional. A JSON-serialized list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode
+ * @param textParseMode Optional. Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed.
+ * @param textEntities Optional. A JSON-serialized list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode.
+ * @param media Optional. Media added to the poll option
  */
 @Serializable
 data class InputPollOption(
     val text: String,
     val textParseMode: String? = null,
     val textEntities: List<MessageEntity>? = null,
+    val media: InputPollOptionMedia? = null,
 ) {
-    override fun toString() = DebugStringBuilder("InputPollOption").prop("text", text).prop("textParseMode", textParseMode).prop("textEntities", textEntities).toString()
+    override fun toString() = DebugStringBuilder("InputPollOption").prop("text", text).prop("textParseMode", textParseMode).prop("textEntities", textEntities).prop("media", media).toString()
 }
 
 /**
@@ -1256,6 +1533,7 @@ data class InputPollOption(
  * @param optionIds 0-based identifiers of chosen answer options. May be empty if the vote was retracted.
  * @param voterChat Optional. The chat that changed the answer to the poll, if the voter is anonymous
  * @param user Optional. The user that changed the answer to the poll, if the voter isn't anonymous
+ * @param optionPersistentIds Persistent identifiers of the chosen answer options. May be empty if the vote was retracted.
  */
 @Serializable
 data class PollAnswer(
@@ -1263,8 +1541,9 @@ data class PollAnswer(
     val optionIds: List<Long>,
     val voterChat: Chat? = null,
     val user: User? = null,
+    val optionPersistentIds: List<String>,
 ) {
-    override fun toString() = DebugStringBuilder("PollAnswer").prop("pollId", pollId).prop("optionIds", optionIds).prop("voterChat", voterChat).prop("user", user).toString()
+    override fun toString() = DebugStringBuilder("PollAnswer").prop("pollId", pollId).prop("optionIds", optionIds).prop("voterChat", voterChat).prop("user", user).prop("optionPersistentIds", optionPersistentIds).toString()
 }
 
 /**
@@ -1278,11 +1557,18 @@ data class PollAnswer(
  * @param type Poll type, currently can be “regular” or “quiz”
  * @param allowsMultipleAnswers True, if the poll allows multiple answers
  * @param questionEntities Optional. Special entities that appear in the question. Currently, only custom emoji entities are allowed in poll questions
- * @param correctOptionId Optional. 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot.
  * @param explanation Optional. Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters
  * @param explanationEntities Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the explanation
  * @param openPeriod Optional. Amount of time in seconds the poll will be active after creation
  * @param closeDate Optional. Point in time (Unix timestamp) when the poll will be automatically closed
+ * @param allowsRevoting True, if the poll allows to change the chosen answer options
+ * @param membersOnly True if voting is limited to users who have been members of the chat where the poll was originally sent for more than 24 hours
+ * @param countryCodes Optional. A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which users can vote in the poll. The country code “FT” is used for users with anonymous numbers. If omitted, then users from any country can participate in the poll.
+ * @param correctOptionIds Optional. Array of 0-based identifiers of the correct answer options. Available only for polls in quiz mode which are closed or were sent (not forwarded) by the bot or to the private chat with the bot.
+ * @param explanationMedia Optional. Media added to the quiz explanation
+ * @param description Optional. Description of the poll; for polls inside the Message object only
+ * @param descriptionEntities Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the description
+ * @param media Optional. Media added to the poll description; for polls inside the Message object only
  */
 @Serializable
 data class Poll(
@@ -1295,13 +1581,20 @@ data class Poll(
     val type: String,
     val allowsMultipleAnswers: Boolean,
     val questionEntities: List<MessageEntity>? = null,
-    val correctOptionId: Long? = null,
     val explanation: String? = null,
     val explanationEntities: List<MessageEntity>? = null,
     val openPeriod: Seconds? = null,
     val closeDate: UnixTimestamp? = null,
+    val allowsRevoting: Boolean,
+    val membersOnly: Boolean,
+    val countryCodes: List<String>? = null,
+    val correctOptionIds: List<Long>? = null,
+    val explanationMedia: PollMedia? = null,
+    val description: String? = null,
+    val descriptionEntities: List<MessageEntity>? = null,
+    val media: PollMedia? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Poll").prop("id", id).prop("question", question).prop("options", options).prop("totalVoterCount", totalVoterCount).prop("isClosed", isClosed).prop("isAnonymous", isAnonymous).prop("type", type).prop("allowsMultipleAnswers", allowsMultipleAnswers).prop("questionEntities", questionEntities).prop("correctOptionId", correctOptionId).prop("explanation", explanation).prop("explanationEntities", explanationEntities).prop("openPeriod", openPeriod).prop("closeDate", closeDate).toString()
+    override fun toString() = DebugStringBuilder("Poll").prop("id", id).prop("question", question).prop("options", options).prop("totalVoterCount", totalVoterCount).prop("isClosed", isClosed).prop("isAnonymous", isAnonymous).prop("type", type).prop("allowsMultipleAnswers", allowsMultipleAnswers).prop("questionEntities", questionEntities).prop("explanation", explanation).prop("explanationEntities", explanationEntities).prop("openPeriod", openPeriod).prop("closeDate", closeDate).prop("allowsRevoting", allowsRevoting).prop("membersOnly", membersOnly).prop("countryCodes", countryCodes).prop("correctOptionIds", correctOptionIds).prop("explanationMedia", explanationMedia).prop("description", description).prop("descriptionEntities", descriptionEntities).prop("media", media).toString()
 }
 
 /**
@@ -1309,8 +1602,9 @@ data class Poll(
  * @param id Unique identifier of the task
  * @param text Text of the task
  * @param textEntities Optional. Special entities that appear in the task text
- * @param completedByUser Optional. User that completed the task; omitted if the task wasn't completed
+ * @param completedByUser Optional. User that completed the task; omitted if the task wasn't completed by a user
  * @param completionDate Optional. Point in time (Unix timestamp) when the task was completed; 0 if the task wasn't completed
+ * @param completedByChat Optional. Chat that completed the task; omitted if the task wasn't completed by a chat
  */
 @Serializable
 data class ChecklistTask(
@@ -1319,8 +1613,9 @@ data class ChecklistTask(
     val textEntities: List<MessageEntity>? = null,
     val completedByUser: User? = null,
     val completionDate: Long? = null,
+    val completedByChat: Chat? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChecklistTask").prop("id", id).prop("text", text).prop("textEntities", textEntities).prop("completedByUser", completedByUser).prop("completionDate", completionDate).toString()
+    override fun toString() = DebugStringBuilder("ChecklistTask").prop("id", id).prop("text", text).prop("textEntities", textEntities).prop("completedByUser", completedByUser).prop("completionDate", completionDate).prop("completedByChat", completedByChat).toString()
 }
 
 /**
@@ -1347,7 +1642,7 @@ data class Checklist(
  * @param id Unique identifier of the task; must be positive and unique among all task identifiers currently present in the checklist
  * @param text Text of the task; 1-100 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the text. See formatting options for more details.
- * @param textEntities Optional. List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.
+ * @param textEntities Optional. List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are allowed.
  */
 @Serializable
 data class InputChecklistTask(
@@ -1364,7 +1659,7 @@ data class InputChecklistTask(
  * @param title Title of the checklist; 1-255 characters after entities parsing
  * @param tasks List of 1-30 tasks in the checklist
  * @param parseMode Optional. Mode for parsing entities in the title. See formatting options for more details.
- * @param titleEntities Optional. List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.
+ * @param titleEntities Optional. List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are allowed.
  * @param othersCanAddTasks Optional. Pass True if other users can add tasks to the checklist
  * @param othersCanMarkTasksAsDone Optional. Pass True if other users can mark tasks as done or not done in the checklist
  */
@@ -1378,34 +1673,6 @@ data class InputChecklist(
     val othersCanMarkTasksAsDone: Boolean? = null,
 ) {
     override fun toString() = DebugStringBuilder("InputChecklist").prop("title", title).prop("tasks", tasks).prop("parseMode", parseMode).prop("titleEntities", titleEntities).prop("othersCanAddTasks", othersCanAddTasks).prop("othersCanMarkTasksAsDone", othersCanMarkTasksAsDone).toString()
-}
-
-/**
- * Describes a service message about checklist tasks marked as done or not done.
- * @param checklistMessage Optional. Message containing the checklist whose tasks were marked as done or not done. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
- * @param markedAsDoneTaskIds Optional. Identifiers of the tasks that were marked as done
- * @param markedAsNotDoneTaskIds Optional. Identifiers of the tasks that were marked as not done
- */
-@Serializable
-data class ChecklistTasksDone(
-    val checklistMessage: Message? = null,
-    val markedAsDoneTaskIds: List<Long>? = null,
-    val markedAsNotDoneTaskIds: List<Long>? = null,
-) {
-    override fun toString() = DebugStringBuilder("ChecklistTasksDone").prop("checklistMessage", checklistMessage).prop("markedAsDoneTaskIds", markedAsDoneTaskIds).prop("markedAsNotDoneTaskIds", markedAsNotDoneTaskIds).toString()
-}
-
-/**
- * Describes a service message about tasks added to a checklist.
- * @param tasks List of tasks added to the checklist
- * @param checklistMessage Optional. Message containing the checklist to which the tasks were added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
- */
-@Serializable
-data class ChecklistTasksAdded(
-    val tasks: List<ChecklistTask>,
-    val checklistMessage: Message? = null,
-) {
-    override fun toString() = DebugStringBuilder("ChecklistTasksAdded").prop("tasks", tasks).prop("checklistMessage", checklistMessage).toString()
 }
 
 /**
@@ -1431,7 +1698,7 @@ data class Location(
 
 /**
  * This object represents a venue.
- * @param location Venue location. Can't be a live location
+ * @param location Venue location. Can't be a live location.
  * @param title Name of the venue
  * @param address Address of the venue
  * @param foursquareId Optional. Foursquare identifier of the venue
@@ -1489,6 +1756,79 @@ data class MessageAutoDeleteTimerChanged(
     val messageAutoDeleteTime: Long,
 ) {
     override fun toString() = DebugStringBuilder("MessageAutoDeleteTimerChanged").prop("messageAutoDeleteTime", messageAutoDeleteTime).toString()
+}
+
+/**
+ * This object contains information about the bot that was created to be managed by the current bot.
+ * @param bot Information about the bot. The bot's token can be fetched using the method getManagedBotToken.
+ */
+@Serializable
+data class ManagedBotCreated(
+    val bot: User,
+) {
+    override fun toString() = DebugStringBuilder("ManagedBotCreated").prop("bot", bot).toString()
+}
+
+/**
+ * This object contains information about the creation, token update, or owner update of a bot that is managed by the current bot.
+ * @param user User that created the bot
+ * @param bot Information about the bot. Token of the bot can be fetched using the method getManagedBotToken.
+ */
+@Serializable
+data class ManagedBotUpdated(
+    val user: User,
+    val bot: User,
+) {
+    override fun toString() = DebugStringBuilder("ManagedBotUpdated").prop("user", user).prop("bot", bot).toString()
+}
+
+/**
+ * This object contains information about changes to a user payment subscription toward the current bot.
+ * @param user User who subscribed for payments toward the bot
+ * @param invoicePayload Bot-specified invoice payload
+ * @param state The new state of the subscription. Currently, it can be one of “canceled” if the user canceled the subscription, “active” if the user re-enabled a previously canceled subscription, or “failed” if payment for the subscription failed.
+ */
+@Serializable
+data class BotSubscriptionUpdated(
+    val user: User,
+    val invoicePayload: String,
+    val state: String,
+) {
+    override fun toString() = DebugStringBuilder("BotSubscriptionUpdated").prop("user", user).prop("invoicePayload", invoicePayload).prop("state", state).toString()
+}
+
+/**
+ * Describes a service message about an option added to a poll.
+ * @param optionPersistentId Unique identifier of the added option
+ * @param optionText Option text
+ * @param pollMessage Optional. Message containing the poll to which the option was added, if known. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param optionTextEntities Optional. Special entities that appear in the option_text
+ */
+@Serializable
+data class PollOptionAdded(
+    val optionPersistentId: String,
+    val optionText: String,
+    val pollMessage: Message? = null,
+    val optionTextEntities: List<MessageEntity>? = null,
+) {
+    override fun toString() = DebugStringBuilder("PollOptionAdded").prop("optionPersistentId", optionPersistentId).prop("optionText", optionText).prop("pollMessage", pollMessage).prop("optionTextEntities", optionTextEntities).toString()
+}
+
+/**
+ * Describes a service message about an option deleted from a poll.
+ * @param optionPersistentId Unique identifier of the deleted option
+ * @param optionText Option text
+ * @param pollMessage Optional. Message containing the poll from which the option was deleted, if known. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param optionTextEntities Optional. Special entities that appear in the option_text
+ */
+@Serializable
+data class PollOptionDeleted(
+    val optionPersistentId: String,
+    val optionText: String,
+    val pollMessage: Message? = null,
+    val optionTextEntities: List<MessageEntity>? = null,
+) {
+    override fun toString() = DebugStringBuilder("PollOptionDeleted").prop("optionPersistentId", optionPersistentId).prop("optionText", optionText).prop("pollMessage", pollMessage).prop("optionTextEntities", optionTextEntities).toString()
 }
 
 /**
@@ -1600,7 +1940,7 @@ data class BackgroundTypeWallpaper(
  * @param document Document with the pattern
  * @param fill The background fill that is combined with the pattern
  * @param intensity Intensity of the pattern when it is shown above the filled background; 0-100
- * @param isInverted Optional. True, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only
+ * @param isInverted Optional. True, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only.
  * @param isMoving Optional. True, if the background moves slightly when the device is tilted
  */
 @Serializable
@@ -1639,18 +1979,65 @@ data class ChatBackground(
 }
 
 /**
+ * Describes a service message about checklist tasks marked as done or not done.
+ * @param checklistMessage Optional. Message containing the checklist whose tasks were marked as done or not done. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param markedAsDoneTaskIds Optional. Identifiers of the tasks that were marked as done
+ * @param markedAsNotDoneTaskIds Optional. Identifiers of the tasks that were marked as not done
+ */
+@Serializable
+data class ChecklistTasksDone(
+    val checklistMessage: Message? = null,
+    val markedAsDoneTaskIds: List<Long>? = null,
+    val markedAsNotDoneTaskIds: List<Long>? = null,
+) {
+    override fun toString() = DebugStringBuilder("ChecklistTasksDone").prop("checklistMessage", checklistMessage).prop("markedAsDoneTaskIds", markedAsDoneTaskIds).prop("markedAsNotDoneTaskIds", markedAsNotDoneTaskIds).toString()
+}
+
+/**
+ * Describes a service message about tasks added to a checklist.
+ * @param tasks List of tasks added to the checklist
+ * @param checklistMessage Optional. Message containing the checklist to which the tasks were added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ */
+@Serializable
+data class ChecklistTasksAdded(
+    val tasks: List<ChecklistTask>,
+    val checklistMessage: Message? = null,
+) {
+    override fun toString() = DebugStringBuilder("ChecklistTasksAdded").prop("tasks", tasks).prop("checklistMessage", checklistMessage).toString()
+}
+
+/**
+ * Describes a service message about a chat being added to a community.
+ * @param community The new community to which the chat belongs
+ */
+@Serializable
+data class CommunityChatAdded(
+    val community: Community,
+) {
+    override fun toString() = DebugStringBuilder("CommunityChatAdded").prop("community", community).toString()
+}
+
+/**
+ * Describes a service message about a chat being removed from a community. Currently holds no information.
+ */
+@Serializable
+data object CommunityChatRemoved
+
+/**
  * This object represents a service message about a new forum topic created in the chat.
  * @param name Name of the topic
  * @param iconColor Color of the topic icon in RGB format
  * @param iconCustomEmojiId Optional. Unique identifier of the custom emoji shown as the topic icon
+ * @param isNameImplicit Optional. True, if the name of the topic wasn't specified explicitly by its creator and likely needs to be changed by the bot
  */
 @Serializable
 data class ForumTopicCreated(
     val name: String,
     val iconColor: Long,
     val iconCustomEmojiId: CustomEmojiId? = null,
+    val isNameImplicit: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ForumTopicCreated").prop("name", name).prop("iconColor", iconColor).prop("iconCustomEmojiId", iconCustomEmojiId).toString()
+    override fun toString() = DebugStringBuilder("ForumTopicCreated").prop("name", name).prop("iconColor", iconColor).prop("iconCustomEmojiId", iconCustomEmojiId).prop("isNameImplicit", isNameImplicit).toString()
 }
 
 /**
@@ -1712,7 +2099,7 @@ data class SharedUser(
 /**
  * This object contains information about the users whose identifiers were shared with the bot using a KeyboardButtonRequestUsers button.
  * @param requestId Identifier of the request
- * @param users Information about users shared with the bot.
+ * @param users Information about users shared with the bot
  */
 @Serializable
 data class UsersShared(
@@ -1726,8 +2113,8 @@ data class UsersShared(
  * This object contains information about a chat that was shared with the bot using a KeyboardButtonRequestChat button.
  * @param requestId Identifier of the request
  * @param chatId Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.
- * @param title Optional. Title of the chat, if the title was requested by the bot.
- * @param username Optional. Username of the chat, if the username was requested by the bot and available.
+ * @param title Optional. Title of the chat, if the title was requested by the bot
+ * @param username Optional. Username of the chat, if the username was requested by the bot and available
  * @param photo Optional. Available sizes of the chat photo, if the photo was requested by the bot
  */
 @Serializable
@@ -1808,7 +2195,7 @@ data class PaidMessagePriceChanged(
 
 /**
  * Describes a service message about a change in the price of direct messages sent to a channel chat.
- * @param areDirectMessagesEnabled True, if direct messages are enabled for the channel chat; false otherwise
+ * @param areDirectMessagesEnabled True, if direct messages are enabled for the channel chat; False otherwise
  * @param directMessageStarCount Optional. The new number of Telegram Stars that must be paid by users for each direct message sent to the channel. Does not apply to users who have been exempted by administrators. Defaults to 0.
  */
 @Serializable
@@ -1817,6 +2204,77 @@ data class DirectMessagePriceChanged(
     val directMessageStarCount: Long? = null,
 ) {
     override fun toString() = DebugStringBuilder("DirectMessagePriceChanged").prop("areDirectMessagesEnabled", areDirectMessagesEnabled).prop("directMessageStarCount", directMessageStarCount).toString()
+}
+
+/**
+ * Describes a service message about the approval of a suggested post.
+ * @param sendDate Date when the post will be published
+ * @param suggestedPostMessage Optional. Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param price Optional. Amount paid for the post
+ */
+@Serializable
+data class SuggestedPostApproved(
+    val sendDate: Long,
+    val suggestedPostMessage: Message? = null,
+    val price: SuggestedPostPrice? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostApproved").prop("sendDate", sendDate).prop("suggestedPostMessage", suggestedPostMessage).prop("price", price).toString()
+}
+
+/**
+ * Describes a service message about the failed approval of a suggested post. Currently, only caused by insufficient user funds at the time of approval.
+ * @param price Expected price of the post
+ * @param suggestedPostMessage Optional. Message containing the suggested post whose approval has failed. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ */
+@Serializable
+data class SuggestedPostApprovalFailed(
+    val price: SuggestedPostPrice,
+    val suggestedPostMessage: Message? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostApprovalFailed").prop("price", price).prop("suggestedPostMessage", suggestedPostMessage).toString()
+}
+
+/**
+ * Describes a service message about the rejection of a suggested post.
+ * @param suggestedPostMessage Optional. Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param comment Optional. Comment with which the post was declined
+ */
+@Serializable
+data class SuggestedPostDeclined(
+    val suggestedPostMessage: Message? = null,
+    val comment: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostDeclined").prop("suggestedPostMessage", suggestedPostMessage).prop("comment", comment).toString()
+}
+
+/**
+ * Describes a service message about a successful payment for a suggested post.
+ * @param currency Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or “TON” for TON grams.
+ * @param suggestedPostMessage Optional. Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ * @param amount Optional. The amount of the currency that was received by the channel in nanograms; for payments in TON grams only
+ * @param starAmount Optional. The amount of Telegram Stars that was received by the channel; for payments in Telegram Stars only
+ */
+@Serializable
+data class SuggestedPostPaid(
+    val currency: String,
+    val suggestedPostMessage: Message? = null,
+    val amount: Long? = null,
+    val starAmount: StarAmount? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostPaid").prop("currency", currency).prop("suggestedPostMessage", suggestedPostMessage).prop("amount", amount).prop("starAmount", starAmount).toString()
+}
+
+/**
+ * Describes a service message about a payment refund for a suggested post.
+ * @param reason Reason for the refund. Currently, one of “post_deleted” if the post was deleted within 24 hours of being posted or removed from scheduled messages without being posted, or “payment_refunded” if the payer refunded their payment.
+ * @param suggestedPostMessage Optional. Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+ */
+@Serializable
+data class SuggestedPostRefunded(
+    val reason: String,
+    val suggestedPostMessage: Message? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostRefunded").prop("reason", reason).prop("suggestedPostMessage", suggestedPostMessage).toString()
 }
 
 /**
@@ -1910,7 +2368,7 @@ data class GiveawayCompleted(
 /**
  * Describes the options used for link preview generation.
  * @param isDisabled Optional. True, if the link preview is disabled
- * @param url Optional. URL to use for the link preview. If empty, then the first URL found in the message text will be used
+ * @param url Optional. URL to use for the link preview. If empty, then the first URL found in the message text will be used.
  * @param preferSmallMedia Optional. True, if the media in the link preview is supposed to be shrunk; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
  * @param preferLargeMedia Optional. True, if the media in the link preview is supposed to be enlarged; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
  * @param showAboveText Optional. True, if the link preview must be shown above the message text; otherwise, the link preview will be shown below the message text
@@ -1927,6 +2385,60 @@ data class LinkPreviewOptions(
 }
 
 /**
+ * Describes the price of a suggested post.
+ * @param currency Currency in which the post will be paid. Currently, must be one of “XTR” for Telegram Stars or “TON” for TON grams.
+ * @param amount The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanograms. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanograms must be between 10000000 and 10000000000000.
+ */
+@Serializable
+data class SuggestedPostPrice(
+    val currency: String,
+    val amount: Long,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostPrice").prop("currency", currency).prop("amount", amount).toString()
+}
+
+/**
+ * Contains information about a suggested post.
+ * @param state State of the suggested post. Currently, it can be one of “pending”, “approved”, “declined”.
+ * @param price Optional. Proposed price of the post. If the field is omitted, then the post is unpaid.
+ * @param sendDate Optional. Proposed send date of the post. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user or administrator who approves it.
+ */
+@Serializable
+data class SuggestedPostInfo(
+    val state: String,
+    val price: SuggestedPostPrice? = null,
+    val sendDate: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostInfo").prop("state", state).prop("price", price).prop("sendDate", sendDate).toString()
+}
+
+/**
+ * Contains parameters of a post that is being suggested by the bot.
+ * @param price Optional. Proposed price for the post. If the field is omitted, then the post is unpaid.
+ * @param sendDate Optional. Proposed send date of the post. If specified, then the date must be between 300 second and 2678400 seconds (30 days) in the future. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user who approves it.
+ */
+@Serializable
+data class SuggestedPostParameters(
+    val price: SuggestedPostPrice? = null,
+    val sendDate: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("SuggestedPostParameters").prop("price", price).prop("sendDate", sendDate).toString()
+}
+
+/**
+ * Describes a topic of a direct messages chat.
+ * @param topicId Unique identifier of the topic. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+ * @param user Optional. Information about the user that created the topic. Currently, it is always present.
+ */
+@Serializable
+data class DirectMessagesTopic(
+    val topicId: Long,
+    val user: User? = null,
+) {
+    override fun toString() = DebugStringBuilder("DirectMessagesTopic").prop("topicId", topicId).prop("user", user).toString()
+}
+
+/**
  * This object represent a user's profile pictures.
  * @param totalCount Total number of profile pictures the target user has
  * @param photos Requested profile pictures (in up to 4 sizes each)
@@ -1937,6 +2449,19 @@ data class UserProfilePhotos(
     val photos: List<List<PhotoSize>>,
 ) {
     override fun toString() = DebugStringBuilder("UserProfilePhotos").prop("totalCount", totalCount).prop("photos", photos).toString()
+}
+
+/**
+ * This object represents the audios displayed on a user's profile.
+ * @param totalCount Total number of profile audios for the target user
+ * @param audios Requested profile audios
+ */
+@Serializable
+data class UserProfileAudios(
+    val totalCount: Long,
+    val audios: List<Audio>,
+) {
+    override fun toString() = DebugStringBuilder("UserProfileAudios").prop("totalCount", totalCount).prop("audios", audios).toString()
 }
 
 /**
@@ -1970,11 +2495,11 @@ data class WebAppInfo(
 }
 
 /**
- * This object represents a custom keyboard with reply options (see Introduction to bots for details and examples). Not supported in channels and for messages sent on behalf of a Telegram Business account.
+ * This object represents a custom keyboard with reply options (see Introduction to bots for details and examples). Not supported in channels and for messages sent on behalf of a business account.
  * @param keyboard Array of button rows, each represented by an Array of KeyboardButton objects
- * @param isPersistent Optional. Requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.
- * @param resizeKeyboard Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
- * @param oneTimeKeyboard Optional. Requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat - the user can press a special button in the input field to see the custom keyboard again. Defaults to false.
+ * @param isPersistent Optional. Requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to False, in which case the custom keyboard can be hidden and opened with a keyboard icon.
+ * @param resizeKeyboard Optional. Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to False, in which case the custom keyboard is always of the same height as the app's standard keyboard.
+ * @param oneTimeKeyboard Optional. Requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat - the user can press a special button in the input field to see the custom keyboard again. Defaults to False.
  * @param inputFieldPlaceholder Optional. The placeholder to be shown in the input field when the keyboard is active; 1-64 characters
  * @param selective Optional. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message. Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
  */
@@ -1991,14 +2516,17 @@ data class ReplyKeyboardMarkup(
 }
 
 /**
- * This object represents one button of the reply keyboard. At most one of the optional fields must be used to specify type of the button. For simple text buttons, String can be used instead of this object to specify the button text.
- * @param text Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed
+ * This object represents one button of the reply keyboard. At most one of the fields other than text, icon_custom_emoji_id, and style must be used to specify the type of the button. For simple text buttons, String can be used instead of this object to specify the button text.
+ * @param text Text of the button. If none of the fields other than text, icon_custom_emoji_id, and style are used, it will be sent as a message when the button is pressed.
  * @param requestUsers Optional. If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a “users_shared” service message. Available in private chats only.
  * @param requestChat Optional. If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a “chat_shared” service message. Available in private chats only.
  * @param requestContact Optional. If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only.
  * @param requestLocation Optional. If True, the user's current location will be sent when the button is pressed. Available in private chats only.
  * @param requestPoll Optional. If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only.
  * @param webApp Optional. If specified, the described Web App will be launched when the button is pressed. The Web App will be able to send a “web_app_data” service message. Available in private chats only.
+ * @param iconCustomEmojiId Optional. Unique identifier of the custom emoji shown before the text of the button. Can only be used by bots that purchased additional usernames on Fragment or in the messages directly sent by the bot to private, group and supergroup chats if the owner of the bot has a Telegram Premium subscription.
+ * @param style Optional. Style of the button. Must be one of “danger” (red), “success” (green) or “primary” (blue). If omitted, then an app-specific style is used.
+ * @param requestManagedBot Optional. If specified, pressing the button will ask the user to create and share a bot that will be managed by the current bot. Available for bots that enabled management of other bots in the @BotFather Mini App. Available in private chats only.
  */
 @Serializable
 data class KeyboardButton(
@@ -2009,13 +2537,16 @@ data class KeyboardButton(
     val requestLocation: Boolean? = null,
     val requestPoll: KeyboardButtonPollType? = null,
     val webApp: WebAppInfo? = null,
+    val iconCustomEmojiId: CustomEmojiId? = null,
+    val style: String? = null,
+    val requestManagedBot: KeyboardButtonRequestManagedBot? = null,
 ) {
-    override fun toString() = DebugStringBuilder("KeyboardButton").prop("text", text).prop("requestUsers", requestUsers).prop("requestChat", requestChat).prop("requestContact", requestContact).prop("requestLocation", requestLocation).prop("requestPoll", requestPoll).prop("webApp", webApp).toString()
+    override fun toString() = DebugStringBuilder("KeyboardButton").prop("text", text).prop("requestUsers", requestUsers).prop("requestChat", requestChat).prop("requestContact", requestContact).prop("requestLocation", requestLocation).prop("requestPoll", requestPoll).prop("webApp", webApp).prop("iconCustomEmojiId", iconCustomEmojiId).prop("style", style).prop("requestManagedBot", requestManagedBot).toString()
 }
 
 /**
  * This object defines the criteria used to request suitable users. Information about the selected users will be shared with the bot when the corresponding button is pressed. More about requesting users »
- * @param requestId Signed 32-bit identifier of the request that will be received back in the UsersShared object. Must be unique within the message
+ * @param requestId Signed 32-bit identifier of the request that will be received back in the UsersShared object. Must be unique within the message.
  * @param userIsBot Optional. Pass True to request bots, pass False to request regular users. If not specified, no additional restrictions are applied.
  * @param userIsPremium Optional. Pass True to request premium users, pass False to request non-premium users. If not specified, no additional restrictions are applied.
  * @param maxQuantity Optional. The maximum number of users to be selected; 1-10. Defaults to 1.
@@ -2038,8 +2569,8 @@ data class KeyboardButtonRequestUsers(
 
 /**
  * This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted requested rights in the chat if appropriate. More about requesting chats ».
- * @param requestId Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message
- * @param chatIsChannel Pass True to request a channel chat, pass False to request a group or a supergroup chat.
+ * @param requestId Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message.
+ * @param chatIsChannel Pass True to request a channel chat, pass False to request a group or a supergroup chat
  * @param chatIsForum Optional. Pass True to request a forum supergroup, pass False to request a non-forum chat. If not specified, no additional restrictions are applied.
  * @param chatHasUsername Optional. Pass True to request a supergroup or a channel with a username, pass False to request a chat without a username. If not specified, no additional restrictions are applied.
  * @param chatIsCreated Optional. Pass True to request a chat owned by the user. Otherwise, no additional restrictions are applied.
@@ -2068,6 +2599,21 @@ data class KeyboardButtonRequestChat(
 }
 
 /**
+ * This object defines the parameters for the creation of a managed bot. Information about the created bot will be shared with the bot using the update managed_bot and a Message with the field managed_bot_created.
+ * @param requestId Signed 32-bit identifier of the request. Must be unique within the message.
+ * @param suggestedName Optional. Suggested name for the bot
+ * @param suggestedUsername Optional. Suggested username for the bot
+ */
+@Serializable
+data class KeyboardButtonRequestManagedBot(
+    val requestId: Long,
+    val suggestedName: String? = null,
+    val suggestedUsername: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("KeyboardButtonRequestManagedBot").prop("requestId", requestId).prop("suggestedName", suggestedName).prop("suggestedUsername", suggestedUsername).toString()
+}
+
+/**
  * This object represents type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
  * @param type Optional. If quiz is passed, the user will be allowed to create only polls in the quiz mode. If regular is passed, only regular polls will be allowed. Otherwise, the user will be allowed to create a poll of any type.
  */
@@ -2079,7 +2625,7 @@ data class KeyboardButtonPollType(
 }
 
 /**
- * Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup). Not supported in channels and for messages sent on behalf of a Telegram Business account.
+ * Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup). Not supported in channels and for messages sent on behalf of a business account.
  * @param removeKeyboard Requests clients to remove the custom keyboard (user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup)
  * @param selective Optional. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message. Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
  */
@@ -2103,18 +2649,20 @@ data class InlineKeyboardMarkup(
 }
 
 /**
- * This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify type of the button.
+ * This object represents one button of an inline keyboard. Exactly one of the fields other than text, icon_custom_emoji_id, and style must be used to specify the type of the button.
  * @param text Label text on the button
  * @param url Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
  * @param callbackData Optional. Data to be sent in a callback query to the bot when the button is pressed, 1-64 bytes
- * @param webApp Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a Telegram Business account.
+ * @param webApp Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.
  * @param loginUrl Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
- * @param switchInlineQuery Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent on behalf of a Telegram Business account.
- * @param switchInlineQueryCurrentChat Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business account.
- * @param switchInlineQueryChosenChat Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
+ * @param switchInlineQuery Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
+ * @param switchInlineQueryCurrentChat Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a business account.
+ * @param switchInlineQueryChosenChat Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
  * @param callbackGame Optional. Description of the game that will be launched when the user presses the button. NOTE: This type of button must always be the first button in the first row.
  * @param pay Optional. Specify True, to send a Pay button. Substrings “⭐” and “XTR” in the buttons's text will be replaced with a Telegram Star icon. NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
- * @param copyText Optional. Description of the button that copies the specified text to the clipboard.
+ * @param copyText Optional. Description of the button that copies the specified text to the clipboard
+ * @param iconCustomEmojiId Optional. Unique identifier of the custom emoji shown before the text of the button. Can only be used by bots that purchased additional usernames on Fragment or in the messages directly sent by the bot to private, group and supergroup chats if the owner of the bot has a Telegram Premium subscription.
+ * @param style Optional. Style of the button. Must be one of “danger” (red), “success” (green) or “primary” (blue). If omitted, then an app-specific style is used.
  */
 @Serializable
 data class InlineKeyboardButton(
@@ -2129,8 +2677,10 @@ data class InlineKeyboardButton(
     val callbackGame: CallbackGame? = null,
     val pay: Boolean? = null,
     val copyText: CopyTextButton? = null,
+    val iconCustomEmojiId: CustomEmojiId? = null,
+    val style: String? = null,
 ) {
-    override fun toString() = DebugStringBuilder("InlineKeyboardButton").prop("text", text).prop("url", url).prop("callbackData", callbackData).prop("webApp", webApp).prop("loginUrl", loginUrl).prop("switchInlineQuery", switchInlineQuery).prop("switchInlineQueryCurrentChat", switchInlineQueryCurrentChat).prop("switchInlineQueryChosenChat", switchInlineQueryChosenChat).prop("callbackGame", callbackGame).prop("pay", pay).prop("copyText", copyText).toString()
+    override fun toString() = DebugStringBuilder("InlineKeyboardButton").prop("text", text).prop("url", url).prop("callbackData", callbackData).prop("webApp", webApp).prop("loginUrl", loginUrl).prop("switchInlineQuery", switchInlineQuery).prop("switchInlineQueryCurrentChat", switchInlineQueryCurrentChat).prop("switchInlineQueryChosenChat", switchInlineQueryChosenChat).prop("callbackGame", callbackGame).prop("pay", pay).prop("copyText", copyText).prop("iconCustomEmojiId", iconCustomEmojiId).prop("style", style).toString()
 }
 
 /**
@@ -2140,9 +2690,9 @@ data class InlineKeyboardButton(
  *
  * Sample bot: @discussbot
  * @param url An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data. NOTE: You must always check the hash of the received data to verify the authentication and the integrity of the data as described in Checking authorization.
- * @param forwardText Optional. New text of the button in forwarded messages.
+ * @param forwardText Optional. New text of the button in forwarded messages
  * @param botUsername Optional. Username of a bot, which will be used for user authorization. See Setting up a bot for more details. If not specified, the current bot's username will be assumed. The url's domain must be the same as the domain linked with the bot. See Linking your domain to the bot for more details.
- * @param requestWriteAccess Optional. Pass True to request the permission for your bot to send messages to the user.
+ * @param requestWriteAccess Optional. Pass True to request the permission for your bot to send messages to the user
  */
 @Serializable
 data class LoginUrl(
@@ -2156,7 +2706,7 @@ data class LoginUrl(
 
 /**
  * This object represents an inline button that switches the current user to inline mode in a chosen chat, with an optional default inline query.
- * @param query Optional. The default inline query to be inserted in the input field. If left empty, only the bot's username will be inserted
+ * @param query Optional. The default inline query to be inserted in the input field. If left empty, only the bot's username will be inserted.
  * @param allowUserChats Optional. True, if private chats with users can be chosen
  * @param allowBotChats Optional. True, if private chats with bots can be chosen
  * @param allowGroupChats Optional. True, if group and supergroup chats can be chosen
@@ -2190,7 +2740,7 @@ data class CopyTextButton(
  * @param from Sender
  * @param chatInstance Global identifier, uniquely corresponding to the chat to which the message with the callback button was sent. Useful for high scores in games.
  * @param message Optional. Message sent by the bot with the callback button that originated the query
- * @param inlineMessageId Optional. Identifier of the message sent via the bot in inline mode, that originated the query.
+ * @param inlineMessageId Optional. Identifier of the message sent via the bot in inline mode, that originated the query
  * @param data Optional. Data associated with the callback button. Be aware that the message originated the query can contain no callback buttons with this data.
  * @param gameShortName Optional. Short name of a Game to be returned, serves as the unique identifier for the game
  */
@@ -2208,7 +2758,7 @@ data class CallbackQuery(
 }
 
 /**
- * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode. Not supported in channels and for messages sent on behalf of a Telegram Business account.
+ * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode. Not supported in channels and for messages sent on behalf of a user account.
  * @param forceReply Shows reply interface to the user, as if they manually selected the bot's message and tapped 'Reply'
  * @param inputFieldPlaceholder Optional. The placeholder to be shown in the input field when the reply is active; 1-64 characters
  * @param selective Optional. Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.
@@ -2220,6 +2770,19 @@ data class ForceReply(
     val selective: Boolean? = null,
 ) : ReplyMarkup {
     override fun toString() = DebugStringBuilder("ForceReply").prop("forceReply", forceReply).prop("inputFieldPlaceholder", inputFieldPlaceholder).prop("selective", selective).toString()
+}
+
+/**
+ * Represents a community (a group of chats).
+ * @param id Unique identifier for this community. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+ * @param name Name of the community
+ */
+@Serializable
+data class Community(
+    val id: Long,
+    val name: String,
+) {
+    override fun toString() = DebugStringBuilder("Community").prop("id", id).prop("name", name).toString()
 }
 
 /**
@@ -2287,6 +2850,8 @@ data class ChatInviteLink(
  * @param canEditMessages Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
  * @param canPinMessages Optional. True, if the user is allowed to pin messages; for groups and supergroups only
  * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
+ * @param canManageDirectMessages Optional. True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
+ * @param canManageTags Optional. True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can_pin_messages.
  */
 @Serializable
 data class ChatAdministratorRights(
@@ -2305,8 +2870,10 @@ data class ChatAdministratorRights(
     val canEditMessages: Boolean? = null,
     val canPinMessages: Boolean? = null,
     val canManageTopics: Boolean? = null,
+    val canManageDirectMessages: Boolean? = null,
+    val canManageTags: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatAdministratorRights").prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).toString()
+    override fun toString() = DebugStringBuilder("ChatAdministratorRights").prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("canManageDirectMessages", canManageDirectMessages).prop("canManageTags", canManageTags).toString()
 }
 
 /**
@@ -2316,7 +2883,7 @@ data class ChatAdministratorRights(
  * @param date Date the change was done in Unix time
  * @param oldChatMember Previous information about the chat member
  * @param newChatMember New information about the chat member
- * @param inviteLink Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
+ * @param inviteLink Optional. Chat invite link, which was used by the user to join the chat; for joining by invite link events only
  * @param viaJoinRequest Optional. True, if the user joined the chat after sending a direct join request without using an invite link and being approved by an administrator
  * @param viaChatFolderInviteLink Optional. True, if the user joined the chat via a chat folder invite link
  */
@@ -2383,6 +2950,8 @@ data class ChatMemberOwner(
  * @param canPinMessages Optional. True, if the user is allowed to pin messages; for groups and supergroups only
  * @param canManageTopics Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
  * @param customTitle Optional. Custom title for this user
+ * @param canManageDirectMessages Optional. True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
+ * @param canManageTags Optional. True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can_pin_messages.
  */
 @Serializable
 @SerialName("administrator")
@@ -2405,29 +2974,33 @@ data class ChatMemberAdministrator(
     val canPinMessages: Boolean? = null,
     val canManageTopics: Boolean? = null,
     val customTitle: String? = null,
+    val canManageDirectMessages: Boolean? = null,
+    val canManageTags: Boolean? = null,
 ) : ChatMember {
-    override fun toString() = DebugStringBuilder("ChatMemberAdministrator").prop("user", user).prop("canBeEdited", canBeEdited).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("customTitle", customTitle).toString()
+    override fun toString() = DebugStringBuilder("ChatMemberAdministrator").prop("user", user).prop("canBeEdited", canBeEdited).prop("isAnonymous", isAnonymous).prop("canManageChat", canManageChat).prop("canDeleteMessages", canDeleteMessages).prop("canManageVideoChats", canManageVideoChats).prop("canRestrictMembers", canRestrictMembers).prop("canPromoteMembers", canPromoteMembers).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPostStories", canPostStories).prop("canEditStories", canEditStories).prop("canDeleteStories", canDeleteStories).prop("canPostMessages", canPostMessages).prop("canEditMessages", canEditMessages).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("customTitle", customTitle).prop("canManageDirectMessages", canManageDirectMessages).prop("canManageTags", canManageTags).toString()
 }
 
 /**
  * Represents a chat member that has no additional privileges or restrictions.
  * @param user Information about the user
  * @param untilDate Optional. Date when the user's subscription will expire; Unix time
+ * @param tag Optional. Tag of the member
  */
 @Serializable
 @SerialName("member")
 data class ChatMemberMember(
     val user: User,
     val untilDate: UnixTimestamp? = null,
+    val tag: String? = null,
 ) : ChatMember {
-    override fun toString() = DebugStringBuilder("ChatMemberMember").prop("user", user).prop("untilDate", untilDate).toString()
+    override fun toString() = DebugStringBuilder("ChatMemberMember").prop("user", user).prop("untilDate", untilDate).prop("tag", tag).toString()
 }
 
 /**
  * Represents a chat member that is under certain restrictions in the chat. Supergroups only.
  * @param user Information about the user
  * @param isMember True, if the user is a member of the chat at the moment of the request
- * @param canSendMessages True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
+ * @param canSendMessages True, if the user is allowed to send text messages, rich messages, contacts, giveaways, giveaway winners, invoices, locations and venues
  * @param canSendAudios True, if the user is allowed to send audios
  * @param canSendDocuments True, if the user is allowed to send documents
  * @param canSendPhotos True, if the user is allowed to send photos
@@ -2441,7 +3014,10 @@ data class ChatMemberMember(
  * @param canInviteUsers True, if the user is allowed to invite new users to the chat
  * @param canPinMessages True, if the user is allowed to pin messages
  * @param canManageTopics True, if the user is allowed to create forum topics
- * @param untilDate Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
+ * @param untilDate Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever.
+ * @param canReactToMessages True, if the user is allowed to react to messages
+ * @param canEditTag True, if the user is allowed to edit their own tag
+ * @param tag Optional. Tag of the member
  */
 @Serializable
 @SerialName("restricted")
@@ -2463,8 +3039,11 @@ data class ChatMemberRestricted(
     val canPinMessages: Boolean,
     val canManageTopics: Boolean,
     val untilDate: UnixTimestamp,
+    val canReactToMessages: Boolean,
+    val canEditTag: Boolean,
+    val tag: String? = null,
 ) : ChatMember {
-    override fun toString() = DebugStringBuilder("ChatMemberRestricted").prop("user", user).prop("isMember", isMember).prop("canSendMessages", canSendMessages).prop("canSendAudios", canSendAudios).prop("canSendDocuments", canSendDocuments).prop("canSendPhotos", canSendPhotos).prop("canSendVideos", canSendVideos).prop("canSendVideoNotes", canSendVideoNotes).prop("canSendVoiceNotes", canSendVoiceNotes).prop("canSendPolls", canSendPolls).prop("canSendOtherMessages", canSendOtherMessages).prop("canAddWebPagePreviews", canAddWebPagePreviews).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("untilDate", untilDate).toString()
+    override fun toString() = DebugStringBuilder("ChatMemberRestricted").prop("user", user).prop("isMember", isMember).prop("canSendMessages", canSendMessages).prop("canSendAudios", canSendAudios).prop("canSendDocuments", canSendDocuments).prop("canSendPhotos", canSendPhotos).prop("canSendVideos", canSendVideos).prop("canSendVideoNotes", canSendVideoNotes).prop("canSendVoiceNotes", canSendVoiceNotes).prop("canSendPolls", canSendPolls).prop("canSendOtherMessages", canSendOtherMessages).prop("canAddWebPagePreviews", canAddWebPagePreviews).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("untilDate", untilDate).prop("canReactToMessages", canReactToMessages).prop("canEditTag", canEditTag).prop("tag", tag).toString()
 }
 
 /**
@@ -2482,7 +3061,7 @@ data class ChatMemberLeft(
 /**
  * Represents a chat member that was banned in the chat and can't return to the chat or view chat messages.
  * @param user Information about the user
- * @param untilDate Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever
+ * @param untilDate Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever.
  */
 @Serializable
 @SerialName("kicked")
@@ -2499,8 +3078,9 @@ data class ChatMemberBanned(
  * @param from User that sent the join request
  * @param userChatId Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.
  * @param date Date the request was sent in Unix time
- * @param bio Optional. Bio of the user.
+ * @param bio Optional. Bio of the user
  * @param inviteLink Optional. Chat invite link that was used by the user to send the join request
+ * @param queryId Optional. Identifier of the join request query; for bots assigned to process join requests only. If present, then the bot must call sendChatJoinRequestWebApp or directly call answerChatJoinRequestQuery within 10 seconds.
  */
 @Serializable
 data class ChatJoinRequest(
@@ -2510,13 +3090,14 @@ data class ChatJoinRequest(
     val date: UnixTimestamp,
     val bio: String? = null,
     val inviteLink: ChatInviteLink? = null,
+    val queryId: String? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatJoinRequest").prop("chat", chat).prop("from", from).prop("userChatId", userChatId).prop("date", date).prop("bio", bio).prop("inviteLink", inviteLink).toString()
+    override fun toString() = DebugStringBuilder("ChatJoinRequest").prop("chat", chat).prop("from", from).prop("userChatId", userChatId).prop("date", date).prop("bio", bio).prop("inviteLink", inviteLink).prop("queryId", queryId).toString()
 }
 
 /**
  * Describes actions that a non-administrator user is allowed to take in a chat.
- * @param canSendMessages Optional. True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
+ * @param canSendMessages Optional. True, if the user is allowed to send text messages, rich messages, contacts, giveaways, giveaway winners, invoices, locations and venues
  * @param canSendAudios Optional. True, if the user is allowed to send audios
  * @param canSendDocuments Optional. True, if the user is allowed to send documents
  * @param canSendPhotos Optional. True, if the user is allowed to send photos
@@ -2526,10 +3107,12 @@ data class ChatJoinRequest(
  * @param canSendPolls Optional. True, if the user is allowed to send polls and checklists
  * @param canSendOtherMessages Optional. True, if the user is allowed to send animations, games, stickers and use inline bots
  * @param canAddWebPagePreviews Optional. True, if the user is allowed to add web page previews to their messages
- * @param canChangeInfo Optional. True, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
+ * @param canChangeInfo Optional. True, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups.
  * @param canInviteUsers Optional. True, if the user is allowed to invite new users to the chat
- * @param canPinMessages Optional. True, if the user is allowed to pin messages. Ignored in public supergroups
- * @param canManageTopics Optional. True, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages
+ * @param canPinMessages Optional. True, if the user is allowed to pin messages. Ignored in public supergroups.
+ * @param canManageTopics Optional. True, if the user is allowed to create forum topics. If omitted, defaults to the value of can_pin_messages.
+ * @param canReactToMessages Optional. True, if the user is allowed to react to messages. If omitted, defaults to the value of can_send_messages.
+ * @param canEditTag Optional. True, if the user is allowed to edit their own tag. If omitted, defaults to the value of can_pin_messages.
  */
 @Serializable
 data class ChatPermissions(
@@ -2547,8 +3130,10 @@ data class ChatPermissions(
     val canInviteUsers: Boolean? = null,
     val canPinMessages: Boolean? = null,
     val canManageTopics: Boolean? = null,
+    val canReactToMessages: Boolean? = null,
+    val canEditTag: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ChatPermissions").prop("canSendMessages", canSendMessages).prop("canSendAudios", canSendAudios).prop("canSendDocuments", canSendDocuments).prop("canSendPhotos", canSendPhotos).prop("canSendVideos", canSendVideos).prop("canSendVideoNotes", canSendVideoNotes).prop("canSendVoiceNotes", canSendVoiceNotes).prop("canSendPolls", canSendPolls).prop("canSendOtherMessages", canSendOtherMessages).prop("canAddWebPagePreviews", canAddWebPagePreviews).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).toString()
+    override fun toString() = DebugStringBuilder("ChatPermissions").prop("canSendMessages", canSendMessages).prop("canSendAudios", canSendAudios).prop("canSendDocuments", canSendDocuments).prop("canSendPhotos", canSendPhotos).prop("canSendVideos", canSendVideos).prop("canSendVideoNotes", canSendVideoNotes).prop("canSendVoiceNotes", canSendVoiceNotes).prop("canSendPolls", canSendPolls).prop("canSendOtherMessages", canSendOtherMessages).prop("canAddWebPagePreviews", canAddWebPagePreviews).prop("canChangeInfo", canChangeInfo).prop("canInviteUsers", canInviteUsers).prop("canPinMessages", canPinMessages).prop("canManageTopics", canManageTopics).prop("canReactToMessages", canReactToMessages).prop("canEditTag", canEditTag).toString()
 }
 
 /**
@@ -2618,6 +3203,23 @@ data class BusinessOpeningHours(
     val openingHours: List<BusinessOpeningHoursInterval>,
 ) {
     override fun toString() = DebugStringBuilder("BusinessOpeningHours").prop("timeZoneName", timeZoneName).prop("openingHours", openingHours).toString()
+}
+
+/**
+ * This object describes the rating of a user based on their Telegram Star spendings.
+ * @param level Current level of the user, indicating their reliability when purchasing digital goods and services. A higher level suggests a more trustworthy customer; a negative level is likely reason for concern.
+ * @param rating Numerical value of the user's rating; the higher the rating, the better
+ * @param currentLevelRating The rating value required to get the current level
+ * @param nextLevelRating Optional. The rating value required to get to the next level; omitted if the maximum level was reached
+ */
+@Serializable
+data class UserRating(
+    val level: Long,
+    val rating: Long,
+    val currentLevelRating: Long,
+    val nextLevelRating: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("UserRating").prop("level", level).prop("rating", rating).prop("currentLevelRating", currentLevelRating).prop("nextLevelRating", nextLevelRating).toString()
 }
 
 /**
@@ -2780,7 +3382,7 @@ sealed interface ReactionType
 
 /**
  * The reaction is based on an emoji.
- * @param emoji Reaction emoji. Currently, it can be one of "❤", "👍", "👎", "🔥", "🥰", "👏", "😁", "🤔", "🤯", "😱", "🤬", "😢", "🎉", "🤩", "🤮", "💩", "🙏", "👌", "🕊", "🤡", "🥱", "🥴", "😍", "🐳", "❤‍🔥", "🌚", "🌭", "💯", "🤣", "⚡", "🍌", "🏆", "💔", "🤨", "😐", "🍓", "🍾", "💋", "🖕", "😈", "😴", "😭", "🤓", "👻", "👨‍💻", "👀", "🎃", "🙈", "😇", "😨", "🤝", "✍", "🤗", "🫡", "🎅", "🎄", "☃", "💅", "🤪", "🗿", "🆒", "💘", "🙉", "🦄", "😘", "💊", "🙊", "😎", "👾", "🤷‍♂", "🤷", "🤷‍♀", "😡"
+ * @param emoji Reaction emoji. Currently, it can be one of "❤", "👍", "👎", "🔥", "🥰", "👏", "😁", "🤔", "🤯", "😱", "🤬", "😢", "🎉", "🤩", "🤮", "💩", "🙏", "👌", "🕊", "🤡", "🥱", "🥴", "😍", "🐳", "❤‍🔥", "🌚", "🌭", "💯", "🤣", "⚡", "🍌", "🏆", "💔", "🤨", "😐", "🍓", "🍾", "💋", "🖕", "😈", "😴", "😭", "🤓", "👻", "👨‍💻", "👀", "🎃", "🙈", "😇", "😨", "🤝", "✍", "🤗", "🫡", "🎅", "🎄", "☃", "💅", "🤪", "🗿", "🆒", "💘", "🙉", "🦄", "😘", "💊", "🙊", "😎", "👾", "🤷‍♂", "🤷", "🤷‍♀", "😡".
  */
 @Serializable
 @SerialName("emoji")
@@ -2868,6 +3470,7 @@ data class MessageReactionCountUpdated(
  * @param name Name of the topic
  * @param iconColor Color of the topic icon in RGB format
  * @param iconCustomEmojiId Optional. Unique identifier of the custom emoji shown as the topic icon
+ * @param isNameImplicit Optional. True, if the name of the topic wasn't specified explicitly by its creator and likely needs to be changed by the bot
  */
 @Serializable
 data class ForumTopic(
@@ -2875,8 +3478,24 @@ data class ForumTopic(
     val name: String,
     val iconColor: Long,
     val iconCustomEmojiId: CustomEmojiId? = null,
+    val isNameImplicit: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("ForumTopic").prop("messageThreadId", messageThreadId).prop("name", name).prop("iconColor", iconColor).prop("iconCustomEmojiId", iconCustomEmojiId).toString()
+    override fun toString() = DebugStringBuilder("ForumTopic").prop("messageThreadId", messageThreadId).prop("name", name).prop("iconColor", iconColor).prop("iconCustomEmojiId", iconCustomEmojiId).prop("isNameImplicit", isNameImplicit).toString()
+}
+
+/**
+ * This object describes the background of a gift.
+ * @param centerColor Center color of the background in RGB format
+ * @param edgeColor Edge color of the background in RGB format
+ * @param textColor Text color of the background in RGB format
+ */
+@Serializable
+data class GiftBackground(
+    val centerColor: Long,
+    val edgeColor: Long,
+    val textColor: Long,
+) {
+    override fun toString() = DebugStringBuilder("GiftBackground").prop("centerColor", centerColor).prop("edgeColor", edgeColor).prop("textColor", textColor).toString()
 }
 
 /**
@@ -2885,8 +3504,15 @@ data class ForumTopic(
  * @param sticker The sticker that represents the gift
  * @param starCount The number of Telegram Stars that must be paid to send the sticker
  * @param upgradeStarCount Optional. The number of Telegram Stars that must be paid to upgrade the gift to a unique one
- * @param totalCount Optional. The total number of the gifts of this type that can be sent; for limited gifts only
- * @param remainingCount Optional. The number of remaining gifts of this type that can be sent; for limited gifts only
+ * @param totalCount Optional. The total number of gifts of this type that can be sent by all users; for limited gifts only
+ * @param remainingCount Optional. The number of remaining gifts of this type that can be sent by all users; for limited gifts only
+ * @param isPremium Optional. True, if the gift can only be purchased by Telegram Premium subscribers
+ * @param hasColors Optional. True, if the gift can be used (after being upgraded) to customize a user's appearance
+ * @param personalTotalCount Optional. The total number of gifts of this type that can be sent by the bot; for limited gifts only
+ * @param personalRemainingCount Optional. The number of remaining gifts of this type that can be sent by the bot; for limited gifts only
+ * @param background Optional. Background of the gift
+ * @param uniqueGiftVariantCount Optional. The total number of different unique gifts that can be obtained by upgrading the gift
+ * @param publisherChat Optional. Information about the chat that published the gift
  */
 @Serializable
 data class Gift(
@@ -2896,8 +3522,15 @@ data class Gift(
     val upgradeStarCount: Long? = null,
     val totalCount: Long? = null,
     val remainingCount: Long? = null,
+    val isPremium: Boolean? = null,
+    val hasColors: Boolean? = null,
+    val personalTotalCount: Long? = null,
+    val personalRemainingCount: Long? = null,
+    val background: GiftBackground? = null,
+    val uniqueGiftVariantCount: Long? = null,
+    val publisherChat: Chat? = null,
 ) {
-    override fun toString() = DebugStringBuilder("Gift").prop("id", id).prop("sticker", sticker).prop("starCount", starCount).prop("upgradeStarCount", upgradeStarCount).prop("totalCount", totalCount).prop("remainingCount", remainingCount).toString()
+    override fun toString() = DebugStringBuilder("Gift").prop("id", id).prop("sticker", sticker).prop("starCount", starCount).prop("upgradeStarCount", upgradeStarCount).prop("totalCount", totalCount).prop("remainingCount", remainingCount).prop("isPremium", isPremium).prop("hasColors", hasColors).prop("personalTotalCount", personalTotalCount).prop("personalRemainingCount", personalRemainingCount).prop("background", background).prop("uniqueGiftVariantCount", uniqueGiftVariantCount).prop("publisherChat", publisherChat).toString()
 }
 
 /**
@@ -2915,15 +3548,17 @@ data class Gifts(
  * This object describes the model of a unique gift.
  * @param name Name of the model
  * @param sticker The sticker that represents the unique gift
- * @param rarityPerMille The number of unique gifts that receive this model for every 1000 gifts upgraded
+ * @param rarityPerMille The number of unique gifts that receive this model for every 1000 gift upgrades. Always 0 for crafted gifts.
+ * @param rarity Optional. Rarity of the model if it is a crafted model. Currently, can be “uncommon”, “rare”, “epic”, or “legendary”.
  */
 @Serializable
 data class UniqueGiftModel(
     val name: String,
     val sticker: Sticker,
     val rarityPerMille: Long,
+    val rarity: String? = null,
 ) {
-    override fun toString() = DebugStringBuilder("UniqueGiftModel").prop("name", name).prop("sticker", sticker).prop("rarityPerMille", rarityPerMille).toString()
+    override fun toString() = DebugStringBuilder("UniqueGiftModel").prop("name", name).prop("sticker", sticker).prop("rarityPerMille", rarityPerMille).prop("rarity", rarity).toString()
 }
 
 /**
@@ -2974,13 +3609,40 @@ data class UniqueGiftBackdrop(
 }
 
 /**
+ * This object contains information about the color scheme for a user's name, message replies and link previews based on a unique gift.
+ * @param modelCustomEmojiId Custom emoji identifier of the unique gift's model
+ * @param symbolCustomEmojiId Custom emoji identifier of the unique gift's symbol
+ * @param lightThemeMainColor Main color used in light themes; RGB format
+ * @param lightThemeOtherColors List of 1-3 additional colors used in light themes; RGB format
+ * @param darkThemeMainColor Main color used in dark themes; RGB format
+ * @param darkThemeOtherColors List of 1-3 additional colors used in dark themes; RGB format
+ */
+@Serializable
+data class UniqueGiftColors(
+    val modelCustomEmojiId: CustomEmojiId,
+    val symbolCustomEmojiId: CustomEmojiId,
+    val lightThemeMainColor: Long,
+    val lightThemeOtherColors: List<Long>,
+    val darkThemeMainColor: Long,
+    val darkThemeOtherColors: List<Long>,
+) {
+    override fun toString() = DebugStringBuilder("UniqueGiftColors").prop("modelCustomEmojiId", modelCustomEmojiId).prop("symbolCustomEmojiId", symbolCustomEmojiId).prop("lightThemeMainColor", lightThemeMainColor).prop("lightThemeOtherColors", lightThemeOtherColors).prop("darkThemeMainColor", darkThemeMainColor).prop("darkThemeOtherColors", darkThemeOtherColors).toString()
+}
+
+/**
  * This object describes a unique gift that was upgraded from a regular gift.
  * @param baseName Human-readable name of the regular gift from which this unique gift was upgraded
- * @param name Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas
+ * @param name Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas.
  * @param number Unique number of the upgraded gift among gifts upgraded from the same regular gift
  * @param model Model of the gift
  * @param symbol Symbol of the gift
  * @param backdrop Backdrop of the gift
+ * @param giftId Identifier of the regular gift from which the gift was upgraded
+ * @param isPremium Optional. True, if the original regular gift was exclusively purchaseable by Telegram Premium subscribers
+ * @param isBurned Optional. True, if the gift was used to craft another gift and isn't available anymore
+ * @param isFromBlockchain Optional. True, if the gift is assigned from the TON blockchain and can't be resold or transferred in Telegram
+ * @param colors Optional. The color scheme that can be used by the gift's owner for the chat's name, replies to messages and link previews; for business account gifts and gifts that are currently on sale only
+ * @param publisherChat Optional. Information about the chat that published the gift
  */
 @Serializable
 data class UniqueGift(
@@ -2990,8 +3652,14 @@ data class UniqueGift(
     val model: UniqueGiftModel,
     val symbol: UniqueGiftSymbol,
     val backdrop: UniqueGiftBackdrop,
+    val giftId: String,
+    val isPremium: Boolean? = null,
+    val isBurned: Boolean? = null,
+    val isFromBlockchain: Boolean? = null,
+    val colors: UniqueGiftColors? = null,
+    val publisherChat: Chat? = null,
 ) {
-    override fun toString() = DebugStringBuilder("UniqueGift").prop("baseName", baseName).prop("name", name).prop("number", number).prop("model", model).prop("symbol", symbol).prop("backdrop", backdrop).toString()
+    override fun toString() = DebugStringBuilder("UniqueGift").prop("baseName", baseName).prop("name", name).prop("number", number).prop("model", model).prop("symbol", symbol).prop("backdrop", backdrop).prop("giftId", giftId).prop("isPremium", isPremium).prop("isBurned", isBurned).prop("isFromBlockchain", isFromBlockchain).prop("colors", colors).prop("publisherChat", publisherChat).toString()
 }
 
 /**
@@ -2999,11 +3667,13 @@ data class UniqueGift(
  * @param gift Information about the gift
  * @param ownedGiftId Optional. Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts
  * @param convertStarCount Optional. Number of Telegram Stars that can be claimed by the receiver by converting the gift; omitted if conversion to Telegram Stars is impossible
- * @param prepaidUpgradeStarCount Optional. Number of Telegram Stars that were prepaid by the sender for the ability to upgrade the gift
+ * @param prepaidUpgradeStarCount Optional. Number of Telegram Stars that were prepaid for the ability to upgrade the gift
  * @param canBeUpgraded Optional. True, if the gift can be upgraded to a unique gift
  * @param text Optional. Text of the message that was added to the gift
  * @param entities Optional. Special entities that appear in the text
  * @param isPrivate Optional. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
+ * @param isUpgradeSeparate Optional. True, if the gift's upgrade was purchased after the gift was sent
+ * @param uniqueGiftNumber Optional. Unique number reserved for this gift when upgraded. See the number field in UniqueGift.
  */
 @Serializable
 data class GiftInfo(
@@ -3015,29 +3685,33 @@ data class GiftInfo(
     val text: String? = null,
     val entities: List<MessageEntity>? = null,
     val isPrivate: Boolean? = null,
+    val isUpgradeSeparate: Boolean? = null,
+    val uniqueGiftNumber: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("GiftInfo").prop("gift", gift).prop("ownedGiftId", ownedGiftId).prop("convertStarCount", convertStarCount).prop("prepaidUpgradeStarCount", prepaidUpgradeStarCount).prop("canBeUpgraded", canBeUpgraded).prop("text", text).prop("entities", entities).prop("isPrivate", isPrivate).toString()
+    override fun toString() = DebugStringBuilder("GiftInfo").prop("gift", gift).prop("ownedGiftId", ownedGiftId).prop("convertStarCount", convertStarCount).prop("prepaidUpgradeStarCount", prepaidUpgradeStarCount).prop("canBeUpgraded", canBeUpgraded).prop("text", text).prop("entities", entities).prop("isPrivate", isPrivate).prop("isUpgradeSeparate", isUpgradeSeparate).prop("uniqueGiftNumber", uniqueGiftNumber).toString()
 }
 
 /**
  * Describes a service message about a unique gift that was sent or received.
  * @param gift Information about the gift
- * @param origin Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, or “resale” for gifts bought from other users
- * @param lastResaleStarCount Optional. For gifts bought from other users, the price paid for the gift
+ * @param origin Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, “resale” for gifts bought from other users, “gifted_upgrade” for upgrades purchased after the gift was sent, or “offer” for gifts bought or sold through gift purchase offers.
  * @param ownedGiftId Optional. Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts
  * @param transferStarCount Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
- * @param nextTransferDate Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now
+ * @param nextTransferDate Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now.
+ * @param lastResaleCurrency Optional. For gifts bought from other users, the currency in which the payment for the gift was done. Currently, one of “XTR” for Telegram Stars or “TON” for TON grams.
+ * @param lastResaleAmount Optional. For gifts bought from other users, the price paid for the gift in either Telegram Stars or nanograms
  */
 @Serializable
 data class UniqueGiftInfo(
     val gift: UniqueGift,
     val origin: String,
-    val lastResaleStarCount: Long? = null,
     val ownedGiftId: String? = null,
     val transferStarCount: Long? = null,
     val nextTransferDate: Long? = null,
+    val lastResaleCurrency: String? = null,
+    val lastResaleAmount: Long? = null,
 ) {
-    override fun toString() = DebugStringBuilder("UniqueGiftInfo").prop("gift", gift).prop("origin", origin).prop("lastResaleStarCount", lastResaleStarCount).prop("ownedGiftId", ownedGiftId).prop("transferStarCount", transferStarCount).prop("nextTransferDate", nextTransferDate).toString()
+    override fun toString() = DebugStringBuilder("UniqueGiftInfo").prop("gift", gift).prop("origin", origin).prop("ownedGiftId", ownedGiftId).prop("transferStarCount", transferStarCount).prop("nextTransferDate", nextTransferDate).prop("lastResaleCurrency", lastResaleCurrency).prop("lastResaleAmount", lastResaleAmount).toString()
 }
 
 /**
@@ -3061,8 +3735,10 @@ sealed interface OwnedGift
  * @param isSaved Optional. True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only
  * @param canBeUpgraded Optional. True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only
  * @param wasRefunded Optional. True, if the gift was refunded and isn't available anymore
- * @param convertStarCount Optional. Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars
- * @param prepaidUpgradeStarCount Optional. Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift
+ * @param convertStarCount Optional. Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars; for gifts received on behalf of business accounts only
+ * @param prepaidUpgradeStarCount Optional. Number of Telegram Stars that were paid for the ability to upgrade the gift
+ * @param isUpgradeSeparate Optional. True, if the gift's upgrade was purchased after the gift was sent; for gifts received on behalf of business accounts only
+ * @param uniqueGiftNumber Optional. Unique number reserved for this gift when upgraded. See the number field in UniqueGift.
  */
 @Serializable
 @SerialName("regular")
@@ -3079,8 +3755,10 @@ data class OwnedGiftRegular(
     val wasRefunded: Boolean? = null,
     val convertStarCount: Long? = null,
     val prepaidUpgradeStarCount: Long? = null,
+    val isUpgradeSeparate: Boolean? = null,
+    val uniqueGiftNumber: Long? = null,
 ) : OwnedGift {
-    override fun toString() = DebugStringBuilder("OwnedGiftRegular").prop("gift", gift).prop("sendDate", sendDate).prop("ownedGiftId", ownedGiftId).prop("senderUser", senderUser).prop("text", text).prop("entities", entities).prop("isPrivate", isPrivate).prop("isSaved", isSaved).prop("canBeUpgraded", canBeUpgraded).prop("wasRefunded", wasRefunded).prop("convertStarCount", convertStarCount).prop("prepaidUpgradeStarCount", prepaidUpgradeStarCount).toString()
+    override fun toString() = DebugStringBuilder("OwnedGiftRegular").prop("gift", gift).prop("sendDate", sendDate).prop("ownedGiftId", ownedGiftId).prop("senderUser", senderUser).prop("text", text).prop("entities", entities).prop("isPrivate", isPrivate).prop("isSaved", isSaved).prop("canBeUpgraded", canBeUpgraded).prop("wasRefunded", wasRefunded).prop("convertStarCount", convertStarCount).prop("prepaidUpgradeStarCount", prepaidUpgradeStarCount).prop("isUpgradeSeparate", isUpgradeSeparate).prop("uniqueGiftNumber", uniqueGiftNumber).toString()
 }
 
 /**
@@ -3092,7 +3770,7 @@ data class OwnedGiftRegular(
  * @param isSaved Optional. True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only
  * @param canBeTransferred Optional. True, if the gift can be transferred to another owner; for gifts received on behalf of business accounts only
  * @param transferStarCount Optional. Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
- * @param nextTransferDate Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now
+ * @param nextTransferDate Optional. Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now.
  */
 @Serializable
 @SerialName("unique")
@@ -3113,7 +3791,7 @@ data class OwnedGiftUnique(
  * Contains the list of gifts received and owned by a user or a chat.
  * @param totalCount The total number of gifts owned by the user or the chat
  * @param gifts The list of gifts
- * @param nextOffset Optional. Offset for the next request. If empty, then there are no more results
+ * @param nextOffset Optional. Offset for the next request. If empty, then there are no more results.
  */
 @Serializable
 data class OwnedGifts(
@@ -3125,11 +3803,25 @@ data class OwnedGifts(
 }
 
 /**
+ * This object describes the access settings of a bot.
+ * @param isAccessRestricted True, if only selected users can access the bot. The bot's owner can always access it.
+ * @param addedUsers Optional. The list of other users who have access to the bot if the access is restricted
+ */
+@Serializable
+data class BotAccessSettings(
+    val isAccessRestricted: Boolean,
+    val addedUsers: List<User>? = null,
+) {
+    override fun toString() = DebugStringBuilder("BotAccessSettings").prop("isAccessRestricted", isAccessRestricted).prop("addedUsers", addedUsers).toString()
+}
+
+/**
  * This object describes the types of gifts that can be gifted to a user or a chat.
  * @param unlimitedGifts True, if unlimited regular gifts are accepted
  * @param limitedGifts True, if limited regular gifts are accepted
  * @param uniqueGifts True, if unique gifts or gifts that can be upgraded to unique for free are accepted
  * @param premiumSubscription True, if a Telegram Premium subscription is accepted
+ * @param giftsFromChannels True, if transfers of unique gifts from channels are accepted
  */
 @Serializable
 data class AcceptedGiftTypes(
@@ -3137,8 +3829,9 @@ data class AcceptedGiftTypes(
     val limitedGifts: Boolean,
     val uniqueGifts: Boolean,
     val premiumSubscription: Boolean,
+    val giftsFromChannels: Boolean,
 ) {
-    override fun toString() = DebugStringBuilder("AcceptedGiftTypes").prop("unlimitedGifts", unlimitedGifts).prop("limitedGifts", limitedGifts).prop("uniqueGifts", uniqueGifts).prop("premiumSubscription", premiumSubscription).toString()
+    override fun toString() = DebugStringBuilder("AcceptedGiftTypes").prop("unlimitedGifts", unlimitedGifts).prop("limitedGifts", limitedGifts).prop("uniqueGifts", uniqueGifts).prop("premiumSubscription", premiumSubscription).prop("giftsFromChannels", giftsFromChannels).toString()
 }
 
 /**
@@ -3157,14 +3850,16 @@ data class StarAmount(
 /**
  * This object represents a bot command.
  * @param command Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores.
- * @param description Description of the command; 1-256 characters.
+ * @param description Description of the command; 1-256 characters
+ * @param isEphemeral Optional. True, if the command sends an ephemeral message, which can be seen only by the sender of the message and the bot
  */
 @Serializable
 data class BotCommand(
     val command: String,
     val description: String,
+    val isEphemeral: Boolean? = null,
 ) {
-    override fun toString() = DebugStringBuilder("BotCommand").prop("command", command).prop("description", description).toString()
+    override fun toString() = DebugStringBuilder("BotCommand").prop("command", command).prop("description", description).prop("isEphemeral", isEphemeral).toString()
 }
 
 /**
@@ -3211,7 +3906,7 @@ data object BotCommandScopeAllChatAdministrators : BotCommandScope
 
 /**
  * Represents the scope of bot commands, covering a specific chat.
- * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup in the format @username. Channel direct messages chats and channel chats aren't supported.
  */
 @Serializable
 @SerialName("chat")
@@ -3223,7 +3918,7 @@ data class BotCommandScopeChat(
 
 /**
  * Represents the scope of bot commands, covering all administrators of a specific group or supergroup chat.
- * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup in the format @username. Channel direct messages chats and channel chats aren't supported.
  */
 @Serializable
 @SerialName("chat_administrators")
@@ -3235,7 +3930,7 @@ data class BotCommandScopeChatAdministrators(
 
 /**
  * Represents the scope of bot commands, covering a specific member of a group or supergroup chat.
- * @param chatId Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+ * @param chatId Unique identifier for the target chat or username of the target supergroup in the format @username. Channel direct messages chats and channel chats aren't supported.
  * @param userId Unique identifier of the target user
  */
 @Serializable
@@ -3418,6 +4113,28 @@ data class ChatBoostRemoved(
 }
 
 /**
+ * Describes a service message about the chat owner leaving the chat.
+ * @param newOwner Optional. The user who will become the new owner of the chat if the previous owner does not return to the chat
+ */
+@Serializable
+data class ChatOwnerLeft(
+    val newOwner: User? = null,
+) {
+    override fun toString() = DebugStringBuilder("ChatOwnerLeft").prop("newOwner", newOwner).toString()
+}
+
+/**
+ * Describes a service message about an ownership change in the chat.
+ * @param newOwner The new owner of the chat
+ */
+@Serializable
+data class ChatOwnerChanged(
+    val newOwner: User,
+) {
+    override fun toString() = DebugStringBuilder("ChatOwnerChanged").prop("newOwner", newOwner).toString()
+}
+
+/**
  * This object represents a list of boosts added to a chat by a user.
  * @param boosts The list of boosts added to the chat by the user
  */
@@ -3502,6 +4219,52 @@ data class BusinessMessagesDeleted(
 }
 
 /**
+ * Describes an inline message sent by a Web App on behalf of a user.
+ * @param inlineMessageId Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message.
+ */
+@Serializable
+data class SentWebAppMessage(
+    val inlineMessageId: InlineMessageId? = null,
+) {
+    override fun toString() = DebugStringBuilder("SentWebAppMessage").prop("inlineMessageId", inlineMessageId).toString()
+}
+
+/**
+ * Describes an inline message sent by a guest bot.
+ * @param inlineMessageId Identifier of the sent inline message
+ */
+@Serializable
+data class SentGuestMessage(
+    val inlineMessageId: InlineMessageId,
+) {
+    override fun toString() = DebugStringBuilder("SentGuestMessage").prop("inlineMessageId", inlineMessageId).toString()
+}
+
+/**
+ * Describes an inline message to be sent by a user of a Mini App.
+ * @param id Unique identifier of the prepared message
+ * @param expirationDate Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used.
+ */
+@Serializable
+data class PreparedInlineMessage(
+    val id: String,
+    val expirationDate: Long,
+) {
+    override fun toString() = DebugStringBuilder("PreparedInlineMessage").prop("id", id).prop("expirationDate", expirationDate).toString()
+}
+
+/**
+ * Describes a keyboard button to be used by a user of a Mini App.
+ * @param id Unique identifier of the keyboard button
+ */
+@Serializable
+data class PreparedKeyboardButton(
+    val id: String,
+) {
+    override fun toString() = DebugStringBuilder("PreparedKeyboardButton").prop("id", id).toString()
+}
+
+/**
  * Describes why a request was unsuccessful.
  * @param migrateToChatId Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
  * @param retryAfter Optional. In case of exceeding flood control, the number of seconds left to wait before the request can be repeated
@@ -3517,8 +4280,9 @@ data class ResponseParameters(
 /**
  * This object represents the content of a media message to be sent. It should be one of
  * - [InputMediaAnimation]
- * - [InputMediaDocument]
  * - [InputMediaAudio]
+ * - [InputMediaDocument]
+ * - [InputMediaLivePhoto]
  * - [InputMediaPhoto]
  * - [InputMediaVideo]
  */
@@ -3527,71 +4291,13 @@ data class ResponseParameters(
 sealed interface InputMedia
 
 /**
- * Represents a photo to be sent.
- * @param media File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
- * @param caption Optional. Caption of the photo to be sent, 0-1024 characters after entities parsing
- * @param parseMode Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
- * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
- * @param hasSpoiler Optional. Pass True if the photo needs to be covered with a spoiler animation
- */
-@Serializable
-@SerialName("photo")
-data class InputMediaPhoto(
-    val media: String,
-    val caption: String? = null,
-    val parseMode: ParseMode? = null,
-    val captionEntities: List<MessageEntity>? = null,
-    val showCaptionAboveMedia: Boolean? = null,
-    val hasSpoiler: Boolean? = null,
-) : InputMedia {
-    override fun toString() = DebugStringBuilder("InputMediaPhoto").prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).toString()
-}
-
-/**
- * Represents a video to be sent.
- * @param media File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
- * @param thumbnail Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
- * @param caption Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
- * @param parseMode Optional. Mode for parsing entities in the video caption. See formatting options for more details.
- * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
- * @param width Optional. Video width
- * @param height Optional. Video height
- * @param duration Optional. Video duration in seconds
- * @param supportsStreaming Optional. Pass True if the uploaded video is suitable for streaming
- * @param hasSpoiler Optional. Pass True if the video needs to be covered with a spoiler animation
- * @param cover Optional. Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
- * @param startTimestamp Optional. Start timestamp for the video in the message
- */
-@Serializable
-@SerialName("video")
-data class InputMediaVideo(
-    val media: String,
-    val thumbnail: String? = null,
-    val caption: String? = null,
-    val parseMode: ParseMode? = null,
-    val captionEntities: List<MessageEntity>? = null,
-    val showCaptionAboveMedia: Boolean? = null,
-    val width: Long? = null,
-    val height: Long? = null,
-    val duration: Seconds? = null,
-    val supportsStreaming: Boolean? = null,
-    val hasSpoiler: Boolean? = null,
-    val cover: String? = null,
-    val startTimestamp: Long? = null,
-) : InputMedia {
-    override fun toString() = DebugStringBuilder("InputMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).prop("hasSpoiler", hasSpoiler).prop("cover", cover).prop("startTimestamp", startTimestamp).toString()
-}
-
-/**
  * Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
  * @param media File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
  * @param thumbnail Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
  * @param caption Optional. Caption of the animation to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the animation caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
  * @param width Optional. Animation width
  * @param height Optional. Animation height
  * @param duration Optional. Animation duration in seconds
@@ -3610,7 +4316,7 @@ data class InputMediaAnimation(
     val height: Long? = null,
     val duration: Seconds? = null,
     val hasSpoiler: Boolean? = null,
-) : InputMedia {
+) : InputRichMedia {
     override fun toString() = DebugStringBuilder("InputMediaAnimation").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("width", width).prop("height", height).prop("duration", duration).prop("hasSpoiler", hasSpoiler).toString()
 }
 
@@ -3636,7 +4342,7 @@ data class InputMediaAudio(
     val duration: Seconds? = null,
     val performer: String? = null,
     val title: String? = null,
-) : InputMedia {
+) : InputRichMedia {
     override fun toString() = DebugStringBuilder("InputMediaAudio").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).prop("performer", performer).prop("title", title).toString()
 }
 
@@ -3663,13 +4369,198 @@ data class InputMediaDocument(
 }
 
 /**
+ * Represents an HTTP link to be sent.
+ * @param url HTTP URL of the link
+ */
+@Serializable
+@SerialName("link")
+data class InputMediaLink(
+    val url: String,
+) : InputPollOptionMedia {
+    override fun toString() = DebugStringBuilder("InputMediaLink").prop("url", url).toString()
+}
+
+/**
+ * Represents a live photo to be sent.
+ * @param media Video of the live photo to send. Pass a file_id to send a file that exists on the Telegram servers (recommended) or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files ». Sending live photos by a URL is currently unsupported.
+ * @param photo The static photo to send. Pass a file_id to send a file that exists on the Telegram servers (recommended) or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files ». Sending live photos by a URL is currently unsupported.
+ * @param caption Optional. Caption of the live photo to be sent, 0-1024 characters after entities parsing
+ * @param parseMode Optional. Mode for parsing entities in the live photo caption. See formatting options for more details.
+ * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
+ * @param hasSpoiler Optional. Pass True if the live photo needs to be covered with a spoiler animation
+ */
+@Serializable
+@SerialName("live_photo")
+data class InputMediaLivePhoto(
+    val media: String,
+    val photo: String,
+    val caption: String? = null,
+    val parseMode: ParseMode? = null,
+    val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
+    val hasSpoiler: Boolean? = null,
+) : InputMedia {
+    override fun toString() = DebugStringBuilder("InputMediaLivePhoto").prop("media", media).prop("photo", photo).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).toString()
+}
+
+/**
+ * Represents a location to be sent.
+ * @param latitude Latitude of the location
+ * @param longitude Longitude of the location
+ * @param horizontalAccuracy Optional. The radius of uncertainty for the location, measured in meters; 0-1500
+ */
+@Serializable
+@SerialName("location")
+data class InputMediaLocation(
+    val latitude: Double,
+    val longitude: Double,
+    val horizontalAccuracy: Double? = null,
+) : InputPollOptionMedia {
+    override fun toString() = DebugStringBuilder("InputMediaLocation").prop("latitude", latitude).prop("longitude", longitude).prop("horizontalAccuracy", horizontalAccuracy).toString()
+}
+
+/**
+ * Represents a photo to be sent.
+ * @param media File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param caption Optional. Caption of the photo to be sent, 0-1024 characters after entities parsing
+ * @param parseMode Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
+ * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
+ * @param hasSpoiler Optional. Pass True if the photo needs to be covered with a spoiler animation
+ */
+@Serializable
+@SerialName("photo")
+data class InputMediaPhoto(
+    val media: String,
+    val caption: String? = null,
+    val parseMode: ParseMode? = null,
+    val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
+    val hasSpoiler: Boolean? = null,
+) : InputRichMedia {
+    override fun toString() = DebugStringBuilder("InputMediaPhoto").prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("hasSpoiler", hasSpoiler).toString()
+}
+
+/**
+ * Represents a sticker file to be sent.
+ * @param media File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a .WEBP sticker from the Internet, or pass “attach://<file_attach_name>” to upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param emoji Optional. Emoji associated with the sticker; only for just uploaded stickers
+ */
+@Serializable
+@SerialName("sticker")
+data class InputMediaSticker(
+    val media: String,
+    val emoji: String? = null,
+) : InputPollOptionMedia {
+    override fun toString() = DebugStringBuilder("InputMediaSticker").prop("media", media).prop("emoji", emoji).toString()
+}
+
+/**
+ * Represents a venue to be sent.
+ * @param latitude Latitude of the location
+ * @param longitude Longitude of the location
+ * @param title Name of the venue
+ * @param address Address of the venue
+ * @param foursquareId Optional. Foursquare identifier of the venue
+ * @param foursquareType Optional. Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
+ * @param googlePlaceId Optional. Google Places identifier of the venue
+ * @param googlePlaceType Optional. Google Places type of the venue. (See supported types.)
+ */
+@Serializable
+@SerialName("venue")
+data class InputMediaVenue(
+    val latitude: Double,
+    val longitude: Double,
+    val title: String,
+    val address: String,
+    val foursquareId: String? = null,
+    val foursquareType: String? = null,
+    val googlePlaceId: String? = null,
+    val googlePlaceType: String? = null,
+) : InputPollOptionMedia {
+    override fun toString() = DebugStringBuilder("InputMediaVenue").prop("latitude", latitude).prop("longitude", longitude).prop("title", title).prop("address", address).prop("foursquareId", foursquareId).prop("foursquareType", foursquareType).prop("googlePlaceId", googlePlaceId).prop("googlePlaceType", googlePlaceType).toString()
+}
+
+/**
+ * Represents a video to be sent.
+ * @param media File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param thumbnail Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+ * @param caption Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
+ * @param parseMode Optional. Mode for parsing entities in the video caption. See formatting options for more details.
+ * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
+ * @param width Optional. Video width
+ * @param height Optional. Video height
+ * @param duration Optional. Video duration in seconds
+ * @param supportsStreaming Optional. Pass True if the uploaded video is suitable for streaming
+ * @param hasSpoiler Optional. Pass True if the video needs to be covered with a spoiler animation
+ * @param cover Optional. Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param startTimestamp Optional. Start timestamp for the video in the message
+ */
+@Serializable
+@SerialName("video")
+data class InputMediaVideo(
+    val media: String,
+    val thumbnail: String? = null,
+    val caption: String? = null,
+    val parseMode: ParseMode? = null,
+    val captionEntities: List<MessageEntity>? = null,
+    val showCaptionAboveMedia: Boolean? = null,
+    val width: Long? = null,
+    val height: Long? = null,
+    val duration: Seconds? = null,
+    val supportsStreaming: Boolean? = null,
+    val hasSpoiler: Boolean? = null,
+    val cover: String? = null,
+    val startTimestamp: Long? = null,
+) : InputRichMedia {
+    override fun toString() = DebugStringBuilder("InputMediaVideo").prop("media", media).prop("thumbnail", thumbnail).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("showCaptionAboveMedia", showCaptionAboveMedia).prop("width", width).prop("height", height).prop("duration", duration).prop("supportsStreaming", supportsStreaming).prop("hasSpoiler", hasSpoiler).prop("cover", cover).prop("startTimestamp", startTimestamp).toString()
+}
+
+/**
+ * Represents a voice message file to be sent.
+ * @param media File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+ * @param caption Optional. Caption of the voice message to be sent, 0-1024 characters after entities parsing
+ * @param parseMode Optional. Mode for parsing entities in the voice message caption. See formatting options for more details.
+ * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+ * @param duration Optional. Duration of the voice message in seconds
+ */
+@Serializable
+@SerialName("voice_note")
+data class InputMediaVoiceNote(
+    val media: String,
+    val caption: String? = null,
+    val parseMode: ParseMode? = null,
+    val captionEntities: List<MessageEntity>? = null,
+    val duration: Seconds? = null,
+) : InputRichMedia {
+    override fun toString() = DebugStringBuilder("InputMediaVoiceNote").prop("media", media).prop("caption", caption).prop("parseMode", parseMode).prop("captionEntities", captionEntities).prop("duration", duration).toString()
+}
+
+/**
  * This object describes the paid media to be sent. Currently, it can be one of
+ * - [InputPaidMediaLivePhoto]
  * - [InputPaidMediaPhoto]
  * - [InputPaidMediaVideo]
  */
 @Serializable
 @JsonClassDiscriminator("type")
 sealed interface InputPaidMedia
+
+/**
+ * The paid media to send is a live photo.
+ * @param media Video of the live photo to send. Pass a file_id to send a file that exists on the Telegram servers (recommended) or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files ». Sending live photos by a URL is currently unsupported.
+ * @param photo The static photo to send. Pass a file_id to send a file that exists on the Telegram servers (recommended) or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files ». Sending live photos by a URL is currently unsupported.
+ */
+@Serializable
+@SerialName("live_photo")
+data class InputPaidMediaLivePhoto(
+    val media: String,
+    val photo: String,
+) : InputPaidMedia {
+    override fun toString() = DebugStringBuilder("InputPaidMediaLivePhoto").prop("media", media).prop("photo", photo).toString()
+}
 
 /**
  * The paid media to send is a photo.
@@ -3878,12 +4769,1255 @@ data class InputSticker(
 }
 
 /**
+ * Rich formatted message.
+ * @param blocks Content of the message
+ * @param isRtl Optional. True, if the rich message must be shown right-to-left
+ */
+@Serializable
+data class RichMessage(
+    val blocks: List<RichBlock>,
+    val isRtl: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("RichMessage").prop("blocks", blocks).prop("isRtl", isRtl).toString()
+}
+
+/**
+ * Describes a rich message to be sent. Exactly one of the fields html, markdown, or blocks must be used.
+ * @param blocks Optional. Content of the rich message to send described as a list of blocks
+ * @param html Optional. Content of the rich message to send described using HTML formatting. See rich message formatting options for more details. Use media field to specify the media used in the message.
+ * @param markdown Optional. Content of the rich message to send described using Markdown formatting. See rich message formatting options for more details. Use media field to specify the media used in the message.
+ * @param media Optional. List of media that are specified in the markdown or html fields using tg://photo?id=, tg://video?id=, and tg://audio?id= links
+ * @param isRtl Optional. Pass True if the rich message must be shown right-to-left
+ * @param skipEntityDetection Optional. Pass True to skip automatic detection of entities (e.g., URLs, email addresses, username mentions, hashtags, cashtags, bot commands, or phone numbers) in the text
+ */
+@Serializable
+data class InputRichMessage(
+    val blocks: List<InputRichBlock>? = null,
+    val html: String? = null,
+    val markdown: String? = null,
+    val media: List<InputRichMessageMedia>? = null,
+    val isRtl: Boolean? = null,
+    val skipEntityDetection: Boolean? = null,
+) {
+    override fun toString() = DebugStringBuilder("InputRichMessage").prop("blocks", blocks).prop("html", html).prop("markdown", markdown).prop("media", media).prop("isRtl", isRtl).prop("skipEntityDetection", skipEntityDetection).toString()
+}
+
+/**
+ * Describes a media element embedded in an outgoing rich message.
+ * @param id Unique identifier of the media used in a tg://photo?id=, tg://video?id=, or tg://audio?id= link. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
+ * @param media The media to be sent. Everything except the media itself and its properties is ignored.
+ */
+@Serializable
+data class InputRichMessageMedia(
+    val id: String,
+    val media: InputRichMedia,
+) {
+    override fun toString() = DebugStringBuilder("InputRichMessageMedia").prop("id", id).prop("media", media).toString()
+}
+
+/**
+ * This object represents a rich formatted text. Currently, it can be either a String for plain text, an Array of RichText, or any of the following types:
+ * - [RichTextPlain]
+ * - [RichTextSequence]
+ * - [RichTextBold]
+ * - [RichTextItalic]
+ * - [RichTextUnderline]
+ * - [RichTextStrikethrough]
+ * - [RichTextSpoiler]
+ * - [RichTextDateTime]
+ * - [RichTextTextMention]
+ * - [RichTextSubscript]
+ * - [RichTextSuperscript]
+ * - [RichTextMarked]
+ * - [RichTextCode]
+ * - [RichTextCustomEmoji]
+ * - [RichTextMathematicalExpression]
+ * - [RichTextUrl]
+ * - [RichTextEmailAddress]
+ * - [RichTextPhoneNumber]
+ * - [RichTextBankCardNumber]
+ * - [RichTextMention]
+ * - [RichTextHashtag]
+ * - [RichTextCashtag]
+ * - [RichTextBotCommand]
+ * - [RichTextAnchor]
+ * - [RichTextAnchorLink]
+ * - [RichTextReference]
+ * - [RichTextReferenceLink]
+ */
+@Serializable(with = RichTextSerializer::class)
+sealed interface RichText
+
+/**
+ * Plain text without formatting, represented as a bare JSON string.
+ */
+@Serializable
+@JvmInline
+value class RichTextPlain(val value: String) : RichText {
+    override fun toString(): String = "RichTextPlain(${quoteWhenWhitespace(value)})"
+}
+
+/**
+ * A sequence of rich texts, represented as a JSON array. Nesting is allowed.
+ */
+@Serializable
+@JvmInline
+value class RichTextSequence(val value: List<RichText>) : RichText {
+    override fun toString(): String = "RichTextSequence($value)"
+}
+
+object RichTextSerializer : KSerializer<RichText> {
+    private val plainSerializer get() = String.serializer()
+    private val sequenceSerializer get() = ListSerializer(RichText.serializer())
+
+    override val descriptor: SerialDescriptor get() = JsonElement.serializer().descriptor
+
+    override fun deserialize(decoder: Decoder): RichText {
+        val input = decoder as? JsonDecoder ?: error("RichText can only be deserialized from JSON")
+        return when (val element = input.decodeJsonElement()) {
+            is JsonPrimitive -> RichTextPlain(element.content)
+            is JsonArray -> RichTextSequence(input.json.decodeFromJsonElement(sequenceSerializer, element))
+            is JsonObject -> {
+                val marker = element["type"]?.jsonPrimitive?.content
+                    ?: error("Missing 'type' in RichText object: $element")
+                val serializer = when (marker) {
+                    "bold" -> RichTextBold.serializer()
+                    "italic" -> RichTextItalic.serializer()
+                    "underline" -> RichTextUnderline.serializer()
+                    "strikethrough" -> RichTextStrikethrough.serializer()
+                    "spoiler" -> RichTextSpoiler.serializer()
+                    "date_time" -> RichTextDateTime.serializer()
+                    "text_mention" -> RichTextTextMention.serializer()
+                    "subscript" -> RichTextSubscript.serializer()
+                    "superscript" -> RichTextSuperscript.serializer()
+                    "marked" -> RichTextMarked.serializer()
+                    "code" -> RichTextCode.serializer()
+                    "custom_emoji" -> RichTextCustomEmoji.serializer()
+                    "mathematical_expression" -> RichTextMathematicalExpression.serializer()
+                    "url" -> RichTextUrl.serializer()
+                    "email_address" -> RichTextEmailAddress.serializer()
+                    "phone_number" -> RichTextPhoneNumber.serializer()
+                    "bank_card_number" -> RichTextBankCardNumber.serializer()
+                    "mention" -> RichTextMention.serializer()
+                    "hashtag" -> RichTextHashtag.serializer()
+                    "cashtag" -> RichTextCashtag.serializer()
+                    "bot_command" -> RichTextBotCommand.serializer()
+                    "anchor" -> RichTextAnchor.serializer()
+                    "anchor_link" -> RichTextAnchorLink.serializer()
+                    "reference" -> RichTextReference.serializer()
+                    "reference_link" -> RichTextReferenceLink.serializer()
+                    else -> error("Unknown RichText type: $marker")
+                }
+                input.json.decodeFromJsonElement(serializer, element)
+            }
+        }
+    }
+
+    override fun serialize(encoder: Encoder, value: RichText) {
+        val output = encoder as? JsonEncoder ?: error("RichText can only be serialized to JSON")
+        when (value) {
+            is RichTextPlain -> output.encodeSerializableValue(plainSerializer, value.value)
+            is RichTextSequence -> output.encodeSerializableValue(sequenceSerializer, value.value)
+            is RichTextBold -> output.encodeSerializableValue(RichTextBold.serializer(), value)
+            is RichTextItalic -> output.encodeSerializableValue(RichTextItalic.serializer(), value)
+            is RichTextUnderline -> output.encodeSerializableValue(RichTextUnderline.serializer(), value)
+            is RichTextStrikethrough -> output.encodeSerializableValue(RichTextStrikethrough.serializer(), value)
+            is RichTextSpoiler -> output.encodeSerializableValue(RichTextSpoiler.serializer(), value)
+            is RichTextDateTime -> output.encodeSerializableValue(RichTextDateTime.serializer(), value)
+            is RichTextTextMention -> output.encodeSerializableValue(RichTextTextMention.serializer(), value)
+            is RichTextSubscript -> output.encodeSerializableValue(RichTextSubscript.serializer(), value)
+            is RichTextSuperscript -> output.encodeSerializableValue(RichTextSuperscript.serializer(), value)
+            is RichTextMarked -> output.encodeSerializableValue(RichTextMarked.serializer(), value)
+            is RichTextCode -> output.encodeSerializableValue(RichTextCode.serializer(), value)
+            is RichTextCustomEmoji -> output.encodeSerializableValue(RichTextCustomEmoji.serializer(), value)
+            is RichTextMathematicalExpression -> output.encodeSerializableValue(RichTextMathematicalExpression.serializer(), value)
+            is RichTextUrl -> output.encodeSerializableValue(RichTextUrl.serializer(), value)
+            is RichTextEmailAddress -> output.encodeSerializableValue(RichTextEmailAddress.serializer(), value)
+            is RichTextPhoneNumber -> output.encodeSerializableValue(RichTextPhoneNumber.serializer(), value)
+            is RichTextBankCardNumber -> output.encodeSerializableValue(RichTextBankCardNumber.serializer(), value)
+            is RichTextMention -> output.encodeSerializableValue(RichTextMention.serializer(), value)
+            is RichTextHashtag -> output.encodeSerializableValue(RichTextHashtag.serializer(), value)
+            is RichTextCashtag -> output.encodeSerializableValue(RichTextCashtag.serializer(), value)
+            is RichTextBotCommand -> output.encodeSerializableValue(RichTextBotCommand.serializer(), value)
+            is RichTextAnchor -> output.encodeSerializableValue(RichTextAnchor.serializer(), value)
+            is RichTextAnchorLink -> output.encodeSerializableValue(RichTextAnchorLink.serializer(), value)
+            is RichTextReference -> output.encodeSerializableValue(RichTextReference.serializer(), value)
+            is RichTextReferenceLink -> output.encodeSerializableValue(RichTextReferenceLink.serializer(), value)
+        }
+    }
+}
+/**
+ * A bold text.
+ * @param type Type of the rich text, always “bold”
+ * @param text The text
+ */
+@Serializable
+data class RichTextBold(
+    val type: String,
+    val text: RichText,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextBold").prop("type", type).prop("text", text).toString()
+}
+
+/**
+ * An italicized text.
+ * @param type Type of the rich text, always “italic”
+ * @param text The text
+ */
+@Serializable
+data class RichTextItalic(
+    val type: String,
+    val text: RichText,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextItalic").prop("type", type).prop("text", text).toString()
+}
+
+/**
+ * An underlined text.
+ * @param type Type of the rich text, always “underline”
+ * @param text The text
+ */
+@Serializable
+data class RichTextUnderline(
+    val type: String,
+    val text: RichText,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextUnderline").prop("type", type).prop("text", text).toString()
+}
+
+/**
+ * A strikethrough text.
+ * @param type Type of the rich text, always “strikethrough”
+ * @param text The text
+ */
+@Serializable
+data class RichTextStrikethrough(
+    val type: String,
+    val text: RichText,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextStrikethrough").prop("type", type).prop("text", text).toString()
+}
+
+/**
+ * A text covered by a spoiler.
+ * @param type Type of the rich text, always “spoiler”
+ * @param text The text
+ */
+@Serializable
+data class RichTextSpoiler(
+    val type: String,
+    val text: RichText,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextSpoiler").prop("type", type).prop("text", text).toString()
+}
+
+/**
+ * Formatted date and time.
+ * @param type Type of the rich text, always “date_time”
+ * @param text The text
+ * @param unixTime The Unix time associated with the entity
+ * @param dateTimeFormat The string that defines the formatting of the date and time. See date-time entity formatting for more details.
+ */
+@Serializable
+data class RichTextDateTime(
+    val type: String,
+    val text: RichText,
+    val unixTime: Long,
+    val dateTimeFormat: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextDateTime").prop("type", type).prop("text", text).prop("unixTime", unixTime).prop("dateTimeFormat", dateTimeFormat).toString()
+}
+
+/**
+ * A mention of a Telegram user by their identifier.
+ * @param type Type of the rich text, always “text_mention”
+ * @param text The text
+ * @param user The mentioned user
+ */
+@Serializable
+data class RichTextTextMention(
+    val type: String,
+    val text: RichText,
+    val user: User,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextTextMention").prop("type", type).prop("text", text).prop("user", user).toString()
+}
+
+/**
+ * A subscript text.
+ * @param type Type of the rich text, always “subscript”
+ * @param text The text
+ */
+@Serializable
+data class RichTextSubscript(
+    val type: String,
+    val text: RichText,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextSubscript").prop("type", type).prop("text", text).toString()
+}
+
+/**
+ * A superscript text.
+ * @param type Type of the rich text, always “superscript”
+ * @param text The text
+ */
+@Serializable
+data class RichTextSuperscript(
+    val type: String,
+    val text: RichText,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextSuperscript").prop("type", type).prop("text", text).toString()
+}
+
+/**
+ * A marked text.
+ * @param type Type of the rich text, always “marked”
+ * @param text The text
+ */
+@Serializable
+data class RichTextMarked(
+    val type: String,
+    val text: RichText,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextMarked").prop("type", type).prop("text", text).toString()
+}
+
+/**
+ * A monowidth text.
+ * @param type Type of the rich text, always “code”
+ * @param text The text
+ */
+@Serializable
+data class RichTextCode(
+    val type: String,
+    val text: RichText,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextCode").prop("type", type).prop("text", text).toString()
+}
+
+/**
+ * A custom emoji.
+ * @param type Type of the rich text, always “custom_emoji”
+ * @param customEmojiId Unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker.
+ * @param alternativeText Alternative emoji for the custom emoji
+ */
+@Serializable
+data class RichTextCustomEmoji(
+    val type: String,
+    val customEmojiId: CustomEmojiId,
+    val alternativeText: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextCustomEmoji").prop("type", type).prop("customEmojiId", customEmojiId).prop("alternativeText", alternativeText).toString()
+}
+
+/**
+ * A mathematical expression.
+ * @param type Type of the rich text, always “mathematical_expression”
+ * @param expression The expression in LaTeX format
+ */
+@Serializable
+data class RichTextMathematicalExpression(
+    val type: String,
+    val expression: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextMathematicalExpression").prop("type", type).prop("expression", expression).toString()
+}
+
+/**
+ * A text with a link.
+ * @param type Type of the rich text, always “url”
+ * @param text The text
+ * @param url URL of the link
+ */
+@Serializable
+data class RichTextUrl(
+    val type: String,
+    val text: RichText,
+    val url: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextUrl").prop("type", type).prop("text", text).prop("url", url).toString()
+}
+
+/**
+ * A text with an email address.
+ * @param type Type of the rich text, always “email_address”
+ * @param text The text
+ * @param emailAddress The email address
+ */
+@Serializable
+data class RichTextEmailAddress(
+    val type: String,
+    val text: RichText,
+    val emailAddress: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextEmailAddress").prop("type", type).prop("text", text).prop("emailAddress", emailAddress).toString()
+}
+
+/**
+ * A text with a phone number.
+ * @param type Type of the rich text, always “phone_number”
+ * @param text The text
+ * @param phoneNumber The phone number
+ */
+@Serializable
+data class RichTextPhoneNumber(
+    val type: String,
+    val text: RichText,
+    val phoneNumber: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextPhoneNumber").prop("type", type).prop("text", text).prop("phoneNumber", phoneNumber).toString()
+}
+
+/**
+ * A text with a bank card number.
+ * @param type Type of the rich text, always “bank_card_number”
+ * @param text The text
+ * @param bankCardNumber The bank card number
+ */
+@Serializable
+data class RichTextBankCardNumber(
+    val type: String,
+    val text: RichText,
+    val bankCardNumber: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextBankCardNumber").prop("type", type).prop("text", text).prop("bankCardNumber", bankCardNumber).toString()
+}
+
+/**
+ * A mention by a username.
+ * @param type Type of the rich text, always “mention”
+ * @param text The text
+ * @param username The username
+ */
+@Serializable
+data class RichTextMention(
+    val type: String,
+    val text: RichText,
+    val username: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextMention").prop("type", type).prop("text", text).prop("username", username).toString()
+}
+
+/**
+ * A hashtag.
+ * @param type Type of the rich text, always “hashtag”
+ * @param text The text
+ * @param hashtag The hashtag
+ */
+@Serializable
+data class RichTextHashtag(
+    val type: String,
+    val text: RichText,
+    val hashtag: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextHashtag").prop("type", type).prop("text", text).prop("hashtag", hashtag).toString()
+}
+
+/**
+ * A cashtag.
+ * @param type Type of the rich text, always “cashtag”
+ * @param text The text
+ * @param cashtag The cashtag
+ */
+@Serializable
+data class RichTextCashtag(
+    val type: String,
+    val text: RichText,
+    val cashtag: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextCashtag").prop("type", type).prop("text", text).prop("cashtag", cashtag).toString()
+}
+
+/**
+ * A bot command.
+ * @param type Type of the rich text, always “bot_command”
+ * @param text The text
+ * @param botCommand The bot command
+ */
+@Serializable
+data class RichTextBotCommand(
+    val type: String,
+    val text: RichText,
+    val botCommand: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextBotCommand").prop("type", type).prop("text", text).prop("botCommand", botCommand).toString()
+}
+
+/**
+ * An anchor.
+ * @param type Type of the rich text, always “anchor”
+ * @param name The name of the anchor
+ */
+@Serializable
+data class RichTextAnchor(
+    val type: String,
+    val name: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextAnchor").prop("type", type).prop("name", name).toString()
+}
+
+/**
+ * A link to an anchor.
+ * @param type Type of the rich text, always “anchor_link”
+ * @param text The link text
+ * @param anchorName The name of the anchor. If the name is empty, then the link brings back to the top of the message.
+ */
+@Serializable
+data class RichTextAnchorLink(
+    val type: String,
+    val text: RichText,
+    val anchorName: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextAnchorLink").prop("type", type).prop("text", text).prop("anchorName", anchorName).toString()
+}
+
+/**
+ * A reference.
+ * @param type Type of the rich text, always “reference”
+ * @param text Text of the reference
+ * @param name The name of the reference
+ */
+@Serializable
+data class RichTextReference(
+    val type: String,
+    val text: RichText,
+    val name: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextReference").prop("type", type).prop("text", text).prop("name", name).toString()
+}
+
+/**
+ * A link to a reference.
+ * @param type Type of the rich text, always “reference_link”
+ * @param text The link text
+ * @param referenceName The name of the reference
+ */
+@Serializable
+data class RichTextReferenceLink(
+    val type: String,
+    val text: RichText,
+    val referenceName: String,
+) : RichText {
+    override fun toString() = DebugStringBuilder("RichTextReferenceLink").prop("type", type).prop("text", text).prop("referenceName", referenceName).toString()
+}
+
+/**
+ * Caption of a rich formatted block.
+ * @param text Block caption
+ * @param credit Optional. Block credit which corresponds to the HTML tag <cite>
+ */
+@Serializable
+data class RichBlockCaption(
+    val text: RichText,
+    val credit: RichText? = null,
+) {
+    override fun toString() = DebugStringBuilder("RichBlockCaption").prop("text", text).prop("credit", credit).toString()
+}
+
+/**
+ * Cell in a table.
+ * @param align Horizontal cell content alignment. Currently, must be one of “left”, “center”, or “right”.
+ * @param valign Vertical cell content alignment. Currently, must be one of “top”, “middle”, or “bottom”.
+ * @param text Optional. Text in the cell. If omitted, then the cell is invisible.
+ * @param isHeader Optional. True, if the cell is a header cell
+ * @param colspan Optional. The number of columns the cell spans if it is bigger than 1
+ * @param rowspan Optional. The number of rows the cell spans if it is bigger than 1
+ */
+@Serializable
+data class RichBlockTableCell(
+    val align: String,
+    val valign: String,
+    val text: RichText? = null,
+    val isHeader: Boolean? = null,
+    val colspan: Long? = null,
+    val rowspan: Long? = null,
+) {
+    override fun toString() = DebugStringBuilder("RichBlockTableCell").prop("align", align).prop("valign", valign).prop("text", text).prop("isHeader", isHeader).prop("colspan", colspan).prop("rowspan", rowspan).toString()
+}
+
+/**
+ * An item of a list.
+ * @param label Label of the item
+ * @param blocks The content of the item
+ * @param hasCheckbox Optional. True, if the item has a checkbox
+ * @param isChecked Optional. True, if the item has a checked checkbox
+ * @param value Optional. For ordered lists, the numeric value of the item label
+ * @param type Optional. For ordered lists, the type of the item label; must be one of “a” for lowercase letters, “A” for uppercase letters, “i” for lowercase Roman numerals, “I” for uppercase Roman numerals, or “1” for decimal numbers
+ */
+@Serializable
+data class RichBlockListItem(
+    val label: String,
+    val blocks: List<RichBlock>,
+    val hasCheckbox: Boolean? = null,
+    val isChecked: Boolean? = null,
+    val value: Long? = null,
+    val type: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("RichBlockListItem").prop("label", label).prop("blocks", blocks).prop("hasCheckbox", hasCheckbox).prop("isChecked", isChecked).prop("value", value).prop("type", type).toString()
+}
+
+/**
+ * This object represents a block in a rich formatted message. Currently, it can be any of the following types:
+ * - [RichBlockParagraph]
+ * - [RichBlockSectionHeading]
+ * - [RichBlockPreformatted]
+ * - [RichBlockFooter]
+ * - [RichBlockDivider]
+ * - [RichBlockMathematicalExpression]
+ * - [RichBlockAnchor]
+ * - [RichBlockList]
+ * - [RichBlockBlockQuotation]
+ * - [RichBlockPullQuotation]
+ * - [RichBlockCollage]
+ * - [RichBlockSlideshow]
+ * - [RichBlockTable]
+ * - [RichBlockDetails]
+ * - [RichBlockMap]
+ * - [RichBlockAnimation]
+ * - [RichBlockAudio]
+ * - [RichBlockPhoto]
+ * - [RichBlockVideo]
+ * - [RichBlockVoiceNote]
+ * - [RichBlockThinking]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface RichBlock
+
+/**
+ * A text paragraph, corresponding to the HTML tag <p>.
+ * @param text Text of the block
+ */
+@Serializable
+@SerialName("paragraph")
+data class RichBlockParagraph(
+    val text: RichText,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockParagraph").prop("text", text).toString()
+}
+
+/**
+ * A section heading, corresponding to the HTML tags <h1>, <h2>, <h3>, <h4>, <h5>, or <h6>.
+ * @param text Text of the block
+ * @param size Relative size of the text font; 1-6, 1 is the largest, 6 is the smallest
+ */
+@Serializable
+@SerialName("heading")
+data class RichBlockSectionHeading(
+    val text: RichText,
+    val size: Long,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockSectionHeading").prop("text", text).prop("size", size).toString()
+}
+
+/**
+ * A preformatted text block, corresponding to the nested HTML tags <pre> and <code>.
+ * @param text Text of the block
+ * @param language Optional. The programming language of the text
+ */
+@Serializable
+@SerialName("pre")
+data class RichBlockPreformatted(
+    val text: RichText,
+    val language: String? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockPreformatted").prop("text", text).prop("language", language).toString()
+}
+
+/**
+ * A footer, corresponding to the HTML tag <footer>.
+ * @param text Text of the block
+ */
+@Serializable
+@SerialName("footer")
+data class RichBlockFooter(
+    val text: RichText,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockFooter").prop("text", text).toString()
+}
+
+/**
+ * A divider, corresponding to the HTML tag <hr/>.
+ */
+@Serializable
+@SerialName("divider")
+data object RichBlockDivider : RichBlock
+
+/**
+ * A block with a mathematical expression in LaTeX format, corresponding to the custom HTML tag <tg-math-block>.
+ * @param expression The mathematical expression in LaTeX format
+ */
+@Serializable
+@SerialName("mathematical_expression")
+data class RichBlockMathematicalExpression(
+    val expression: String,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockMathematicalExpression").prop("expression", expression).toString()
+}
+
+/**
+ * A block with an anchor, corresponding to the HTML tag <a> with the attribute name.
+ * @param name The name of the anchor
+ */
+@Serializable
+@SerialName("anchor")
+data class RichBlockAnchor(
+    val name: String,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockAnchor").prop("name", name).toString()
+}
+
+/**
+ * A list of blocks, corresponding to the HTML tag <ul> or <ol> with multiple nested tags <li>.
+ * @param items Items of the list
+ */
+@Serializable
+@SerialName("list")
+data class RichBlockList(
+    val items: List<RichBlockListItem>,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockList").prop("items", items).toString()
+}
+
+/**
+ * A block quotation, corresponding to the HTML tag <blockquote>.
+ * @param blocks Content of the block
+ * @param credit Optional. Credit of the block
+ */
+@Serializable
+@SerialName("blockquote")
+data class RichBlockBlockQuotation(
+    val blocks: List<RichBlock>,
+    val credit: RichText? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockBlockQuotation").prop("blocks", blocks).prop("credit", credit).toString()
+}
+
+/**
+ * A quotation with centered text, loosely corresponding to the HTML tag <aside>.
+ * @param text Text of the block
+ * @param credit Optional. Credit of the block
+ */
+@Serializable
+@SerialName("pullquote")
+data class RichBlockPullQuotation(
+    val text: RichText,
+    val credit: RichText? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockPullQuotation").prop("text", text).prop("credit", credit).toString()
+}
+
+/**
+ * A collage, corresponding to the custom HTML tag <tg-collage>.
+ * @param blocks Elements of the collage
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("collage")
+data class RichBlockCollage(
+    val blocks: List<RichBlock>,
+    val caption: RichBlockCaption? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockCollage").prop("blocks", blocks).prop("caption", caption).toString()
+}
+
+/**
+ * A slideshow, corresponding to the custom HTML tag <tg-slideshow>.
+ * @param blocks Elements of the slideshow
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("slideshow")
+data class RichBlockSlideshow(
+    val blocks: List<RichBlock>,
+    val caption: RichBlockCaption? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockSlideshow").prop("blocks", blocks).prop("caption", caption).toString()
+}
+
+/**
+ * A table, corresponding to the HTML tag <table>.
+ * @param cells Cells of the table
+ * @param isBordered Optional. True, if the table has borders
+ * @param isStriped Optional. True, if the table is striped
+ * @param caption Optional. Caption of the table
+ */
+@Serializable
+@SerialName("table")
+data class RichBlockTable(
+    val cells: List<List<RichBlockTableCell>>,
+    val isBordered: Boolean? = null,
+    val isStriped: Boolean? = null,
+    val caption: RichText? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockTable").prop("cells", cells).prop("isBordered", isBordered).prop("isStriped", isStriped).prop("caption", caption).toString()
+}
+
+/**
+ * An expandable block for details disclosure, corresponding to the HTML tag <details>.
+ * @param summary Always shown summary of the block
+ * @param blocks Content of the block
+ * @param isOpen Optional. True, if the content of the block is visible by default
+ */
+@Serializable
+@SerialName("details")
+data class RichBlockDetails(
+    val summary: RichText,
+    val blocks: List<RichBlock>,
+    val isOpen: Boolean? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockDetails").prop("summary", summary).prop("blocks", blocks).prop("isOpen", isOpen).toString()
+}
+
+/**
+ * A block with a map, corresponding to the custom HTML tag <tg-map>.
+ * @param location Location of the center of the map
+ * @param zoom Map zoom level; 13-20
+ * @param width Expected width of the map
+ * @param height Expected height of the map
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("map")
+data class RichBlockMap(
+    val location: Location,
+    val zoom: Long,
+    val width: Long,
+    val height: Long,
+    val caption: RichBlockCaption? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockMap").prop("location", location).prop("zoom", zoom).prop("width", width).prop("height", height).prop("caption", caption).toString()
+}
+
+/**
+ * A block with an animation, corresponding to the HTML tag <video>.
+ * @param animation The animation
+ * @param hasSpoiler Optional. True, if the media preview is covered by a spoiler animation
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("animation")
+data class RichBlockAnimation(
+    val animation: Animation,
+    val hasSpoiler: Boolean? = null,
+    val caption: RichBlockCaption? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockAnimation").prop("animation", animation).prop("hasSpoiler", hasSpoiler).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a music file, corresponding to the HTML tag <audio>.
+ * @param audio The audio
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("audio")
+data class RichBlockAudio(
+    val audio: Audio,
+    val caption: RichBlockCaption? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockAudio").prop("audio", audio).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a photo, corresponding to the HTML tag <img>.
+ * @param photo Available sizes of the photo
+ * @param hasSpoiler Optional. True, if the media preview is covered by a spoiler animation
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("photo")
+data class RichBlockPhoto(
+    val photo: List<PhotoSize>,
+    val hasSpoiler: Boolean? = null,
+    val caption: RichBlockCaption? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockPhoto").prop("photo", photo).prop("hasSpoiler", hasSpoiler).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a video, corresponding to the HTML tag <video>.
+ * @param video The video
+ * @param hasSpoiler Optional. True, if the media preview is covered by a spoiler animation
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("video")
+data class RichBlockVideo(
+    val video: Video,
+    val hasSpoiler: Boolean? = null,
+    val caption: RichBlockCaption? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockVideo").prop("video", video).prop("hasSpoiler", hasSpoiler).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a voice note, corresponding to the HTML tag <audio>.
+ * @param voiceNote The voice note
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("voice_note")
+data class RichBlockVoiceNote(
+    val voiceNote: Voice,
+    val caption: RichBlockCaption? = null,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockVoiceNote").prop("voiceNote", voiceNote).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a “Thinking…” placeholder, corresponding to the custom HTML tag <tg-thinking>. The block may be used only in sendRichMessageDraft, therefore it can't be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.
+ * @param text Text of the block. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.
+ */
+@Serializable
+@SerialName("thinking")
+data class RichBlockThinking(
+    val text: RichText,
+) : RichBlock {
+    override fun toString() = DebugStringBuilder("RichBlockThinking").prop("text", text).toString()
+}
+
+/**
+ * An item of a list to be sent.
+ * @param blocks The content of the item
+ * @param hasCheckbox Optional. Pass True if the item has a checkbox
+ * @param isChecked Optional. Pass True if the item has a checked checkbox
+ * @param value Optional. For ordered lists, the numeric value of the item label
+ * @param type Optional. For ordered lists, the type of the item label; must be one of “a” for lowercase letters, “A” for uppercase letters, “i” for lowercase Roman numerals, “I” for uppercase Roman numerals, or “1” for decimal numbers
+ */
+@Serializable
+data class InputRichBlockListItem(
+    val blocks: List<InputRichBlock>,
+    val hasCheckbox: Boolean? = null,
+    val isChecked: Boolean? = null,
+    val value: Long? = null,
+    val type: String? = null,
+) {
+    override fun toString() = DebugStringBuilder("InputRichBlockListItem").prop("blocks", blocks).prop("hasCheckbox", hasCheckbox).prop("isChecked", isChecked).prop("value", value).prop("type", type).toString()
+}
+
+/**
+ * This object represents a block in a rich formatted message to be sent. Currently, it can be any of the following types:
+ * - [InputRichBlockParagraph]
+ * - [InputRichBlockSectionHeading]
+ * - [InputRichBlockPreformatted]
+ * - [InputRichBlockFooter]
+ * - [InputRichBlockDivider]
+ * - [InputRichBlockMathematicalExpression]
+ * - [InputRichBlockAnchor]
+ * - [InputRichBlockList]
+ * - [InputRichBlockBlockQuotation]
+ * - [InputRichBlockPullQuotation]
+ * - [InputRichBlockCollage]
+ * - [InputRichBlockSlideshow]
+ * - [InputRichBlockTable]
+ * - [InputRichBlockDetails]
+ * - [InputRichBlockMap]
+ * - [InputRichBlockAnimation]
+ * - [InputRichBlockAudio]
+ * - [InputRichBlockPhoto]
+ * - [InputRichBlockVideo]
+ * - [InputRichBlockVoiceNote]
+ * - [InputRichBlockThinking]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface InputRichBlock
+
+/**
+ * A text paragraph, corresponding to the HTML tag <p>.
+ * @param text Text of the block
+ */
+@Serializable
+@SerialName("paragraph")
+data class InputRichBlockParagraph(
+    val text: RichText,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockParagraph").prop("text", text).toString()
+}
+
+/**
+ * A section heading, corresponding to the HTML tags <h1>, <h2>, <h3>, <h4>, <h5>, or <h6>.
+ * @param text Text of the block
+ * @param size Relative size of the text font; 1-6, 1 is the largest, 6 is the smallest
+ */
+@Serializable
+@SerialName("heading")
+data class InputRichBlockSectionHeading(
+    val text: RichText,
+    val size: Long,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockSectionHeading").prop("text", text).prop("size", size).toString()
+}
+
+/**
+ * A preformatted text block, corresponding to the nested HTML tags <pre> and <code>.
+ * @param text Text of the block
+ * @param language Optional. The programming language of the text
+ */
+@Serializable
+@SerialName("pre")
+data class InputRichBlockPreformatted(
+    val text: RichText,
+    val language: String? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockPreformatted").prop("text", text).prop("language", language).toString()
+}
+
+/**
+ * A footer, corresponding to the HTML tag <footer>.
+ * @param text Text of the block
+ */
+@Serializable
+@SerialName("footer")
+data class InputRichBlockFooter(
+    val text: RichText,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockFooter").prop("text", text).toString()
+}
+
+/**
+ * A divider, corresponding to the HTML tag <hr/>.
+ */
+@Serializable
+@SerialName("divider")
+data object InputRichBlockDivider : InputRichBlock
+
+/**
+ * A block with a mathematical expression in LaTeX format, corresponding to the custom HTML tag <tg-math-block>.
+ * @param expression The mathematical expression in LaTeX format
+ */
+@Serializable
+@SerialName("mathematical_expression")
+data class InputRichBlockMathematicalExpression(
+    val expression: String,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockMathematicalExpression").prop("expression", expression).toString()
+}
+
+/**
+ * A block with an anchor, corresponding to the HTML tag <a> with the attribute name.
+ * @param name The name of the anchor
+ */
+@Serializable
+@SerialName("anchor")
+data class InputRichBlockAnchor(
+    val name: String,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockAnchor").prop("name", name).toString()
+}
+
+/**
+ * A list of blocks, corresponding to the HTML tag <ul> or <ol> with multiple nested tags <li>.
+ * @param items Items of the list
+ */
+@Serializable
+@SerialName("list")
+data class InputRichBlockList(
+    val items: List<InputRichBlockListItem>,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockList").prop("items", items).toString()
+}
+
+/**
+ * A block quotation, corresponding to the HTML tag <blockquote>.
+ * @param blocks Content of the block
+ * @param credit Optional. Credit of the block
+ */
+@Serializable
+@SerialName("blockquote")
+data class InputRichBlockBlockQuotation(
+    val blocks: List<InputRichBlock>,
+    val credit: RichText? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockBlockQuotation").prop("blocks", blocks).prop("credit", credit).toString()
+}
+
+/**
+ * A quotation with centered text, loosely corresponding to the HTML tag <aside>.
+ * @param text Text of the block
+ * @param credit Optional. Credit of the block
+ */
+@Serializable
+@SerialName("pullquote")
+data class InputRichBlockPullQuotation(
+    val text: RichText,
+    val credit: RichText? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockPullQuotation").prop("text", text).prop("credit", credit).toString()
+}
+
+/**
+ * A collage, corresponding to the custom HTML tag <tg-collage>.
+ * @param blocks Elements of the collage
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("collage")
+data class InputRichBlockCollage(
+    val blocks: List<InputRichBlock>,
+    val caption: RichBlockCaption? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockCollage").prop("blocks", blocks).prop("caption", caption).toString()
+}
+
+/**
+ * A slideshow, corresponding to the custom HTML tag <tg-slideshow>.
+ * @param blocks Elements of the slideshow
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("slideshow")
+data class InputRichBlockSlideshow(
+    val blocks: List<InputRichBlock>,
+    val caption: RichBlockCaption? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockSlideshow").prop("blocks", blocks).prop("caption", caption).toString()
+}
+
+/**
+ * A table, corresponding to the HTML tag <table>.
+ * @param cells Cells of the table
+ * @param isBordered Optional. Pass True if the table has borders
+ * @param isStriped Optional. Pass True if the table is striped
+ * @param caption Optional. Caption of the table
+ */
+@Serializable
+@SerialName("table")
+data class InputRichBlockTable(
+    val cells: List<List<RichBlockTableCell>>,
+    val isBordered: Boolean? = null,
+    val isStriped: Boolean? = null,
+    val caption: RichText? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockTable").prop("cells", cells).prop("isBordered", isBordered).prop("isStriped", isStriped).prop("caption", caption).toString()
+}
+
+/**
+ * An expandable block for details disclosure, corresponding to the HTML tag <details>.
+ * @param summary Always shown summary of the block
+ * @param blocks Content of the block
+ * @param isOpen Optional. Pass True if the content of the block is visible by default
+ */
+@Serializable
+@SerialName("details")
+data class InputRichBlockDetails(
+    val summary: RichText,
+    val blocks: List<InputRichBlock>,
+    val isOpen: Boolean? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockDetails").prop("summary", summary).prop("blocks", blocks).prop("isOpen", isOpen).toString()
+}
+
+/**
+ * A block with a map, corresponding to the custom HTML tag <tg-map>. The map's width and height must not exceed 10000 in total. The width and height ratio must be at most 20.
+ * @param location Location of the center of the map
+ * @param zoom Map zoom level; 0-24
+ * @param width Map width; 0-10000
+ * @param height Map height; 0-10000
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("map")
+data class InputRichBlockMap(
+    val location: Location,
+    val zoom: Long,
+    val width: Long,
+    val height: Long,
+    val caption: RichBlockCaption? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockMap").prop("location", location).prop("zoom", zoom).prop("width", width).prop("height", height).prop("caption", caption).toString()
+}
+
+/**
+ * A block with an animation, corresponding to the HTML tag <video>.
+ * @param animation The animation. Caption is ignored.
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("animation")
+data class InputRichBlockAnimation(
+    val animation: InputMediaAnimation,
+    val caption: RichBlockCaption? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockAnimation").prop("animation", animation).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a music file, corresponding to the HTML tag <audio>.
+ * @param audio The audio. Caption is ignored.
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("audio")
+data class InputRichBlockAudio(
+    val audio: InputMediaAudio,
+    val caption: RichBlockCaption? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockAudio").prop("audio", audio).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a photo, corresponding to the HTML tag <img>.
+ * @param photo The photo. Caption is ignored.
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("photo")
+data class InputRichBlockPhoto(
+    val photo: InputMediaPhoto,
+    val caption: RichBlockCaption? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockPhoto").prop("photo", photo).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a video, corresponding to the HTML tag <video>.
+ * @param video The video. Caption is ignored.
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("video")
+data class InputRichBlockVideo(
+    val video: InputMediaVideo,
+    val caption: RichBlockCaption? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockVideo").prop("video", video).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a voice note, corresponding to the HTML tag <audio>.
+ * @param voiceNote The voice note. Caption is ignored.
+ * @param caption Optional. Caption of the block
+ */
+@Serializable
+@SerialName("voice_note")
+data class InputRichBlockVoiceNote(
+    val voiceNote: InputMediaVoiceNote,
+    val caption: RichBlockCaption? = null,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockVoiceNote").prop("voiceNote", voiceNote).prop("caption", caption).toString()
+}
+
+/**
+ * A block with a “Thinking…” placeholder, corresponding to the custom HTML tag <tg-thinking>. The block may be used only in sendRichMessageDraft, therefore it can't be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.
+ * @param text Text of the block. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.
+ */
+@Serializable
+@SerialName("thinking")
+data class InputRichBlockThinking(
+    val text: RichText,
+) : InputRichBlock {
+    override fun toString() = DebugStringBuilder("InputRichBlockThinking").prop("text", text).toString()
+}
+
+/**
  * This object represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results.
  * @param id Unique identifier for this query
  * @param from Sender
  * @param query Text of the query (up to 256 characters)
  * @param offset Offset of the results to be returned, can be controlled by the bot
- * @param chatType Optional. Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat
+ * @param chatType Optional. Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat.
  * @param location Optional. Sender location, only for bots that request user location
  */
 @Serializable
@@ -3971,7 +6105,7 @@ data class InlineQueryResultArticle(
 /**
  * Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
  * @param id Unique identifier for this result, 1-64 bytes
- * @param photoUrl A valid URL of the photo. Photo must be in JPEG format. Photo size must not exceed 5MB
+ * @param photoUrl A valid URL of the photo. Photo must be in JPEG format. Photo size must not exceed 5MB.
  * @param thumbnailUrl URL of the thumbnail for the photo
  * @param photoWidth Optional. Width of the photo
  * @param photoHeight Optional. Height of the photo
@@ -3980,7 +6114,7 @@ data class InlineQueryResultArticle(
  * @param caption Optional. Caption of the photo to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the photo
  */
@@ -4012,12 +6146,12 @@ data class InlineQueryResultPhoto(
  * @param gifWidth Optional. Width of the GIF
  * @param gifHeight Optional. Height of the GIF
  * @param gifDuration Optional. Duration of the GIF in seconds
- * @param thumbnailMimeType Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
+ * @param thumbnailMimeType Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”.
  * @param title Optional. Title for the result
  * @param caption Optional. Caption of the GIF file to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the GIF animation
  */
@@ -4050,12 +6184,12 @@ data class InlineQueryResultGif(
  * @param mpeg4Width Optional. Video width
  * @param mpeg4Height Optional. Video height
  * @param mpeg4Duration Optional. Video duration in seconds
- * @param thumbnailMimeType Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
+ * @param thumbnailMimeType Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”.
  * @param title Optional. Title for the result
  * @param caption Optional. Caption of the MPEG-4 file to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the video animation
  */
@@ -4092,7 +6226,7 @@ data class InlineQueryResultMpeg4Gif(
  * @param caption Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the video caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
  * @param videoWidth Optional. Video width
  * @param videoHeight Optional. Video height
  * @param videoDuration Optional. Video duration in seconds
@@ -4223,7 +6357,7 @@ data class InlineQueryResultDocument(
  * @param longitude Location longitude in degrees
  * @param title Location title
  * @param horizontalAccuracy Optional. The radius of uncertainty for the location, measured in meters; 0-1500
- * @param livePeriod Optional. Period in seconds during which the location can be updated, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
+ * @param livePeriod Optional. Period in seconds during which the location can be updated, must be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely
  * @param heading Optional. For live locations, a direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param proximityAlertRadius Optional. For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
  * @param replyMarkup Optional. Inline keyboard attached to the message
@@ -4345,7 +6479,7 @@ data class InlineQueryResultGame(
  * @param caption Optional. Caption of the photo to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the photo caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the photo
  */
@@ -4374,7 +6508,7 @@ data class InlineQueryResultCachedPhoto(
  * @param caption Optional. Caption of the GIF file to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the GIF animation
  */
@@ -4402,7 +6536,7 @@ data class InlineQueryResultCachedGif(
  * @param caption Optional. Caption of the MPEG-4 file to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the video animation
  */
@@ -4477,7 +6611,7 @@ data class InlineQueryResultCachedDocument(
  * @param caption Optional. Caption of the video to be sent, 0-1024 characters after entities parsing
  * @param parseMode Optional. Mode for parsing entities in the video caption. See formatting options for more details.
  * @param captionEntities Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
- * @param showCaptionAboveMedia Optional. Pass True, if the caption must be shown above the message media
+ * @param showCaptionAboveMedia Optional. Pass True if the caption must be shown above the message media
  * @param replyMarkup Optional. Inline keyboard attached to the message
  * @param inputMessageContent Optional. Content of the message to be sent instead of the video
  */
@@ -4549,8 +6683,9 @@ data class InlineQueryResultCachedAudio(
 }
 
 /**
- * This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following 5 types:
+ * This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following types:
  * - [InputTextMessageContent]
+ * - [InputRichMessageContent]
  * - [InputLocationMessageContent]
  * - [InputVenueMessageContent]
  * - [InputContactMessageContent]
@@ -4564,6 +6699,7 @@ object InputMessageContentSerializer : JsonContentPolymorphicSerializer<InputMes
         val json = element.jsonObject
         return when {
             "message_text" in json -> InputTextMessageContent.serializer()
+            "rich_message" in json -> InputRichMessageContent.serializer()
             "horizontal_accuracy" in json -> InputLocationMessageContent.serializer()
             "address" in json -> InputVenueMessageContent.serializer()
             "phone_number" in json -> InputContactMessageContent.serializer()
@@ -4591,11 +6727,22 @@ data class InputTextMessageContent(
 }
 
 /**
+ * Represents the content of a rich message to be sent as the result of an inline query.
+ * @param richMessage The message to be sent
+ */
+@Serializable
+data class InputRichMessageContent(
+    val richMessage: InputRichMessage,
+) : InputMessageContent {
+    override fun toString() = DebugStringBuilder("InputRichMessageContent").prop("richMessage", richMessage).toString()
+}
+
+/**
  * Represents the content of a location message to be sent as the result of an inline query.
  * @param latitude Latitude of the location in degrees
  * @param longitude Longitude of the location in degrees
  * @param horizontalAccuracy Optional. The radius of uncertainty for the location, measured in meters; 0-1500
- * @param livePeriod Optional. Period in seconds during which the location can be updated, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
+ * @param livePeriod Optional. Period in seconds during which the location can be updated, must be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely
  * @param heading Optional. For live locations, a direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param proximityAlertRadius Optional. For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
  */
@@ -4662,7 +6809,7 @@ data class InputContactMessageContent(
  * @param prices Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.
  * @param providerToken Optional. Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.
  * @param maxTipAmount Optional. The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.
- * @param suggestedTipAmounts Optional. A JSON-serialized array of suggested amounts of tip in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.
+ * @param suggestedTipAmounts Optional. A JSON-serialized Array of suggested amounts of tip in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.
  * @param providerData Optional. A JSON-serialized object for data about the invoice, which will be shared with the payment provider. A detailed description of the required fields should be provided by the payment provider.
  * @param photoUrl Optional. URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service.
  * @param photoSize Optional. Photo size in bytes
@@ -4719,30 +6866,6 @@ data class ChosenInlineResult(
     val inlineMessageId: InlineMessageId? = null,
 ) {
     override fun toString() = DebugStringBuilder("ChosenInlineResult").prop("resultId", resultId).prop("from", from).prop("query", query).prop("location", location).prop("inlineMessageId", inlineMessageId).toString()
-}
-
-/**
- * Describes an inline message sent by a Web App on behalf of a user.
- * @param inlineMessageId Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message.
- */
-@Serializable
-data class SentWebAppMessage(
-    val inlineMessageId: InlineMessageId? = null,
-) {
-    override fun toString() = DebugStringBuilder("SentWebAppMessage").prop("inlineMessageId", inlineMessageId).toString()
-}
-
-/**
- * Describes an inline message to be sent by a user of a Mini App.
- * @param id Unique identifier of the prepared message
- * @param expirationDate Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used
- */
-@Serializable
-data class PreparedInlineMessage(
-    val id: String,
-    val expirationDate: Long,
-) {
-    override fun toString() = DebugStringBuilder("PreparedInlineMessage").prop("id", id).prop("expirationDate", expirationDate).toString()
 }
 
 /**
@@ -4861,7 +6984,7 @@ data class SuccessfulPayment(
 
 /**
  * This object contains basic information about a refunded payment.
- * @param currency Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. Currently, always “XTR”
+ * @param currency Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. Currently, always “XTR”.
  * @param totalAmount Total refunded price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
  * @param invoicePayload Bot-specified invoice payload
  * @param telegramPaymentChargeId Telegram payment identifier
@@ -5101,8 +7224,8 @@ data object TransactionPartnerOther : TransactionPartner
  * @param id Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.
  * @param amount Integer amount of Telegram Stars transferred by the transaction
  * @param date Date the transaction was created in Unix time
- * @param source Optional. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions
- * @param receiver Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions
+ * @param source Optional. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions.
+ * @param receiver Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions.
  * @param nanostarAmount Optional. The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999
  */
 @Serializable
@@ -5377,10 +7500,10 @@ data class PassportElementErrorUnspecified(
  * This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
  * @param title Title of the game
  * @param description Description of the game
- * @param photo Photo that will be displayed in the game message in chats.
+ * @param photo Photo that will be displayed in the game message in chats
  * @param text Optional. Brief description of the game or high scores included in the game message. Can be automatically edited to include current high scores for the game when the bot calls setGameScore, or manually edited using editMessageText. 0-4096 characters.
  * @param textEntities Optional. Special entities that appear in text, such as usernames, URLs, bot commands, etc.
- * @param animation Optional. Animation that will be displayed in the game message in chats. Upload via BotFather
+ * @param animation Optional. Animation that will be displayed in the game message in chats. Upload via BotFather.
  */
 @Serializable
 data class Game(
@@ -5437,6 +7560,18 @@ object ReplyMarkupSerializer : JsonContentPolymorphicSerializer<ReplyMarkup>(Rep
         }
     }
 }
+
+/**
+ * Media that can be embedded in an outgoing rich message.
+ * - [InputMediaAnimation]
+ * - [InputMediaAudio]
+ * - [InputMediaPhoto]
+ * - [InputMediaVideo]
+ * - [InputMediaVoiceNote]
+ */
+@Serializable
+@JsonClassDiscriminator("type")
+sealed interface InputRichMedia
 
 /**
  * Chat identifier.

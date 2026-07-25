@@ -2,7 +2,10 @@ package me.alllex.tbot.apigen
 
 
 val unionTypesWithExplicitMarker = setOf(
-    "PassportElementError"
+    "PassportElementError",
+    // RichText is serialized by hand rather than by the sealed-class machinery, so the marker
+    // field is not injected for it and has to survive as a real field on each variant.
+    "RichText",
 )
 
 data class MethodVariation(
@@ -348,4 +351,8 @@ val updateListenerEntries = listOf(
     UpdateListenerEntry("MessageReaction", fieldType = "MessageReactionUpdated"),
     UpdateListenerEntry("ChatBoost", fieldType = "ChatBoostUpdated"),
     UpdateListenerEntry("RemovedChatBoost", fieldType = "ChatBoostRemoved"),
+    // Bot API 10.2
+    UpdateListenerEntry("GuestMessage", fieldType = "Message"),
+    UpdateListenerEntry("ManagedBot", fieldType = "ManagedBotUpdated"),
+    UpdateListenerEntry("Subscription", fieldType = "BotSubscriptionUpdated"),
 )

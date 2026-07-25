@@ -74,7 +74,7 @@ tasks.test {
     useJUnitPlatform()
 }
 
-val updateApiSpec by tasks.registering {
+val updateApiSpec = tasks.register("updateApiSpec") {
     group = "telegram"
     val specFile = layout.projectDirectory.file("api-spec/telegram-bot-api.html")
     outputs.file(specFile)
@@ -90,7 +90,7 @@ val updateApiSpec by tasks.registering {
     }
 }
 
-val extractBotApi by tasks.registering(BotApiExtract::class) {
+val extractBotApi = tasks.register<BotApiExtract>("extractBotApi") {
     group = "telegram"
     apiSpecFile = layout.projectDirectory.file("api-spec/telegram-bot-api.html")
     apiArgListFile = layout.projectDirectory.file("api-spec/telegram-bot-api.args.json")
@@ -99,7 +99,7 @@ val extractBotApi by tasks.registering(BotApiExtract::class) {
     mustRunAfter(updateApiSpec)
 }
 
-val generateBotApi by tasks.registering(BotApiGenerate::class) {
+val generateBotApi = tasks.register<BotApiGenerate>("generateBotApi") {
     group = "telegram"
     apiJsonFile = extractBotApi.flatMap { it.outputFile }
     packageName = "me.alllex.tbot.api.model"
@@ -110,7 +110,7 @@ val generateBotApi by tasks.registering(BotApiGenerate::class) {
 tasks.named("apiDump") { mustRunAfter(generateBotApi) }
 tasks.named("apiCheck") { mustRunAfter("apiDump") }
 
-val extractBotApiArgLists by tasks.registering(BotApiArgListExtract::class) {
+val extractBotApiArgLists = tasks.register<BotApiArgListExtract>("extractBotApiArgLists") {
     group = "telegram"
     apiJsonFile = extractBotApi.flatMap { it.outputFile }
     outputFile = layout.projectDirectory.file("api-spec/telegram-bot-api.args.json")
@@ -130,12 +130,12 @@ kotlin.compilerOptions {
     freeCompilerArgs.add("-Xcontext-parameters")
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
+val sourcesJar = tasks.register<Jar>("sourcesJar") {
     this.archiveClassifier = "sources"
     from(sourceSets.main.map { it.allSource })
 }
 
-val javadocJar by tasks.registering(Jar::class) {
+val javadocJar = tasks.register<Jar>("javadocJar") {
     description = "Produce javadoc with Dokka HTML inside"
     from(tasks.dokkaGeneratePublicationHtml)
     archiveClassifier = "javadoc"
@@ -157,9 +157,9 @@ afterEvaluate {
     // Register signatures in afterEvaluate, otherwise the signing plugin creates the signing tasks
     // too early, before all the publications are added.
     signing {
-        val signingKeyId: String? by project
-        val signingKey: String? by project
-        val signingPassword: String? by project
+        val signingKeyId = project.findProperty("signingKeyId") as String?
+        val signingKey = project.findProperty("signingKey") as String?
+        val signingPassword = project.findProperty("signingPassword") as String?
 
         if (signingKeyId != null) {
             useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)

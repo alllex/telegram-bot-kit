@@ -5,12 +5,14 @@ kotlinTarget = "2.0.0"
 kotlinPlugin = "2.4.10"
 kotlinx-coroutines = "1.11.0"
 kotlinx-serialization = "1.11.0"
-ktor = "2.3.7"
-log4j = "2.24.3"
-junit5 = "5.10.0"
-jsoup = "1.21.1"
+ktor = "3.5.1"
+log4j = "2.26.1"
+junit5 = "5.14.4"
+jsoup = "1.22.2"
 parsus = "0.6.1"
-binary-compatibility-validator = "0.18.0"
+slf4j = "2.0.18"
+assertk = "0.28.1"
+binary-compatibility-validator = "0.18.1"
 dokka = "2.2.0"
 nexus-publish = "2.0.0"
 
@@ -26,14 +28,15 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
-slf4j-api = { module = "org.slf4j:slf4j-api", version = "1.7.36" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
-log4j-slf4j-impl = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j" }
+# slf4j2 binding: log4j-slf4j-impl binds slf4j 1.x only and is silently inert against 2.x
+log4j-slf4j-impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
 
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
-assertk-jvm = { module = "com.willowtreeapps.assertk:assertk-jvm", version = "0.26.1" }
+assertk-jvm = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
 
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 parsus-jvm = { module = "me.alllex.parsus:parsus-jvm", version.ref = "parsus" }

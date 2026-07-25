@@ -126,10 +126,6 @@ kotlin.sourceSets.main {
     kotlin.srcDir(generateBotApi)
 }
 
-kotlin.compilerOptions {
-    freeCompilerArgs.add("-Xcontext-parameters")
-}
-
 val sourcesJar = tasks.register<Jar>("sourcesJar") {
     this.archiveClassifier = "sources"
     from(sourceSets.main.map { it.allSource })

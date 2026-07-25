@@ -2,7 +2,7 @@
 jdkTarget = "11"
 jvmToolchain = "21"
 kotlinTarget = "2.0.0"
-kotlinPlugin = "2.1.20"
+kotlinPlugin = "2.4.10"
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization = "1.8.1"
 ktor = "2.3.7"

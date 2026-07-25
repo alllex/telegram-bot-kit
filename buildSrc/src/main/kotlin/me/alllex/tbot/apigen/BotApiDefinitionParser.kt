@@ -12,6 +12,7 @@ import me.alllex.parsus.parser.repeatOneOrMore
 import me.alllex.parsus.token.regexToken
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import org.jsoup.nodes.TextNode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -190,6 +191,15 @@ class BotApiDefinitionParser {
     ): BotApi {
 
         val doc = Jsoup.parse(originalHtml.readText())
+
+        // Telegram renders emoji as <img class="emoji" alt="🎲">. Jsoup's text() ignores the alt
+        // attribute, so emoji would be dropped from descriptions entirely. Substituting the alt
+        // text into the DOM before any text() call both preserves the emoji and makes the output
+        // independent of how a given jsoup version spaces replaced inline elements.
+        for (emojiImg in doc.select("img.emoji")) {
+            emojiImg.replaceWith(TextNode(emojiImg.attr("alt")))
+        }
+
         val devPageContent = doc.select("#dev_page_content").firstOrNull()
             ?: error("Could not find #dev_page_content")
 
@@ -360,7 +370,7 @@ class BotApiDefinitionParser {
             val nameEl = row.child(0)
             val typeEl = row.child(1)
             val descriptionEl = row.child(2)
-            val description = descriptionEl.text().trim() // TODO: replace <img ... alt="😐"> with actual emoji text
+            val description = descriptionEl.text().trim()
             val isOptional = description.startsWith("Optional")
             val serialFieldName = nameEl.text().trim()
             val typeText = typeEl.text().trim()

@@ -16,9 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Bootstrap JVM for Gradle itself, deliberately independent of the build's
-      # toolchain: the foojay resolver provisions the jvmToolchain (21) from the
-      # version catalog, so this does not need to track it.
+      # Bootstrap JVM for Gradle itself, deliberately independent of both the
+      # build's toolchain (jvmToolchain 21, provisioned by the foojay resolver)
+      # and the bytecode release target (jdkTarget 17). It only needs to be new
+      # enough to run Gradle, so it does not need to track either of them.
       - uses: actions/setup-java@v4
         with:
           java-version-file: .github/workflows/.ci-java-version

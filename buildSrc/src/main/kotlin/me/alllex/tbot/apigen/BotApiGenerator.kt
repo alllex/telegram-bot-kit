@@ -409,13 +409,25 @@ class BotApiGenerator {
         appendLine("import kotlinx.serialization.json.*")
         appendLine("import kotlinx.serialization.DeserializationStrategy")
         appendLine("import kotlinx.serialization.ExperimentalSerializationApi")
+        appendLine("import kotlinx.serialization.KSerializer")
         appendLine("import kotlinx.serialization.SerialName")
         appendLine("import kotlinx.serialization.Serializable")
+        appendLine("import kotlinx.serialization.builtins.ListSerializer")
+        appendLine("import kotlinx.serialization.builtins.serializer")
+        appendLine("import kotlinx.serialization.descriptors.SerialDescriptor")
         appendLine("import kotlinx.serialization.encodeToString")
+        appendLine("import kotlinx.serialization.encoding.Decoder")
+        appendLine("import kotlinx.serialization.encoding.Encoder")
         appendLine()
 
         val specialTypes: Map<String, StringBuilder.(BotApiElement) -> Unit> = mapOf(
             "Update" to { generateSourceCodeForUpdate(it) },
+            "RichText" to { el ->
+                val unionTypes = el.unionTypes.orEmpty().map {
+                    typeElements.find { typeElement -> typeElement.name == it } ?: error("Unknown union type: $it")
+                }
+                generateSourceCodeForRichText(el, unionTypes)
+            },
         )
 
         val processedSpecialTypes = mutableSetOf<String>()
@@ -437,7 +449,11 @@ class BotApiGenerator {
             }
         }
 
-        val unprocessedSpecialTypes = specialTypes.keys - processedSpecialTypes
+        // `RichText` only exists from Bot API 10.2 onwards, so its handler is allowed to go unused
+        // against an older spec. Every other special type must be present, otherwise its handler
+        // has silently stopped matching.
+        val optionalSpecialTypes = setOf("RichText")
+        val unprocessedSpecialTypes = specialTypes.keys - processedSpecialTypes - optionalSpecialTypes
         check(unprocessedSpecialTypes.isEmpty()) {
             "Special types not processed: $unprocessedSpecialTypes"
         }
@@ -453,6 +469,117 @@ class BotApiGenerator {
         appendLine("@JvmInline")
         appendLine("value class ${valueType.name}(val value: ${valueType.backingType}) {")
         appendLine("    override fun toString(): String = \"${valueType.name}(\${quoteWhenWhitespace(value)})\"")
+        appendLine("}")
+    }
+
+    /**
+     * Generates `RichText`, whose union includes members that are not objects.
+     *
+     * Every other union in the Bot API is a set of JSON objects, so the general
+     * [generateUnionTypeSourceCode] can discriminate on a field being present and reads
+     * `element.jsonObject` to do it. `RichText` is documented as "either a String for plain text,
+     * an Array of RichText, or any of the following types", so that read would throw on the two
+     * most common shapes. Plain text is the common case, so getting this wrong fails at runtime
+     * rather than at build time.
+     *
+     * The two non-object shapes are given synthesized members, [RichTextPlain] and
+     * [RichTextSequence], so that consumers still see one exhaustive sealed hierarchy, and the
+     * serializer branches on the JSON shape before falling back to the object variants.
+     *
+     * This is deliberately special-cased rather than generalized: `RichText` is currently the only
+     * union in the spec with this shape, and a general mechanism would have to infer from prose
+     * which non-object shapes are allowed and what to name them. If a second such union appears,
+     * that is the point to replace this with a general solution.
+     */
+    private fun StringBuilder.generateSourceCodeForRichText(
+        element: BotApiElement,
+        unionTypes: List<BotApiElement>,
+    ) {
+        val name = element.name.value
+        val plainName = "${name}Plain"
+        val sequenceName = "${name}Sequence"
+
+        val discriminatorFieldName = unionTypes.mapNotNull { it.getUnionDiscriminatorFieldName() }
+            .toSet()
+            .also { check(it.size <= 1) { "Multiple discriminator field names found for $name: $it" } }
+            .singleOrNull()
+            ?: error("No discriminator field found for the object variants of $name")
+
+        appendLine("/**")
+        appendKdocLines(element.description)
+        appendLine(" * - [$plainName]")
+        appendLine(" * - [$sequenceName]")
+        for (unionType in unionTypes) {
+            appendLine(" * - [${unionType.name.value}]")
+        }
+        appendLine(" */")
+        appendLine("@Serializable(with = ${name}Serializer::class)")
+        appendLine("sealed interface $name")
+
+        appendLine()
+        appendLine("/**")
+        appendLine(" * Plain text without formatting, represented as a bare JSON string.")
+        appendLine(" */")
+        appendLine("@Serializable")
+        appendLine("@JvmInline")
+        appendLine("value class $plainName(val value: String) : $name {")
+        appendLine("    override fun toString(): String = \"$plainName(\${quoteWhenWhitespace(value)})\"")
+        appendLine("}")
+
+        appendLine()
+        appendLine("/**")
+        appendLine(" * A sequence of rich texts, represented as a JSON array. Nesting is allowed.")
+        appendLine(" */")
+        appendLine("@Serializable")
+        appendLine("@JvmInline")
+        appendLine("value class $sequenceName(val value: List<$name>) : $name {")
+        appendLine("    override fun toString(): String = \"$sequenceName(\$value)\"")
+        appendLine("}")
+
+        appendLine()
+        appendLine("object ${name}Serializer : KSerializer<$name> {")
+        appendLine("    private val plainSerializer get() = String.serializer()")
+        appendLine("    private val sequenceSerializer get() = ListSerializer($name.serializer())")
+        appendLine()
+        // Delegates to the JsonElement descriptor: the value can be a string, an array or an
+        // object, so there is no single fixed shape to describe.
+        appendLine("    override val descriptor: SerialDescriptor get() = JsonElement.serializer().descriptor")
+        appendLine()
+        appendLine("    override fun deserialize(decoder: Decoder): $name {")
+        appendLine("        val input = decoder as? JsonDecoder ?: error(\"$name can only be deserialized from JSON\")")
+        appendLine("        return when (val element = input.decodeJsonElement()) {")
+        appendLine("            is JsonPrimitive -> $plainName(element.content)")
+        appendLine("            is JsonArray -> $sequenceName(input.json.decodeFromJsonElement(sequenceSerializer, element))")
+        appendLine("            is JsonObject -> {")
+        appendLine("                val marker = element[\"$discriminatorFieldName\"]?.jsonPrimitive?.content")
+        appendLine("                    ?: error(\"Missing '$discriminatorFieldName' in $name object: \$element\")")
+        appendLine("                val serializer = when (marker) {")
+        for (unionType in unionTypes) {
+            val markerField = unionType.fields?.firstOrNull { it.isUnionDiscriminator() }
+                ?: error("Failed to find discriminator field for ${unionType.name}")
+            val marker = unionMarkerValueInDescriptionRe.find(markerField.description)
+                ?.groupValues?.get(1)
+                ?: error("Can't find union marker value for ${unionType.name} in: '${markerField.description}'")
+            appendLine("                    \"$marker\" -> ${unionType.name.value}.serializer()")
+        }
+        appendLine("                    else -> error(\"Unknown $name type: \$marker\")")
+        appendLine("                }")
+        appendLine("                input.json.decodeFromJsonElement(serializer, element)")
+        appendLine("            }")
+        appendLine("        }")
+        appendLine("    }")
+        appendLine()
+        appendLine("    override fun serialize(encoder: Encoder, value: $name) {")
+        appendLine("        val output = encoder as? JsonEncoder ?: error(\"$name can only be serialized to JSON\")")
+        appendLine("        when (value) {")
+        appendLine("            is $plainName -> output.encodeSerializableValue(plainSerializer, value.value)")
+        appendLine("            is $sequenceName -> output.encodeSerializableValue(sequenceSerializer, value.value)")
+        for (unionType in unionTypes) {
+            val typeName = unionType.name.value
+            appendLine("            is $typeName -> output.encodeSerializableValue($typeName.serializer(), value)")
+        }
+        appendLine("        }")
+        appendLine("    }")
         appendLine("}")
     }
 

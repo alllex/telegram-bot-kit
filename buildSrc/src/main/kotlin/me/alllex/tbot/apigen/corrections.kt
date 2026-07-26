@@ -2,7 +2,41 @@ package me.alllex.tbot.apigen
 
 
 val unionTypesWithExplicitMarker = setOf(
-    "PassportElementError"
+    "PassportElementError",
+    // RichText is serialized by hand rather than by the sealed-class machinery, so the marker
+    // field is not injected for it and has to survive as a real field on each variant.
+    "RichText",
+)
+
+/**
+ * Union types that the spec uses but never defines, so there is no definition to parse.
+ *
+ * The spec spells these out inline as "A or B or C" wherever they are used, and [unionTypeNames]
+ * maps that member set to a name. The named type still has to exist, which is what these entries
+ * declare.
+ *
+ * An entry is only contributed when every one of its union members was parsed from the spec.
+ * Members are added over time — `InputMediaVoiceNote` arrived in Bot API 10.2 — so declaring a
+ * union whose members are missing would produce a sealed type referring to types that do not
+ * exist. Requiring all members keeps this keyed on what the union actually needs rather than on
+ * the presence of some other type that happens to reference it.
+ */
+val implicitUnionElements: List<BotApiElement> = listOf(
+    BotApiElement(
+        BotApiElementName("ReplyMarkup"),
+        description = "This object represents an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).",
+        unionTypes = listOf(
+            "InlineKeyboardMarkup", "ReplyKeyboardMarkup", "ReplyKeyboardRemove", "ForceReply"
+        ).map { BotApiElementName(it) }
+    ),
+    // The `media` field of `InputRichMessageMedia` is an anonymous union in the spec.
+    BotApiElement(
+        BotApiElementName("InputRichMedia"),
+        description = "Media that can be embedded in an outgoing rich message.",
+        unionTypes = listOf(
+            "InputMediaAnimation", "InputMediaAudio", "InputMediaPhoto", "InputMediaVideo", "InputMediaVoiceNote"
+        ).map { BotApiElementName(it) }
+    ),
 )
 
 data class MethodVariation(
@@ -348,4 +382,8 @@ val updateListenerEntries = listOf(
     UpdateListenerEntry("MessageReaction", fieldType = "MessageReactionUpdated"),
     UpdateListenerEntry("ChatBoost", fieldType = "ChatBoostUpdated"),
     UpdateListenerEntry("RemovedChatBoost", fieldType = "ChatBoostRemoved"),
+    // Bot API 10.2
+    UpdateListenerEntry("GuestMessage", fieldType = "Message"),
+    UpdateListenerEntry("ManagedBot", fieldType = "ManagedBotUpdated"),
+    UpdateListenerEntry("Subscription", fieldType = "BotSubscriptionUpdated"),
 )

@@ -73,6 +73,15 @@ interface TelegramBotUpdateListener {
     suspend fun onRemovedChatBoost(removedChatBoost: ChatBoostRemoved) {}
 
     context(_: TelegramBotApiContext)
+    suspend fun onGuestMessage(guestMessage: Message) {}
+
+    context(_: TelegramBotApiContext)
+    suspend fun onManagedBot(managedBot: ManagedBotUpdated) {}
+
+    context(_: TelegramBotApiContext)
+    suspend fun onSubscription(subscription: BotSubscriptionUpdated) {}
+
+    context(_: TelegramBotApiContext)
     suspend fun onUpdate(update: Update) {
         when (update) {
             is MessageUpdate -> onMessage(update.message)
@@ -97,6 +106,9 @@ interface TelegramBotUpdateListener {
             is MessageReactionUpdate -> onMessageReaction(update.messageReaction)
             is ChatBoostUpdate -> onChatBoost(update.chatBoost)
             is RemovedChatBoostUpdate -> onRemovedChatBoost(update.removedChatBoost)
+            is GuestMessageUpdate -> onGuestMessage(update.guestMessage)
+            is ManagedBotUpdate -> onManagedBot(update.managedBot)
+            is SubscriptionUpdate -> onSubscription(update.subscription)
             else -> error("Unknown update type: ${update::class.simpleName}")
         }
     }
@@ -125,6 +137,9 @@ fun TelegramBotUpdateListener(
     onMessageReaction: TelegramBotUpdateHandler<MessageReactionUpdated>? = null,
     onChatBoost: TelegramBotUpdateHandler<ChatBoostUpdated>? = null,
     onRemovedChatBoost: TelegramBotUpdateHandler<ChatBoostRemoved>? = null,
+    onGuestMessage: TelegramBotUpdateHandler<Message>? = null,
+    onManagedBot: TelegramBotUpdateHandler<ManagedBotUpdated>? = null,
+    onSubscription: TelegramBotUpdateHandler<BotSubscriptionUpdated>? = null,
     @Suppress("UNUSED_PARAMETER") noTrailingLambda: Unit = Unit,
 ): TelegramBotUpdateListener {
     return object : TelegramBotUpdateListener {
@@ -216,5 +231,17 @@ fun TelegramBotUpdateListener(
         context(_: TelegramBotApiContext)
         override suspend fun onRemovedChatBoost(removedChatBoost: ChatBoostRemoved) =
             onRemovedChatBoost?.handle(removedChatBoost) ?: Unit
+
+        context(_: TelegramBotApiContext)
+        override suspend fun onGuestMessage(guestMessage: Message) =
+            onGuestMessage?.handle(guestMessage) ?: Unit
+
+        context(_: TelegramBotApiContext)
+        override suspend fun onManagedBot(managedBot: ManagedBotUpdated) =
+            onManagedBot?.handle(managedBot) ?: Unit
+
+        context(_: TelegramBotApiContext)
+        override suspend fun onSubscription(subscription: BotSubscriptionUpdated) =
+            onSubscription?.handle(subscription) ?: Unit
     }
 }

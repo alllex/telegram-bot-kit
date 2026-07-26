@@ -60,19 +60,19 @@ suspend fun TelegramBotApiClient.tryForwardMessage(requestBody: ForwardMessageRe
     telegramPost("forwardMessage", requestBody)
 
 /**
- * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.
+ * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an Array of MessageId of the sent messages is returned.
  */
 suspend fun TelegramBotApiClient.tryForwardMessages(requestBody: ForwardMessagesRequest): TelegramResponse<List<MessageRef>> =
     telegramPost("forwardMessages", requestBody)
 
 /**
- * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+ * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
  */
 suspend fun TelegramBotApiClient.tryCopyMessage(requestBody: CopyMessageRequest): TelegramResponse<MessageRef> =
     telegramPost("copyMessage", requestBody)
 
 /**
- * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
+ * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an Array of MessageId of the sent messages is returned.
  */
 suspend fun TelegramBotApiClient.tryCopyMessages(requestBody: CopyMessagesRequest): TelegramResponse<List<MessageRef>> =
     telegramPost("copyMessages", requestBody)
@@ -82,6 +82,12 @@ suspend fun TelegramBotApiClient.tryCopyMessages(requestBody: CopyMessagesReques
  */
 suspend fun TelegramBotApiClient.trySendPhoto(requestBody: SendPhotoRequest): TelegramResponse<Message> =
     telegramPost("sendPhoto", requestBody)
+
+/**
+ * Use this method to send live photos. On success, the sent Message is returned.
+ */
+suspend fun TelegramBotApiClient.trySendLivePhoto(requestBody: SendLivePhotoRequest): TelegramResponse<Message> =
+    telegramPost("sendLivePhoto", requestBody)
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -128,7 +134,7 @@ suspend fun TelegramBotApiClient.trySendPaidMedia(requestBody: SendPaidMediaRequ
     telegramPost("sendPaidMedia", requestBody)
 
 /**
- * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Message objects that were sent is returned.
+ * Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
  */
 suspend fun TelegramBotApiClient.trySendMediaGroup(requestBody: SendMediaGroupRequest): TelegramResponse<List<Message>> =
     telegramPost("sendMediaGroup", requestBody)
@@ -170,6 +176,12 @@ suspend fun TelegramBotApiClient.trySendDice(requestBody: SendDiceRequest): Tele
     telegramPost("sendDice", requestBody)
 
 /**
+ * Use this method to stream a partial message to a user while the message is being generated. Note that the streamed draft is ephemeral and acts as a temporary 30-second preview - once the output is finalized, you must call sendMessage with the complete message to persist it in the user's chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySendMessageDraft(requestBody: SendMessageDraftRequest): TelegramResponse<Boolean> =
+    telegramPost("sendMessageDraft", requestBody)
+
+/**
  * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
  *
  * Example: The ImageBot needs some time to process a request and upload the image. Instead of sending a text message along the lines of “Retrieving image, please wait…”, the bot may use sendChatAction with action = upload_photo. The user will see a “sending photo” status for the bot.
@@ -190,6 +202,12 @@ suspend fun TelegramBotApiClient.trySetMessageReaction(requestBody: SetMessageRe
  */
 suspend fun TelegramBotApiClient.tryGetUserProfilePhotos(requestBody: GetUserProfilePhotosRequest): TelegramResponse<UserProfilePhotos> =
     telegramPost("getUserProfilePhotos", requestBody)
+
+/**
+ * Use this method to get a list of profile audios for a user. Returns a UserProfileAudios object.
+ */
+suspend fun TelegramBotApiClient.tryGetUserProfileAudios(requestBody: GetUserProfileAudiosRequest): TelegramResponse<UserProfileAudios> =
+    telegramPost("getUserProfileAudios", requestBody)
 
 /**
  * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success.
@@ -232,6 +250,12 @@ suspend fun TelegramBotApiClient.tryPromoteChatMember(requestBody: PromoteChatMe
  */
 suspend fun TelegramBotApiClient.trySetChatAdministratorCustomTitle(requestBody: SetChatAdministratorCustomTitleRequest): TelegramResponse<Boolean> =
     telegramPost("setChatAdministratorCustomTitle", requestBody)
+
+/**
+ * Use this method to set a tag for a regular member in a group or a supergroup. The bot must be an administrator in the chat for this to work and must have the can_manage_tags administrator right. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetChatMemberTag(requestBody: SetChatMemberTagRequest): TelegramResponse<Boolean> =
+    telegramPost("setChatMemberTag", requestBody)
 
 /**
  * Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success.
@@ -300,6 +324,18 @@ suspend fun TelegramBotApiClient.tryDeclineChatJoinRequest(requestBody: DeclineC
     telegramPost("declineChatJoinRequest", requestBody)
 
 /**
+ * Use this method to process a received chat join request query. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryAnswerChatJoinRequestQuery(requestBody: AnswerChatJoinRequestQueryRequest): TelegramResponse<Boolean> =
+    telegramPost("answerChatJoinRequestQuery", requestBody)
+
+/**
+ * Use this method to process a received chat join request query by showing a Mini App to the user before deciding the outcome. Call answerChatJoinRequestQuery to resolve the join request query based on the user interaction with the Mini App. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySendChatJoinRequestWebApp(requestBody: SendChatJoinRequestWebAppRequest): TelegramResponse<Boolean> =
+    telegramPost("sendChatJoinRequestWebApp", requestBody)
+
+/**
  * Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
  */
 suspend fun TelegramBotApiClient.trySetChatPhoto(requestBody: SetChatPhotoRequest): TelegramResponse<Boolean> =
@@ -324,19 +360,19 @@ suspend fun TelegramBotApiClient.trySetChatDescription(requestBody: SetChatDescr
     telegramPost("setChatDescription", requestBody)
 
 /**
- * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
+ * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryPinChatMessage(requestBody: PinChatMessageRequest): TelegramResponse<Boolean> =
     telegramPost("pinChatMessage", requestBody)
 
 /**
- * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
+ * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryUnpinChatMessage(requestBody: UnpinChatMessageRequest): TelegramResponse<Boolean> =
     telegramPost("unpinChatMessage", requestBody)
 
 /**
- * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' administrator right in a supergroup or 'can_edit_messages' administrator right in a channel. Returns True on success.
+ * Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryUnpinAllChatMessages(requestBody: UnpinAllChatMessagesRequest): TelegramResponse<Boolean> =
     telegramPost("unpinAllChatMessages", requestBody)
@@ -354,15 +390,15 @@ suspend fun TelegramBotApiClient.tryGetChat(requestBody: GetChatRequest): Telegr
     telegramPost("getChat", requestBody)
 
 /**
- * Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of ChatMember objects.
+ * Use this method to get a list of administrators in a chat. Returns an Array of ChatMember objects.
  */
 suspend fun TelegramBotApiClient.tryGetChatAdministrators(requestBody: GetChatAdministratorsRequest): TelegramResponse<List<ChatMember>> =
     telegramPost("getChatAdministrators", requestBody)
 
 /**
- * Use this method to get the number of members in a chat. Returns Int on success.
+ * Use this method to get the number of members in a chat. Returns Integer on success.
  */
-suspend fun TelegramBotApiClient.tryGetChatMemberCount(requestBody: GetChatMemberCountRequest): TelegramResponse<Int> =
+suspend fun TelegramBotApiClient.tryGetChatMemberCount(requestBody: GetChatMemberCountRequest): TelegramResponse<Long> =
     telegramPost("getChatMemberCount", requestBody)
 
 /**
@@ -370,6 +406,12 @@ suspend fun TelegramBotApiClient.tryGetChatMemberCount(requestBody: GetChatMembe
  */
 suspend fun TelegramBotApiClient.tryGetChatMember(requestBody: GetChatMemberRequest): TelegramResponse<ChatMember> =
     telegramPost("getChatMember", requestBody)
+
+/**
+ * Use this method to get the last messages from the personal chat (i.e., the chat currently added to their profile) of a given user. On success, an Array of Message objects is returned.
+ */
+suspend fun TelegramBotApiClient.tryGetUserPersonalChatMessages(requestBody: GetUserPersonalChatMessagesRequest): TelegramResponse<List<Message>> =
+    telegramPost("getUserPersonalChatMessages", requestBody)
 
 /**
  * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set optionally returned in getChat requests to check if the bot can use this method. Returns True on success.
@@ -390,13 +432,13 @@ suspend fun TelegramBotApiClient.tryGetForumTopicIconStickers(): TelegramRespons
     telegramGet("getForumTopicIconStickers")
 
 /**
- * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a ForumTopic object.
+ * Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns information about the created topic as a ForumTopic object.
  */
 suspend fun TelegramBotApiClient.tryCreateForumTopic(requestBody: CreateForumTopicRequest): TelegramResponse<ForumTopic> =
     telegramPost("createForumTopic", requestBody)
 
 /**
- * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+ * Use this method to edit name and icon of a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryEditForumTopic(requestBody: EditForumTopicRequest): TelegramResponse<Boolean> =
     telegramPost("editForumTopic", requestBody)
@@ -414,13 +456,13 @@ suspend fun TelegramBotApiClient.tryReopenForumTopic(requestBody: ReopenForumTop
     telegramPost("reopenForumTopic", requestBody)
 
 /**
- * Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success.
+ * Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryDeleteForumTopic(requestBody: DeleteForumTopicRequest): TelegramResponse<Boolean> =
     telegramPost("deleteForumTopic", requestBody)
 
 /**
- * Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
+ * Use this method to clear the list of pinned messages in a forum topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryUnpinAllForumTopicMessages(requestBody: UnpinAllForumTopicMessagesRequest): TelegramResponse<Boolean> =
     telegramPost("unpinAllForumTopicMessages", requestBody)
@@ -470,6 +512,12 @@ suspend fun TelegramBotApiClient.tryAnswerCallbackQuery(requestBody: AnswerCallb
     telegramPost("answerCallbackQuery", requestBody)
 
 /**
+ * Use this method to reply to a received guest message. On success, a SentGuestMessage object is returned.
+ */
+suspend fun TelegramBotApiClient.tryAnswerGuestQuery(requestBody: AnswerGuestQueryRequest): TelegramResponse<SentGuestMessage> =
+    telegramPost("answerGuestQuery", requestBody)
+
+/**
  * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object.
  */
 suspend fun TelegramBotApiClient.tryGetUserChatBoosts(requestBody: GetUserChatBoostsRequest): TelegramResponse<UserChatBoosts> =
@@ -480,6 +528,30 @@ suspend fun TelegramBotApiClient.tryGetUserChatBoosts(requestBody: GetUserChatBo
  */
 suspend fun TelegramBotApiClient.tryGetBusinessConnection(requestBody: GetBusinessConnectionRequest): TelegramResponse<BusinessConnection> =
     telegramPost("getBusinessConnection", requestBody)
+
+/**
+ * Use this method to get the token of a managed bot. Returns the token as String on success.
+ */
+suspend fun TelegramBotApiClient.tryGetManagedBotToken(requestBody: GetManagedBotTokenRequest): TelegramResponse<String> =
+    telegramPost("getManagedBotToken", requestBody)
+
+/**
+ * Use this method to revoke the current token of a managed bot and generate a new one. Returns the new token as String on success.
+ */
+suspend fun TelegramBotApiClient.tryReplaceManagedBotToken(requestBody: ReplaceManagedBotTokenRequest): TelegramResponse<String> =
+    telegramPost("replaceManagedBotToken", requestBody)
+
+/**
+ * Use this method to get the access settings of a managed bot. Returns a BotAccessSettings object on success.
+ */
+suspend fun TelegramBotApiClient.tryGetManagedBotAccessSettings(requestBody: GetManagedBotAccessSettingsRequest): TelegramResponse<BotAccessSettings> =
+    telegramPost("getManagedBotAccessSettings", requestBody)
+
+/**
+ * Use this method to change the access settings of a managed bot. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetManagedBotAccessSettings(requestBody: SetManagedBotAccessSettingsRequest): TelegramResponse<Boolean> =
+    telegramPost("setManagedBotAccessSettings", requestBody)
 
 /**
  * Use this method to change the list of the bot's commands. See this manual for more details about bot commands. Returns True on success.
@@ -536,6 +608,18 @@ suspend fun TelegramBotApiClient.tryGetMyShortDescription(requestBody: GetMyShor
     telegramPost("getMyShortDescription", requestBody)
 
 /**
+ * Changes the profile photo of the bot. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySetMyProfilePhoto(requestBody: SetMyProfilePhotoRequest): TelegramResponse<Boolean> =
+    telegramPost("setMyProfilePhoto", requestBody)
+
+/**
+ * Removes the profile photo of the bot. Requires no parameters. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryRemoveMyProfilePhoto(): TelegramResponse<Boolean> =
+    telegramGet("removeMyProfilePhoto")
+
+/**
  * Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success.
  */
 suspend fun TelegramBotApiClient.trySetChatMenuButton(requestBody: SetChatMenuButtonRequest): TelegramResponse<Boolean> =
@@ -558,102 +642,6 @@ suspend fun TelegramBotApiClient.trySetMyDefaultAdministratorRights(requestBody:
  */
 suspend fun TelegramBotApiClient.tryGetMyDefaultAdministratorRights(requestBody: GetMyDefaultAdministratorRightsRequest): TelegramResponse<ChatAdministratorRights> =
     telegramPost("getMyDefaultAdministratorRights", requestBody)
-
-/**
- * Use this method to edit text and game messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Message> =
-    telegramPost("editMessageText", requestBody)
-
-/**
- * Use this method to edit text and game messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageText", requestBody)
-
-/**
- * Use this method to edit captions of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Message> =
-    telegramPost("editMessageCaption", requestBody)
-
-/**
- * Use this method to edit captions of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageCaption", requestBody)
-
-/**
- * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Message> =
-    telegramPost("editMessageMedia", requestBody)
-
-/**
- * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageMedia", requestBody)
-
-/**
- * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success the edited Message is returned.
- */
-suspend fun TelegramBotApiClient.tryEditMessageLiveLocation(requestBody: EditMessageLiveLocationRequest): TelegramResponse<Message> =
-    telegramPost("editMessageLiveLocation", requestBody)
-
-/**
- * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success True is returned.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageLiveLocation(requestBody: EditMessageLiveLocationRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageLiveLocation", requestBody)
-
-/**
- * Use this method to stop updating a live location message before live_period expires. On success the edited Message is returned.
- */
-suspend fun TelegramBotApiClient.tryStopMessageLiveLocation(requestBody: StopMessageLiveLocationRequest): TelegramResponse<Message> =
-    telegramPost("stopMessageLiveLocation", requestBody)
-
-/**
- * Use this method to stop updating a live location message before live_period expires. On success True is returned.
- */
-suspend fun TelegramBotApiClient.tryStopInlineMessageLiveLocation(requestBody: StopMessageLiveLocationRequest): TelegramResponse<Boolean> =
-    telegramPost("stopMessageLiveLocation", requestBody)
-
-/**
- * Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.
- */
-suspend fun TelegramBotApiClient.tryEditMessageChecklist(requestBody: EditMessageChecklistRequest): TelegramResponse<Message> =
-    telegramPost("editMessageChecklist", requestBody)
-
-/**
- * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Message> =
-    telegramPost("editMessageReplyMarkup", requestBody)
-
-/**
- * Use this method to edit only the reply markup of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
- */
-suspend fun TelegramBotApiClient.tryEditInlineMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Boolean> =
-    telegramPost("editMessageReplyMarkup", requestBody)
-
-/**
- * Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.
- */
-suspend fun TelegramBotApiClient.tryStopPoll(requestBody: StopPollRequest): TelegramResponse<Poll> =
-    telegramPost("stopPoll", requestBody)
-
-/**
- * Use this method to delete a message, including service messages, with the following limitations: - A message can only be deleted if it was sent less than 48 hours ago. - Service messages about a supergroup, channel, or forum topic creation can't be deleted. - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago. - Bots can delete outgoing messages in private chats, groups, and supergroups. - Bots can delete incoming messages in private chats. - Bots granted can_post_messages permissions can delete outgoing messages in channels. - If the bot is an administrator of a group, it can delete any message there. - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there. Returns True on success.
- */
-suspend fun TelegramBotApiClient.tryDeleteMessage(requestBody: DeleteMessageRequest): TelegramResponse<Boolean> =
-    telegramPost("deleteMessage", requestBody)
-
-/**
- * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
- */
-suspend fun TelegramBotApiClient.tryDeleteMessages(requestBody: DeleteMessagesRequest): TelegramResponse<Boolean> =
-    telegramPost("deleteMessages", requestBody)
 
 /**
  * Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.
@@ -764,6 +752,18 @@ suspend fun TelegramBotApiClient.tryGetBusinessAccountGifts(requestBody: GetBusi
     telegramPost("getBusinessAccountGifts", requestBody)
 
 /**
+ * Returns the gifts owned and hosted by a user. Returns OwnedGifts on success.
+ */
+suspend fun TelegramBotApiClient.tryGetUserGifts(requestBody: GetUserGiftsRequest): TelegramResponse<OwnedGifts> =
+    telegramPost("getUserGifts", requestBody)
+
+/**
+ * Returns the gifts owned by a chat. Returns OwnedGifts on success.
+ */
+suspend fun TelegramBotApiClient.tryGetChatGifts(requestBody: GetChatGiftsRequest): TelegramResponse<OwnedGifts> =
+    telegramPost("getChatGifts", requestBody)
+
+/**
  * Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success.
  */
 suspend fun TelegramBotApiClient.tryConvertGiftToStars(requestBody: ConvertGiftToStarsRequest): TelegramResponse<Boolean> =
@@ -788,6 +788,12 @@ suspend fun TelegramBotApiClient.tryPostStory(requestBody: PostStoryRequest): Te
     telegramPost("postStory", requestBody)
 
 /**
+ * Reposts a story on behalf of a business account from another business account. Both business accounts must be managed by the same bot, and the story on the source account must have been posted (or reposted) by the bot. Requires the can_manage_stories business bot right for both business accounts. Returns Story on success.
+ */
+suspend fun TelegramBotApiClient.tryRepostStory(requestBody: RepostStoryRequest): TelegramResponse<Story> =
+    telegramPost("repostStory", requestBody)
+
+/**
  * Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.
  */
 suspend fun TelegramBotApiClient.tryEditStory(requestBody: EditStoryRequest): TelegramResponse<Story> =
@@ -798,6 +804,174 @@ suspend fun TelegramBotApiClient.tryEditStory(requestBody: EditStoryRequest): Te
  */
 suspend fun TelegramBotApiClient.tryDeleteStory(requestBody: DeleteStoryRequest): TelegramResponse<Boolean> =
     telegramPost("deleteStory", requestBody)
+
+/**
+ * Use this method to set the result of an interaction with a Web App and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a SentWebAppMessage object is returned.
+ */
+suspend fun TelegramBotApiClient.tryAnswerWebAppQuery(requestBody: AnswerWebAppQueryRequest): TelegramResponse<SentWebAppMessage> =
+    telegramPost("answerWebAppQuery", requestBody)
+
+/**
+ * Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.
+ */
+suspend fun TelegramBotApiClient.trySavePreparedInlineMessage(requestBody: SavePreparedInlineMessageRequest): TelegramResponse<PreparedInlineMessage> =
+    telegramPost("savePreparedInlineMessage", requestBody)
+
+/**
+ * Stores a keyboard button that can be used by a user within a Mini App. Returns a PreparedKeyboardButton object.
+ */
+suspend fun TelegramBotApiClient.trySavePreparedKeyboardButton(requestBody: SavePreparedKeyboardButtonRequest): TelegramResponse<PreparedKeyboardButton> =
+    telegramPost("savePreparedKeyboardButton", requestBody)
+
+/**
+ * Use this method to edit text, rich and game messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Message> =
+    telegramPost("editMessageText", requestBody)
+
+/**
+ * Use this method to edit text, rich and game messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageText(requestBody: EditMessageTextRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageText", requestBody)
+
+/**
+ * Use this method to edit captions of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Message> =
+    telegramPost("editMessageCaption", requestBody)
+
+/**
+ * Use this method to edit captions of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageCaption(requestBody: EditMessageCaptionRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageCaption", requestBody)
+
+/**
+ * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with a media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Message> =
+    telegramPost("editMessageMedia", requestBody)
+
+/**
+ * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with a media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageMedia(requestBody: EditMessageMediaRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageMedia", requestBody)
+
+/**
+ * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success the edited Message is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageLiveLocation(requestBody: EditMessageLiveLocationRequest): TelegramResponse<Message> =
+    telegramPost("editMessageLiveLocation", requestBody)
+
+/**
+ * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success True is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageLiveLocation(requestBody: EditMessageLiveLocationRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageLiveLocation", requestBody)
+
+/**
+ * Use this method to stop updating a live location message before live_period expires. On success the edited Message is returned.
+ */
+suspend fun TelegramBotApiClient.tryStopMessageLiveLocation(requestBody: StopMessageLiveLocationRequest): TelegramResponse<Message> =
+    telegramPost("stopMessageLiveLocation", requestBody)
+
+/**
+ * Use this method to stop updating a live location message before live_period expires. On success True is returned.
+ */
+suspend fun TelegramBotApiClient.tryStopInlineMessageLiveLocation(requestBody: StopMessageLiveLocationRequest): TelegramResponse<Boolean> =
+    telegramPost("stopMessageLiveLocation", requestBody)
+
+/**
+ * Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageChecklist(requestBody: EditMessageChecklistRequest): TelegramResponse<Message> =
+    telegramPost("editMessageChecklist", requestBody)
+
+/**
+ * Use this method to edit only the reply markup of messages. On success the edited Message is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Message> =
+    telegramPost("editMessageReplyMarkup", requestBody)
+
+/**
+ * Use this method to edit only the reply markup of messages. On success True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ */
+suspend fun TelegramBotApiClient.tryEditInlineMessageReplyMarkup(requestBody: EditMessageReplyMarkupRequest): TelegramResponse<Boolean> =
+    telegramPost("editMessageReplyMarkup", requestBody)
+
+/**
+ * Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.
+ */
+suspend fun TelegramBotApiClient.tryStopPoll(requestBody: StopPollRequest): TelegramResponse<Poll> =
+    telegramPost("stopPoll", requestBody)
+
+/**
+ * Use this method to edit an ephemeral text message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, True is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditEphemeralMessageText(requestBody: EditEphemeralMessageTextRequest): TelegramResponse<Boolean> =
+    telegramPost("editEphemeralMessageText", requestBody)
+
+/**
+ * Use this method to edit the media of an ephemeral message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, True is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditEphemeralMessageMedia(requestBody: EditEphemeralMessageMediaRequest): TelegramResponse<Boolean> =
+    telegramPost("editEphemeralMessageMedia", requestBody)
+
+/**
+ * Use this method to edit the caption of an ephemeral message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, True is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditEphemeralMessageCaption(requestBody: EditEphemeralMessageCaptionRequest): TelegramResponse<Boolean> =
+    telegramPost("editEphemeralMessageCaption", requestBody)
+
+/**
+ * Use this method to edit only the reply markup of an ephemeral message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, True is returned.
+ */
+suspend fun TelegramBotApiClient.tryEditEphemeralMessageReplyMarkup(requestBody: EditEphemeralMessageReplyMarkupRequest): TelegramResponse<Boolean> =
+    telegramPost("editEphemeralMessageReplyMarkup", requestBody)
+
+/**
+ * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryApproveSuggestedPost(requestBody: ApproveSuggestedPostRequest): TelegramResponse<Boolean> =
+    telegramPost("approveSuggestedPost", requestBody)
+
+/**
+ * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeclineSuggestedPost(requestBody: DeclineSuggestedPostRequest): TelegramResponse<Boolean> =
+    telegramPost("declineSuggestedPost", requestBody)
+
+/**
+ * Use this method to delete a message, including service messages, with the following limitations: - A message can only be deleted if it was sent less than 48 hours ago. - Service messages about a supergroup, channel, or forum topic creation can't be deleted. - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago. - Bots can delete outgoing messages in private chats, groups, and supergroups. - Bots can delete incoming messages in private chats. - Bots granted can_post_messages permissions can delete outgoing messages in channels. - If the bot is an administrator of a group, it can delete any message there. - If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there. - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteMessage(requestBody: DeleteMessageRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteMessage", requestBody)
+
+/**
+ * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteMessages(requestBody: DeleteMessagesRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteMessages", requestBody)
+
+/**
+ * Use this method to delete an ephemeral message. Note that it is not guaranteed that the user will receive the message deletion event, especially if they are offline. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteEphemeralMessage(requestBody: DeleteEphemeralMessageRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteEphemeralMessage", requestBody)
+
+/**
+ * Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can_delete_messages' administrator right in the chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteMessageReaction(requestBody: DeleteMessageReactionRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteMessageReaction", requestBody)
+
+/**
+ * Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.tryDeleteAllMessageReactions(requestBody: DeleteAllMessageReactionsRequest): TelegramResponse<Boolean> =
+    telegramPost("deleteAllMessageReactions", requestBody)
 
 /**
  * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
@@ -896,22 +1070,22 @@ suspend fun TelegramBotApiClient.tryDeleteStickerSet(requestBody: DeleteStickerS
     telegramPost("deleteStickerSet", requestBody)
 
 /**
+ * Use this method to send rich messages. If the message contains a block with a media element, then the bot must have the right to send the media to the chat. On success, the sent Message is returned.
+ */
+suspend fun TelegramBotApiClient.trySendRichMessage(requestBody: SendRichMessageRequest): TelegramResponse<Message> =
+    telegramPost("sendRichMessage", requestBody)
+
+/**
+ * Use this method to stream a partial rich message to a user while the message is being generated. Note that the streamed draft is ephemeral and acts as a temporary 30-second preview - once the output is finalized, you must call sendRichMessage with the complete message to persist it in the user's chat. Returns True on success.
+ */
+suspend fun TelegramBotApiClient.trySendRichMessageDraft(requestBody: SendRichMessageDraftRequest): TelegramResponse<Boolean> =
+    telegramPost("sendRichMessageDraft", requestBody)
+
+/**
  * Use this method to send answers to an inline query. On success, True is returned. No more than 50 results per query are allowed.
  */
 suspend fun TelegramBotApiClient.tryAnswerInlineQuery(requestBody: AnswerInlineQueryRequest): TelegramResponse<Boolean> =
     telegramPost("answerInlineQuery", requestBody)
-
-/**
- * Use this method to set the result of an interaction with a Web App and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a SentWebAppMessage object is returned.
- */
-suspend fun TelegramBotApiClient.tryAnswerWebAppQuery(requestBody: AnswerWebAppQueryRequest): TelegramResponse<SentWebAppMessage> =
-    telegramPost("answerWebAppQuery", requestBody)
-
-/**
- * Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.
- */
-suspend fun TelegramBotApiClient.trySavePreparedInlineMessage(requestBody: SavePreparedInlineMessageRequest): TelegramResponse<PreparedInlineMessage> =
-    telegramPost("savePreparedInlineMessage", requestBody)
 
 /**
  * Use this method to send invoices. On success, the sent Message is returned.

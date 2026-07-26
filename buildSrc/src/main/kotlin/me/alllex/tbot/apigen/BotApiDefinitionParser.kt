@@ -212,26 +212,6 @@ fun Element.isH2() = tagName() == "h2"
 fun Element.isH3() = tagName() == "h3"
 fun Element.isH4() = tagName() == "h4"
 
-private val implicitReplyMarkupElement = BotApiElement(
-    BotApiElementName("ReplyMarkup"),
-    description = "This object represents an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).",
-    unionTypes = listOf("InlineKeyboardMarkup", "ReplyKeyboardMarkup", "ReplyKeyboardRemove", "ForceReply").map {
-        BotApiElementName(it)
-    }
-)
-
-/**
- * The `media` field of `InputRichMessageMedia` is an anonymous union in the spec, so there is no
- * definition to parse it from. Declared here the same way as [implicitReplyMarkupElement].
- */
-private val implicitInputRichMediaElement = BotApiElement(
-    BotApiElementName("InputRichMedia"),
-    description = "Media that can be embedded in an outgoing rich message.",
-    unionTypes = listOf(
-        "InputMediaAnimation", "InputMediaAudio", "InputMediaPhoto", "InputMediaVideo", "InputMediaVoiceNote"
-    ).map { BotApiElementName(it) }
-)
-
 class BotApiDefinitionParser {
 
     private val logger: Logger = LoggerFactory.getLogger(BotApiDefinitionParser::class.java)
@@ -290,13 +270,13 @@ class BotApiDefinitionParser {
 
         val typeDefinitions = typeDefSections.map(::parseElementDefinition)
 
-        @Suppress("RemoveExplicitTypeArguments")
-        val types = buildList<BotApiElement> {
-            this += typeDefinitions.map(::parseElement).filter { it.originalName.value !in typeSubstitution }
-            this += implicitReplyMarkupElement
-            if (any { it.name.value == "InputRichMessageMedia" }) {
-                this += implicitInputRichMediaElement
-            }
+        val parsedTypes = typeDefinitions.map(::parseElement)
+            .filter { it.originalName.value !in typeSubstitution }
+
+        // Contribute the implicit unions whose members are all present in this version of the spec.
+        val parsedTypeNames = parsedTypes.mapTo(mutableSetOf()) { it.name }
+        val types = parsedTypes + implicitUnionElements.filter { implicit ->
+            implicit.unionTypes.orEmpty().all { it in parsedTypeNames }
         }
 
         val typesWithSortedFields = if (argLists == null) types else types.toSortedFields(argLists)
